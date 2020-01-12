@@ -1,10 +1,9 @@
 
-
-# Python Discord Winter Code Jam 2020: Ancient Technology
+![Code Jam Banner](https://user-images.githubusercontent.com/33516116/72220806-8138ee80-354c-11ea-9bd8-a068778a897f.png)
 
 Welcome to the sixth Python Discord Code Jam!
 
-By popular choice, the theme for this code jam is **Ancient Technology**. What you do with this theme or how you interpret it is up to you, but we're sure you can come up with something fun. As the technlogy for this code jam, we've chosen for [Kivy](https://kivy.org/), a cross-platform framework for making user interfaces. We know that a lot of you are probably relatively new to this framework, but 
+By popular choice, the theme for this code jam is **Ancient Technology**. What you do with this theme or how you interpret it is up to you, but we're sure you can come up with something fun. As the technlogy for this code jam, we've chosen for [Kivy](https://kivy.org/), a cross-platform framework for making user interfaces. We know that a lot of you are probably relatively new to this framework and that's why some of Kivy's [core developers](https://kivy.org/#aboutus) will be hanging out in the #winter-code-jam channel!
 
 ## Getting Started
 
