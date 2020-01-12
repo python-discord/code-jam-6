@@ -1,5 +1,5 @@
 
-![Code Jam Banner](https://user-images.githubusercontent.com/33516116/72220806-8138ee80-354c-11ea-9bd8-a068778a897f.png)
+![Code Jam Banner](https://raw.githubusercontent.com/python-discord/code-jam-6/master/ancient%20tech.png?token=AAQAKVPQ55SEFWYYLYO5YV26ETLTC)
 
 Welcome to the sixth Python Discord Code Jam!
 
