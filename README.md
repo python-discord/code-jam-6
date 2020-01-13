@@ -26,12 +26,28 @@ By popular choice, the theme for this code jam is **Ancient Technology**. What y
 
 - Please read [the rules](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/) before starting to work on your project.
 
-- **Write documentation** for your project. Your team folder should already contain a `README.md` file that you should use to document your project. At the very least, make sure to include information on how to set up and run your project, so the judges won't have trouble running it. Failure to provide this may lead to being docked points, or in extreme cases, disqualification.
+- **Write documentation** for your project. Your team folder should already contain a `README.md` file that you should use to document your project. At the very least, make sure to include information on how to set up and run your project so the judges won't have trouble running it. Failure to provide this information may lead to being docked points, or in extreme cases, disqualification.
 
-- We expect you to submit code that has a style that is in accordance with [PEP8](https://www.python.org/dev/peps/pep-0008/). More specifically, pull requests to this repository will be **automatically linted with a tool called [flake8](http://flake8.pycqa.org/en/stable/)** (see below for more information). To allow you to lint your code locally with the same settings we will use, your team folder contains a flake8 configuration file, `.flake8`, which contains things like the maximum line length (100 characters) we want you to use and some specific ignores.
+- We expect you to submit code that has a style that is in accordance with [PEP8](https://www.python.org/dev/peps/pep-0008/). More specifically, pull requests to this repository will be **automatically linted with a tool called [flake8](http://flake8.pycqa.org/en/stable/)** (see below for more information). Your team folder contains a flake8 configuration file, `.flake8`, that allows you to run flake8 with the same settings as we will use. The most notable setting is that we allow for a maximum line length of 100 characters.
 
     - If you wish to use an autoformatter like `black`, that is absolutely fine. Do note that most autoformatters do not guarantee that your code will pass `flake8` and it's up to you to double check that.
 
 - You may use any third party package that's available on [PyPI](https://pypi.org/), but you should provide a strictly pinned `requirements.txt`, a Pipfile, or some other form of dependency management list so that we can easily install these dependencies.
 
 - You should **make no changes outside of your team's folder**. This means that all of the files you want to include, including your code and assets, should be contained that directory and not in the root level of the repository. This ensures that we can merge your pull request into the repository once the Code Jam is over. This ensures that you will get GitHub contribution credit towards our organization and, most importantly, it will showcase your project on GitHub.
+
+## Code Style and Readability
+
+Code style and readability will be important factors in judging your team's project. We expect you to follow the style recommendations made in [PEP8](https://www.python.org/dev/peps/pep-0008/) and, to check for compliance with PEP8, we will use a linting tool called [flake8](http://flake8.pycqa.org/en/stable/). In case PEP8 and flake8 disagree, the output of the linter will be leading.
+
+We will be using flake8 without additional plugins and with most of default settings enabled. Two notable exceptions are that we will use a maximum line length of 100 characters and ignore error E226. To allow you to run flake8 with the same settings as we will use, we have added a `.flake8` configuration file to your team folder.
+
+Obviously, adhering to PEP8 is not the only factor that determines if your code is readable, so make sure to look [beyond PEP8](https://www.youtube.com/watch?v=wf-BqAjZb8M) as well.
+
+### Automatic Linting of Pull Requests
+
+To help us check your code for compliance with PEP8, we have set up an automated build pipeline that will lint all pull requests made to this repository. Each time a pull requests is opened or when changes are made to the source branch (`master` on your team's fork) of a PR, the build pipeline will automatically lint the pull request. When the build process has completed, the build status will automatically be reported in the pull request:
+
+![Failing build status](https://raw.githubusercontent.com/python-discord/code-jam-6/master/failing_build.png?token=AH7WUVAZRU56A6RY2KPVUOS6EWJUU)
+
+Please note that **you should not use this pipeline as a remote linter**. Ideally, all changes made to the `master` branch of your team's repository have already been linted locally before they were pushed to the remote repository.
