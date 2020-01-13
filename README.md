@@ -16,17 +16,22 @@ Kivy is a cross-platform framework for making user interfaces. We know that a lo
 
 ## Getting Started
 
-1. Have your team leader [fork](https://github.com/python-discord/code-jam-6/fork) the repository. If your leader is unavailable, it's okay if someone else does it.
+### 1. Fork this repository
+Have your team leader [fork](https://github.com/python-discord/code-jam-6/fork) the repository. If your leader is unavailable, it's okay if someone else does it.
 
-2. Open a pull request from your fork's `master` to the `master` branch of this repository. This pull requests will eventually count as your team's submission, but make sure to **open the PR when the code jam starts**. You can use the name of your team as the name of the pull request.
+### 2. Create a pull request
+Open a pull request from your fork's `master` to the `master` branch of this repository. This pull requests will eventually count as your team's submission, but make sure to **open the PR when the code jam starts**. You can use the name of your team as the name of the pull request.
 
-3. Make sure to **only make changes within your team's subdirectory**. The repository should already contain a directory with your team's name as the name.
+### 3. Keep changes to your team folder
+Your own team's project files should be contained **within your own team's subdirectory**. A directory with your team's name will already exist, so make sure to use this.
 
-4. Since you are making a pull request from the `master` of your fork, it would probably be best to use different branches in your repository to work on your project. You can then periodically merge those development branches into the `master` branch.
+### 4. Consider your development workflow
+Since you are making a pull request from the `master` of your fork, it would probably be best to use different branches in your repository to work on your project. You can then periodically merge those development branches into the `master` branch.
 
-    For an ideal developer workflow, you should probably be opening pull requests inside of your fork, targeting your own `master` branch. If this doesn't make any sense to you because you're not that well-versed in git, you will probably be okay with all of you just pushing code directly to your master branch, but keep in mind that this may lead to conflicts if you are all working in parallel.
+For an ideal developer workflow, you should probably be opening pull requests inside of your fork, targeting your own `master` branch. If this doesn't make any sense to you because you're not that well-versed in git, you will probably be okay with all of you just pushing code directly to your master branch, but keep in mind that this may lead to conflicts if you are all working in parallel.
 
-5. The Pull Request will be automatically updated whenever you push code to master on your fork, so all you have to do is keep pushing code to it and make sure you are finished before the code jam ends!
+### 5. Commit to your master branch
+The Pull Request you created originally will be automatically updated whenever you push code to `master` on your fork, so no need for updating anything yourself or creating a new Pull Request at the end. Just keep pushing code to your `master` branch and do your best to finish before the code jam ends!
 
 ## Important considerations
 
