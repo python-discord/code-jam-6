@@ -56,16 +56,16 @@ Please note that **you should not use this pipeline as a remote linter**. Ideall
 
 The [code jam section of our website](https://pythondiscord.com/pages/code-jams/) contains a number of documentations that may help you get started with the Code Jam:
 
-- If you have never used git before, check out ["How to use git"](https://pythondiscord.com/pages/code-jams/using-git/)
+- If you have never used git before, check out [How to use git](https://pythondiscord.com/pages/code-jams/using-git/).
 
-- For information on how to correctly fork the repository, create a pull request, *and* add a GitHub webhook to your team's Discord channel, take a look at ["Opening a Pull Request"](https://pythondiscord.com/pages/code-jams/pull-request/)
+- For information on how to correctly fork the repository, create a pull request, *and* add a GitHub webhook to your team's Discord channel, take a look at [Opening a Pull Request](https://pythondiscord.com/pages/code-jams/pull-request/).
 
-- Do you want to know how we will judge your project? You can read all about that on our ["How does judging work? "](https://pythondiscord.com/pages/code-jams/judging/) page.
+- Do you want to know how we will judge your project? Read [How does judging work? ](https://pythondiscord.com/pages/code-jams/judging/).
 
 ## Partners and Sponsors
 
-- [Kivy](https://kivy.org/#home) (partner)
+[![kivy_full_scaled](https://user-images.githubusercontent.com/33516116/72270319-e0feca80-361c-11ea-9027-747fa344dcc5.png)](https://kivy.org/#home) [![jetbrains_logo_full](https://user-images.githubusercontent.com/33516116/72270320-e0feca80-361c-11ea-901a-7e2c3c42f9f1.png)](https://www.jetbrains.com/) [![do_scaled_112](https://user-images.githubusercontent.com/33516116/72270361-f07e1380-361c-11ea-92ee-cbd9781775a4.png)](https://www.digitalocean.com/)
 
-- [Digital Ocean](https://www.digitalocean.com/) (sponsor)
+   
 
-- [JetBrains](https://www.jetbrains.com/) (sponsor)
+
