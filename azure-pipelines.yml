@@ -18,5 +18,5 @@ jobs:
   - script: pip install flake8
     displayName: 'Install flake8'
 
-  - script: flake8 --exclude=.cache,.venv,.svn,CVS,.bzr,.hg,.git,__pycache__,.tox --max-line-length=100
+  - script: flake8 --isolated --exclude=.cache,.venv,.svn,CVS,.bzr,.hg,.git,__pycache__,.tox --max-line-length=100
     displayName: 'Lint the project with flake8'
