@@ -4,9 +4,15 @@
 [![License](https://img.shields.io/github/license/python-discord/bot)](LICENSE)
 [![Website](https://img.shields.io/badge/website-visit-brightgreen)](https://pythondiscord.com)
 
-Welcome to the sixth Python Discord Code Jam!
+### Welcome to the sixth Python Discord Code Jam!
 
-By popular choice, the theme for this code jam is **Ancient Technology**. What you do with this theme or how you interpret it is up to you, but it will be your task to come up with something fun using this theme. As the technology for this code jam, we've chosen for [Kivy](https://kivy.org/), a cross-platform framework for making user interfaces. We know that a lot of you are probably relatively new to this framework and that's why some of Kivy's [core developers](https://kivy.org/#aboutus) will be hanging out in the `#winter-code-jam` channel to help you!
+#### By popular choice, the theme for this code jam is **Ancient Technology**.
+
+What you do with this theme or how you interpret it is up to you, but it will be your task to come up with something fun using this theme.
+
+#### The chosen technology for this code jam is [Kivy](https://kivy.org/).
+
+Kivy is a cross-platform framework for making user interfaces. We know that a lot of you are probably relatively new to this framework and that's why some of Kivy's [core developers](https://kivy.org/#aboutus) will be hanging out in the **`#winter-code-jam`** channel to help you!
 
 ## Getting Started
 
