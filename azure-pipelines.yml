@@ -1,0 +1,22 @@
+jobs:
+- job: lint
+  displayName: "Lint"
+
+  pool:
+    vmImage: 'Ubuntu 18.04'
+
+  variables:
+    PIP_CACHE_DIR: ".cache/pip"
+
+  steps:
+  - task: UsePythonVersion@0
+    displayName: 'Set Python version'
+    inputs:
+      versionSpec: '3.7.x'
+      addToPath: true
+
+  - script: pip install flake8
+    displayName: 'Install flake8'
+
+  - script: flake8 --exclude=.cache,.venv,.svn,CVS,.bzr,.hg,.git,__pycache__,.tox --ignore=E226 --max-line-length=100
+    displayName: 'Lint the project with flake8'
