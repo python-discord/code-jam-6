@@ -64,8 +64,4 @@ The [code jam section of our website](https://pythondiscord.com/pages/code-jams/
 
 ## Partners and Sponsors
 
-[![kivy_full_scaled](https://user-images.githubusercontent.com/33516116/72270319-e0feca80-361c-11ea-9027-747fa344dcc5.png)](https://kivy.org/#home) [![jetbrains_logo_full](https://user-images.githubusercontent.com/33516116/72270320-e0feca80-361c-11ea-901a-7e2c3c42f9f1.png)](https://www.jetbrains.com/) [![do_scaled_112](https://user-images.githubusercontent.com/33516116/72270361-f07e1380-361c-11ea-92ee-cbd9781775a4.png)](https://www.digitalocean.com/)
-
-   
-
-
+[![kivy_143x80](https://user-images.githubusercontent.com/33516116/72271607-173d4980-361f-11ea-8597-4140d98321f5.png)](https://kivy.org/#home) [![jetbrains_143x80](https://user-images.githubusercontent.com/33516116/72271609-173d4980-361f-11ea-8453-c996d33a649b.png)](https://www.jetbrains.com/) [![do_210x80](https://user-images.githubusercontent.com/33516116/72271610-173d4980-361f-11ea-9f3a-0e8de2b8abd1.png)](https://www.digitalocean.com/) [![linode_202x80](https://user-images.githubusercontent.com/33516116/72271608-173d4980-361f-11ea-82bf-e857efca09df.png)](https://www.linode.com/)
