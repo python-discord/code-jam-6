@@ -54,13 +54,13 @@ Please note that **you should not use this pipeline as a remote linter**. Ideall
 
 ## Useful Information for Participants
 
-The [code jam section of our website](https://pythondiscord.com/pages/code-jams/) contains a number of documentations that may help you get started with the Code Jam:
+Our website contains some pages that may help you get started:
 
-- If you have never used git before, check out [How to use git](https://pythondiscord.com/pages/code-jams/using-git/).
+- [How to use git](https://pythondiscord.com/pages/code-jams/using-git/)
 
-- For information on how to correctly fork the repository, create a pull request, *and* add a GitHub webhook to your team's Discord channel, take a look at [Opening a Pull Request](https://pythondiscord.com/pages/code-jams/pull-request/).
+- [Making a fork, opening a pull request, & creating a GitHub webhook](https://pythondiscord.com/pages/code-jams/pull-request/)
 
-- Do you want to know how we will judge your project? Read [How does judging work? ](https://pythondiscord.com/pages/code-jams/judging/).
+- [How does judging work?](https://pythondiscord.com/pages/code-jams/judging/)
 
 ## Partners and Sponsors
 
