@@ -6,7 +6,7 @@
 
 Welcome to the sixth Python Discord Code Jam!
 
-By popular choice, the theme for this code jam is **Ancient Technology**. What you do with this theme or how you interpret it is up to you, but we're sure you can come up with something fun. As the technlogy for this code jam, we've chosen for [Kivy](https://kivy.org/), a cross-platform framework for making user interfaces. We know that a lot of you are probably relatively new to this framework and that's why some of Kivy's [core developers](https://kivy.org/#aboutus) will be hanging out in the `#winter-code-jam` channel to help you!
+By popular choice, the theme for this code jam is **Ancient Technology**. What you do with this theme or how you interpret it is up to you, but it will be your task to come up with something fun using this theme. As the technlogy for this code jam, we've chosen for [Kivy](https://kivy.org/), a cross-platform framework for making user interfaces. We know that a lot of you are probably relatively new to this framework and that's why some of Kivy's [core developers](https://kivy.org/#aboutus) will be hanging out in the `#winter-code-jam` channel to help you!
 
 ## Getting Started
 
@@ -44,10 +44,28 @@ We will be using flake8 without additional plugins and with most of default sett
 
 Obviously, adhering to PEP8 is not the only factor that determines if your code is readable, so make sure to look [beyond PEP8](https://www.youtube.com/watch?v=wf-BqAjZb8M) as well.
 
-### Automatic Linting of Pull Requests
+#### Automatic Linting of Pull Requests
 
 To help us check your code for compliance with PEP8, we have set up an automated build pipeline that will lint all pull requests made to this repository. Each time a pull requests is opened or when changes are made to the source branch (`master` on your team's fork) of a PR, the build pipeline will automatically lint the pull request. When the build process has completed, the build status will automatically be reported in the pull request:
 
 ![Failing build status](https://raw.githubusercontent.com/python-discord/code-jam-6/master/failing_build.png?token=AH7WUVAZRU56A6RY2KPVUOS6EWJUU)
 
 Please note that **you should not use this pipeline as a remote linter**. Ideally, all changes made to the `master` branch of your team's repository have already been linted locally before they were pushed to the remote repository.
+
+## Useful Information for Participants
+
+The [code jam section of our website](https://pythondiscord.com/pages/code-jams/) contains a number of documentations that may help you get started with the Code Jam:
+
+- If you have never used git before, check out ["How to use git"](https://pythondiscord.com/pages/code-jams/using-git/)
+
+- For information on how to correctly fork the repository, create a pull request, *and* add a GitHub webhook to your team's Discord channel, take a look at ["Opening a Pull Request"](https://pythondiscord.com/pages/code-jams/pull-request/)
+
+- Do you want to know how we will judge your project? You can read all about that on our ["How does judging work? "](https://pythondiscord.com/pages/code-jams/judging/) page.
+
+## Partners and Sponsors
+
+- [Kivy](https://kivy.org/#home) (partner)
+
+- [Digital Ocean](https://www.digitalocean.com/) (sponsor)
+
+- [JetBrains](https://www.jetbrains.com/) (sponsor)
