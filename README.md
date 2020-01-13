@@ -51,7 +51,7 @@ The Pull Request you created originally will be automatically updated whenever y
 
 Code style and readability will be important factors in judging your team's project. We expect you to follow the style recommendations made in [PEP8](https://www.python.org/dev/peps/pep-0008/) and, to check for compliance with PEP8, we will use a linting tool called [flake8](http://flake8.pycqa.org/en/stable/). In case PEP8 and flake8 disagree, the output of the linter will be leading.
 
-We will be using flake8 without additional plugins and with most of default settings enabled. Two notable exceptions are that we will use a maximum line length of 100 characters and ignore error E226. To allow you to run flake8 with the same settings as we will use, we have added a `.flake8` configuration file to your team folder.
+We will be using flake8 without additional plugins and with most of default settings enabled. The most notable exception is that we've set the maximum line length to 100 characters. To make it easy for you to run flake8 with the same settings as we will use, we have added a `.flake8` configuration file to your team folder.
 
 Obviously, adhering to PEP8 is not the only factor that determines if your code is readable, so make sure to look [beyond PEP8](https://www.youtube.com/watch?v=wf-BqAjZb8M) as well.
 
