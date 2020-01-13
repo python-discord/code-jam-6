@@ -1,8 +1,8 @@
+[![Code Jam Banner](https://raw.githubusercontent.com/python-discord/code-jam-6/master/ancient%20tech.png?token=AAQAKVPQ55SEFWYYLYO5YV26ETLTC)](#)
+
 [![Discord](https://img.shields.io/static/v1?label=Python%20Discord&logo=discord&message=%3E30k%20members&color=%237289DA&logoColor=white)](https://discord.gg/2B963hn)
 [![License](https://img.shields.io/github/license/python-discord/bot)](LICENSE)
 [![Website](https://img.shields.io/badge/website-visit-brightgreen)](https://pythondiscord.com)
-
-[![Code Jam Banner](https://raw.githubusercontent.com/python-discord/code-jam-6/master/ancient%20tech.png?token=AAQAKVPQ55SEFWYYLYO5YV26ETLTC)](#)
 
 Welcome to the sixth Python Discord Code Jam!
 
