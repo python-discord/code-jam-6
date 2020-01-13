@@ -10,7 +10,7 @@ By popular choice, the theme for this code jam is **Ancient Technology**. What y
 
 ## Getting Started
 
-1. Have your team leader fork the repository. If your leader is unavailable, it's okay if someone else does it.
+1. Have your team leader [fork](https://github.com/python-discord/code-jam-6/fork) the repository. If your leader is unavailable, it's okay if someone else does it.
 
 2. Open a pull request from your fork's `master` to the `master` branch of this repository. This pull requests will eventually count as your team's submission, but make sure to **open the PR when the code jam starts**. You can use the name of your team as the name of the pull request.
 
