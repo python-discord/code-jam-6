@@ -6,9 +6,8 @@ Ancient Technology!
 
 * Install pipenv: `pip install pipenv`
 * Install dependencies: `pipenv sync --dev`
-* Setup pre-commit hooks: `pipenv run precommit`
 
-All dependencies are now installed in a virutal environment. Pre-commit hooks should also now be setup.
+All dependencies are now installed in a virutal environment.
 
 ## License
 
