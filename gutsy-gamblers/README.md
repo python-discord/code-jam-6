@@ -1,7 +1,7 @@
 # Gutsy Gamblers
 
 ## Ancient Technology!
-The purpose of this app is to be an app.
+The purpose of this app is to be an app. It will *NOT* utilise Ancient Technology but will rather attempt to emulate it... or something. This is a test for webhooks.
 
 ## License
 
