@@ -10,6 +10,8 @@ flake8-bugbear = "*"
 
 [packages]
 kivy = "*"
+kivy-deps-sdl2 = "*"
+kivy-deps-glew = "*"
 
 [requires]
 python_version = "3.7"
