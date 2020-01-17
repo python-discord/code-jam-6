@@ -1,5 +1,7 @@
 # Brilliant Builders
 
+This is our awesome README, lets be sure to add stuff here later!
+
 Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
 
 ## Useful links
