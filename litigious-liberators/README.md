@@ -4,6 +4,8 @@ Please use this README to document your team's project. Make sure to include a g
 
 ## Useful links
 
+- **Trello Board**: [https://trello.com/b/OUo1YWft](https://trello.com/b/OUo1YWft)
+
 - **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
 
 - **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
