@@ -24,7 +24,9 @@ jobs:
         pipenv sync 
     - name: Lint 
       run: |
+        cd brilliant-builders
         pipenv run lint
     - name: Test 
       run: |
+        cd brilliant-builders
         pipenv run test
