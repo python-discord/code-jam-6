@@ -1,13 +1,14 @@
 # Paranormal Pioneers
 
-This is a placeholder for Paranormal Pioneers project README.
+Soon... (c)
 
 ## Developers
 
 - [nekit](https://github.com/NeKitDS)
 - [lakmatiol](https://github.com/lavirlifiliol)
 - [ks123](https://github.com/ks129)
-- [Tansc](https://githib.com/Tansc161)
+- [Tansc](https://github.com/Tansc161)
+- [DagobertDuck](https://github.com/Dag0b3rtDuck)
 
 ## License
 
