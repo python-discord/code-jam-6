@@ -14,4 +14,12 @@ Please use this README to document your team's project. Make sure to include a g
 
 All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
 
-Checking In to Begin!
+## Setup The Environment
+
+used venv to create the virtual envoronment. It was run with: python3 -m venv venv
+
+followed by: source ./venv/bin/activate
+
+I assume: python3 -m pip -r requirements.txt
+
+But I am not sure. :)
