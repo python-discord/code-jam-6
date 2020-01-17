@@ -3,6 +3,7 @@ repos:
     hooks:
     -   id: flake8
         name: Flake8
-        entry: pipenv run flake8
-        language: system
+        entry: pipenv run lint
+        language: python
         types: [python]
+        require_serial: true

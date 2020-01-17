@@ -10,12 +10,10 @@ flake8-bugbear = "*"
 
 [packages]
 kivy = "*"
-kivy-deps-sdl2 = "*"
-kivy-deps-glew = "*"
 
 [requires]
 python_version = "3.7"
 
 [scripts]
-flake8 = "python -m flake8"
+lint = "python -m flake8"
 precommit = "pre-commit install"
