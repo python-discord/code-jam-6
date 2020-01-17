@@ -1,6 +1,5 @@
 [flake8]
 max-line-length = 100
-ignore =
 exclude =
     .githooks/
 filename =
