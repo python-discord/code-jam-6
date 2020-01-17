@@ -18,12 +18,13 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
+        cd brilliant-builders
         python -m pip install --upgrade pip
         pip install pipenv
         pipenv sync 
-    - name: Lint with flake8
+    - name: Lint 
       run: |
         pipenv run lint
-    - name: Test with pytest
+    - name: Test 
       run: |
         pipenv run test
