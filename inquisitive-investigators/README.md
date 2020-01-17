@@ -1,14 +1,14 @@
 # Inquisitive Investigators
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+Ancient Technology!
 
-## Useful links
+## Installation - Developers
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+* Install pipenv: `pip install pipenv`
+* Install dependencies: `pipenv sync --dev`
+* Setup pre-commit hooks: `pipenv run precommit`
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
-
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+All dependencies are now installed in a virutal environment. Pre-commit hooks should also now be setup.
 
 ## License
 
