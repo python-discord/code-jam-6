@@ -1,15 +1,14 @@
 # Paranormal Pioneers
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+This is a placeholder for Paranormal Pioneers project README.
 
-## Useful links
+## Developers
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
-
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
-
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+- [nekit](https://github.com/NeKitDS)
+- [lakmatiol](https://github.com/lavirlifiliol)
+- [ks123](https://github.com/ks129)
+- [Tansc](https://githib.com/Tansc161)
 
 ## License
 
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+All projects in Code Jam 6 are under the [MIT license](../LICENSE).
