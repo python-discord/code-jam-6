@@ -13,3 +13,5 @@ Please use this README to document your team's project. Make sure to include a g
 ## License
 
 All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+
+Checking In to Begin!
