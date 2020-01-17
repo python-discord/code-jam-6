@@ -1,0 +1,23 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pre-commit = "*"
+flake8-import-order = "*"
+flake8-tidy-imports = "*"
+flake8-annotations = "*"
+coverage = "*"
+
+[packages]
+kivy = "~=1.11"
+
+[requires]
+python_version = "3.7"
+
+[scripts]
+lint = "flake8"
+precommit = "pre-commit install"
+test = "coverage run -m unittest"
+report = "coverage report"
