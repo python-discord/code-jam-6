@@ -1,5 +1,5 @@
 # Jurassic Journalists
-Initial...
+Computating...
 
 
 ## Useful links

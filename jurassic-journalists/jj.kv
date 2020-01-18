@@ -1,0 +1,203 @@
+<Butt@Button>:    
+	width: self.parent.width * 1/10
+	height: self.parent.height * 1/10
+    size_hint: None, None
+	background_color: 0,0,0,0
+    on_release: self.parent.typw.text += self.text; self.parent.typw.focus = True
+	canvas.before:
+	    Color:
+		    rgba: (.4,.4,.4,1) if self.state == 'normal' else (0,.7,.7,1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: 50,	
+<Butt2@Label>
+    width: self.parent.width * 1/5
+	height: self.parent.height * 1/10
+    size_hint: None, None
+    #disabled:True
+		
+<TypeWriter>:
+	name: 'Typewriter'
+
+	FloatLayout:
+		typw: typw
+		GestureSurface:
+			on_gesture_complete: self.parent.typw.text = self.parent.typw.text[:-1] # self.parent.typw.do_backspace()
+		Button:
+			on_release: root.manager.current = 'Screen2'
+			pos_hint : {'x': .9, 'y': .9}
+			size_hint: None, None
+			background_color: 0,0,0,.2
+		TextInput: #CodeInput
+		    #canvas.before:
+			#    Color:
+			#	    rgba: .95,.93,.8,.8
+			#    RoundedRectangle:
+			#        pos: self.pos
+			#	    size: self.size
+			#	    radius: 25,
+			id: typw
+			background_color: .95,.93,.8,.8 # 0,0,0,0
+			padding: 12,12,12,12
+			font_name: '1942.ttf'
+			pos_hint: {'x': 0.2, 'y':.5}
+			size_hint: .6, .5
+			readonly: True
+			cursor_blink: False
+			cursor_color: 0,0,0,1
+			cursor_width: 10
+			text: ''
+		Butt:
+			text: 'q'
+			pos_hint: {'x': 0, 'y':.3}
+		Butt:
+			text: 'w'
+			pos_hint: {'x': .1, 'y':.3}
+		Butt:
+			text: 'e'
+			pos_hint: {'x': .2, 'y':.3}
+		Butt:
+			text: 'r'
+			pos_hint: {'x': .3, 'y':.3}
+		Butt:
+			text: 't'
+			pos_hint: {'x': .4, 'y':.3}
+		Butt:
+			text: 'y'
+			pos_hint: {'x': .5, 'y':.3}
+		Butt:
+			text: 'u'
+			pos_hint: {'x': .6, 'y':.3}
+		Butt:
+			text: 'i'
+			pos_hint: {'x': .7, 'y':.3}
+		Butt:
+			text: 'o'
+			pos_hint: {'x': .8, 'y':.3}
+		Butt:
+			text: 'p'
+			pos_hint: {'x': .9, 'y':.3}
+		Butt:
+			text: 'a'
+			pos_hint: {'x': .05, 'y':.2}
+		Butt:
+			text: 's'
+			pos_hint: {'x': .15, 'y':.2}
+		Butt:
+			text: 'd'
+			pos_hint: {'x': .25, 'y':.2}
+		Butt
+			text: 'f'
+			pos_hint: {'x': .35, 'y':.2}
+		Butt
+			text: 'g'
+			pos_hint: {'x': .45, 'y':.2}
+		Butt:
+			text: 'h'
+			pos_hint: {'x': .55, 'y':.2}
+		Butt:
+			text: 'j'
+			pos_hint: {'x': .65, 'y':.2}
+		Butt:
+			text: 'k'
+			pos_hint: {'x': .75, 'y':.2}
+		Butt:
+			text: 'l'
+			pos_hint: {'x': .85, 'y':.2}
+		Butt:
+			text: 'z'
+			pos_hint: {'x': .125, 'y':.1}
+		Butt:
+			text: 'x'
+			pos_hint: {'x': .225, 'y':.1}
+		Butt:
+			text: 'c'
+			pos_hint: {'x': .325, 'y':.1}
+		Butt:
+			text: 'v'
+			pos_hint: {'x': .425, 'y':.1}
+		Butt:
+			text: 'b'
+			pos_hint: {'x': .525, 'y':.1}
+		Butt:
+			text: 'n'
+			pos_hint: {'x': .625, 'y':.1}
+		Butt:
+			text: 'm'
+			pos_hint: {'x': .725, 'y':.1}
+	    
+		Butt:
+			pos_hint: {'x': .05, 'y':0}
+			size_hint: .9, None
+	    	height: self.parent.height * 1/10
+			on_release: self.parent.typw.text += ' '
+		Button:
+		    pos_hint: {'x': .85, 'y': .5}
+			size_hint: .15, .3
+			on_release: self.parent.typw.text += '\n'
+
+<Main@ScreenManager>:
+    TypeWriter
+	Screen2
+
+
+<Screen2>:
+    name: 'Screen2'
+	typw2: typw2
+	Button:
+		pos_hint : {'x': 0, 'y': 0}
+		size_hint: None, None
+		background_color: 0,0,0,.2
+		on_release: root.manager.current = 'Typewriter'
+	TextInput: #CodeInput
+		id: typw2
+		background_color: .95,.93,.8,.8 # 0,0,0,0
+		padding: 12,12,12,12
+		font_name: '1942.ttf'
+		pos_hint: {'x': 0.2, 'y':.5}
+		size_hint: .6, .5
+		readonly: True
+		cursor_blink: False
+		cursor_color: 0,0,0,1
+		cursor_width: 10
+		text: ''
+	Butt2:
+		text: ''
+		pos_hint: {'x': .2, 'y':.3}
+		disabled: True
+	Butt2:
+		text: 'abc'
+		pos_hint: {'x': .4, 'y':.3}
+	Butt2:
+		text: 'def'
+		pos_hint: {'x': .6, 'y':.3}
+	Butt2:
+		text: 'ghi'
+		pos_hint: {'x': .2, 'y':.2}
+	Butt2:
+		text: 'jkl'
+		pos_hint: {'x': .4, 'y':.2}
+	Butt2:
+		text: 'mno'
+		pos_hint: {'x': .6, 'y':.2}
+	Butt2:
+		text: 'pqrs'
+		pos_hint: {'x': .2, 'y':.1}
+	Butt2:
+		text: 'tuv'
+		pos_hint: {'x': .4, 'y':.1}
+	Butt2:
+		text: 'wxyz'
+		pos_hint: {'x': .6, 'y':.1}
+	Butt2:
+		text: ''
+		pos_hint: {'x': .2, 'y':0}
+		disabled: True
+	Butt2:
+		text: '+'
+		pos_hint: {'x': .4, 'y':0}
+	Butt2:
+		text: ''
+		pos_hint: {'x': .6, 'y':0}
+	    disabled: True
