@@ -1,12 +1,29 @@
 import kivy
 from kivy.app import App
 from kivy.lang import Builder
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
 kivy.require('1.11.1')
 
 
-class MainScreen(Screen):
+class Pop(FloatLayout):
     pass
+
+
+class SettingsScreen(Popup):
+    def __init__(self, **kwargs):
+        super(SettingsScreen, self).__init__(**kwargs)
+
+        settings_popup = Popup(title="Settings", content=Label(text='Settings window!'),
+                               size_hint=(None, None), size=(200, 200))
+        settings_popup.open()
+
+
+class MainScreen(Screen):
+    def settings_button(self):
+        SettingsScreen()
 
 
 class WindowManager(ScreenManager):
