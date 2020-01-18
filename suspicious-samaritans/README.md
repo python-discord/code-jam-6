@@ -1,6 +1,17 @@
 # Suspicious Samaritans
 
-modified to allow PR
+WINDOWS:
+
+- Run `set PATH=%path%%CD%\libav\bin;` while in the suspicious-samaritans folder
+- Run `pipenv shell`
+- Run `py main.py`
+
+LINUX:
+
+- Ubuntu:
+  - Run `sudo apt install ffmpeg`
+  - Run `pipenv shell`
+  - Run `python3.7 main.py`
 
 ## Useful links
 
