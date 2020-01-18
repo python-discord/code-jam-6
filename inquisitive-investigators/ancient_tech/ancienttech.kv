@@ -61,7 +61,6 @@
         Label:
             id: name
             text_size: self.size
-            font_name: './ancient_tech/static/retro_font.ttf'
             halign: 'left'
             size_hint: .45, .3
             pos_hint: {'top': 1, 'x': 0.01}
@@ -69,7 +68,6 @@
         Label:
             id: type
             text_size: self.size
-            font_name: './ancient_tech/static/retro_font.ttf'
             halign: 'left'
             size_hint: .15, .3
             pos_hint: {'top': 1, 'x': 0.47}
@@ -77,7 +75,6 @@
         Label:
             id: size
             text_size: self.size
-            font_name: './ancient_tech/static/retro_font.ttf'
             halign: 'left'
             size_hint: .1, .25
             pos_hint: {'top': 1, 'x': .65}
@@ -85,7 +82,6 @@
         Label:
             id: date
             text_size: self.size
-            font_name: './ancient_tech/static/retro_font.ttf'
             halign: 'left'
             size_hint: .2, .3
             pos_hint: {'top': 1, 'x': .81}
@@ -109,7 +105,6 @@
         pos_hint: {'top':1, 'right':1}
         size_hint: 1,.4
         text: 'Current Directory Click to Copy'
-        font_name: './ancient_tech/static/retro_font.ttf'
         color: 0.34,1,1,1
     FloatLayout:
         pos_hint: {'top':.5, 'right':1}
@@ -124,7 +119,6 @@
             pos_hint: {'top': 1, 'x': 0}
             size_hint: .455, 1
             text: 'Name'
-            font_name: './ancient_tech/static/retro_font.ttf'
         Label:
             canvas.before:
                 Color:
@@ -135,7 +129,6 @@
             pos_hint: {'top': 1, 'x': .469}
             size_hint: .15, 1
             text: 'Type'
-            font_name: './ancient_tech/static/retro_font.ttf'
         Label:
             canvas.before:
                 Color:
@@ -146,7 +139,6 @@
             pos_hint: {'top': 1, 'x': .638}
             size_hint: .142, 1
             text: 'Size'
-            font_name: './ancient_tech/static/retro_font.ttf'
         Label:
             canvas.before:
                 Color:
@@ -157,7 +149,6 @@
             pos_hint: {'top': 1, 'right': 1}
             size_hint: .204, 1
             text: 'Date'
-            font_name: './ancient_tech/static/retro_font.ttf'
 
 <Files>:
     size: root.size
@@ -177,41 +168,33 @@
     orientation: 'horizontal'
 
     Button:
-        text: '1: Help'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '0:Help'
     Button:
-        text: '2: Menu'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '1:Menu'
     Button:
-        text: '3: View'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '2:View'
     Button:
-        text: '4: Edit'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '3:Edit'
     Button:
-        text: '5: Copy'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '4:Copy'
     Button:
-        text: '6: PullDwn'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '5:DWN'
     Button:
-        text: '7: PullUp'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '6:UP'
     Button:
-        text: '8: Mkdir'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '7:Mkdir  '
     Button:
-        text: '9: Delete'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '8:Delete'
     Button:
-        text: '10: Quit'
-        font_name: './ancient_tech/static/retro_font.ttf'
+        text: '9:Quit'
 
 <Button>:
+    font_name: './ancient_tech/static/retro_font.ttf'
     background_normal: ''
     background_color: (0,0,0,0)
 
 <Label>:
+    font_name: './ancient_tech/static/retro_font.ttf'
     _scale: 1. if self.texture_size[0] < self.width else float(self.width) / self.texture_size[0]
     canvas.before:
         PushMatrix
