@@ -1,0 +1,33 @@
+name: Lint and test
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up Python
+      uses: actions/setup-python@v1
+      with:
+        python-version: 3.7
+    - name: Install pipenv
+      run: |
+        python -m pip install --upgrade pip
+        pip install pipenv
+    - name: Install dependencies
+      working-directory: ./brilliant-builders
+      run: pipenv sync --dev
+    - name: Lint 
+      working-directory: ./brilliant-builders
+      run: |
+        pipenv run lint
+    - name: Test 
+      working-directory: ./brilliant-builders
+      run: |
+        pipenv run test
