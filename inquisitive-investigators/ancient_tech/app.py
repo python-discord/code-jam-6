@@ -10,6 +10,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.properties import ObjectProperty, StringProperty
 
+from .utils.utils import bytes_conversion
 
 class Main(FloatLayout):
     pass
@@ -54,8 +55,10 @@ class NewFile(Button):
         date = datetime.fromtimestamp(stats.st_mtime).strftime('%d-%m-%Y')
 
         self.ids.name.text = Path(txt).name
-        self.ids.size.text = str(stats.st_size)
-        self.ids.date.text = str(date)
+
+        if self.txt != '../':
+            self.ids.size.text = ' '.join(bytes_conversion(int(stats.st_size)))
+            self.ids.date.text = str(date)
 
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
@@ -87,7 +90,3 @@ class Footer(BoxLayout):
 class AncientTechApp(App):
     def build(self):
         return Main()
-
-
-if __name__ == '__main__':
-    AncientTechApp().run()
