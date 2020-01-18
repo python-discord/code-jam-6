@@ -14,3 +14,22 @@
         Button:
             text:"Submit"
             on_press: root.settings_button()
+
+<RotatingWidget>:
+	canvas.before:
+		PushMatrix
+		Rotate:
+			angle: root.angle
+			axis: 0, 0, 1
+			origin: self.center
+	canvas.after:
+		PopMatrix
+
+	Image:
+		size_hint: None, None
+		size: 100, 100
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+	Label:
+		color: 0, 0, 0, 1
+		text: 'A Rock'
