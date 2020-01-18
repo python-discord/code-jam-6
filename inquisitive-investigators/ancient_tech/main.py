@@ -43,7 +43,6 @@ class File(Button):
         else:
             path = Path(self.text)
 
-        self.ctx.prev_dir = str(Path(*Path(path).parts[:-1]))
 
         if path.is_dir():
             self.ctx.clear_widgets()
@@ -52,6 +51,8 @@ class File(Button):
             self.ctx.generate('../')
             for d in self.ctx.dirs:
                 self.ctx.generate(d)
+
+            self.ctx.prev_dir = str(Path(*Path(path).parts[:-1]))
 
         else:
             Logger.info('FileBrowser: Not a directory!')
