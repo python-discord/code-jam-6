@@ -14,24 +14,18 @@ class Main(FloatLayout):
     pass
 
 
-class FileMain(BoxLayout):
-    pass
-
-
 class FileBrowser(StackLayout):
     dirs = ObjectProperty()
-    prev_dir = StringProperty(str(Path(*Path().home().parts[:-1])))
-    
+    prev_dir = StringProperty()
+    size_hint = (1, None)
+
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.dirs = Path.home().iterdir()
+        self.prev_dir = str(Path(*Path().home().parts[:-1]))
 
     def generate(self, widget):
         self.add_widget(File(self, text=str(widget)))
-
-
-class SubBrowser(StackLayout):
-    pass
 
 
 class File(Button):

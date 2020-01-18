@@ -4,49 +4,46 @@
     Footer:
         pos_hint: {'top': .05}
         size_hint: 1,.07
-    FileMain:
-        pos_hint: {'top': 1}
-        size_hint: 1, .5
-
-<FileMain>:
-    canvas:
-        Color:
-            rgb: 0,1,0
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    orientation: 'horizontal'
 
     ScrollView:
+        pos_hint: {'top': 1}
+        size_hint: .5,.8
+        scroll_distance: 10
+        canvas.before:
+            Color:
+                rgb: 0,0,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
         FileBrowser:
-            id: left
+            height: self.minimum_height
             on_parent:
                 self.generate('../')
                 for d in self.dirs: self.generate(d)
 
-    FileBrowser:
-        id: right
+    ScrollView:
+        pos_hint: {'top': 1, 'right':1}
+        size_hint: .5,.8
+        scroll_distance: 10
+        canvas.before:
+            Color:
+                rgb: 0,0,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        FileBrowser:
+            height: self.minimum_height
+            on_parent:
+                self.generate('../')
+                for d in self.dirs: self.generate(d)
+
 
 <FileBrowser>:
-    canvas:
-        Color:
-            rgb: 0,0,1
-        Rectangle:
-            size: self.size
-            pos: self.pos
-
+    size: root.size
+    pos: root.pos
     orientation: 'rl-tb'
-    spacing: [0,0]
-
-<SubBrowser>:
-    canvas:
-        Color:
-            rgb: 0,0,1
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    orientation: 'rl-tb'
-    spacing: [0,0]
+    spacing: [0,-70]
+    size_hint_y: None
 
 <File>:
     size_hint: 1, .1
