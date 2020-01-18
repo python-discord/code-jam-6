@@ -26,9 +26,6 @@ class FileHeader(FloatLayout):
 
 
 class Files(StackLayout):
-    dirs = ObjectProperty()
-    prev_dir = StringProperty()
-    size_hint = (1, None)
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
@@ -65,7 +62,7 @@ class NewFile(Button):
                 t = 'DIR'
 
             elif str(path).startswith('.') or path.suffix == '':
-                t = str(path)[1:]
+                t = str(path.parts[-1])
 
             else:
                 t = path.suffix[1:].upper()
