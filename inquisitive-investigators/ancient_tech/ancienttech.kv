@@ -177,3 +177,14 @@
 <Button>:
     background_normal: ''
     background_color: (0,0,0,0)
+
+<Label>:
+    _scale: 1. if self.texture_size[0] < self.width else float(self.width) / self.texture_size[0]
+    canvas.before:
+        PushMatrix
+        Scale:
+            origin: self.center
+            x: self._scale or 1.
+            y: self._scale or 1.
+    canvas.after:
+        PopMatrix
