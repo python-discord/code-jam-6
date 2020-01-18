@@ -8,7 +8,8 @@ from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, NumericProperty
+from kivy.clock import Clock
 
 from .utils.utils import bytes_conversion
 
@@ -30,6 +31,10 @@ class Files(StackLayout):
     prev_dir = StringProperty()
     size_hint = (1, None)
 
+    do_layout_event = ObjectProperty(None, allownone=True)
+
+    layout_delay_s = NumericProperty(0.2)
+
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.dirs = Path.home().iterdir()
@@ -37,6 +42,14 @@ class Files(StackLayout):
 
     def generate(self, widget):
         self.add_widget(NewFile(self, str(widget), text=''))
+
+    def do_layout(self, *args, **kwargs):
+        if self.do_layout_event is not None:
+            self.do_layout_event.cancel()
+        real_do_layout = super().do_layout
+        self.do_layout_event = Clock.schedule_once(
+            lambda dt: real_do_layout(*args, **kwargs),
+            self.layout_delay_s)
 
 
 class Column(Widget):

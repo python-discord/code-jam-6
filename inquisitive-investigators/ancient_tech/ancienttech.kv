@@ -189,12 +189,10 @@
         text: '9:Quit'
 
 <Button>:
-    font_name: './ancient_tech/static/retro_font.ttf'
     background_normal: ''
     background_color: (0,0,0,0)
 
 <Label>:
-    font_name: './ancient_tech/static/retro_font.ttf'
     _scale: 1. if self.texture_size[0] < self.width else float(self.width) / self.texture_size[0]
     canvas.before:
         PushMatrix
