@@ -8,10 +8,6 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 kivy.require('1.11.1')
 
 
-class Pop(FloatLayout):
-    pass
-
-
 class SettingsScreen(Popup):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
