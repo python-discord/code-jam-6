@@ -45,16 +45,21 @@ class Renderer(Widget):
         We should have two different drags --- one to rotate the stone and one to chip the
         stone.  Probably 'right' and 'left' click differentiated.
         """
-        # if touch.button == right: self.chip_away(touch)
-        self.rotate(touch.dsx, -touch.dsy)
+        if touch.button == 'right':
+            self.rotate(touch.dsx, -touch.dsy)
+        else:
+            self.chip_away(touch)
 
     def chip_away(self, touch):
         """
         Need collision detection with mesh and a method to remove points from mesh.  Just
         popping vertices/indices from the mesh doesn't seem to change the object on the canvas.
         I think this function will be the most difficult to flesh out.
+
+        Ok, to update the mesh indices, the list needs to be changed. That's why popping didn't
+        work.
         """
-        NotImplemented
+        self.mesh.indices = self.mesh.indices[8:]
 
     def rotate(self, dx, dy):
         x = to_radians(self.rotx.angle)
