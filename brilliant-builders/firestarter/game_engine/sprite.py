@@ -9,7 +9,7 @@ from kivy.uix.widget import Widget
 class Sprite(Widget):
     resource_dir = (Path('.') / 'resources').absolute()
 
-    def __init__(self, image, pos=(0, 0), **kwargs):
+    def __init__(self, image: str, pos: tuple = (0, 0), **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.size = (50, 50)
@@ -25,7 +25,7 @@ class Sprite(Widget):
         """Redraw the rectangle after moving the sprite."""
         self.bg_rect.pos = self.pos
 
-    def update(self):
+    def update(self) -> None:
         raise NotImplementedError()
 
 
@@ -34,10 +34,10 @@ class Player(Sprite):
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
 
-    def __init__(self, image, pos=(0, 0), **kwargs):
+    def __init__(self, image: str, pos: tuple = (0, 0), **kwargs) -> None:
         super().__init__(image, pos, **kwargs)
 
-    def update(self):
+    def update(self) -> None:
         # update the position
         self.pos = (self.pos[0] + self.vel_x, self.pos[1] + self.vel_y)
         # dampen the velocity to come to a stop

@@ -1,7 +1,7 @@
 from typing import List
 
 from kivy.clock import Clock
-from kivy.core.window import Window, Keyboard
+from kivy.core.window import Keyboard, Window
 from kivy.uix.widget import Widget
 
 from firestarter.game_engine.sprite import Sprite
