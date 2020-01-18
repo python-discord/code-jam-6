@@ -30,7 +30,7 @@ class Files(StackLayout):
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.dirs = Path.home().iterdir()
-        self.prev_dir = str(Path(*Path().home().parts[:-1]))
+        self.prev_dir = str(Path.home().parent)
 
     def generate(self, widget):
         self.add_widget(NewFile(self, str(widget), text=''))
@@ -50,7 +50,7 @@ class NewFile(Button):
         self.ctx = ctx
 
         stats = Path(txt).stat()
-        self.ids.name.text = Path(txt).parts[-1]
+        self.ids.name.text = Path(txt).name
         self.ids.size.text = str(stats.st_size)
         self.ids.date.text = str(stats.st_mtime)
 
@@ -65,11 +65,9 @@ class NewFile(Button):
         if path.is_dir():
             self.ctx.clear_widgets()
             self.ctx.dirs = path.iterdir()
-            prev = Path(*Path(path).parts)
-            print(prev.parts)
 
-            if len(prev.parts) > 1:
-                self.ctx.prev_dir = str(Path(*prev.parts[:-1]))
+            if len(path.parts) > 1:
+                self.ctx.prev_dir = str(path.parent)
                 self.ctx.generate('../')
 
             for d in self.ctx.dirs:
