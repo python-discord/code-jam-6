@@ -3,6 +3,10 @@ from kivy.uix.widget import Widget
 from kivy.lang import Builder
 
 
+class ToolManager(Widget):
+    pass
+
+
 class Abacus(Widget):
     pass
 
@@ -18,7 +22,7 @@ class Ledger(Widget):
 class AbacusApp(App):
     def build(self):
         Builder.load_file("abacus.kv")
-        app = Abacus()
+        app = ToolManager()
         return app
 
 
