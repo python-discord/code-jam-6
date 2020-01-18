@@ -2,6 +2,15 @@
 
 Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
 
+## Contents
+
+- [Dev](#dev)
+  * [Project Management](#project-management)
+  * [Code organisation](#code-organisation)
+  * [Setting up your repo](#setting-up-your-repo)
+- [Useful links](#useful-links)
+- [License](#license)
+
 ## Dev
 
 ### Project Management
