@@ -23,6 +23,7 @@ class OSApiException(Exception):
 
 
 class Env:
+    # TODO: add config validation/defaults
     def __init__(self, cfg_file: Optional[IO] = None):
         """create an environment, given a config file.
         If no config file is given, try to find one"""
@@ -30,8 +31,12 @@ class Env:
         if cfg_file:
             cfg.read(cfg_file)
         else:
-            cfg.read(_find_config_file())
-        self.fs_root: pl.Path = pl.Path(cfg['BASE']['fs_root'])
+            file = _find_config_file()
+            cfg.read_file(file)
+            file.close()
+        oo = cfg['DEFAULT']
+
+        self.fs_root: pl.Path = pl.Path(oo['fs_root'])
         self._terminals: Dict[str, Terminal] = {}
 
     def add_terminal(self, uid: str, term: "Terminal") -> None:
@@ -40,10 +45,13 @@ class Env:
     def get_terminal(self, uid: str) -> "Terminal":
         return self._terminals[uid]
 
+    def get_users(self):
+        yield from self._terminals.keys()
+
 
 class Terminal:
     """override methods to create custom terminals"""
-
+    # TODO: have terminals interface with the OS and observe their inputs
     @staticmethod
     def impl_ex(name, action):
         return OSApiException(f"Terminal '{name}' does not support operation '{action}'")
