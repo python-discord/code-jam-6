@@ -12,6 +12,7 @@ from kivy.properties import ObjectProperty, StringProperty
 
 from .utils.utils import bytes_conversion
 
+
 class Main(FloatLayout):
     pass
 
