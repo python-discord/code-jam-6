@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime
 
 from kivy.app import App
 from kivy.logger import Logger
@@ -50,14 +51,16 @@ class NewFile(Button):
         self.ctx = ctx
 
         stats = Path(txt).stat()
+        date = datetime.fromtimestamp(stats.st_mtime).strftime('%d-%m-%Y')
+
         self.ids.name.text = Path(txt).name
         self.ids.size.text = str(stats.st_size)
-        self.ids.date.text = str(stats.st_mtime)
+        self.ids.date.text = str(date)
 
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
-        if self.text == '../':
+        if self.txt == '../':
             path = Path(self.ctx.prev_dir)
         else:
             path = Path(self.txt)
