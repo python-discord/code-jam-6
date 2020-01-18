@@ -1,0 +1,14 @@
+-i https://pypi.org/simple
+certifi==2019.11.28
+chardet==3.0.4
+docutils==0.16 ; sys_platform == 'win32'
+idna==2.8
+kivy-deps-glew==0.1.12 ; sys_platform == 'win32'
+kivy-deps-sdl2==0.1.23 ; sys_platform == 'win32'
+kivy-garden==0.1.4
+kivy==1.11.1
+pygments==2.5.2 ; sys_platform == 'win32'
+pypiwin32==223 ; sys_platform == 'win32'
+pywin32==227
+requests==2.22.0
+urllib3==1.25.7
