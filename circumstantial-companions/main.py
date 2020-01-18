@@ -59,7 +59,7 @@ class Renderer(Widget):
         Ok, to update the mesh indices, the list needs to be changed. That's why popping didn't
         work.
         """
-        self.mesh.indices = self.mesh.indices[8:]
+        self.mesh.indices = self.mesh.indices[3:] # This makes a pretty creepy monkey.
 
     def rotate(self, dx, dy):
         x = to_radians(self.rotx.angle)
