@@ -50,8 +50,9 @@ class NewFile(Button):
         self.txt = txt
         self.ctx = ctx
 
-        stats = Path(txt).stat()
-        self.ids.name.text = Path(txt).name
+        path = Path(txt)
+        stats = path.stat()
+        self.ids.name.text = path.name
 
         if self.txt != '../':
             self.ids.size.text = ' '.join(bytes_conversion(int(stats.st_size)))
@@ -59,6 +60,17 @@ class NewFile(Button):
             self.ids.date.text = datetime.fromtimestamp(
                 stats.st_mtime
             ).strftime('%d-%m-%Y')
+
+            if path.is_dir():
+                t = 'DIR'
+
+            elif str(path).startswith('.') or path.suffix == '':
+                t = str(path)[1:]
+
+            else:
+                t = path.suffix[1:].upper()
+
+            self.ids.type.text = t
 
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
