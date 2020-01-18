@@ -1,16 +1,10 @@
 from pathlib import Path
 
 from kivy.app import App
-<<<<<<< HEAD
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
-=======
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.button import Button
-from kivy.uix.stacklayout import StackLayout
->>>>>>> 387bc7cc5bd27fa85a4dad7296e28b9c28f1e883
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
 
