@@ -14,6 +14,18 @@
   - Gender: Male
   - Age: 46
   - 'Works as a humble farmer'
+- The Jester
+  - Backend development
+  - Nationality: Indian
+  - Gender: Male
+  - Age: 20
+  - 'An autodidact trying to find his way'
+- MBM_1607
+  - Frontend and backend development
+  - Nationality: Pakistani
+  - Gender: Male
+  - Age: 18
+  - 'PEP8 unto thyself, not unto others'
 
 ## WINDOWS
 
