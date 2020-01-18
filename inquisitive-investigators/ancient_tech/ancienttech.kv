@@ -18,23 +18,12 @@
     orientation: 'horizontal'
 
     FileBrowser:
-<<<<<<< HEAD
         id: left
         on_parent:
             for d in self.dirs: self.generate(d)
 
     FileBrowser:
         id: right
-=======
-        Button:
-            text: 'press me'
-            on_press: root.generate()
-    SubBrowser:
-        File:
-            text: '/..'
-        File:
-            text: 'Nothing to Display since in Sub Directory'
->>>>>>> 387bc7cc5bd27fa85a4dad7296e28b9c28f1e883
 
 <FileBrowser>:
     canvas:
