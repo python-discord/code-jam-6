@@ -1,13 +1,13 @@
 from pathlib import Path
 
 from kivy.app import App
+from kivy.logger import Logger
 from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
+from kivy.properties import ObjectProperty, StringProperty
 
 
 class Main(FloatLayout):
@@ -15,23 +15,19 @@ class Main(FloatLayout):
 
 
 class FileMain(BoxLayout):
-    def generate(self):
-        dirs = Path.home().iterdir()
-
-        for d in dirs:
-            self.add_widget(File(text=str(d), size_hint=(1, .1)))
+    pass
 
 
 class FileBrowser(StackLayout):
-    dirs = ObjectProperty(None)
+    dirs = ObjectProperty()
+    prev_dir = StringProperty(str(Path(*Path().home().parts[:-1])))
     
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.dirs = Path.home().iterdir()
-    
 
     def generate(self, widget):
-        self.add_widget(File(text=str(widget)))
+        self.add_widget(File(self, text=str(widget)))
 
 
 class SubBrowser(StackLayout):
@@ -39,7 +35,32 @@ class SubBrowser(StackLayout):
 
 
 class File(Button):
-    pass
+    ctx = ObjectProperty()
+
+    def __init__(self, ctx, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ctx = ctx
+
+    def on_release(self):
+        Logger.info(f'FileBrowser: Pressed "{self.text}"')
+
+        if self.text == '../':
+            path = Path(self.ctx.prev_dir)
+        else:
+            path = Path(self.text)
+
+        self.ctx.prev_dir = str(Path(*Path(path).parts[:-1]))
+
+        if path.is_dir():
+            self.ctx.clear_widgets()
+            self.ctx.dirs = path.iterdir()
+
+            self.ctx.generate('../')
+            for d in self.ctx.dirs:
+                self.ctx.generate(d)
+
+        else:
+            Logger.info('FileBrowser: Not a directory!')
 
 
 class Footer(BoxLayout):

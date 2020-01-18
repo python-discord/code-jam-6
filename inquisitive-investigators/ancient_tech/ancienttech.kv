@@ -21,6 +21,7 @@
         FileBrowser:
             id: left
             on_parent:
+                self.generate('../')
                 for d in self.dirs: self.generate(d)
 
     FileBrowser:
@@ -33,6 +34,7 @@
         Rectangle:
             size: self.size
             pos: self.pos
+
     orientation: 'rl-tb'
     spacing: [0,0]
 
@@ -48,10 +50,6 @@
 
 <File>:
     size_hint: 1, .1
-    on_press: print(f'Pressed {self.text}')
-
-
-
 
 <Footer>:
     canvas:
