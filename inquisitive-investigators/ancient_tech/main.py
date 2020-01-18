@@ -14,7 +14,11 @@ class Main(FloatLayout):
     pass
 
 
-class FileBrowser(StackLayout):
+class FileBrowser(FloatLayout):
+    pass
+
+
+class Files(StackLayout):
     dirs = ObjectProperty()
     prev_dir = StringProperty()
     size_hint = (1, None)
@@ -42,7 +46,6 @@ class File(Button):
             path = Path(self.ctx.prev_dir)
         else:
             path = Path(self.text)
-
 
         if path.is_dir():
             self.ctx.clear_widgets()

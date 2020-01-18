@@ -4,41 +4,38 @@
     Footer:
         pos_hint: {'top': .05}
         size_hint: 1,.07
-
-    ScrollView:
+    FileBrowser:
         pos_hint: {'top': 1}
         size_hint: .5,.8
-        scroll_distance: 10
-        canvas.before:
-            Color:
-                rgb: 0,0,1
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        FileBrowser:
-            height: self.minimum_height
-            on_parent:
-                self.generate('../')
-                for d in self.dirs: self.generate(d)
-
-    ScrollView:
-        pos_hint: {'top': 1, 'right':1}
+    FileBrowser:
+        pos_hint: {'top': 1,'right':1}
         size_hint: .5,.8
-        scroll_distance: 10
-        canvas.before:
-            Color:
-                rgb: 0,0,1
-            Rectangle:
-                size: self.size
-                pos: self.pos
-        FileBrowser:
-            height: self.minimum_height
-            on_parent:
-                self.generate('../')
-                for d in self.dirs: self.generate(d)
+
 
 
 <FileBrowser>:
+    canvas.before:
+        Color:
+            rgb: 1,0,0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    ScrollView:
+        size_hint: .98,.90
+        pos_hint: {'x':.01,'y':.01}
+        scroll_distance: 10
+        Files:
+            canvas.before:
+                Color:
+                    rgb: 0,0,1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            height: self.minimum_height
+            on_parent:
+                self.generate('../')
+                for d in self.dirs: self.generate(d)
+<Files>:
     size: root.size
     pos: root.pos
     orientation: 'rl-tb'
@@ -77,7 +74,6 @@
         text: '9: Delete'
     Button:
         text: '10: Quit'
-
 
 <Button>:
     background_normal: ''
