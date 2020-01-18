@@ -12,7 +12,6 @@ coverage = "*"
 
 [packages]
 kivy = "~=1.11"
-ipython = "*"
 
 [requires]
 python_version = "3.7"
