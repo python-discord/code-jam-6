@@ -1,5 +1,17 @@
-def main(asdlksfksddskgmdkfmglkdmgkldmglkmdflgkmddg):
-    print("Hello" + 'World')
+import kivy
+from kivy.app import App
+from kivy.uix.widget import Widget
 
 
-main("World")
+class MainWidget(Widget):
+    pass
+
+
+class myApp(App):
+
+    def build(self):
+        return MainWidget()
+
+
+if __name__ == "__main__":
+    myApp().run()
