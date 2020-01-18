@@ -28,11 +28,16 @@ class RotatingWidget(FloatLayout):
             item.angle = 0
 
 
+class NowMarker(FloatLayout):
+    pass
+
+
 # Screens in the App #
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
         self.add_widget(RotatingWidget())
+        self.add_widget(NowMarker())
 
     def settings_button(self):
         SettingsScreen()
