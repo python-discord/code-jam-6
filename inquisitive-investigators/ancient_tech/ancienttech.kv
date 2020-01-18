@@ -1,3 +1,5 @@
+#:kivy 1.11.1
+
 <Main>:
     Footer:
         pos_hint: {'top': .05}
@@ -16,19 +18,12 @@
     orientation: 'horizontal'
 
     FileBrowser:
-        File:
-            text: 'Desktop'
-        File:
-            text: 'Documents'
-        File:
-            text: 'Pictures'
-        File:
-            text: 'Videos'
+        id: left
+        on_parent:
+            for d in self.dirs: self.generate(d)
+
     FileBrowser:
-        File:
-            text: '/..'
-        File:
-            text: 'Nothing to Display since in Sub Directory'
+        id: right
 
 
 <FileBrowser>:
