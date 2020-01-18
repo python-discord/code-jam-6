@@ -55,7 +55,7 @@ class NewFile(Button):
 
         if self.txt != '../':
             self.ids.size.text = ' '.join(bytes_conversion(int(stats.st_size)))
-            
+
             self.ids.date.text = datetime.fromtimestamp(
                 stats.st_mtime
             ).strftime('%d-%m-%Y')
