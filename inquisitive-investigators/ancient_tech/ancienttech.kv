@@ -17,10 +17,11 @@
             pos: self.pos
     orientation: 'horizontal'
 
-    FileBrowser:
-        id: left
-        on_parent:
-            for d in self.dirs: self.generate(d)
+    ScrollView:
+        FileBrowser:
+            id: left
+            on_parent:
+                for d in self.dirs: self.generate(d)
 
     FileBrowser:
         id: right
