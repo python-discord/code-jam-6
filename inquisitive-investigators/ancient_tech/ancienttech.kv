@@ -38,52 +38,9 @@
 
         Files:
             height: self.minimum_height
-
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('2')
-            NewFile:
-                size_hint: 1, None
-                on_press: print('1')
+            on_parent:
+                self.generate('../')
+                for d in self.dirs: self.generate(d)
 
 <Column>:
     canvas.before:
@@ -97,15 +54,15 @@
         size: root.size
         pos: root.pos
         Label:
-            text: 'Name'
+            id: name
             size_hint: .39, .3
             pos_hint: {'top': 1, 'x': 0}
         Label:
-            text: 'Size'
+            id: size
             size_hint: .25, .3
             pos_hint: {'top': 1, 'x': .4}
         Label:
-            text: 'Date'
+            id: date
             size_hint: .36, .3
             pos_hint: {'top': 1, 'right': 1}
 

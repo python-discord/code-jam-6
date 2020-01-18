@@ -33,7 +33,7 @@ class Files(StackLayout):
         self.prev_dir = str(Path(*Path().home().parts[:-1]))
 
     def generate(self, widget):
-        self.add_widget(File(self, text=str(widget)))
+        self.add_widget(NewFile(self, str(widget), text=''))
 
 
 class Column(Widget):
@@ -41,28 +41,32 @@ class Column(Widget):
 
 
 class NewFile(Button):
-    pass
-
-
-class File(Button):
     ctx = ObjectProperty()
+    size_hint = (1, None)
 
-    def __init__(self, ctx, *args, **kwargs):
+    def __init__(self, ctx, txt, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.txt = txt
         self.ctx = ctx
 
+        stats = Path(txt).stat()
+        self.ids.name.text = Path(txt).parts[-1]
+        self.ids.size.text = str(stats.st_size)
+        self.ids.date.text = str(stats.st_mtime)
+
     def on_release(self):
-        Logger.info(f'FileBrowser: Pressed "{self.text}"')
+        Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
         if self.text == '../':
             path = Path(self.ctx.prev_dir)
         else:
-            path = Path(self.text)
+            path = Path(self.txt)
 
         if path.is_dir():
             self.ctx.clear_widgets()
             self.ctx.dirs = path.iterdir()
             prev = Path(*Path(path).parts)
+            print(prev.parts)
 
             if len(prev.parts) > 1:
                 self.ctx.prev_dir = str(Path(*prev.parts[:-1]))
