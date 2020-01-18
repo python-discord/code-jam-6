@@ -43,8 +43,6 @@ class Column(Widget):
 
 
 class NewFile(Button):
-    ctx = ObjectProperty()
-    size_hint = (1, None)
 
     def __init__(self, ctx, txt, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,13 +50,14 @@ class NewFile(Button):
         self.ctx = ctx
 
         stats = Path(txt).stat()
-        date = datetime.fromtimestamp(stats.st_mtime).strftime('%d-%m-%Y')
-
         self.ids.name.text = Path(txt).name
 
         if self.txt != '../':
             self.ids.size.text = ' '.join(bytes_conversion(int(stats.st_size)))
-            self.ids.date.text = str(date)
+            
+            self.ids.date.text = datetime.fromtimestamp(
+                stats.st_mtime
+            ).strftime('%d-%m-%Y')
 
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')

@@ -1,7 +1,7 @@
 # Constants
 
 UNITS = [
-    'Bytes',
+    'B',
     'KB',
     'MB',
     'GB',
