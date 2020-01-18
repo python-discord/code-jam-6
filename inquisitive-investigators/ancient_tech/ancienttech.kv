@@ -23,14 +23,14 @@
         pos_hint: {'top':1,'x':.01}
         size_hint: .98,.1
     Column:
-        size_hint: .485, .91
+        size_hint: .445, .91
         pos_hint: {'top': .91, 'x': .01}
     Column:
         size_hint: .146, .91
-        pos_hint: {'top': .91, 'x': .51}
+        pos_hint: {'top': .91, 'x': .47}
     Column:
-        size_hint: .105, .91
-        pos_hint: {'top': .91, 'x': .67}
+        size_hint: .14, .91
+        pos_hint: {'top': .91, 'x': .635}
     Column:
         size_hint: .2, .91
         pos_hint: {'top': .91, 'x': .79}
@@ -61,20 +61,28 @@
         pos: root.pos
         Label:
             id: name
-            size_hint: .495, .3
-            pos_hint: {'top': 1, 'x': 0}
+            text_size: self.size
+            halign: 'left'
+            size_hint: .45, .3
+            pos_hint: {'top': 1, 'x': 0.01}
         Label:
             id: type
+            text_size: self.size
+            halign: 'left'
             size_hint: .15, .3
-            pos_hint: {'top': 1, 'x': 0.51}
+            pos_hint: {'top': 1, 'x': 0.47}
         Label:
             id: size
+            text_size: self.size
+            halign: 'left'
             size_hint: .1, .25
-            pos_hint: {'top': 1, 'x': .68}
+            pos_hint: {'top': 1, 'x': .65}
         Label:
             id: date
+            text_size: self.size
+            halign: 'left'
             size_hint: .2, .3
-            pos_hint: {'top': 1, 'x': .8}
+            pos_hint: {'top': 1, 'x': .81}
 
 <FileHeader>:
     canvas.before:
@@ -105,7 +113,7 @@
                     size: self.size
                     pos: self.pos
             pos_hint: {'top': 1, 'x': 0}
-            size_hint: .49, 1
+            size_hint: .455, 1
             text: 'Name'
         Label:
             canvas.before:
@@ -114,7 +122,7 @@
                 Rectangle:
                     size: self.size
                     pos: self.pos
-            pos_hint: {'top': 1, 'x': .51}
+            pos_hint: {'top': 1, 'x': .469}
             size_hint: .15, 1
             text: 'Type'
         Label:
@@ -124,8 +132,8 @@
                 Rectangle:
                     size: self.size
                     pos: self.pos
-            pos_hint: {'top': 1, 'x': .674}
-            size_hint: .105, 1
+            pos_hint: {'top': 1, 'x': .638}
+            size_hint: .142, 1
             text: 'Size'
         Label:
             canvas.before:
