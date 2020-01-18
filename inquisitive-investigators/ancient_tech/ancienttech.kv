@@ -1,14 +1,80 @@
 <Main>:
-    # Main Class sets reference of id test to test
-    test: test
+    Footer:
+        pos_hint: {'top': .05}
+        size_hint: 1,.07
+    FileMain:
+        pos_hint: {'top': 1}
+        size_hint: 1, .5
+
+<FileMain>:
+    canvas:
+        Color:
+            rgb: 0,1,0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'horizontal'
+
+    FileBrowser:
+        File:
+            text: 'Desktop'
+        File:
+            text: 'Documents'
+        File:
+            text: 'Pictures'
+        File:
+            text: 'Videos'
+    FileBrowser:
+        File:
+            text: '/..'
+        File:
+            text: 'Nothing to Display since in Sub Directory'
 
 
-    # Created a button instance in Main (FloatLayout)
-    # FloatLayout honors the hint system
+<FileBrowser>:
+    canvas:
+        Color:
+            rgb: 0,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'rl-tb'
+    spacing: [0,0]
+<File>:
+    size_hint: 1, .1
+
+
+<Footer>:
+    canvas:
+        Color:
+            rgb: 0.3,0.4,0.5
+        Rectangle:
+            size: root.size
+            pos: root.pos
+    orientation: 'horizontal'
+
     Button:
-        # Created an ID for Main to look for
-        id: test
-        pos_hint: {'top': .75}
-        size_hint: 1,.5
-        text: 'Hello World'
+        text: '1: Help'
+    Button:
+        text: '2: Menu'
+    Button:
+        text: '3: View'
+    Button:
+        text: '4: Edit'
+    Button:
+        text: '5: Copy'
+    Button:
+        text: '6: PullDwn'
+    Button:
+        text: '7: PullUp'
+    Button:
+        text: '8: Mkdir'
+    Button:
+        text: '9: Delete'
+    Button:
+        text: '10: Quit'
 
+
+<Button>:
+    background_normal: ''
+    background_color: (0,0,0,0)
