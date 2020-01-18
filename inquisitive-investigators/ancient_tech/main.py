@@ -18,6 +18,10 @@ class FileBrowser(FloatLayout):
     pass
 
 
+class FileHeader(FloatLayout):
+    pass
+
+
 class Files(StackLayout):
     dirs = ObjectProperty()
     prev_dir = StringProperty()
@@ -30,6 +34,14 @@ class Files(StackLayout):
 
     def generate(self, widget):
         self.add_widget(File(self, text=str(widget)))
+
+
+class Column(Widget):
+    pass
+
+
+class NewFile(Button):
+    pass
 
 
 class File(Button):

@@ -12,7 +12,6 @@
         size_hint: .5,.8
 
 
-
 <FileBrowser>:
     canvas.before:
         Color:
@@ -20,21 +19,148 @@
         Rectangle:
             size: self.size
             pos: self.pos
+    FileHeader:
+        pos_hint: {'top':1,'x':.01}
+        size_hint: .98,.1
+    Column:
+        size_hint: .382, .91
+        pos_hint: {'top': .91, 'x': .01}
+    Column:
+        size_hint: .245, .91
+        pos_hint: {'top': .91, 'x': .402}
+    Column:
+        size_hint: .333, .91
+        pos_hint: {'top': .91, 'x': .657}
     ScrollView:
         size_hint: .98,.90
-        pos_hint: {'x':.01,'y':.01}
+        pos_hint: {'x':.01,'y': 0}
         scroll_distance: 10
+
         Files:
+            height: self.minimum_height
+
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('2')
+            NewFile:
+                size_hint: 1, None
+                on_press: print('1')
+
+<Column>:
+    canvas.before:
+        Color:
+            rgb: 0,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+<NewFile>:
+    FloatLayout:
+        size: root.size
+        pos: root.pos
+        Label:
+            text: 'Name'
+            size_hint: .39, .3
+            pos_hint: {'top': 1, 'x': 0}
+        Label:
+            text: 'Size'
+            size_hint: .25, .3
+            pos_hint: {'top': 1, 'x': .4}
+        Label:
+            text: 'Date'
+            size_hint: .36, .3
+            pos_hint: {'top': 1, 'right': 1}
+
+<FileHeader>:
+    canvas.before:
+        Color:
+            rgb: 1,0,0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'vertical'
+    Button:
+        canvas.before:
+            Color:
+                rgb: 0,1,1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        pos_hint: {'top':1, 'right':1}
+        size_hint: 1,.4
+        text: 'Current Directory Click to Copy'
+    FloatLayout:
+        pos_hint: {'top':.5, 'right':1}
+        size_hint: 1,.4
+        Label:
             canvas.before:
                 Color:
-                    rgb: 0,0,1
+                    rgb: 0,1,1
                 Rectangle:
                     size: self.size
                     pos: self.pos
-            height: self.minimum_height
-            on_parent:
-                self.generate('../')
-                for d in self.dirs: self.generate(d)
+            pos_hint: {'top': 1, 'x': 0}
+            size_hint: .39, 1
+            text: 'Name'
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0,1,1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            pos_hint: {'top': 1, 'x': .4}
+            size_hint: .25, 1
+            text: 'Size'
+        Label:
+            canvas.before:
+                Color:
+                    rgb: 0,1,1
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            pos_hint: {'top': 1, 'right': 1}
+            size_hint: .34, 1
+            text: 'Date'
+
 <Files>:
     size: root.size
     pos: root.pos
@@ -42,8 +168,6 @@
     spacing: [0,-70]
     size_hint_y: None
 
-<File>:
-    size_hint: 1, None
 
 <Footer>:
     canvas:
