@@ -1,12 +1,27 @@
 # Suspicious Samaritans
 
-WINDOWS:
+## Team biography
+
+- Starwort
+  - Team leader; backend development
+  - Nationality: British
+  - Gender: Male
+  - Age: 16
+  - 'I know half the standardlib'
+- Liam
+  - Frontend and backend development
+  - Nationality: American
+  - Gender: Male
+  - Age: 46
+  - 'Works as a humble farmer'
+
+## WINDOWS
 
 - Run `set PATH=%path%%CD%\libav\bin;` while in the suspicious-samaritans folder
 - Run `pipenv shell`
 - Run `py main.py`
 
-LINUX:
+## LINUX
 
 - Ubuntu:
   - Run `sudo apt install ffmpeg`
