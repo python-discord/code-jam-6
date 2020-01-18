@@ -16,20 +16,14 @@
     orientation: 'horizontal'
 
     FileBrowser:
-        File:
-            text: 'Desktop'
-        File:
-            text: 'Documents'
-        File:
-            text: 'Pictures'
-        File:
-            text: 'Videos'
-    FileBrowser:
+        Button:
+            text: 'press me'
+            on_press: root.generate()
+    SubBrowser:
         File:
             text: '/..'
         File:
             text: 'Nothing to Display since in Sub Directory'
-
 
 <FileBrowser>:
     canvas:
@@ -40,8 +34,22 @@
             pos: self.pos
     orientation: 'rl-tb'
     spacing: [0,0]
+
+<SubBrowser>:
+    canvas:
+        Color:
+            rgb: 0,0,1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    orientation: 'rl-tb'
+    spacing: [0,0]
+
 <File>:
     size_hint: 1, .1
+    on_press: print(f'Pressed {self.text}')
+
+
 
 
 <Footer>:
