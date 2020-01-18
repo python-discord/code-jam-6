@@ -18,16 +18,16 @@ jobs:
         python-version: 3.7
     - name: Install pipenv
       run: |
-        cd brilliant-builders
         python -m pip install --upgrade pip
         pip install pipenv
     - name: Install dependencies
+      working-directory: ./brilliant-builders
       run: pipenv sync --dev
     - name: Lint 
+      working-directory: ./brilliant-builders
       run: |
-        cd brilliant-builders
         pipenv run lint
     - name: Test 
+      working-directory: ./brilliant-builders
       run: |
-        cd brilliant-builders
         pipenv run test
