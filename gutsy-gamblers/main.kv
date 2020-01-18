@@ -21,15 +21,24 @@
 		Rotate:
 			angle: root.angle
 			axis: 0, 0, 1
-			origin: self.center
+			origin: (self.width / 2, self.height / 2)
+		Ellipse:
+			size: 500, 500
+			pos: self.width / 2 - 250, self.height / 2 - 250
 	canvas.after:
 		PopMatrix
 
-	Image:
-		size_hint: None, None
-		size: 100, 100
-		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+#	Image:
+#		size_hint: None, None
+#		size: 500, 500
+#		pos_hint: {'center_x': 0.5, 'center_y': 0}
 
 	Label:
 		color: 0, 0, 0, 1
-		text: 'A Rock'
+		text: 'The Sun'
+		pos_hint: {'center_x': 0.5, 'center_y': 0.1}
+
+	Label:
+		color: 0, 0, 0, 1
+		text: 'The Moon'
+		pos_hint: {'center_x': 0.5, 'center_y': 0.9}

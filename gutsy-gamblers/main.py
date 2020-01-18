@@ -18,8 +18,8 @@ class RotatingWidget(FloatLayout):
         super(RotatingWidget, self).__init__(**kwargs)
 
         # Duration is how long it takes to do a full 360 in seconds.
-        anim = Animation(angle=-360, duration=2)
-        anim += Animation(angle=-360, duration=2)
+        anim = Animation(angle=-360, duration=10)
+        anim += Animation(angle=-360, duration=10)
         anim.repeat = True
         anim.start(self)
 
