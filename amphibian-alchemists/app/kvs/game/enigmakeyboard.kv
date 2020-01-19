@@ -6,8 +6,18 @@
         app.root.get_screen("game_screen").handle_key(self)
 
 <Lamp@Widget>:
+    _color:  [1, 1, 1]
+    canvas:
+        Color:
+            rgb: self._color
+        Ellipse:
+            size: self.size
+            pos: self.pos
+    size_hint_x: 0.2
 
 <LampBoard@GridLayout>:
+    padding: dp(10)
+    spacing: dp(10)
     size_hint_y: 0.7
     canvas:
         Color:
@@ -15,74 +25,15 @@
         Rectangle:
             size: root.size
             pos: root.pos
-    rows: 3
+    cols: 2
 
-    BoxLayout:
-        spacing: dp(10)
-        padding: dp(10)
-        Widget:
-        Lamp:
-            id: Q
-        Lamp:
-            id: W
-        Lamp:
-            id: E
-        Lamp:
-            id: R
-        Lamp:
-            id: T
-        Lamp:
-            id: Z
-        Lamp:
-            id: U
-        Lamp:
-            id: I
-        Lamp:
-            id: O
-
-    BoxLayout:
-        spacing: dp(10)
-        padding: dp(10)
-        Widget:
-        Lamp:
-            id: A
-        Lamp:
-            id: S
-        Lamp:
-            id: D
-        Lamp:
-            id: F
-        Lamp:
-            id: G
-        Lamp:
-            id: H
-        Lamp:
-            id: J
-        Lamp:
-            id: K
-        Widget:
-
-    BoxLayout:
-        spacing: dp(10)
-        padding: dp(10)
-        Lamp:
-            id: P
-        Lamp:
-            id: Y
-        Lamp:
-            id: X
-        Lamp:
-            id: C
-        Lamp:
-            id: V
-        Lamp:
-            id: B
-        Lamp:
-            id: N
-        Lamp:
-            id: M
-        Lamp:
-            id: L
+    Lamp:
+        id: lamp
+    TextInput:
+        id: board_input
+        multiline: False
+        on_text:
+            if self.text != self.text.upper(): self.text = self.text.upper()
 
 <Keyboard@GridLayout>:
     canvas:
@@ -205,6 +156,11 @@
             name: "L"
 
 <EnigmaKeyboard@BoxLayout>:
+    canvas:
+        Color:
+            rgb: 0, 0, 0
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
     orientation: "vertical"
     LampBoard:
         id: lamp_board
