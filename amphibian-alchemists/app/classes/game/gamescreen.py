@@ -1,13 +1,16 @@
-from kivy.uix.screenmanager import Screen
-from kivy.storage.jsonstore import JsonStore
-from kivy.app import App
-from requests import get
-from string import ascii_uppercase
-from random import sample
-from enigma.machine import EnigmaMachine
 import os
+from random import sample
+from string import ascii_uppercase
 
-DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
+from enigma.machine import EnigmaMachine
+from kivy.app import App
+from kivy.storage.jsonstore import JsonStore
+from kivy.uix.screenmanager import Screen
+from requests import get
+
+DATA_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
 
 
 def on_config_change():
@@ -23,7 +26,7 @@ def on_config_change():
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings
+        plugboard_settings=plug_settings,
     )
     rotors = ""
     for x in store.get(game_id)["current_state"]["rotors"]:
@@ -34,8 +37,10 @@ def on_config_change():
 
 
 def get_wiki_summary() -> str:
-    endpoint = "https://en.wikipedia.org/w/api.php?action=query&list=random&" \
-               "format=json&rnnamespace=0&rnlimit=1&origin=*"
+    endpoint = (
+        "https://en.wikipedia.org/w/api.php?action=query&list=random&"
+        "format=json&rnnamespace=0&rnlimit=1&origin=*"
+    )
     response = get(endpoint)
     title = (response.json())["query"]["random"][0]["title"]
     endpoint = "https://en.wikipedia.org/api/rest_v1/page/summary/"
@@ -49,7 +54,7 @@ def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> st
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings
+        plugboard_settings=plug_settings,
     )
     machine.set_display(rotor_settings)
     return machine.process_text(text)
@@ -66,7 +71,7 @@ def setup_new_game_settings():
     plug_array = sample(ascii_uppercase, 20)
     plugs = []
     for i in range(10):
-        plugs.append("".join(plug_array[i * 2:i * 2 + 2]))
+        plugs.append("".join(plug_array[i * 2 : i * 2 + 2]))
     plug_settings = " ".join(x for x in plugs)
     rotors = sample(ascii_uppercase, 3)
     rotor_setting = "".join(rotors)
@@ -74,7 +79,7 @@ def setup_new_game_settings():
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings
+        plugboard_settings=plug_settings,
     )
     App.get_running_app().machine.set_display(rotor_setting)
 
@@ -86,32 +91,23 @@ def setup_new_game_settings():
         game_id,
         ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
         unciphered_text=text,
-        encrypted_state={
-            "reflector": "B",
-            "rotors": rotors,
-            "plugs": plugs
-        },
+        encrypted_state={"reflector": "B", "rotors": rotors, "plugs": plugs},
         current_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
-            "plugs": [
-                "AB", "CD", "EF", "GH", "IJ",
-                "KL", "MN", "OP", "QR", "ST"
-            ]
+            "plugs": ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"],
         },
         last_saved_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
-            "plugs": [
-                "AB", "CD", "EF", "GH", "IJ",
-                "KL", "MN", "OP", "QR", "ST"
-            ]
-        }
+            "plugs": ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"],
+        },
     )
 
 
 class GameScreen(Screen):
     """Do we automatically assume new game or should we save?"""
+
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
         store.put("latest_game_id", id=None)
