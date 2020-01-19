@@ -4,8 +4,12 @@ from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
 from kivy.animation import Animation
 
-
-sentences = ["Hello", "my", "friends"]
+lorem = ""
+sentences = [
+    "Dino Tinder is a Tinder Clone adapted\n for the middle ages.",
+    "my",
+    "friends",
+]
 images = [
     "https://placekitten.com/g/1080/1920",
     "https://placekitten.com/g/200/300",
@@ -26,10 +30,29 @@ class MyOnboardWidget(FloatLayout):
             self.add_widget(image_object)
 
         for index, sentence in enumerate(sentences):
-            label_object = Label(text=sentence, pos=(0, 200))
+            label_object = Label(
+                text=lorem,
+                pos_hint={"center_x": 0.50, "center_y": 0.2},
+                color=[1, 0, 0, 1],
+                halign="left",
+                valign="middle",
+                font_size="15sp",
+                text_size=(400, 600),
+            )
             label_object.opacity = 1 if index == 0 else 0
             setattr(self, f"description_{index}", label_object)
             self.add_widget(label_object)
+
+        self.add_widget(
+            Label(
+                text="Welcome to DinoTinder",
+                pos_hint={"center_x": 0.40, "center_y": 0.3},
+                color=[1, 0, 0, 1],
+                halign="left",
+                valign="middle",
+                font_size="25sp",
+            )
+        )
 
     def animate(self, obj_out, obj_in):
         appear = Animation(opacity=1, duration=1)
@@ -44,9 +67,6 @@ class MyOnboardWidget(FloatLayout):
         if self.steps == 1:
             self.animate(obj_out=self.image_1, obj_in=self.image_2)
             self.animate(obj_out=self.description_1, obj_in=self.description_2)
-        if self.steps == 2:
-            self.animate(obj_out=self.image_2, obj_in=self.image_3)
-            self.animate(obj_out=self.description_2, obj_in=self.description_3)
 
         self.steps += 1
 
