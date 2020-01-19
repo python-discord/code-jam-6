@@ -1,0 +1,41 @@
+#:kivy 1.11.1
+
+
+<ColorBoxLayout>:
+	canvas.before:
+		Color:
+			rgba: self.background_color
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+<IconButton>:
+	size_hint: None, 1
+	source: root.icon
+	size: dp(32), dp(32)
+
+<RootLayout>:
+	orientation: "horizontal"
+	padding: dp(12)
+	spacing: dp(12)
+
+	BoxLayout:
+		orientation: "vertical"
+		size_hint_x: 0.6
+		spacing: dp(24)
+		ColorBoxLayout:
+			size_hint_y: 0.7
+			background_color: 0.2, 0.2, 0.2, 1
+		ColorBoxLayout:
+			size_hint_y: 0.3
+			background_color: 0.2, 0.2, 0.2, 1
+	BoxLayout:
+		orientation: "vertical"
+		size_hint_x: 0.4
+		spacing: dp(16)
+		ColorBoxLayout:
+			size_hint_y: 0.65
+			background_color: 0.2, 0.2, 0.2, 1
+		ColorBoxLayout:
+			size_hint_y: 0.35
+			background_color: 0.2, 0.2, 0.2, 1
