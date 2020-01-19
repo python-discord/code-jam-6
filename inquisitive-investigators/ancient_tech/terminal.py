@@ -17,6 +17,7 @@ from kivy.properties import (
 
 from .utils.utils import threaded
 
+
 class Shell(EventDispatcher):
     __events__ = ('on_output', 'on_complete')
     process = ObjectProperty()
@@ -135,6 +136,7 @@ class TerminalInput(TextInput):
 
     def on_complete(self, output):
         self.prompt()
+
 
 class Terminal(BoxLayout, Shell):
     terminal_input = ObjectProperty()
