@@ -1,0 +1,98 @@
+<Key@ButtonBehavior+Image>:
+    on_kv_post: self.source = f"misc/{self.name}.png"
+    on_state: self.source = "misc/keydown.png" if self.state == "down" else f"misc/{self.name}.png"
+    on_release: app.root.get_screen("game_screen").handle_key(self.name)
+
+<EnigmaKeyboard@GridLayout>:
+    canvas:
+        Color:
+            rgba: 51 / 255, 51 / 255, 51 / 255, 1
+        Rectangle:
+            size: root.size
+            pos: root.pos
+    rows: 3
+
+    BoxLayout:
+        spacing: dp(10)
+        padding: dp(15)
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+                width: 5
+        Widget:
+        Key:
+            name: "Q"
+        Key:
+            name: "W"
+        Key:
+            name: "E"
+        Key:
+            name: "R"
+        Key:
+            name: "T"
+        Key:
+            name: "Z"
+        Key:
+            name: "U"
+        Key:
+            name: "I"
+        Key:
+            name: "O"
+
+    BoxLayout:
+        spacing: dp(10)
+        padding: dp(10)
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+                width: 4
+        Widget:
+        Key:
+            name: "A"
+        Key:
+            name: "S"
+        Key:
+            name: "D"
+        Key:
+            name: "F"
+        Key:
+            name: "G"
+        Key:
+            name: "H"
+        Key:
+            name: "J"
+        Key:
+            name: "K"
+        Widget:
+
+    BoxLayout:
+        spacing: dp(10)
+        padding: dp(10)
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 1
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+                width: 2
+        Key:
+            name: "P"
+        Key:
+            name: "Y"
+        Key:
+            name: "X"
+        Key:
+            name: "C"
+        Key:
+            name: "V"
+        Key:
+            name: "B"
+        Key:
+            name: "N"
+        Key:
+            name: "M"
+        Key:
+            name: "L"
