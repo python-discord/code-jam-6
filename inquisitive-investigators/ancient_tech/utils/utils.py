@@ -1,3 +1,5 @@
+from threading import Thread
+
 from .constants import UNITS
 
 def bytes_conversion(size, unit=UNITS[0]):
@@ -13,3 +15,12 @@ def bytes_conversion(size, unit=UNITS[0]):
             unit=UNITS[UNITS.index(unit)+1]
         )
     return str(size), unit
+
+def threaded(func):
+
+    def wrapper(*args, **kwargs):
+        thread = Thread(target=func, args=args, kwargs=kwargs)
+        thread.daemon = True
+        thread.start()
+        
+    return wrapper

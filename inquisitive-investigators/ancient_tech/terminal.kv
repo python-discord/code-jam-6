@@ -1,0 +1,20 @@
+#:kivy 1.11.1
+
+<Terminal>:
+    terminal_input: terminal_input
+    scroll_view: scroll_view
+    pos: self.pos
+    size: self.size
+
+    ScrollView:
+        id: scroll_view
+        size_hint: 1, None
+        
+        TerminalInput:
+            id: terminal_input
+            shell: root
+            font_name: root.font_name
+            font_size: root.font_size
+            foreground_color: root.foreground_color
+            background_color: root.background_color
+            height: max(self.parent.height, self.minimum_height)

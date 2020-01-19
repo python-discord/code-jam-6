@@ -2,31 +2,31 @@ from pathlib import Path
 from datetime import datetime
 
 from kivy import Config
-from kivy.uix.label import Label
 
-Config.set('graphics', 'minimum_width', '1250')
-Config.set('graphics', 'minimum_height', '500')
-Config.set('graphics', 'width', '1250')
-Config.set('graphics', 'height', '500')
+Config.set('graphics', 'minimum_width', '1300')
+Config.set('graphics', 'minimum_height', '600')
+Config.set('graphics', 'width', '1300')
+Config.set('graphics', 'height', '600')
 
 from kivy.app import App
+from kivy.lang import Builder
 from kivy.logger import Logger
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
+from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
-from kivy.uix.popup import Popup
 
-from kivy.properties import (
-    StringProperty,
-)
-from kivy.lang import Builder
+from .terminal import Terminal, TerminalInput
 from .utils.utils import bytes_conversion
 
 Builder.load_file('./ancient_tech/Main.kv')
 Builder.load_file('./ancient_tech/FileManager.kv')
+Builder.load_file('./ancient_tech/terminal.kv')
 Builder.load_file('./ancient_tech/Footer.kv')
 
 
@@ -63,6 +63,7 @@ class FileHeader(FloatLayout):
 
 
 class Files(StackLayout):
+
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.dirs = Path.home().iterdir()
@@ -91,6 +92,7 @@ class NewFile(Button):
             if path.is_dir():
                 t = 'DIR'
 
+                self.ids.size.text = '-'
                 # self.ids.size.text = ' '.join(
                 #    bytes_conversion(
                 #        sum(
@@ -99,11 +101,14 @@ class NewFile(Button):
                 #    )
                 # )
 
-            elif str(path).startswith('.') or path.suffix == '':
-                t = str(path.parts[-1])
-
             else:
-                t = path.suffix[1:].upper()
+
+                if str(path).startswith('.') or path.suffix == '':
+                    t = str(path.parts[-1])
+
+                else:
+                    t = path.suffix[1:].upper()
+                
                 self.ids.size.text = ' '.join(
                     bytes_conversion(
                         int(stats.st_size)
@@ -141,11 +146,8 @@ class NewFile(Button):
             Logger.info('FileBrowser: Not a directory!')
 
 
-class Nano(Widget):
-    pass
-
-
 class Footer(BoxLayout):
+
     def __init__(self, **kwargs):
         super(Footer, self).__init__(**kwargs)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
@@ -171,7 +173,7 @@ class Footer(BoxLayout):
         if keycode[1] == '7':
             print('7')
         if keycode[1] == '8':
-            self.mkDir()
+            self.mkdir()
         if keycode[1] == '9':
             print('9')
         if keycode[1] == '0':
@@ -182,7 +184,7 @@ class Footer(BoxLayout):
         popup = AboutPopup(size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
 
-    def mkDir(self):
+    def mkdir(self):
         popup = MKDIR(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
 
@@ -192,6 +194,7 @@ class Footer(BoxLayout):
 
 
 class AboutPopup(Popup):
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.ids.AboutInfo.text = '''
@@ -204,8 +207,9 @@ class AboutPopup(Popup):
         '''
 
 
-class MKDIR(Popup):
-    def mk_dir(self):
+class Mkdir(Popup):
+
+    def mkdir(self):
         print(self.ids.create.text)
 
 
@@ -214,5 +218,6 @@ class QuitPopup(Popup):
 
 
 class AncientTechApp(App):
+
     def build(self):
         return Main()
