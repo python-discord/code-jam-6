@@ -33,9 +33,6 @@ class CuneiformDrawingInput(Widget):
 
 
 class Screen:
-    # There will be three screens: title, settings, board.
-    # A class that keeps track of gamestates will likely be needed.
-
     def __init__(self):
         self.sm = ScreenManager()
         self.sm.add_widget(Calculator(name='calculator'))
