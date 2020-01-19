@@ -33,6 +33,14 @@ class FileBrowser(FloatLayout):
     pass
 
 
+class Column(Widget):
+    pass
+
+
+class Border(Widget):
+    pass
+
+
 class FileHeader(FloatLayout):
     current_dir = StringProperty()
 
@@ -49,10 +57,6 @@ class Files(StackLayout):
 
     def generate(self, widget):
         self.add_widget(NewFile(self, str(widget), text=''))
-
-
-class Column(Widget):
-    pass
 
 
 class NewFile(Button):
@@ -124,6 +128,10 @@ class NewFile(Button):
             Logger.info('FileBrowser: Not a directory!')
 
 
+class Nano(Widget):
+    pass
+
+
 class Footer(BoxLayout):
     def __init__(self, **kwargs):
         super(Footer, self).__init__(**kwargs)
@@ -150,7 +158,7 @@ class Footer(BoxLayout):
         if keycode[1] == '7':
             print('7')
         if keycode[1] == '8':
-            print('8')
+            self.mkDir()
         if keycode[1] == '9':
             print('9')
         if keycode[1] == '0':
@@ -161,31 +169,35 @@ class Footer(BoxLayout):
         popup = AboutPopup(size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
 
+    def mkDir(self):
+        popup = MKDIR(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
+        popup.open()
+
     def quit(self):
         popup = QuitPopup(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
-
-
-class QuitPopup(Popup):
-
-    def check(self, value: bool):
-        if not value:
-            self.dismiss()
-        if value:
-            quit(0)
 
 
 class AboutPopup(Popup):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.ids.AboutInfo.text = '''
-                                                                 Scroll Effect 
-                                                            Hopefully it works!
+        Scroll Effect! Hopefully it works!
+        
         Features:
                   yeah there here, we got like a file thing
                   Oh yeah and were adding a text editor too!
                   is this scrolling yet?
         '''
+
+
+class MKDIR(Popup):
+    def mk_dir(self):
+        print(self.ids.create.text)
+
+
+class QuitPopup(Popup):
+    pass
 
 
 class AncientTechApp(App):

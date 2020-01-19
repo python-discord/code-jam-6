@@ -7,10 +7,22 @@
     FileBrowser:
         pos_hint: {'top': 1,'right':1}
         size_hint: .499,.8
+    Border:
+        pos_hint: {'top': .2}
+        size_hint: 1,.01
+    Nano:
+        pos_hint: {'top': .19}
+        size_hint: 1,.15
     Footer:
         pos_hint: {'top': .04}
         size_hint: 1,.04
-
+<Nano>:
+    canvas:
+        Color:
+            rgba: 1,1,1,.5
+        Rectangle:
+            pos: self.pos
+            size: self.size
 
 <FileBrowser>:
     canvas.before:
@@ -45,7 +57,13 @@
             on_parent:
                 self.generate('<-')
                 for d in self.dirs: self.generate(d)
-
+<Border>:
+    canvas.before:
+        Color:
+            rgb: 0.34,1,1
+        Rectangle:
+            size: root.size
+            pos: root.pos
 <Column>:
     canvas.before:
         Color:
@@ -95,7 +113,7 @@
             size: self.size
             pos: self.pos
     orientation: 'vertical'
-    Button:
+    Label:
         canvas.before:
             Color:
                 rgb: 0,0,.65
@@ -171,35 +189,57 @@
                 text_size: (self.width-20), None
                 line_height: 1.5
                 valign: "top"
+                color: 0.34,1,1,1
         Button:
-            text: "Close"
+            text: "[ Close ]"
             size_hint_y: None
             height: "40dp"
             on_press: root.dismiss()
+            color: 0.34,1,1,1
 
+<MKDIR>:
+    title: 'Make a new Directory in your Current Directory?'
+    FloatLayout:
+        TextInput:
+            id: create
+            size_hint: .5,.2
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            hint_text: 'Enter Directory Name'
+        Button:
+            size_hint: .5,.1
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            text: '[ Create New Directory ]'
+            color: 0.34,1,1,1
+            on_press: root.mk_dir()
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .2}
+            text: '[ Cancel ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
 
 <QuitPopup>:
     title: 'Quit?'
     FloatLayout:
         Label:
-            size_hint: .2,.1
+            size_hint: .5,.1
             pos_hint: {'center_x': .5, 'center_y': .7}
             color: 0.34,1,1,1
             text: 'Are you sure you want to Quit?'
         Button:
             id: yes
-            size_hint: .2,.1
+            size_hint: .2,.2
             pos_hint: {'center_x': .3, 'center_y': .5}
             text: '[ YES ]'
             color: 0.34,1,1,1
-            on_press: root.check(True)
+            on_press: quit(0)
         Button:
             id: no
-            size_hint: .2,.1
+            size_hint: .2,.2
             pos_hint: {'center_x': .7, 'center_y': .5}
             text: '[ NO ]'
             color: 0.34,1,1,1
-            on_press: root.check(False)
+            on_press: root.dismiss()
 
 <Popup>:
     auto_dismiss: False
@@ -227,26 +267,37 @@
     orientation: 'horizontal'
 
     Button:
-        text: '1:About'
+        size_hint: 1,1
+        text: '1: About'
         on_press: root.about()
     Button:
-        text: '2:Menu'
+        size_hint: 1,1
+        text: '2: Menu'
     Button:
-        text: '3:View'
+        size_hint: 1,1
+        text: '3: View'
     Button:
-        text: '4:Edit'
+        size_hint: 1,1
+        text: '4: Edit'
     Button:
-        text: '5:Copy'
+        size_hint: 1,1
+        text: '5: Copy'
     Button:
-        text: '6:DWN'
+        size_hint: 1,1
+        text: '6: DWN'
     Button:
-        text: '7:UP'
+        size_hint: 1,1
+        text: '7: UP'
     Button:
-        text: '8:Mkdir  '
+        size_hint: 1,1
+        text: '8: Mkdir  '
+        on_press: root.mkDir()
     Button:
-        text: '9:Delete'
+        size_hint: 1,1
+        text: '9: Delete'
     Button:
-        text: '0:Quit'
+        size_hint: 1,1
+        text: '0: Quit'
         on_press: root.quit()
 
 <Button>:
@@ -256,4 +307,19 @@
 
 <Label>:
     font_name: './ancient_tech/static/retro_font.ttf'
+    _scale: 1. if self.texture_size[0] < self.width else float(self.width) / self.texture_size[0]
+    canvas.before:
+        PushMatrix
+        Scale:
+            origin: self.center
+            x: self._scale or 1.
+            y: self._scale or 1.
+    canvas.after:
+        PopMatrix
 
+<TextInput>:
+    font_name: './ancient_tech/static/retro_font.ttf'
+    multiline: False
+    background_color: 0,0,.65,1
+    foreground_color: 0.34,1,1,1
+    hint_text_color: 0.34,1,1,1
