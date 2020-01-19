@@ -2,29 +2,24 @@ from pathlib import Path
 from datetime import datetime
 
 from kivy import Config
-from kivy.uix.popup import Popup
-from kivy.uix.recycleview import RecycleView
 
 Config.set('graphics', 'minimum_width', '1250')
 Config.set('graphics', 'minimum_height', '500')
 Config.set('graphics', 'width', '1250')
 Config.set('graphics', 'height', '500')
 
-from kivy.core.window import Window
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.logger import Logger
-from kivy.factory import Factory
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
+from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
+from kivy.uix.popup import Popup
 
 from kivy.properties import (
-    ObjectProperty,
     StringProperty,
-    NumericProperty
 )
 
 from .utils.utils import bytes_conversion
@@ -56,12 +51,6 @@ class Files(StackLayout):
         self.add_widget(NewFile(self, str(widget), text=''))
 
 
-class RV(RecycleView):
-    def __init__(self, **kwargs):
-        super(RV, self).__init__(**kwargs)
-        self.data = [{'text': str(x)} for x in range(100)]
-
-
 class Column(Widget):
     pass
 
@@ -78,8 +67,6 @@ class NewFile(Button):
             stats = path.stat()
 
             self.ids.name.text = path.name
-            self.ids.size.text = ' '.join(bytes_conversion(int(stats.st_size)))
-
             self.ids.date.text = datetime.fromtimestamp(
                 stats.st_mtime
             ).strftime('%d-%m-%Y')
@@ -87,11 +74,24 @@ class NewFile(Button):
             if path.is_dir():
                 t = 'DIR'
 
+                # self.ids.size.text = ' '.join(
+                #    bytes_conversion(
+                #        sum(
+                #            f.stat().st_size for f in path.glob('**/*') if f.is_file()
+                #        )
+                #    )
+                # )
+
             elif str(path).startswith('.') or path.suffix == '':
                 t = str(path.parts[-1])
 
             else:
                 t = path.suffix[1:].upper()
+                self.ids.size.text = ' '.join(
+                    bytes_conversion(
+                        int(stats.st_size)
+                    )
+                )
 
             self.ids.type.text = t
 

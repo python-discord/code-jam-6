@@ -37,22 +37,15 @@
     Column:
         size_hint: .2, .91
         pos_hint: {'top': .91, 'x': .79}
-
-    RV:
+    ScrollView:
         size_hint: .98,.90
         pos_hint: {'x':.01,'y': 0}
         scroll_distance: 10
-
-
-<RV>:
-    viewclass: 'NewFile'
-    Files:
-        height: self.minimum_height
-        on_parent:
-            self.generate('<-')
-            for d in self.dirs: self.generate(d)
-
-
+        Files:
+            height: self.minimum_height
+            on_parent:
+                self.generate('<-')
+                for d in self.dirs: self.generate(d)
 
 <Column>:
     canvas.before:
