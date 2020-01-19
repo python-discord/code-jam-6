@@ -5,7 +5,6 @@ from project.core.parser import Parser
 from project.core.terminal import IOTerminal
 
 
-
 class CD(command.Command):
     def __init__(self) -> None:
         super().__init__(name='cd')

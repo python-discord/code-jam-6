@@ -2,41 +2,35 @@ from pathlib import Path
 from typing import Any, Dict, IO, Optional, NoReturn
 from sys import stdin, stderr, stdout
 
-from project.core.constants import BIN_DIR, FILE_SYSTEM
+from project.core.api import Api
 from project.core.parser import Parser
 
 
-class Terminal:
+class IOTerminal:
     def __init__(
         self,
+        api: Api,
         io_in: IO = stdin,
         io_err: IO = stderr,
         io_out: IO = stdout,
         ps_format: str = '{name}@{terminal}:{path}{ps}',
-        env: Optional[Dict[str, Any]] = None,
         name: str = 'root',
         term_name: str = 'term',
-        path: str = FILE_SYSTEM,
         ps: str = '$',
     ) -> None:
         # those are useless for now
         self._in = io_in
         self._err = io_err
         self._out = io_out
-
+        self.api = api
         # TODO: add config loading
         self._format = ps_format
         self._name = name
         self._term_name = term_name
         self._ps = ps
-        self._path: Path = Path(path)
+        self._path: Path = Path('./')
 
-        self._env = env or dict()
         self._parser = Parser()
-
-    @property
-    def env(self) -> Dict[str, Any]:
-        return self._env
 
     @property
     def ps(self) -> str:
@@ -78,14 +72,14 @@ class Terminal:
 
     def format_ps(self, end: str = ''):
         return self.format.format(
-            path=str(self.path).replace(str(FILE_SYSTEM), '~'),
+            path=f"/{self.path}",
             name=self.name,
             terminal=self.term,
             ps=self.ps,
         ) + end
 
     def _load_commands(self):
-        for file in BIN_DIR.glob('*.py'):
+        for file in self.api.resolve_commands():
             name = file.name.strip(file.suffix)
             self.parser.load_command(name)
 

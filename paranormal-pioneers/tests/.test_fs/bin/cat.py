@@ -7,9 +7,9 @@ from project.core.parser import Parser
 from project.core.terminal import IOTerminal
 
 
-class Touch(command.Command):
+class Cat(command.Command):
     def __init__(self):
-        super().__init__(name='touch')
+        super().__init__(name='cat')
 
     def get_path(self, before: PathLike, after: PathLike, api: Api) -> PathLike:
         path = api.find_dir(before, after)
@@ -23,11 +23,13 @@ class Touch(command.Command):
 
     def main(self, ns: Namespace, term: IOTerminal) -> None:
         try:
-            if ns.path is not None:
-                term.api.touch(self.path)
+            if ns.path is not None and self.path != term.path:
+                if self.path.is_file():
+                    return self.path.read_text('utf-8')
+                log.warning('error: not a file')
         except OSError:
-            log.warning('error: no such file or directory')
+            log.warning('error: no such file')
 
 
 def setup(parser: Parser) -> None:
-    parser.add_command(Touch())
+    parser.add_command(Cat())

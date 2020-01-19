@@ -40,10 +40,15 @@ class ApiTest(unittest.TestCase):
             f.write(self.test_msg)
         self.assertTrue(self.api.exists_file('a_file'))
         self.assertEqual(self.test_msg, self.api.open_file('a_file','r').read())
+    def test_command(self):
+        cmd = tuple(self.api.resolve_commands())
+        print(cmd)
+        self.assertEqual(len(cmd), 6)
 
     def tearDown(self) -> None:
-        shutil.rmtree('./.test_fs')
-        os.mkdir("./.test_fs")
+        #shutil.rmtree('./.test_fs')
+        #os.mkdir("./.test_fs")
+        pass
 
 
 if __name__ == '__main__':

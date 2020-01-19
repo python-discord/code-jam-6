@@ -37,6 +37,7 @@ class Env:
         oo = cfg['DEFAULT']
 
         self.fs_root: pl.Path = pl.Path(oo['fs_root'])
+        self.ex_env: bool = oo.getboolean('allow_exit_env', False)
         self._terminals: Dict[str, Terminal] = {}
 
     def add_terminal(self, uid: str, term: "Terminal") -> None:
@@ -56,10 +57,10 @@ class Terminal:
     def impl_ex(name, action):
         return OSApiException(f"Terminal '{name}' does not support operation '{action}'")
 
-    def stdin(self) -> IO:
+    def term_to_vm(self) -> IO:
         """:return the standard input stream of this terminal"""
         raise Terminal.impl_ex(self.__name__, 'stdin')
 
-    def stdout(self) -> IO:
+    def vm_to_term(self) -> IO:
         """:return the standard output stream of this terminal"""
         raise Terminal.impl_ex(self.__name__, 'stdout')

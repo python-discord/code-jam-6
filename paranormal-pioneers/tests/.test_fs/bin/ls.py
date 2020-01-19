@@ -31,7 +31,7 @@ class LS(command.Command):
     def main(self, ns: Namespace, term: IOTerminal) -> str:
         entries = []
 
-        for path in sorted(term.api.list_dir(self.dir)):
+        for path in sorted(self.dir.iterdir()):
             name = path.name
 
             if name.startswith('.') and not self.show_all:

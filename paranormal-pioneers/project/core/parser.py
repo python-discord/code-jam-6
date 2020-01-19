@@ -17,11 +17,11 @@ class Parser:
 
     def load_command(self, module: str, char: str = '.') -> None:
         path: str = make_path(module)
-
         try:
             module = importlib.import_module(path)  # type: ignore
         except ImportError:
             log.warning(f'Could not load command: {module!r}.')
+            return
 
         if not hasattr(module, 'setup'):
             log.warning(f'Command module does not have setup function: {module!r}.')
@@ -37,7 +37,7 @@ class Parser:
 
         commands = self._commands
         command_name = args.pop(0)
-
+        log.warning(commands)
         if command_name in commands:
             return commands.get(command_name).execute(term=term, args=args)
 

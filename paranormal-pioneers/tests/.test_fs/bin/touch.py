@@ -24,7 +24,7 @@ class Touch(command.Command):
     def main(self, ns: Namespace, term: IOTerminal) -> None:
         try:
             if ns.path is not None:
-                term.api.touch(self.path)
+                self.path.touch()
         except OSError:
             log.warning('error: no such file or directory')
 
