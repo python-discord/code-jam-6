@@ -1,4 +1,4 @@
-name: Lint and test
+name: Test
 
 on: [push]
 
@@ -22,12 +22,7 @@ jobs:
         pip install pipenv
     - name: Install dependencies
       working-directory: ./brilliant-builders
-      run: pipenv sync --dev
-    - name: Lint 
+      run: pipenv sync
+    - name: Run tests
       working-directory: ./brilliant-builders
-      run: |
-        pipenv run lint
-    - name: Test 
-      working-directory: ./brilliant-builders
-      run: |
-        pipenv run test
+      run: pipenv run python -m unittest
