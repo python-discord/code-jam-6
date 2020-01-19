@@ -4,10 +4,13 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+mypy = "*"
+pylint = "*"
 
 [packages]
 pydub = "*"
 numpy = "*"
+ffmpeg-python = "*"
 
 [requires]
 python_version = "3.7"
