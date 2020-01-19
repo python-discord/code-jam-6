@@ -12,14 +12,17 @@ kivy.require('1.11.1')
 
 # Widget element things #
 class RotatingWidget(FloatLayout):
+    """
+    At some point we'll need to add a time for sunrise / sunset.
+    """
     angle = NumericProperty(0)
 
-    def __init__(self, **kwargs):
+    def __init__(self, speed, **kwargs):
         super(RotatingWidget, self).__init__(**kwargs)
 
         # Duration is how long it takes to do a full 360 in seconds.
-        anim = Animation(angle=-360, duration=10)
-        anim += Animation(angle=-360, duration=10)
+        anim = Animation(angle=-360, duration=speed)
+        anim += Animation(angle=-360, duration=speed)
         anim.repeat = True
         anim.start(self)
 
@@ -36,7 +39,7 @@ class NowMarker(FloatLayout):
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.add_widget(RotatingWidget())
+        self.add_widget(RotatingWidget(50))
         self.add_widget(NowMarker())
 
     def settings_button(self):
