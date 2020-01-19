@@ -1,2 +1,42 @@
+<MenuButton@Button>:
+<ConfirmationPopup@Popup>:
+    title: "Confirm exit"
+    size_hint: 0.5, 0.5
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Are you sure you want to exit?"
+        BoxLayout:
+            size_hint_y: 0.3
+            orientation: "horizontal"
+            Button:
+                text: "Yes"
+                on_release: app.stop()
+            Button:
+                text: "No"
+                on_release: root.dismiss()
+
 <MainScreen>:
     name: "main_screen"
+    AnchorLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.5, 0.5
+            GridLayout:
+                pos_hint: {"center_x": 0.5}
+                size_hint_x: 0.3
+                cols: 2
+                Image:
+                    source: app.icon
+                Label:
+                    text: app.title
+            Widget:
+            MenuButton:
+                text: "New Game"
+                on_release: root.manager.current = "game_screen"
+            MenuButton:
+                text: "Settings"
+                on_release: root.manager.current = "settings_screen"
+            MenuButton:
+                text: "Exit"
+                on_release: Factory.ConfirmationPopup().open()

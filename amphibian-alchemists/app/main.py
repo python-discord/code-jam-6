@@ -2,7 +2,7 @@ import kivy
 from kivy.app import App
 from kivy.factory import Factory
 from kivy.lang import Builder
-from kivy.uix.screenmanager import ScreenManager
+from kivy.uix.screenmanager import FadeTransition, ScreenManager
 
 kivy.require("1.11.1")
 
@@ -17,7 +17,9 @@ Builder.load_file("kvs/settingsscreen.kv")
 
 
 class UIManager(ScreenManager):
-    pass
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.transition = FadeTransition()
 
 
 class AncientTechApp(App):

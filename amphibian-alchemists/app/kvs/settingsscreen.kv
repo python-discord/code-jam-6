@@ -1,2 +1,13 @@
 <SettingsScreen>:
     name: "settings_screen"
+    AnchorLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.5, 0.5
+            Label:
+                text: "Settings"
+            Button:
+                size_hint: 0.3, 0.3
+                pos_hint: {"center_x": 0.5}
+                text: "Go Back"
+                on_release: root.manager.current = "main_screen"
