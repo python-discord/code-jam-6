@@ -185,7 +185,7 @@ class Footer(BoxLayout):
         popup.open()
 
     def mkdir(self):
-        popup = MKDIR(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
+        popup = Mkdir(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
 
     def quit(self):

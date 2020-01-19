@@ -3,12 +3,9 @@
 <Terminal>:
     terminal_input: terminal_input
     scroll_view: scroll_view
-    pos: self.pos
-    size: self.size
 
     ScrollView:
         id: scroll_view
-        size_hint: 1, None
         
         TerminalInput:
             id: terminal_input
@@ -18,3 +15,4 @@
             foreground_color: root.foreground_color
             background_color: root.background_color
             height: max(self.parent.height, self.minimum_height)
+            size_hint_y: None

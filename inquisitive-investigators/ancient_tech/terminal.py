@@ -34,13 +34,15 @@ class Shell(EventDispatcher):
             cmd, stdout=subprocess.PIPE
         )
         line_iter = iter(self.process.stdout.readline, '')
-
+        self.dispatch('on_output', '\n'.encode())
+        
         for line in line_iter:
             output += line.decode()
 
             if show_output:
                 self.dispatch('on_output', line)
 
+        self.dispatch('on_output', '\n'.encode())
         self.dispatch('on_complete', output)
 
     @threaded
