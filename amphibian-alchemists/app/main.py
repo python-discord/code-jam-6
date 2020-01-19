@@ -3,6 +3,8 @@ from kivy.app import App
 from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.uix.screenmanager import FadeTransition, ScreenManager
+from enigma.machine import EnigmaMachine
+import os
 
 kivy.require("1.11.1")
 
@@ -32,6 +34,18 @@ class UIManager(ScreenManager):
 
 
 class AncientTechApp(App):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.machine = EnigmaMachine.from_key_sheet(
+            rotors="I II III",
+            reflector="B",
+            ring_settings=[1, 20, 11],
+            plugboard_settings="AV BS CG DL FU HZ IN KM OW RX"
+        )
+        self.machine.set_display("ABC")
+        self.game_id = None
+        self.APP_DIR = os.path.dirname(os.path.abspath(__file__))
+
     def build(self):
         self.title = "ENG"
         self.icon = "misc/logo.png"
