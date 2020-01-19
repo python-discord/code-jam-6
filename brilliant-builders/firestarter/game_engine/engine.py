@@ -2,7 +2,6 @@ import os
 from pathlib import Path
 from typing import List
 
-
 from firestarter.game_engine.sprite import Sprite, SpriteConfig
 
 from kivy.clock import Clock
@@ -12,7 +11,7 @@ from kivy.uix.widget import Widget
 
 
 class Engine(Widget):
-    resource_dir = (Path('.') / 'resources').absolute()
+    resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -58,6 +57,13 @@ class Engine(Widget):
         self.sprites.append(sprite)
         self.add_widget(sprite)
 
+    def add_sprites(self, sprites: List[Sprite]) -> None:
+        """Add the list of sprites to the internal list and add the widgets."""
+        self.sprites.extend(sprites)
+        sprite: Sprite
+        for sprite in sprites:
+            self.add_widget(sprite)
+
     def update(self, dt: float) -> None:
         """This function will be overwritten by the user."""
         pass
@@ -72,7 +78,11 @@ class Engine(Widget):
         """Update all sprites positions and call the users update function."""
         sprite: Sprite
         for sprite in self.sprites:
-            sprite.update()
+            if sprite.killed:
+                self.sprites.remove(sprite)
+                self.remove_widget(sprite)
+            else:
+                sprite.update(self.sprites)
 
         self.update(dt)
 

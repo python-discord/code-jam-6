@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Tuple
+from typing import List, Tuple
 
 from kivy.graphics import Rectangle
 from kivy.graphics.texture import Texture
@@ -20,12 +22,13 @@ class SpriteConfig:
 
 
 class Sprite(Widget):
-    resource_dir = (Path('.') / 'resources').absolute()
+    resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
 
-    def __init__(self, config: SpriteConfig, pos: Tuple[int] = (0, 0), **kwargs) -> None:
+    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs) -> None:
         super().__init__(**kwargs)
 
-        self.size = (50, 50)
+        self.killed: bool = False
+        self.size = config.size
         self.pos = pos
         self.config = config
         self.current_mode = 0
@@ -60,8 +63,38 @@ class Sprite(Widget):
         """Redraw the rectangle after moving the sprite."""
         self.bg_rect.pos = self.pos
 
-    def update(self) -> None:
+    def update(self, *args) -> None:
         raise NotImplementedError()
+
+    def on_collision(self, other: Sprite) -> bool:
+        """Return False if you can pass through, else return True"""
+        return True
+
+    def kill(self) -> None:
+        self.killed = True
+
+
+class Platform(Sprite):
+    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
+        super().__init__(config, pos, **kwargs)
+
+    def update(self, other_sprites: List[Sprite]) -> None:
+        pass
+
+
+class PickUpCoin(Sprite):
+    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
+        super().__init__(config, pos, **kwargs)
+
+    def update(self, other_sprites: List[Sprite]) -> None:
+        pass
+
+    def on_collision(self, other: Sprite) -> bool:
+        if isinstance(other, Player):
+            print("coin +1!")
+            other.score += 1
+            self.kill()
+        return False
 
 
 class Player(Sprite):
@@ -69,17 +102,44 @@ class Player(Sprite):
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
 
-    def __init__(self, config: SpriteConfig, pos: tuple = (0, 0), **kwargs) -> None:
+    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs) -> None:
         super().__init__(config, pos, **kwargs)
+        self.score = 0
 
-    def update(self) -> None:
+    def update(self, other_sprites: List[Sprite]) -> None:
+        """Update the players position and handle collisions (very inefficiently!!)"""
         # update the position
+        old_pos = (self.pos[0], self.pos[1])
+        # first try to apply up/downwards velocity
         self.pos = (self.pos[0] + self.vel_x, self.pos[1] + self.vel_y)
+        if self.collides_with(other_sprites):  # we are colliding in x or y
+
+            self.pos = (old_pos[0], old_pos[1])
+            self.pos = (self.pos[0] + self.vel_x, self.pos[1])
+
+            if self.collides_with(other_sprites):  # colliding in x
+                self.pos = (old_pos[0], old_pos[1])
+
+            old_pos = (self.pos[0], self.pos[1])
+            self.pos = (old_pos[0], old_pos[1] + self.vel_y)
+
+            if self.collides_with(other_sprites):  # colliding in y
+                self.pos = (old_pos[0], old_pos[1])
+
+        # self.pos = old_pos
+
         # dampen the velocity to come to a stop
         self.vel_x *= .5
         self.vel_y *= .5
         # apply some downwards velocity
         self.vel_y -= 2
-        # make sure we don't fall out of the world
-        if self.pos[1] < 50:
-            self.pos = (self.pos[0], 50)
+
+    def collides_with(self, other_sprites: List[Sprite]) -> bool:
+        # deal with collisions
+        for sprite in other_sprites:
+            if sprite != self and self.collide_widget(sprite):
+                if sprite.on_collision(self):
+                    return True
+
+    def on_collision(self, other: Sprite) -> None:
+        pass
