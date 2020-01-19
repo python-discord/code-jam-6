@@ -5,6 +5,9 @@ from requests import get
 from string import ascii_uppercase
 from random import sample
 from enigma.machine import EnigmaMachine
+import os
+
+DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
 
 
 def on_config_change():
@@ -12,7 +15,7 @@ def on_config_change():
     After you change the JSON data w/ JSONStore, call this function
     This should only be called for rotor or plug changes
     """
-    store = JsonStore("data/gamestate.json")
+    store = JsonStore(DATA_DIR)
     game_id = str(App.get_running_app().game_id)
     plugs = store.get(game_id)["current_state"]["plugs"]
     plug_settings = " ".join(x for x in plugs)
@@ -53,7 +56,7 @@ def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> st
 
 
 def setup_new_game_settings():
-    store = JsonStore("data/gamestate.json")
+    store = JsonStore(DATA_DIR)
     currrent_game_id = store.get("latest_game_id")["id"]
     if currrent_game_id is None:
         store.put("latest_game_id", id=0)
@@ -123,10 +126,14 @@ def setup_new_game_settings():
 
 class GameScreen(Screen):
     """Do we automatically assume new game or should we save?"""
+    if not os.path.exists(DATA_DIR):
+        store = JsonStore(DATA_DIR)
+        store.put("latest_game_id", id=None)
 
     def on_enter(self, *args):
-        store = JsonStore("data/gamestate.json")
-        # TODO Add load game screen and select a game id.
+        store = JsonStore(DATA_DIR)
+        # TODO Add load game screen and select a game id by
+        #  running App.get_running_app().game_id = 0
         game_id = App.get_running_app().game_id
         if game_id is None or store.exists(str(App.get_running_app().game_id)) is False:
             setup_new_game_settings()

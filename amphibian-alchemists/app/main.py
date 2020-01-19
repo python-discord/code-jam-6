@@ -4,6 +4,7 @@ from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.uix.screenmanager import FadeTransition, ScreenManager
 from enigma.machine import EnigmaMachine
+import os
 
 kivy.require("1.11.1")
 
@@ -43,6 +44,7 @@ class AncientTechApp(App):
         )
         self.machine.set_display("ABC")
         self.game_id = None
+        self.APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def build(self):
         self.title = "ENG"
