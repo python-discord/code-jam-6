@@ -12,8 +12,6 @@
         size_hint: 1,.04
 
 
-
-
 <FileBrowser>:
     canvas.before:
         Color:
@@ -38,6 +36,7 @@
         size_hint: .2, .91
         pos_hint: {'top': .91, 'x': .79}
     ScrollView:
+        effect_cls: "ScrollEffect"
         size_hint: .98,.90
         pos_hint: {'x':.01,'y': 0}
         scroll_distance: 10
@@ -159,6 +158,26 @@
     size_hint: 1, None
 
 
+<AboutPopup>:
+    title: 'About NAMEOFPROJECT'
+    BoxLayout:
+        orientation: "vertical"
+        ScrollView:
+            effect_cls: "ScrollEffect"
+            Label:
+                id: AboutInfo
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: (self.width-20), None
+                line_height: 1.5
+                valign: "top"
+        Button:
+            text: "Close"
+            size_hint_y: None
+            height: "40dp"
+            on_press: root.dismiss()
+
+
 <QuitPopup>:
     title: 'Quit?'
     FloatLayout:
@@ -183,6 +202,7 @@
             on_press: root.check(False)
 
 <Popup>:
+    auto_dismiss: False
     canvas.before:
         Color:
             rgb: 0.34,1,1
@@ -194,6 +214,8 @@
     title_align: 'center'
     title_font: './ancient_tech/static/retro_font.ttf'
 
+<ModalView@Popup>:
+    background_color: 0,0,0,00
 
 <Footer>:
     canvas:
@@ -206,6 +228,7 @@
 
     Button:
         text: '1:About'
+        on_press: root.about()
     Button:
         text: '2:Menu'
     Button:
@@ -224,6 +247,7 @@
         text: '9:Delete'
     Button:
         text: '0:Quit'
+        on_press: root.quit()
 
 <Button>:
     font_name: './ancient_tech/static/retro_font.ttf'

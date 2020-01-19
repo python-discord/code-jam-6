@@ -136,7 +136,7 @@ class Footer(BoxLayout):
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if keycode[1] == '1':
-            print('1')
+            self.about()
         if keycode[1] == '2':
             print('2')
         if keycode[1] == '3':
@@ -157,6 +157,10 @@ class Footer(BoxLayout):
             self.quit()
         return True
 
+    def about(self):
+        popup = AboutPopup(size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
+        popup.open()
+
     def quit(self):
         popup = QuitPopup(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
@@ -169,6 +173,19 @@ class QuitPopup(Popup):
             self.dismiss()
         if value:
             quit(0)
+
+
+class AboutPopup(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.ids.AboutInfo.text = '''
+                                                                 Scroll Effect 
+                                                            Hopefully it works!
+        Features:
+                  yeah there here, we got like a file thing
+                  Oh yeah and were adding a text editor too!
+                  is this scrolling yet?
+        '''
 
 
 class AncientTechApp(App):
