@@ -18,3 +18,7 @@ Your location can either be specified in settings or gathered by IP geolocation.
 ## License
 
 All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+
+## Setup
+1. Create a file called `config.py`
+2. Create a variable called `GEOLOCATION_KEY` and paste in
