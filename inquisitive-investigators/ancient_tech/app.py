@@ -27,9 +27,7 @@ class FileHeader(FloatLayout):
 
 
 class Files(StackLayout):
-
     do_layout_event = ObjectProperty(None, allownone=True)
-
     layout_delay_s = NumericProperty(0.15)
 
     def __init__(self, *args, **kwargs):
@@ -60,11 +58,11 @@ class NewFile(Button):
         self.txt = txt
         self.ctx = ctx
 
-        path = Path(txt)
-        stats = path.stat()
-        self.ids.name.text = path.name
+        if self.txt != '<-':
+            path = Path(txt)
+            stats = path.stat()
 
-        if self.txt != '../':
+            self.ids.name.text = path.name
             self.ids.size.text = ' '.join(bytes_conversion(int(stats.st_size)))
 
             self.ids.date.text = datetime.fromtimestamp(
@@ -82,10 +80,14 @@ class NewFile(Button):
 
             self.ids.type.text = t
 
+        else:
+            self.ids.name.text = '<-'
+            self.ids.type.text = 'PARENT'
+
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
-        if self.txt == '../':
+        if self.txt == '<-':
             path = Path(self.ctx.prev_dir)
         else:
             path = Path(self.txt)
@@ -96,7 +98,7 @@ class NewFile(Button):
 
             if len(path.parts) > 1:
                 self.ctx.prev_dir = str(path.parent)
-                self.ctx.generate('../')
+                self.ctx.generate('<-')
 
             for d in self.ctx.dirs:
                 self.ctx.generate(d)
