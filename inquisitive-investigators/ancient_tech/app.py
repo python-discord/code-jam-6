@@ -30,7 +30,7 @@ class Files(StackLayout):
 
     do_layout_event = ObjectProperty(None, allownone=True)
 
-    layout_delay_s = NumericProperty(0.2)
+    layout_delay_s = NumericProperty(0.15)
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
