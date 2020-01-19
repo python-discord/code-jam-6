@@ -23,9 +23,11 @@
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
 <SunRise>:
+    rot_angle: 0
+
     canvas:
         Rotate:
-            angle: 0
+            angle: root.rot_angle
             origin: self.center
 
 	Image:
@@ -35,9 +37,11 @@
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
 <SunSet>:
+    rot_angle: 0
+
     canvas:
         Rotate:
-            angle: 0
+            angle: root.rot_angle
             origin: self.center
 
 	Image:

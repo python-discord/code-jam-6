@@ -37,9 +37,17 @@ class RotatingWidget(FloatLayout):
         anim.repeat = True
         anim.start(self)
 
-        # Create new widget for icons that can be arbitrarily rotated on canvas.
-        self.add_widget(SunRise())
-        self.add_widget(SunSet())
+        # Add icons that can be arbitrarily rotated on canvas.
+        # Plus a time test
+        time = 8
+        sunrise = 6
+        sunset = 20
+
+        rise_angle = time - sunrise * 15
+        set_angle = sunset - time * 15
+
+        self.add_widget(SunRise(rise_angle))
+        self.add_widget(SunSet(set_angle))
 
     def on_angle(self, item, angle):
         if angle == 360:
@@ -51,11 +59,15 @@ class NowMarker(FloatLayout):
 
 
 class SunRise(FloatLayout):
-    pass
+    def __init__(self, rot_angle, **kwargs):
+        super(SunRise, self).__init__(**kwargs)
+        self.rot_angle = rot_angle
 
 
 class SunSet(FloatLayout):
-    pass
+    def __init__(self, rot_angle, **kwargs):
+        super(SunSet, self).__init__(**kwargs)
+        self.rot_angle = rot_angle
 
 
 # Screens in the App #
