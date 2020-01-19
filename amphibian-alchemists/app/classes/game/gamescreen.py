@@ -6,6 +6,7 @@ from string import ascii_uppercase
 from random import sample
 from enigma.machine import EnigmaMachine
 import os
+from kivy.lang import Builder
 
 DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
 
@@ -112,6 +113,9 @@ def setup_new_game_settings():
 
 class GameScreen(Screen):
     """Do we automatically assume new game or should we save?"""
+
+    Builder.load_file("kvs/game/enigmakeyboard.kv")
+
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
         store.put("latest_game_id", id=None)

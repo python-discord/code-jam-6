@@ -5,11 +5,11 @@
             orientation: "vertical"
             size_hint: 0.75, 0.7
             Button:
+                size_hint_y: 0.2
                 text: "Rotors"
                 on_release: root.manager.current = "rotor"
-            Button:
-                text: "Keyboard"
-                on_release: root.manager.current = "keyboard"
+            EnigmaKeyboard:
+                id: enigma_keyboard
     AnchorLayout:
         anchor_x : "left"
         Button:
