@@ -13,6 +13,7 @@ pydub = "*"
 numpy = "*"
 ffmpeg-python = "*"
 requests = "*"
+kivy = "*"
 
 [requires]
 python_version = "3.7"
