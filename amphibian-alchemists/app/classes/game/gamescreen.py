@@ -160,7 +160,11 @@ class GameScreen(Screen):
             "m",
             "l",
         }
-        if self.manager.current == "game_screen" and codepoint in keys and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus:
+        if (
+            self.manager.current == "game_screen"
+            and codepoint in keys
+            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
+        ):
             self.ids.enigma_keyboard.ids.keyboard.ids[
                 codepoint.upper()
             ].trigger_action()
@@ -170,8 +174,12 @@ class GameScreen(Screen):
         Here goes what we're gonna do whenever a key in the machine is pressed
         """
 
-        anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.5) + Animation(_color=[1, 1, 1], duration=0.5)
+        anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.5) + Animation(
+            _color=[1, 1, 1], duration=0.5
+        )
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
         if not self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus:
-            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(key.name)
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(
+                key.name
+            )
