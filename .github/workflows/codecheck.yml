@@ -3,10 +3,11 @@ name: Python style check
 on: [push]
 
 jobs:
-  build:
+  code-style:
 
     runs-on: ubuntu-latest
 
     steps:
+      - uses: actions/checkout@v1
       - name: Python style check
         uses: bulv1ne/python-style-check@v0.3
