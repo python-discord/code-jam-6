@@ -1,16 +1,18 @@
-from kivy.app import App
-from kivy.core.window import Window
-
 from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.sprite import Player
+
+from kivy.app import App
+from kivy.clock import Clock
+from kivy.core.window import Window
 
 
 class MyGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.player = Player('Bob-01.jpg', (50, 50))
-
+        self.player = Player(self.assets['spritesheet_caveman'], (50, 75))
         self.add_sprite(self.player)
+
+        Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)
 
     def update(self, dt: float) -> None:
         if 'spacebar' in self.pressed_keys:
