@@ -1,6 +1,6 @@
 # Paranormal Pioneers
 
-Soon... (c)
+This is a placeholder for Paranormal Pioneers project README.
 
 ## Developers
 
