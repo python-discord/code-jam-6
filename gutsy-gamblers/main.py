@@ -1,4 +1,4 @@
-import json
+from datetime import datetime, timedelta
 
 import kivy
 import requests
@@ -39,15 +39,8 @@ class RotatingWidget(FloatLayout):
 
         # Add icons that can be arbitrarily rotated on canvas.
         # Plus a time test
-        time = 8
-        sunrise = 6
-        sunset = 20
-
-        rise_angle = time - sunrise * 15
-        set_angle = sunset - time * 15
-
-        self.add_widget(SunRise(rise_angle))
-        self.add_widget(SunSet(set_angle))
+        self.add_widget(SunRise(0))
+        self.add_widget(SunSet(0))
 
     def on_angle(self, item, angle):
         if angle == 360:
@@ -93,7 +86,9 @@ class SettingsScreen(Popup):
         zipcode = resp['zipcode']
 
         settings_popup = Popup(title="Settings",
-                               content=Label(text=f'Currently in {city}, {state_prov}, {country} {zipcode}'),
+                               content=Label(
+                                   text=f'Currently in {city}, {state_prov}, {country} {zipcode}'
+                               ),
                                size_hint=(None, None), size=(500, 200))
         settings_popup.open()
 
