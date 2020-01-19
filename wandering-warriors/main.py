@@ -11,7 +11,7 @@ class Abacus(Widget):
     pass
 
 
-class DrawingInput(Widget):
+class CuneiformDrawingInput(Widget):
     pass
 
 
