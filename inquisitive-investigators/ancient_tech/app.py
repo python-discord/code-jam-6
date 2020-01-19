@@ -50,6 +50,10 @@ class Header(Label):
     pass
 
 
+class FileInfo(Label):
+    pass
+
+
 class FileHeader(FloatLayout):
     current_dir = StringProperty()
 
