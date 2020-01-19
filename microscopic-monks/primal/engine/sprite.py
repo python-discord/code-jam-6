@@ -12,10 +12,10 @@ class Sprite(Widget):
     vel = ReferenceListProperty(vel_x, vel_y)
     resource_dir = (Path('.') / 'resources').absolute()
 
-    def __init__(self, image: str, pos: tuple = (0, 0), **kwargs) -> None:
+    def __init__(self, image: str, pos: tuple = (0, 0), size: tuple = (50, 50), **kwargs) -> None:
         super().__init__(**kwargs)
 
-        self.size = (50, 50)
+        self.size = size
         self.pos = pos
 
         with self.canvas:
@@ -41,8 +41,8 @@ class Player(Sprite):
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
 
-    def __init__(self, image: str, pos: tuple = (0, 0), **kwargs) -> None:
-        super().__init__(image, pos, **kwargs)
+    def __init__(self, image: str, pos: tuple = (0, 0), size: tuple = (50, 50), **kwargs) -> None:
+        super().__init__(image, pos, size, **kwargs)
 
     def update(self) -> None:
-        pass
+        self.redraw()

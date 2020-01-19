@@ -38,7 +38,7 @@ class Engine(Widget):
         sprite: Sprite
         for sprite in self.sprites:
             sprite.update()
-
+        self.sprites[0].update()
         self.update(dt)
 
     def _keyboard_closed(self) -> None:
