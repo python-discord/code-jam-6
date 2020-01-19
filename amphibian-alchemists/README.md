@@ -1,15 +1,50 @@
-# Amphibian Alchemists!
+# Enigma Communication
+By: Amphibian Alchemists
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+The Enigma Machine from WWII is the most infamous encryption device of the era. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths.
 
-## Useful links
+Table of Contents:
+- Setup
+- Tutorial
+- Guides
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+---
+### Setup
+1. Clone or download this repository. 
+2. Creating a virtual environment. 
+3. Activate it and `pip install kivy`. 
+4. In terminal, run main.py by doing `python main.py`
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+---
+### Tutorial
+![](https://ietp-web-cdn-eandt-cache.azureedge.net/0/2/c/4/5/9/02c4592c9a481871f93b30cdb914d341e22f547b.jpg)
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+At the top are rotors which are configured by rotation, the middle is the lampboard which shows outputted characters, the middle is the input keyboard, and the bottom is the plugboard.
 
-## License
+You will be configuring the rotors and plugboard where you can plug and unplug characters.
 
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+Every 24 hours, the Germans redid the settings and distributed it to their generals. 
+
+You are given these settings in order to decrypt the message. Your job is to configure the Enigma machine and produce logical, Anglicized/English text. Once you have configured the machine, using your keyboard, you can (randomly) type out the ciphered characters and will be magically typing out the outputted, logical characters if the machine is configured correctly.
+
+When you create a new game, you are shown the Enigma machine. 
+
+- By pressing on a rotor, you will first be led to a new screen where you can rotate the rotor to its proper initial settings
+- By pressing on the plugboard, you will be led to a new screen where you can drag-and-drop plugs to its proper initial place.
+
+Once you have finished configuring both the plugboard and rotors, go to the main enigma machine and start randomly pressing keys. You can see which keys are being typed by the animations or you can press on the piece of paper at the top right to see the ciphered text. 
+
+The output characters when you type will be shown and automatically configured in another piece of paper. You can restart the game if you misconfigured the machine. __Remember, only start typing when you have finished configurations!__
+
+---
+### Guides
+
+You can learn more about the enigma machine here:
+- https://en.wikipedia.org/wiki/Enigma_machine
+- [In-depth YouTube guide and technical details](https://www.youtube.com/watch?v=GcI-YlFSGYo)
+
+A diagram of the machine's internal functionality:
+![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
+---
+### TODO
+- Integration with Discord
