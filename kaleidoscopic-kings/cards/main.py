@@ -40,7 +40,6 @@ class Card:
             f"option 2: {self.option_2.text if self.option_2 is not None else None}\n"
         )
 
-
 class Deck:
     """The deck of cards from which the user draws"""
 
@@ -72,19 +71,36 @@ class Game:
 
     def __init__(self, possible_cards):
         self.deck = Deck(possible_cards)
+        # TODO: Add more attributes here
+        self.health = 100
+
+    def get_player_state(self):
+        """ Get player's current state """
+        return {
+            'health': self.health
+        }
+
+    def set_player_state(self, outcome):
+        """ Set player's current state by applying the selected outcome to the current state """
+        if 'health' in outcome:
+            self.health += outcome['health']
 
     def take_turn(self):
         """A temporary function to take a turn via console input.
         In reality, this kind of interaction would be handled through
         multiple different methods exposed to kivy"""
+
         card = self.deck.get_next_card()
+        print('Player State: ', self.get_player_state())
         print(card)
         print(f"1) {card.option_1}")
         print(f"2) {card.option_2}")
-        choice = input("Option 1 or 2? :")
-        res = card.option_1 if choice == "1" else card.option_2
-        print(res.next_card)
-        self.deck.insert_card(res.next_card)
+
+        choice = input("Option 1 or 2? : ")
+        selected_option = card.option_1 if choice == "1" else card.option_2
+        self.set_player_state(selected_option.outcome)
+        print('Player State: ', self.get_player_state())
+        self.deck.insert_card(selected_option.next_card)
 
 
 def card_from_dict(card_dict: dict) -> Card:
