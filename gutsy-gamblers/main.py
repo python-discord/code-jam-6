@@ -1,12 +1,18 @@
+import json
+
 import kivy
+import requests
+from kivy.animation import Animation
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import NumericProperty
-from kivy.animation import Animation
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import Screen, ScreenManager
+
+from config import GEOLOCATION_KEY
+
 kivy.require('1.11.1')
 
 
@@ -47,8 +53,15 @@ class SettingsScreen(Popup):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
 
-        settings_popup = Popup(title="Settings", content=Label(text='Settings window!'),
-                               size_hint=(None, None), size=(200, 200))
+        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
+        resp = r.json()
+        city = resp['city']
+        state_prov = resp['state_prov']
+        country = resp['country_name']
+        zipcode = resp['zipcode']
+
+        settings_popup = Popup(title="Settings", content=Label(text=f'Currently in {city}, {state_prov}, {country} {zipcode}'),
+                               size_hint=(None, None), size=(500, 200))
         settings_popup.open()
 
 
