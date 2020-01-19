@@ -3,7 +3,10 @@ from random import sample
 from string import ascii_uppercase
 
 from enigma.machine import EnigmaMachine
+from kivy.animation import Animation
 from kivy.app import App
+from kivy.core.window import Window
+from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from requests import get
@@ -108,6 +111,12 @@ def setup_new_game_settings():
 class GameScreen(Screen):
     """Do we automatically assume new game or should we save?"""
 
+    Builder.load_file("kvs/game/enigmakeyboard.kv")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        Window.bind(on_key_down=self._on_key_down)
+
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
         store.put("latest_game_id", id=None)
@@ -121,3 +130,56 @@ class GameScreen(Screen):
             setup_new_game_settings()
         else:
             on_config_change()
+
+    def _on_key_down(self, window, key, scancode, codepoint, modifiers):
+        keys = {
+            "q",
+            "w",
+            "e",
+            "r",
+            "t",
+            "z",
+            "u",
+            "i",
+            "o",
+            "a",
+            "s",
+            "d",
+            "f",
+            "g",
+            "h",
+            "j",
+            "k",
+            "p",
+            "y",
+            "x",
+            "c",
+            "v",
+            "b",
+            "n",
+            "m",
+            "l",
+        }
+        if (
+            self.manager.current == "game_screen"
+            and codepoint in keys
+            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
+        ):
+            self.ids.enigma_keyboard.ids.keyboard.ids[
+                codepoint.upper()
+            ].trigger_action()
+
+    def handle_key(self, key):
+        """
+        Here goes what we're gonna do whenever a key in the machine is pressed
+        """
+
+        anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.5) + Animation(
+            _color=[1, 1, 1], duration=0.5
+        )
+        anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
+
+        if not self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus:
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(
+                key.name
+            )
