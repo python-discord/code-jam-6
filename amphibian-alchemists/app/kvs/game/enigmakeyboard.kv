@@ -1,9 +1,90 @@
 <Key@ButtonBehavior+Image>:
     on_kv_post: self.source = f"misc/{self.name}.png"
-    on_state: self.source = "misc/keydown.png" if self.state == "down" else f"misc/{self.name}.png"
-    on_release: app.root.get_screen("game_screen").handle_key(self.name)
+    on_press: self.source = "misc/keydown.png"
+    on_release:
+        self.source = f"misc/{self.name}.png"
+        app.root.get_screen("game_screen").handle_key(self)
 
-<EnigmaKeyboard@GridLayout>:
+<Lamp@Widget>:
+
+<LampBoard@GridLayout>:
+    size_hint_y: 0.7
+    canvas:
+        Color:
+            rgba: 204 / 255, 204 / 255, 204 / 255, 1
+        Rectangle:
+            size: root.size
+            pos: root.pos
+    rows: 3
+
+    BoxLayout:
+        spacing: dp(10)
+        padding: dp(10)
+        Widget:
+        Lamp:
+            id: Q
+        Lamp:
+            id: W
+        Lamp:
+            id: E
+        Lamp:
+            id: R
+        Lamp:
+            id: T
+        Lamp:
+            id: Z
+        Lamp:
+            id: U
+        Lamp:
+            id: I
+        Lamp:
+            id: O
+
+    BoxLayout:
+        spacing: dp(10)
+        padding: dp(10)
+        Widget:
+        Lamp:
+            id: A
+        Lamp:
+            id: S
+        Lamp:
+            id: D
+        Lamp:
+            id: F
+        Lamp:
+            id: G
+        Lamp:
+            id: H
+        Lamp:
+            id: J
+        Lamp:
+            id: K
+        Widget:
+
+    BoxLayout:
+        spacing: dp(10)
+        padding: dp(10)
+        Lamp:
+            id: P
+        Lamp:
+            id: Y
+        Lamp:
+            id: X
+        Lamp:
+            id: C
+        Lamp:
+            id: V
+        Lamp:
+            id: B
+        Lamp:
+            id: N
+        Lamp:
+            id: M
+        Lamp:
+            id: L
+
+<Keyboard@GridLayout>:
     canvas:
         Color:
             rgba: 51 / 255, 51 / 255, 51 / 255, 1
@@ -23,22 +104,31 @@
                 width: 5
         Widget:
         Key:
+            id: Q
             name: "Q"
         Key:
+            id: W
             name: "W"
         Key:
+            id: E
             name: "E"
         Key:
+            id: R
             name: "R"
         Key:
+            id: T
             name: "T"
         Key:
+            id: Z
             name: "Z"
         Key:
+            id: U
             name: "U"
         Key:
+            id: I
             name: "I"
         Key:
+            id: O
             name: "O"
 
     BoxLayout:
@@ -52,20 +142,28 @@
                 width: 4
         Widget:
         Key:
+            id: A
             name: "A"
         Key:
+            id: S
             name: "S"
         Key:
+            id: D
             name: "D"
         Key:
+            id: F
             name: "F"
         Key:
+            id: G
             name: "G"
         Key:
+            id: H
             name: "H"
         Key:
+            id: J
             name: "J"
         Key:
+            id: K
             name: "K"
         Widget:
 
@@ -79,20 +177,36 @@
                 rectangle: self.x, self.y, self.width, self.height
                 width: 2
         Key:
+            id: P
             name: "P"
         Key:
+            id: Y
             name: "Y"
         Key:
+            id: X
             name: "X"
         Key:
+            id: C
             name: "C"
         Key:
+            id: V
             name: "V"
         Key:
+            id: B
             name: "B"
         Key:
+            id: N
             name: "N"
         Key:
+            id: M
             name: "M"
         Key:
+            id: L
             name: "L"
+
+<EnigmaKeyboard@BoxLayout>:
+    orientation: "vertical"
+    LampBoard:
+        id: lamp_board
+    Keyboard:
+        id: keyboard
