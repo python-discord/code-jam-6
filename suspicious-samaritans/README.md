@@ -10,7 +10,7 @@
   - 'I know half the standardlib'
 - Liam
   - Frontend and backend development
-  - Nationality: American
+  - Nationality: Spanish-American
   - Gender: Male
   - Age: 46
   - 'Works as a humble farmer'
@@ -33,18 +33,10 @@
   - Age: 16
   - 'They still don't know I have no idea what I'm doing'
 
-## WINDOWS
+## Setup instructions
 
-- Run `set PATH=%path%%CD%\libav\bin;` while in the suspicious-samaritans folder
-- Run `pipenv shell`
-- Run `py main.py`
-
-## LINUX
-
-- Ubuntu:
-  - Run `sudo apt install ffmpeg`
-  - Run `pipenv shell`
-  - Run `python3.7 main.py`
+- Run `setup.py` with any Python 3.6+
+- Run `pipenv run python main.py`
 
 ## Useful links
 
