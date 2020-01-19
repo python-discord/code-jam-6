@@ -5,12 +5,14 @@ from io import BytesIO
 import platform
 import requests
 
-team_folder = dirname(__file__)
+team_folder = dirname(__file__) or "."
 # our team folder, used to ensure we don't put binaries anywhere they shouldn't be
 
 # run pipenv automatically
+print("Installing dependencies...")
 chdir(team_folder)
 system("pipenv sync")
+print("Done")
 
 ffmpeg_build_url = "https://ffmpeg.zeranoe.com/builds/{os}{os_bit}/static/{zip_name}.zip"  # binary download url
 zip_name_base = "ffmpeg-20200115-0dc0837-{os}{os_bit}-static"
@@ -66,13 +68,14 @@ if os_name == "macos":
 
 zip_name = zip_name_base.format(os=os_name, os_bit=os_bit)
 # plug our info into our base filename
-
+print("Downloading FFmpeg...")
 stream = BytesIO()  # create a content buffer
 distribution_data = requests.get(
     ffmpeg_build_url.format(os=os_name, os_bit=os_bit, zip_name=zip_name)
 ).content  # get the FFmpeg binaries
 stream.write(distribution_data)  # write them into the buffer
 stream.seek(0)  # move to the start of the buffer
+print("Done!\nExtracting...")
 
 # work out the file extension to look for
 # found by inspection of the zips
