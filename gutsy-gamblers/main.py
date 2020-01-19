@@ -35,10 +35,10 @@ class RotatingWidget(FloatLayout):
         anim = Animation(angle=360, duration=day_length)
         anim += Animation(angle=360, duration=day_length)
         anim.repeat = True
-        anim.start(self)
+        # anim.start(self)
 
         # Add icons that can be arbitrarily rotated on canvas.
-        # Plus a time test
+
         self.add_widget(SunRise(0))
         self.add_widget(SunSet(0))
 
@@ -67,7 +67,7 @@ class SunSet(FloatLayout):
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.add_widget(RotatingWidget(50, 'assets/dial.png', (500, 500)))
+        self.add_widget(RotatingWidget(50, 'assets/dial.png', (0.8, 0.8)))
         self.add_widget(NowMarker())
 
     def settings_button(self):
