@@ -90,7 +90,7 @@ class TerminalInput(TextInput):
             text = self.text[self._cursor_pos:]
 
             if text.strip():
-                Clock.schedule_once(partial(self.run_cmd, text))
+                Clock.schedule_once(partial(self._run_cmd, text))
             else:
                 Clock.schedule_once(self.prompt)
 
@@ -111,7 +111,7 @@ class TerminalInput(TextInput):
             window, keycode, text, modifiers
         )
 
-    def run_cmd(self, cmd, *args, **kwargs):
+    def _run_cmd(self, cmd, *args, **kwargs):
         posix_ = True
 
         # Check OS
