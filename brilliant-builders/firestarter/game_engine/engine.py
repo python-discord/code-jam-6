@@ -39,7 +39,13 @@ class Engine(Widget):
         Clock.schedule_interval(self._animate, 1.0 / 10.0)
 
     def load_sprite_sheets(self) -> dict:
-        """Load all images in the resources/sprites directory to the gpu"""
+        """Load all images in the resources/sprites directory to the gpu.
+
+        Every image should have an associated config file named <file>_config.toml
+        containing a section `animation` with the following data :
+        * size : Two elements array, size of each sprite
+        * modes : Number of animations in the spritesheet
+        * frame_count : Array, number of frames per animation"""
         assets = {}
         for sprite_sheet in [
             sp for sp in os.listdir(self.resource_dir / 'sprites')
