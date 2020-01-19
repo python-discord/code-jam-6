@@ -1,5 +1,4 @@
 <MainWidget>:
-
     GridLayout:
         size: root.size
         cols: 3
@@ -14,24 +13,26 @@
             cols: 1
             rows: 4
 
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
 
         GridLayout:
             cols: 1
             rows: 2
 
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
+                text: data.active_card.text
+
                 allow_stretch: True
                 keep_ratio: False
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
                 allow_stretch: True
                 keep_ratio: False
@@ -41,7 +42,7 @@
             orientation: "vertical"
             spacing: 20
 
-            Image:
+            CardWidget:
                 source: './assets/stone_tablet.png'
                 allow_stretch: True
                 keep_ratio: False
@@ -51,27 +52,38 @@
                 rows: 2
                 spacing: 15
 
-                Image:
+                CardWidget:
                     source: './assets/stone_tablet.png'
                     allow_stretch: True
                     keep_ratio: False
-                Image:
+                CardWidget:
                     source: './assets/stone_tablet.png'
                     allow_stretch: True
                     keep_ratio: False
-                Image:
+                CardWidget:
                     source: './assets/stone_tablet.png'
                     allow_stretch: True
                     keep_ratio: False
-                Image:
+                CardWidget:
                     source: './assets/stone_tablet.png'
                     allow_stretch: True
                     keep_ratio: False
-                Image:
+                CardWidget:
                     source: './assets/stone_tablet.png'
                     allow_stretch: True
                     keep_ratio: False
-                Image:
+                CardWidget:
                     source: './assets/stone_tablet.png'
                     allow_stretch: True
                     keep_ratio: False
+
+<CardWidget>:
+    Image:
+        source: root.source
+        size:root.size
+        pos_hint: {'x': 0, 'y' : 0}
+    Label:
+        pos:root.pos
+        text: root.text
+        text_size: (200, None)
+        pos_hint: {'x': 0.1, 'y' : 0.25}
