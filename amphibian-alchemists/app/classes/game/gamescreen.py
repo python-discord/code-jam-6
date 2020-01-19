@@ -61,7 +61,7 @@ def setup_new_game_settings():
     if currrent_game_id is None:
         store.put("latest_game_id", id=0)
     else:
-        store.put("latest_game_id", currrent_game_id=int(currrent_game_id) + 1)
+        store.put("latest_game_id", id=int(currrent_game_id) + 1)
     game_id = store.get("latest_game_id")["id"]
     plug_array = sample(ascii_uppercase, 20)
     plugs = []
@@ -69,59 +69,45 @@ def setup_new_game_settings():
         plugs.append("".join(plug_array[i * 2:i * 2 + 2]))
     plug_settings = " ".join(x for x in plugs)
     rotors = sample(ascii_uppercase, 3)
+    rotor_setting = "".join(rotors)
     App.get_running_app().machine.from_key_sheet(
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
         plugboard_settings=plug_settings
     )
-    App.get_running_app().machine.set_display("".join(rotors))
+    App.get_running_app().machine.set_display(rotor_setting)
 
     """Storing data"""
     rotors.append(None)
     rotors.append(None)
     text = get_wiki_summary()
-    store.put(game_id,
-              ciphered_text=get_encrypted_text(text, rotors, plug_settings),
-              unciphered_text=text,
-              encrypted_state={
-                  "reflector": "B",
-                  "rotors": rotors,
-                  "plugs": plugs
-              },
-              current_state={
-                  "reflector": "B",
-                  "rotors": ["A", "A", "A", None, None],
-                  "plugs": [
-                      "AB",
-                      "CD",
-                      "EF",
-                      "GH",
-                      "IJ",
-                      "KL",
-                      "MN",
-                      "OP",
-                      "QR",
-                      "ST"
-                  ]
-              },
-              last_saved_state={
-                  "reflector": "B",
-                  "rotors": ["A", "A", "A", None, None],
-                  "plugs": [
-                      "AB",
-                      "CD",
-                      "EF",
-                      "GH",
-                      "IJ",
-                      "KL",
-                      "MN",
-                      "OP",
-                      "QR",
-                      "ST"
-                  ]
-              }
-              )
+    store.put(
+        game_id,
+        ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
+        unciphered_text=text,
+        encrypted_state={
+            "reflector": "B",
+            "rotors": rotors,
+            "plugs": plugs
+        },
+        current_state={
+            "reflector": "B",
+            "rotors": ["A", "A", "A", None, None],
+            "plugs": [
+                "AB", "CD", "EF", "GH", "IJ",
+                "KL", "MN", "OP", "QR", "ST"
+            ]
+        },
+        last_saved_state={
+            "reflector": "B",
+            "rotors": ["A", "A", "A", None, None],
+            "plugs": [
+                "AB", "CD", "EF", "GH", "IJ",
+                "KL", "MN", "OP", "QR", "ST"
+            ]
+        }
+    )
 
 
 class GameScreen(Screen):
