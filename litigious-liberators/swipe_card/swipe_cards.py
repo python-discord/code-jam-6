@@ -40,18 +40,26 @@ class Swiper(Carousel):
 
     def on_touch_down(self, touch):
         if touch.is_mouse_scrolling:
+            while True:
+                next_image = next(self.cycler)
+                if next_image not in self.selected:
+                    break
             if touch.button == "scrolldown":
-                for i in range(len(self.pic_list)):
-                    next_image = next(self.cycler)
-                    if next_image not in self.selected:
-                        break
+                self.direction = "right"
                 next_image = f"{self.pic_dir}/{next_image}"
                 current_image = self.current_slide
-                self.remove_widget(current_image)
+                popup = SwipePopup()
+                self.selected |= {current_image.source.split("/")[1]}
+                popup.open()
                 self.add_widget(Image(source=next_image))
                 self.load_next()
+
             elif touch.button == "scrollup":
-                self.load_previous()
+                self.direction = "left"
+                next_image = f"{self.pic_dir}/{next_image}"
+                current_image = self.current_slide
+                self.add_widget(Image(source=next_image))
+                self.load_next()
 
         if touch.is_double_tap:
             popup = SwipePopup()
