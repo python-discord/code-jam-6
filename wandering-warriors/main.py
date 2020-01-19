@@ -44,11 +44,11 @@ class Screen:
         return self.sm
 
 
-class Application(App):
+class CalculatorApp(App):
     def build(self):
-        Builder.load_file("app.kv")
+        Builder.load_file("calculator.kv")
         return Screen().get_manager()
 
 
 if __name__ == "__main__":
-    Application().run()
+    CalculatorApp().run()
