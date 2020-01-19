@@ -1,5 +1,6 @@
 from pathlib import Path
 from datetime import datetime
+
 from kivy import Config
 from kivy.uix.popup import Popup
 
@@ -10,14 +11,20 @@ Config.set('graphics', 'height', '500')
 
 from kivy.core.window import Window
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.logger import Logger
+from kivy.factory import Factory
 from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
-from kivy.properties import ObjectProperty, StringProperty, NumericProperty
-from kivy.clock import Clock
+
+from kivy.properties import (
+    ObjectProperty, 
+    StringProperty, 
+    NumericProperty
+)
 
 from .utils.utils import bytes_conversion
 
@@ -31,7 +38,11 @@ class FileBrowser(FloatLayout):
 
 
 class FileHeader(FloatLayout):
-    pass
+    current_dir = StringProperty()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.current_dir = str(Path().home())
 
 
 class Files(StackLayout):
@@ -110,6 +121,8 @@ class NewFile(Button):
 
             for d in self.ctx.dirs:
                 self.ctx.generate(d)
+
+            self.ctx.parent.parent.ids.header.current_dir = str(path)
 
         else:
             Logger.info('FileBrowser: Not a directory!')
