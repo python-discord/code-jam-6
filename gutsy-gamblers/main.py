@@ -19,21 +19,38 @@ kivy.require('1.11.1')
 # Widget element things #
 class RotatingWidget(FloatLayout):
     """
-    At some point we'll need to add a time for sunrise / sunset.
+    Speed will become a fixed value of 86400 once completed.
+    Image should, i suppose, be a fixed image?
+    At some point we'll need to add a tuple(?) for sunrise / sunset times.
     """
     angle = NumericProperty(0)
 
-    def __init__(self, speed, **kwargs):
+    def __init__(self, day_length, dial_image, dial_size, **kwargs):
         super(RotatingWidget, self).__init__(**kwargs)
 
-        # Duration is how long it takes to do a full 360 in seconds.
-        anim = Animation(angle=-360, duration=speed)
-        anim += Animation(angle=-360, duration=speed)
+        self.dial_file = dial_image
+        self.dial_size = dial_size      # X / Y tuple.
+
+        # Duration is how long it takes to perform the overall animation
+        anim = Animation(angle=360, duration=day_length)
+        anim += Animation(angle=360, duration=day_length)
         anim.repeat = True
         anim.start(self)
 
+        # Add icons that can be arbitrarily rotated on canvas.
+        # Plus a time test
+        time = 8
+        sunrise = 6
+        sunset = 20
+
+        rise_angle = time - sunrise * 15
+        set_angle = sunset - time * 15
+
+        self.add_widget(SunRise(rise_angle))
+        self.add_widget(SunSet(set_angle))
+
     def on_angle(self, item, angle):
-        if angle == -360:
+        if angle == 360:
             item.angle = 0
 
 
@@ -41,11 +58,23 @@ class NowMarker(FloatLayout):
     pass
 
 
+class SunRise(FloatLayout):
+    def __init__(self, rot_angle, **kwargs):
+        super(SunRise, self).__init__(**kwargs)
+        self.rot_angle = rot_angle
+
+
+class SunSet(FloatLayout):
+    def __init__(self, rot_angle, **kwargs):
+        super(SunSet, self).__init__(**kwargs)
+        self.rot_angle = rot_angle
+
+
 # Screens in the App #
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.add_widget(RotatingWidget(50))
+        self.add_widget(RotatingWidget(50, 'assets/dial.png', (500, 500)))
         self.add_widget(NowMarker())
 
     def settings_button(self):
@@ -63,7 +92,8 @@ class SettingsScreen(Popup):
         country = resp['country_name']
         zipcode = resp['zipcode']
 
-        settings_popup = Popup(title="Settings", content=Label(text=f'Currently in {city}, {state_prov}, {country} {zipcode}'),
+        settings_popup = Popup(title="Settings",
+                               content=Label(text=f'Currently in {city}, {state_prov}, {country} {zipcode}'),
                                size_hint=(None, None), size=(500, 200))
         settings_popup.open()
 
@@ -77,7 +107,7 @@ class SunClock(App):
     Core class.
     """
     def build(self):
-        kv = Builder.load_file('main.kv')
+        Builder.load_file('main.kv')
         sm = WindowManager()
 
         screens = [MainScreen(name='main')]
