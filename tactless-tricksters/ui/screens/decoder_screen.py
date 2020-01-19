@@ -28,17 +28,6 @@ class DecoderScreen(Screen):
         self.ui_layout()
 
     def ui_layout(self):
-        with self.canvas:
-            Color(rgba=App.get_running_app().theme_cls.accent_color)
-            Rectangle(pos=self.pos, size=(Window.width, Window.height))
-
-        toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        toolbar = MDToolbar(title="Enigma", anchor_title='center')
-        toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
-        toolbar.left_action_items = [['arrow-left', lambda x: self.return_home()]]
-        toolbar.elevation = 40
-        toolbar_anchor.add_widget(toolbar)
-
         record_button_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom',
                                             padding=[dp(25), dp(25), dp(25), dp(25)])
 
@@ -80,7 +69,6 @@ class DecoderScreen(Screen):
         decode_card.elevation = 15
 
         self.add_widget(decode_card)
-        self.add_widget(toolbar_anchor)
         self.add_widget(record_button_anchor)
 
     def update_audio_indicator(self, dt):

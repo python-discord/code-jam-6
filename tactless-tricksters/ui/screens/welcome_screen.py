@@ -77,7 +77,7 @@ class WelcomeScreen(Screen):
         welcome_card.add_widget(MDLabel(text=''))
         welcome_card.add_widget(button_box)
 
-        self.add_widget(toolbar_anchor)
+        #self.add_widget(toolbar_anchor)
         self.add_widget(welcome_card)
 
     def encode_screen_switch(self):

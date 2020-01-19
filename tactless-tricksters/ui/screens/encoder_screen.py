@@ -1,11 +1,9 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.floatlayout import FloatLayout
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.metrics import dp
-from kivy.graphics import Color,Rectangle
+from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 
 # kivymd imports
@@ -29,17 +27,6 @@ class EncoderScreen(Screen):
         self.ui_layout()
 
     def ui_layout(self):
-        with self.canvas:
-            Color(rgba=App.get_running_app().theme_cls.accent_color)
-            Rectangle(pos=self.pos, size=(Window.width, Window.height))
-
-        toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        toolbar = MDToolbar(title="Enigma", anchor_title='center')
-        toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
-        toolbar.left_action_items = [['arrow-left', lambda x: self.return_home()]]
-        toolbar.elevation = 40
-        toolbar_anchor.add_widget(toolbar)
-
         play_button_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom',
                                             padding=[dp(25), dp(25), dp(25), dp(25)])
 
@@ -79,7 +66,6 @@ class EncoderScreen(Screen):
         encode_card.elevation = 15
 
         self.add_widget(encode_card)
-        self.add_widget(toolbar_anchor)
         self.add_widget(play_button_anchor)
 
     def update_audio_indicator(self, dt):
