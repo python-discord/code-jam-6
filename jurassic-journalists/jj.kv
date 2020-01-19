@@ -1,146 +1,52 @@
-<Butt@Button>:    
-	width: self.parent.width * 1/10
-	height: self.parent.height * 1/10
+#:import F kivy.factory.Factory
+#:import Letter classes.Letter
+<Butt@Button>:
+	width: self.parent.width * 1/20
+	height: self.parent.height * 1/20
     size_hint: None, None
-	background_color: 0,0,0,0
-    on_release: self.parent.typw.text += self.text; self.parent.typw.focus = True
+	background_color: 0,0,0,0 # 0,1,1,1
+	text_color: 0,0,0,0
+    on_release: self.parent.typw.text += self.txt
 	canvas.before:
 	    Color:
-		    rgba: (.4,.4,.4,1) if self.state == 'normal' else (0,.7,.7,1)
+		    rgba: (0,0,0,0) if self.state == 'normal' else (0,.7,.7,.1)
         RoundedRectangle:
             pos: self.pos
             size: self.size
-            radius: 50,	
+            radius: 5,
+
 <Butt2@Label>
     width: self.parent.width * 1/5
 	height: self.parent.height * 1/10
     size_hint: None, None
-    #disabled:True
 		
 <TypeWriter>:
-	name: 'Typewriter'
+    name: 'Typewriter'
+    canvas:
+        Rectangle:
+            pos: self.pos
+			size: self.size
+            source: 'room.png'
+    Button:
+		on_release: root.manager.current = 'Screen2'
+		pos_hint : {'x': .9, 'y': .9}
+		size_hint: None, None
+		background_color: 0,0,0,.2
+	Button:
+	    size_hint: None, None
+	    pos_hint: {'x': .7, 'y': .45}
+	    #background_color: 0,0,0,0
+	    background_normal: 'paper.png'
+	    background_down: 'paper.png'
+	    on_release: F.TypeW().open()
 
-	FloatLayout:
-		typw: typw
-		GestureSurface:
-			on_gesture_complete: self.parent.typw.text = self.parent.typw.text[:-1] # self.parent.typw.do_backspace()
-		Button:
-			on_release: root.manager.current = 'Screen2'
-			pos_hint : {'x': .9, 'y': .9}
-			size_hint: None, None
-			background_color: 0,0,0,.2
-		TextInput: #CodeInput
-		    #canvas.before:
-			#    Color:
-			#	    rgba: .95,.93,.8,.8
-			#    RoundedRectangle:
-			#        pos: self.pos
-			#	    size: self.size
-			#	    radius: 25,
-			id: typw
-			background_color: .95,.93,.8,.8 # 0,0,0,0
-			padding: 12,12,12,12
-			font_name: '1942.ttf'
-			pos_hint: {'x': 0.2, 'y':.5}
-			size_hint: .6, .5
-			readonly: True
-			cursor_blink: False
-			cursor_color: 0,0,0,1
-			cursor_width: 10
-			text: ''
-		Butt:
-			text: 'q'
-			pos_hint: {'x': 0, 'y':.3}
-		Butt:
-			text: 'w'
-			pos_hint: {'x': .1, 'y':.3}
-		Butt:
-			text: 'e'
-			pos_hint: {'x': .2, 'y':.3}
-		Butt:
-			text: 'r'
-			pos_hint: {'x': .3, 'y':.3}
-		Butt:
-			text: 't'
-			pos_hint: {'x': .4, 'y':.3}
-		Butt:
-			text: 'y'
-			pos_hint: {'x': .5, 'y':.3}
-		Butt:
-			text: 'u'
-			pos_hint: {'x': .6, 'y':.3}
-		Butt:
-			text: 'i'
-			pos_hint: {'x': .7, 'y':.3}
-		Butt:
-			text: 'o'
-			pos_hint: {'x': .8, 'y':.3}
-		Butt:
-			text: 'p'
-			pos_hint: {'x': .9, 'y':.3}
-		Butt:
-			text: 'a'
-			pos_hint: {'x': .05, 'y':.2}
-		Butt:
-			text: 's'
-			pos_hint: {'x': .15, 'y':.2}
-		Butt:
-			text: 'd'
-			pos_hint: {'x': .25, 'y':.2}
-		Butt
-			text: 'f'
-			pos_hint: {'x': .35, 'y':.2}
-		Butt
-			text: 'g'
-			pos_hint: {'x': .45, 'y':.2}
-		Butt:
-			text: 'h'
-			pos_hint: {'x': .55, 'y':.2}
-		Butt:
-			text: 'j'
-			pos_hint: {'x': .65, 'y':.2}
-		Butt:
-			text: 'k'
-			pos_hint: {'x': .75, 'y':.2}
-		Butt:
-			text: 'l'
-			pos_hint: {'x': .85, 'y':.2}
-		Butt:
-			text: 'z'
-			pos_hint: {'x': .125, 'y':.1}
-		Butt:
-			text: 'x'
-			pos_hint: {'x': .225, 'y':.1}
-		Butt:
-			text: 'c'
-			pos_hint: {'x': .325, 'y':.1}
-		Butt:
-			text: 'v'
-			pos_hint: {'x': .425, 'y':.1}
-		Butt:
-			text: 'b'
-			pos_hint: {'x': .525, 'y':.1}
-		Butt:
-			text: 'n'
-			pos_hint: {'x': .625, 'y':.1}
-		Butt:
-			text: 'm'
-			pos_hint: {'x': .725, 'y':.1}
-	    
-		Butt:
-			pos_hint: {'x': .05, 'y':0}
-			size_hint: .9, None
-	    	height: self.parent.height * 1/10
-			on_release: self.parent.typw.text += ' '
-		Button:
-		    pos_hint: {'x': .85, 'y': .5}
-			size_hint: .15, .3
-			on_release: self.parent.typw.text += '\n'
 
 <Main@ScreenManager>:
     TypeWriter
 	Screen2
 
+
+<Pili@Image>
 
 <Screen2>:
     name: 'Screen2'
@@ -201,3 +107,173 @@
 		text: ''
 		pos_hint: {'x': .6, 'y':0}
 	    disabled: True
+
+
+<TypeW@Popup>
+    canvas.before:
+        Color:
+            rgba: 0,0,0,0
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    canvas.after:    
+        Color:
+            rgba: 1,1,1,.5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'paper.png'
+    title: ''
+    separator_color: 0,0,0,0
+	FloatLayout:
+		typw: typw
+		GestureSurface:
+			on_gesture_complete: typw.text += '_b'
+		Pili: #CodeInput
+#		    canvas:
+#			    Color:
+#				    rgba: .95,.93,.8,.8
+#			    Mesh:
+#                    vertices: self.mesh_points
+#                    indices: range(len(self.mesh_points) // 4)
+#                    texture: self.mesh_texture
+#                    mode: 'triangle_fan'
+			id: typw
+			source: 'blank.png'
+			#background_color:  .95,.93,.8,.8 
+			#padding: 12,12,12,12
+			pos_hint: {'x': 0.2, 'y':.5}
+			size_hint: .7, .5
+			allow_stretch: True
+			letters: []
+			text: ''
+			on_text: 
+			    self.letters.append(Letter(self.text[-1], 32, '1942.ttf')) if '_' not in self.text[-2:] else self.escaped()
+			on_letters: self.update()
+		Butt:
+			txt: 'q'
+			pos_hint: {'x': .16, 'y':.175}
+		Butt:
+			txt: 'w'
+			pos_hint: {'x': .235, 'y':.175}
+		Butt:
+			txt: 'e'
+			pos_hint: {'x': .31, 'y':.175}
+		Butt:
+			txt: 'r'
+			pos_hint: {'x': .385, 'y':.175}
+		Butt:
+			txt: 't'
+			pos_hint: {'x': .46, 'y':.175}
+		Butt:
+			txt: 'y'
+			pos_hint: {'x': .535, 'y':.175}
+		Butt:
+			txt: 'u'
+			pos_hint: {'x': .61, 'y':.175}
+		Butt:
+			txt: 'i'
+			pos_hint: {'x': .685, 'y':.175}
+		Butt:
+			txt: 'o'
+			pos_hint: {'x': .76, 'y':.175}
+		Butt:
+			txt: 'p'
+			pos_hint: {'x': .835, 'y':.175}
+		Butt:
+			txt: 'a'
+			pos_hint: {'x': .2, 'y':.125}
+		Butt:
+			txt: 's'
+			pos_hint: {'x': .275, 'y':.125}
+		Butt:
+			txt: 'd'
+			pos_hint: {'x': .35, 'y':.125}
+		Butt
+			txt: 'f'
+			pos_hint: {'x': .425, 'y':.125}
+		Butt
+			txt: 'g'
+			pos_hint: {'x': .5, 'y':.125}
+		Butt:
+			txt: 'h'
+			pos_hint: {'x': .575, 'y':.125}
+		Butt:
+			txt: 'j'
+			pos_hint: {'x': .65, 'y':.125}
+		Butt:
+			txt: 'k'
+			pos_hint: {'x': .725, 'y':.125}
+		Butt:
+			txt: 'l'
+			pos_hint: {'x': .8, 'y':.125}
+		Butt:
+			txt: 'z'
+			pos_hint: {'x': .2, 'y':.08}
+		Butt:
+			txt: 'x'
+			pos_hint: {'x': .275, 'y':.08}
+		Butt:
+			txt: 'c'
+			pos_hint: {'x': .35, 'y':.08}
+		Butt:
+			txt: 'v'
+			pos_hint: {'x': .425, 'y':.08}
+		Butt:
+			txt: 'b'
+			pos_hint: {'x': .5, 'y':.08}
+		Butt:
+			txt: 'n'
+			pos_hint: {'x': .575, 'y':.08}
+		Butt:
+			txt: 'm'
+			pos_hint: {'x': .65, 'y':.08}
+		Butt:
+			txt: ';'
+			pos_hint: {'x': .725, 'y':.08}
+		Butt:
+			txt: ':'
+			pos_hint: {'x': .8, 'y':.08}
+		Butt:
+			pos_hint: {'x': .2, 'y':0}
+			size_hint: .65, None
+	    	height: self.parent.height * 1/20
+			txt: ' '
+		Butt:
+		    pos_hint: {'x': .85, 'y': .4}
+			size_hint: .15, .15
+			txt: '_n'
+			
+			
+			
+#		BoxLayout:
+#		    pili: typw
+#            orientation: 'vertical'
+#            size_hint_x: None
+#            width: 100
+#            Slider:
+#                value: pili.offset_x
+#                on_value: pili.offset_x = args[1]
+#                min: -1
+#                max: 1
+#            Slider:
+#                value: pili.offset_y
+#                on_value: pili.offset_y = args[1]
+#                min: -1
+#                max: 1
+#            Slider:
+#                value: pili.radius
+#                on_value: pili.radius = args[1]
+#                min: 10
+#                max: 1000
+#            Slider:
+#                value: pili.sin_wobble
+#                on_value: pili.sin_wobble = args[1]
+#                min: -50
+#                max: 50
+#            Slider:
+#                value: .pili.sin_wobble_speed
+#                on_value: pili.sin_wobble_speed = args[1]
+#                min: 0
+#                max: 50
+#                step: 1
