@@ -9,6 +9,30 @@
             id: swipe_carousel
             size_hint_y: 0.7
 
+<Slide>:
+    background_color: '#d7ccc8'
+    orientation: 'vertical'
+    Image:
+        id: picture
+        size_hint_y: None
+        height: 200
+    Label:
+        color: 0, 0, 0, 1
+        id: name
+        text: 'Name: '
+    Label:
+        color: 0, 0, 0, 1
+        id: species
+        text: 'Species: '
+    Label:
+        color: 0, 0, 0, 1
+        id: age
+        text: 'Age: '
+    Label:
+        color: 0, 0, 0, 1
+        id: job
+        text: 'Job: '
+
 <AfterSwipeScreen>:
     name: 'After'
     BoxLayout:

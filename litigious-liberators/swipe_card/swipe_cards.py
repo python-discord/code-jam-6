@@ -1,16 +1,30 @@
 from kivy.config import Config
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.carousel import Carousel
+import os
 from os import listdir
 from random import shuffle
 from copy import deepcopy
-from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, Screen
+from yaml import safe_load
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
+
+
+class Slide(BoxLayout):
+    def __init__(self, profile, **kwargs):
+        super(Slide, self).__init__(**kwargs)
+        self.ids.picture.source = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), f"../profiles/pictures/{profile['Picture']}"
+        )
+        self.ids.name.text += profile["Name"]
+        self.ids.species.text += profile["Species"]
+        self.ids.age.text += str(profile["Age"])
+        self.ids.job.text += profile["What I do"]
 
 
 class Root(BoxLayout):
@@ -20,13 +34,17 @@ class Root(BoxLayout):
 class Swiper(Carousel):
     def __init__(self, **kwargs):
         super(Swiper, self).__init__(**kwargs)
-        self.pic_dir = "pictures"
-        self.static_pic_list = listdir(self.pic_dir)
-        self.pic_list = deepcopy(self.static_pic_list)
-        self.cycler = self.r_cycle(self.pic_list)
+        self.profile_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "../profiles/write-ups"
+        )
+        self.static_profile_list = listdir(self.profile_dir)
+        self.profile_list = deepcopy(self.static_profile_list)
+        self.cycler = self.r_cycle(self.profile_list)
         self._selected = set()
         self.limit = 3
-        self.add_widget(Image(source=f"{self.pic_dir}/{next(self.cycler)}"))
+        with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
+            profile = safe_load(profile_file.read())
+            self.add_widget(Slide(profile))
 
     @property
     def selected(self):
@@ -41,29 +59,34 @@ class Swiper(Carousel):
     def on_touch_down(self, touch):
         if touch.is_mouse_scrolling:
             while True:
-                next_image = next(self.cycler)
-                if next_image not in self.selected:
+                next_profile = next(self.cycler)
+                if next_profile not in self.selected:
                     break
             if touch.button == "scrolldown":
                 self.direction = "right"
-                next_image = f"{self.pic_dir}/{next_image}"
-                current_image = self.current_slide
                 popup = SwipePopup()
-                self.selected |= {current_image.source.split("/")[1]}
                 popup.open()
-                self.add_widget(Image(source=next_image))
+                with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
+                    profile = safe_load(profile_file.read())
+                    self.selected |= {
+                        os.path.join(
+                            os.path.dirname(os.path.abspath(__file__)),
+                            f"../profiles/pictures/{profile['Picture']}",
+                        )
+                    }
+                    self.add_widget(Slide(profile))
                 self.load_next()
 
             elif touch.button == "scrollup":
                 self.direction = "left"
-                next_image = f"{self.pic_dir}/{next_image}"
-                current_image = self.current_slide
-                self.add_widget(Image(source=next_image))
+                with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
+                    profile = safe_load(profile_file.read())
+                    self.add_widget(Slide(profile))
                 self.load_next()
 
         if touch.is_double_tap:
             popup = SwipePopup()
-            self.selected |= {self.current_slide.source.split("/")[1]}
+            self.selected |= {self.current_slide.ids["picture"].source.split("/")[1]}
             popup.open()
 
     @staticmethod
@@ -90,6 +113,7 @@ class AfterSwipeScreen(Screen):
 
 class CarouselApp(App):
     def build(self):
+        Window.clearcolor = (188 / 255, 170 / 255, 164 / 255, 1)
         self.sm = ScreenManager()
         self.start_screen = SwipingScreen()
         self.second_screen = AfterSwipeScreen()
