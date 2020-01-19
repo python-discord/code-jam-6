@@ -22,46 +22,46 @@
 		size: 75, 75
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
+<SunRise>:
+    canvas:
+        Rotate:
+            angle: 320
+            origin: self.center
+
+	Image:
+		source: 'assets/sun_rise.png'
+		size_hint: None, None
+		size: 50, 50
+		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+
+<SunSet>:
+    canvas:
+        Rotate:
+            angle: 90
+            origin: self.center
+
+	Image:
+		source: 'assets/sun_set.png'
+		size_hint: None, None
+		size: 50, 50
+		pos_hint: {'center_x': 0.5, 'center_y': 0.2}
+
 <RotatingWidget>:
+    dial_file: ''
+    dial_size: (0, 0)
+
 	canvas.before:
 		PushMatrix
 		Rotate:
 			angle: root.angle
 			axis: 0, 0, 1
 			origin: (self.width / 2, self.height / 2)
-		Color:
-			rgb: (1, 1, 1)
-		Ellipse:
-			size: 500, 500
-			pos: self.width / 2 - 250, self.height / 2 - 250
-
-
-		Color:
-			rgb: (0, 0, 0)
-		Ellipse:
-			size: 460, 460
-			pos: self.width / 2 - 230, self.height / 2 - 230
-
-		Color:
-			rgb: (1, 1, 1)
-		Ellipse:
-			size: 440, 440
-			pos: self.width / 2 - 220, self.height / 2 - 220
 
 	canvas.after:
 		PopMatrix
 
-#	Image:
-#		size_hint: None, None
-#		size: 500, 500
-#		pos_hint: {'center_x': 0.5, 'center_y': 0}
-
-	Label:
-		color: 0, 0, 0, 1
-		text: 'The Sun'
-		pos_hint: {'center_x': 0.5, 'center_y': 0.1}
-
-	Label:
-		color: 0, 0, 0, 1
-		text: 'The Moon'
-		pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+	Image:
+	    source: root.dial_file
+		size_hint: None, None
+		size: root.dial_size
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
