@@ -23,7 +23,7 @@ At the top are rotors which are configured by rotation, the middle is the lampbo
 
 You will be configuring the rotors and plugboard where you can plug and unplug characters.
 
-Every 24 hours, the Germans redid the settings and distributed it to their generals. 
+Every 24 hours, the Germans switched the rotors and plugboard settings according to a key distributed at the beginning of each month.
 
 You are given these settings in order to decrypt the message. Your job is to configure the Enigma machine and produce logical, Anglicized/English text. Once you have configured the machine, using your keyboard, you can (randomly) type out the ciphered characters and will be magically typing out the outputted, logical characters if the machine is configured correctly.
 
