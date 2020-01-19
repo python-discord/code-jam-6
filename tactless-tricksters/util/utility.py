@@ -9,4 +9,8 @@ class Utility(object):
         morse_thread = Thread(target=self.morse.transmit)
         morse_thread.daemon = True
         morse_thread.start()
-
+        
+    def morse_transmit_speak(self):
+        morse_thread = Thread(target=self.morse.speak)
+        morse_thread.daemon = True
+        morse_thread.start()

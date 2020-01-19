@@ -44,7 +44,7 @@ class EncoderScreen(Screen):
                                             padding=[dp(25), dp(25), dp(25), dp(25)])
 
         play_button = MDFloatingActionButton(icon='play', size=[dp(56), dp(56)])
-        play_button.md_bg_color = [76/255, 175/255, 80/255, 1]
+        play_button.md_bg_color = App.get_running_app().theme_cls.primary_color# [76/255, 175/255, 80/255, 1]
         play_button.text_color = [1, 1, 1, 1]
         play_button.bind(on_press=lambda x: self.play_audio())
         play_button_anchor.add_widget(play_button)
