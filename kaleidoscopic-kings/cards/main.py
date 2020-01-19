@@ -9,9 +9,7 @@ class Option:
 
     def __init__(self, text=None, outcomes=None):
         self.text: str = text
-        self.outcome = random.choices(
-            outcomes, weights=[d["weight"] for d in outcomes]
-        )[0]
+        self.outcome = random.choices(outcomes, weights=[d["weight"] for d in outcomes])[0]
         self.next_card = (
             None if self.outcome["next_card"] == "random" else self.outcome["next_card"]
         )
@@ -24,11 +22,7 @@ class Card:
     """Represents a card to be presented to the user"""
 
     def __init__(
-        self,
-        text: str = None,
-        card_id: str = None,
-        card_type: str = None,
-        options=List[Option],
+        self, text: str = None, card_id: str = None, card_type: str = None, options=List[Option],
     ):
         self.text: str = text
         self.card_id: str = card_id
