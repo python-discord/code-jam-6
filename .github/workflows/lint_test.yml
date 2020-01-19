@@ -25,6 +25,7 @@ jobs:
       run: pipenv sync --dev
     - name: Lint 
       working-directory: ./brilliant-builders
+      if: ${{ matrix.os }} == 'ubuntu-latest' 
       run: |
         pipenv run lint
     - name: Test 
