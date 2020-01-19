@@ -50,3 +50,60 @@ class Player(Sprite):
 
     def update(self) -> None:
         self.redraw()
+
+
+class Terrain(Sprite):
+    vel_x = NumericProperty(0)
+    vel_y = NumericProperty(0)
+    vel = ReferenceListProperty(vel_x, vel_y)
+
+    def __init__(self, perlin, pos: tuple = (0, 0), **kwargs) -> None:
+        self.perlin = perlin
+        self.m = int(perlin.shape[0] / 2 - 2 + pos[0] / 1000)
+        self.n = int(perlin.shape[1] / 2 - 2 + pos[1] / 1000)
+        a = perlin[self.m][self.n]
+        if a > 0.75:
+            image = 'i.png'
+            self.type = 3
+        elif a > 0.5:
+            image = 'l.png'
+            self.type = 2
+        elif a > 0.25:
+            image = 's.png'
+            self.type = 1
+        else:
+            image = 'w.png'
+            self.type = 0
+        super().__init__(image, pos, (1000, 1000), **kwargs)
+
+    def update(self):
+        if self.pos[0] < -2000:
+            self.pos[0] = 6000
+            self.m += 8
+        if self.pos[0] > 6000:
+            self.pos[0] = -2000
+            self.m -= 8
+        if self.pos[1] < -2000:
+            self.pos[1] = 5000
+            self.n += 7
+        if self.pos[1] > 5000:
+            self.pos[1] = -2000
+            self.n += 7
+        a = self.perlin[self.m][self.n]
+        if a > 0.75:
+            image = 'i.png'
+            self.type = 3
+        elif a > 0.5:
+            image = 'l.png'
+            self.type = 2
+        elif a > 0.25:
+            image = 's.png'
+            self.type = 1
+        else:
+            image = 'w.png'
+            self.type = 0
+        self.bg_rect.source = (self.resource_dir / image).as_posix()
+        self.pos = (self.pos[0] + self.vel_x, self.pos[1] + self.vel_y)
+        # dampen the velocity to come to a stop
+        self.vel_x *= 0
+        self.vel_y *= 0
