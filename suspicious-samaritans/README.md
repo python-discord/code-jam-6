@@ -7,7 +7,7 @@
   - Nationality: British
   - Gender: Male
   - Age: 16
-  - 'I know half the standardlib'
+  - 'Rules with a mercury fist'
 - Liam
   - Frontend and backend development
   - Nationality: Latin-American
