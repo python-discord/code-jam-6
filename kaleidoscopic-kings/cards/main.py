@@ -9,7 +9,12 @@ class Option:
 
     def __init__(self, text=None, outcomes=None):
         self.text: str = text
-        self.outcome = random.choices(outcomes, weights=[d["weight"] for d in outcomes])[0]
+        self.outcome = random.choices(
+            outcomes, weights=[d["weight"] for d in outcomes]
+        )[0]
+        self.next_card = (
+            None if self.outcome["next_card"] == "random" else self.outcome["next_card"]
+        )
 
     def __repr__(self):
         return self.text
@@ -19,7 +24,11 @@ class Card:
     """Represents a card to be presented to the user"""
 
     def __init__(
-        self, text: str = None, card_id: str = None, card_type: str = None, options=List[Option],
+        self,
+        text: str = None,
+        card_id: str = None,
+        card_type: str = None,
+        options=List[Option],
     ):
         self.text: str = text
         self.card_id: str = card_id
@@ -34,7 +43,7 @@ class Card:
             f"id: {self.card_id} \n\t"
             f"text: {self.text} \n\t"
             f"option 1: {self.option_1.text if self.option_1 is not None else None} \n\t"
-            f"option 2: {self.option_2.text if self.option_2 is not None else None}"
+            f"option 2: {self.option_2.text if self.option_2 is not None else None}\n"
         )
 
 
@@ -43,7 +52,9 @@ class Deck:
 
     def __init__(self, possible_cards: List[Card]):
         self._queue: Deque = deque()
-        self._possible_cards: List = possible_cards
+        self._possible_cards: List[Card] = possible_cards
+        self._event_cards: List[Card] = [c for c in possible_cards if c.type == "event"]
+
         for _ in range(10):
             self.insert_card()
 
@@ -56,9 +67,9 @@ class Deck:
         a random card inserted at the back, if an ID is provided,
         then the card with that id is inserted at the front"""
         if card_id is None:
-            self._queue.append(random.choice(self._possible_cards))
+            self._queue.append(random.choice(self._event_cards))
         else:
-            card_to_add = next(c for c in self._possible_cards if c["card_id"] == card_id)
+            card_to_add = next(c for c in self._possible_cards if c.card_id == card_id)
             self._queue.appendleft(card_to_add)
 
 
@@ -73,11 +84,13 @@ class Game:
         In reality, this kind of interaction would be handled through
         multiple different methods exposed to kivy"""
         card = self.deck.get_next_card()
+        print(card)
         print(f"1) {card.option_1}")
         print(f"2) {card.option_2}")
         choice = input("Option 1 or 2? :")
         res = card.option_1 if choice == "1" else card.option_2
-        print(res.outcome)
+        print(res.next_card)
+        self.deck.insert_card(res.next_card)
 
 
 def card_from_dict(card_dict: dict) -> Card:
@@ -89,8 +102,7 @@ def card_from_dict(card_dict: dict) -> Card:
 
 if __name__ == "__main__":
     with open("TestCards.json") as f:
-        c = json.load(f)[0]
-        card = card_from_dict(c)
+        cards = [card_from_dict(c) for c in json.load(f)]
 
-    g = Game([card])
+    g = Game(cards)
     g.take_turn()
