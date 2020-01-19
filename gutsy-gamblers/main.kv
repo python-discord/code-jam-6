@@ -1,6 +1,11 @@
 #:kivy 1.11.1
 
 <MainScreen>
+    canvas:
+        Rotate:
+            angle: 0
+            origin: self.center
+
 	BoxLayout:
 		orientation: 'vertical'
 		size: root.width, root.height
@@ -25,29 +30,33 @@
 <SunRise>:
     rot_angle: 0
 
-    canvas:
+    canvas.before:
+        PushMatrix
         Rotate:
             angle: root.rot_angle
             origin: self.center
+    canvas.after:
+        PopMatrix
 
 	Image:
 		source: 'assets/sun_rise.png'
-		size_hint: None, None
-		size: 50, 50
+		size_hint: 0.05, 0.05
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
 <SunSet>:
     rot_angle: 0
 
-    canvas:
+    canvas.before:
+        PushMatrix
         Rotate:
             angle: root.rot_angle
             origin: self.center
+    canvas.after:
+        PopMatrix
 
 	Image:
 		source: 'assets/sun_set.png'
-		size_hint: None, None
-		size: 50, 50
+		size_hint: 0.05, 0.05
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
 <RotatingWidget>:

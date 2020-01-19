@@ -38,9 +38,20 @@ class RotatingWidget(FloatLayout):
         # anim.start(self)
 
         # Add icons that can be arbitrarily rotated on canvas.
+        # Plus a time test
+        now = datetime.now()
 
-        self.add_widget(SunRise(0))
-        self.add_widget(SunSet(0))
+        sunrise = now - timedelta(hours=6)
+        sunset = now + timedelta(hours=3)
+
+        sunrise = now - sunrise
+        sunrise = sunrise.seconds / 3600 * 15
+
+        sunset = now - sunset
+        sunset = sunset.seconds / 3600 * -15
+
+        self.add_widget(SunRise(sunrise))
+        self.add_widget(SunSet(sunset))
 
     def on_angle(self, item, angle):
         if angle == 360:
