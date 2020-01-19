@@ -6,12 +6,20 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.graphics import Color,Rectangle
+from kivy.clock import Clock
 
 # kivymd imports
 from kivymd.button import MDFloatingActionButton
 from kivymd.toolbar import MDToolbar
 from kivymd.textfields import MDTextFieldRound
 from kivymd.label import MDLabel
+from kivymd.cards import MDCard
+
+# Project imports
+from ui.widgets.audio_indicator import AudioIndicator
+
+# TODO remove after debug
+import random
 
 
 class EncoderScreen(Screen):
@@ -43,7 +51,7 @@ class EncoderScreen(Screen):
 
         box_layout = BoxLayout(orientation='vertical')
 
-        self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5})
+        self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5}, size_hint=(0.85, 1))
         self.encode_input.icon_left_dasabled = True
         # Moves widget out of the field of view
         self.encode_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
@@ -51,21 +59,36 @@ class EncoderScreen(Screen):
         self.encode_input.icon_right = 'login'
         self.encode_input.children[2].children[0].bind(on_press=lambda x: self.encode_audio(self.encode_input.text))
 
-        box_layout.add_widget(MDLabel(text=''))
-        box_layout.add_widget(MDLabel(text=''))
-        box_layout.add_widget(MDLabel(text=''))
-        box_layout.add_widget(self.encode_input)
-        box_layout.add_widget(MDLabel(text=''))
+        encode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
+                             size_hint_x=0.85, size_hint_y=0.6, pos_hint={'top': 0.85, 'center_x': 0.5})
+        encode_label = MDLabel(text='Encode Morse Code Audio', font_style='Body1', halign='center')
+        encode_label.theme_text_color = 'Custom'
+        encode_label.text_color = [1, 1, 1, 1]
+        encode_card.add_widget(encode_label)
 
-        self.add_widget(box_layout)
+        self.audio_indicator = AudioIndicator()
+        Clock.schedule_interval(self.update_audio_indicator, 0.1)
+
+        encode_card.add_widget(self.audio_indicator)
+        encode_card.add_widget(self.encode_input)
+        encode_card.md_bg_color = App.get_running_app().theme_cls.accent_color
+        encode_card.elevation = 15
+
+        self.add_widget(encode_card)
         self.add_widget(toolbar_anchor)
         self.add_widget(play_button_anchor)
+
+    def update_audio_indicator(self, dt):
+        if hasattr(self.audio_indicator, 'stack_width'):
+            level_array = []
+            for columns in range(self.audio_indicator.stack_width):
+                level_array.append(random.randrange(0, self.audio_indicator.stack_height))
+            self.audio_indicator.set_levels(level_array)
 
     def encode_audio(self, text):
         # TODO insert encoding audio function
         print(text)
         self.encode_input.text = ''
-
 
     def play_audio(self):
         # TODO insert audio encoding
