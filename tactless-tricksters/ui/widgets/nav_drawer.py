@@ -16,9 +16,12 @@ class ContentNavigationDrawer(MDNavigationDrawer):
                                                  on_release=lambda x: self.scr_chng('encode', self.encode))
         self.decode = NavigationDrawerIconButton(text="Decode", icon='logout',
                                                  on_release=lambda x: self.scr_chng('decode', self.decode))
+        self.message = NavigationDrawerIconButton(text="Messages", icon='message',
+                                                 on_release=lambda x: self.scr_chng('message', self.message))
         self.add_widget(self.home)
         self.add_widget(self.encode)
         self.add_widget(self.decode)
+        self.add_widget(self.message)
 
     def scr_chng(self, screen, nav_item):
         self.nav_layout.toggle_nav_drawer()
