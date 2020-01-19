@@ -1,5 +1,11 @@
 from pathlib import Path
 from datetime import datetime
+from kivy import Config
+
+Config.set('graphics', 'minimum_width', '1250')
+Config.set('graphics', 'minimum_height', '500')
+Config.set('graphics', 'width', '1250')
+Config.set('graphics', 'height', '500')
 
 from kivy.app import App
 from kivy.logger import Logger
@@ -27,7 +33,6 @@ class FileHeader(FloatLayout):
 
 
 class Files(StackLayout):
-
     do_layout_event = ObjectProperty(None, allownone=True)
 
     layout_delay_s = NumericProperty(0.15)
