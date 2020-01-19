@@ -1,5 +1,5 @@
 from kivy.uix.screenmanager import Screen
 
 
-class GameScreen(Screen):
+class Plugboard(Screen):
     pass

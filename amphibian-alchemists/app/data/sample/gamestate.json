@@ -1,0 +1,68 @@
+{
+  "1": {
+    "ciphered_text": "asdfjhalskjdfhasdjf",
+    "unciphered_text": "Hello",
+    "current_output_text": "",
+    "encrypted_state": {
+      "reflector": "B",
+      "rotors": {
+        "1": "N",
+        "2": "W",
+        "3": "B",
+        "4": null,
+        "5": null
+      },
+      "plugs": {
+        "1": "AB",
+        "2": "CD",
+        "3": "EF",
+        "4": "GH",
+        "5": "IJ",
+        "6": "KL",
+        "7": "MN",
+        "8": "OP",
+        "9": "QR",
+        "10": "ST"
+      }
+    },
+    "current_state": {
+      "rotors": {
+        "1": "A",
+        "2": "A",
+        "3": "A"
+      },
+      "plugs": {
+        "1": "AB",
+        "2": "CD",
+        "3": "EF",
+        "4": "GH",
+        "5": "IJ",
+        "6": "KL",
+        "7": "MN",
+        "8": "OP",
+        "9": "QR",
+        "10": "ST"
+      }
+    },
+    "last_saved_state": {
+      "rotors": {
+        "1": "A",
+        "2": "A",
+        "3": "A"
+      },
+      "plugs": {
+        "1": "AB",
+        "2": "CD",
+        "3": "EF",
+        "4": "GH",
+        "5": "IJ",
+        "6": "KL",
+        "7": "MN",
+        "8": "OP",
+        "9": "QR",
+        "10": "ST"
+      }
+    }
+  },
+  "2": {}
+}
