@@ -41,8 +41,7 @@ class EncoderScreen(Screen):
         play_button.bind(on_press=lambda x: self.play_audio())
         play_button_anchor.add_widget(play_button)
 
-        box_layout = BoxLayout()
-        box_layout.orientation = 'vertical'
+        box_layout = BoxLayout(orientation='vertical')
 
         self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5})
         self.encode_input.icon_left_dasabled = True
