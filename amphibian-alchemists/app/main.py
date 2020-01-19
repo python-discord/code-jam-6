@@ -1,10 +1,11 @@
+import os
+
 import kivy
+from enigma.machine import EnigmaMachine
 from kivy.app import App
 from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.uix.screenmanager import FadeTransition, ScreenManager
-from enigma.machine import EnigmaMachine
-import os
 
 kivy.require("1.11.1")
 
@@ -40,7 +41,7 @@ class AncientTechApp(App):
             rotors="I II III",
             reflector="B",
             ring_settings=[1, 20, 11],
-            plugboard_settings="AV BS CG DL FU HZ IN KM OW RX"
+            plugboard_settings="AV BS CG DL FU HZ IN KM OW RX",
         )
         self.machine.set_display("ABC")
         self.game_id = None
