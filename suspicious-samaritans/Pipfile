@@ -12,6 +12,7 @@ black = "*"
 pydub = "*"
 numpy = "*"
 ffmpeg-python = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"
