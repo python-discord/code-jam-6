@@ -26,6 +26,12 @@
   - Gender: Male
   - Age: 18
   - 'PEP8 unto thyself, not unto others'
+- Turreted
+  - Backend development
+  - Nationality: American
+  - Gender: Male
+  - Age: 16
+  - 'They still don't know I have no idea what I'm doing'
 
 ## WINDOWS
 
