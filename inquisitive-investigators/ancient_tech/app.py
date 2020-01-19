@@ -1,5 +1,11 @@
 from pathlib import Path
 from datetime import datetime
+from kivy import Config
+
+Config.set('graphics', 'minimum_width', '1250')
+Config.set('graphics', 'minimum_height', '500')
+Config.set('graphics', 'width', '1250')
+Config.set('graphics', 'height', '500')
 
 from kivy.app import App
 from kivy.logger import Logger
