@@ -1,0 +1,25 @@
+#:import Factory kivy.factory.Factory
+
+<Screen>:
+    on_enter: root.manager.loading_popup.dismiss()
+    on_pre_leave: root.manager.loading_popup.open()
+
+<LoadingPopup@Popup>:
+    title: "Loading"
+    auto_dismiss: False
+    size_hint: 0.5, 0.2
+    BoxLayout:
+        Label:
+            text: "Loading..."
+
+<UIManager>:
+    loading_popup: Factory.LoadingPopup()
+    canvas:
+        Color:
+            rgba: 111 / 255, 175 / 255 , 150 / 255, 1
+        Rectangle:
+            size: root.size
+            pos: root.pos
+    MainScreen:
+    GameScreen:
+    SettingsScreen:
