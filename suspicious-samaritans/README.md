@@ -10,7 +10,7 @@
   - 'I know half the standardlib'
 - Liam
   - Frontend and backend development
-  - Nationality: Spanish-American
+  - Nationality: Latin-American
   - Gender: Male
   - Age: 46
   - 'Works as a humble farmer'
