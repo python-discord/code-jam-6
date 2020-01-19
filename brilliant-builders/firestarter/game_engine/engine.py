@@ -12,7 +12,7 @@ from kivy.uix.widget import Widget
 
 
 class Engine(Widget):
-    resource_dir = (Path('.') / 'resources').absolute()
+    resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
