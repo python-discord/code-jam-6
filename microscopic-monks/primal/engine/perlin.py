@@ -1,7 +1,7 @@
 import numpy as np
 from noise import pnoise2
 
-def perlin_array(shape = (30, 30),
+def perlin_array(shape = (40, 40),
 			scale=100, octaves = 6,
 			persistence = 0.5,
 			lacunarity = 2.0,

@@ -3,6 +3,7 @@ from pathlib import Path
 from kivy.graphics import Rectangle
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
+from kivy.core.window import Window
 from kivy.uix.widget import Widget
 
 
@@ -26,6 +27,9 @@ class Sprite(Widget):
 
     def redraw(self, *args) -> None:
         """Redraw the rectangle after moving the sprite."""
+        x, y = self.pos
+        if x < -2000 or x > Window.size[0] + 2000 or y < -2000 or y > Window.size[1] + 2000:
+            return
         self.bg_rect.pos = self.pos
 
     def update(self) -> None:

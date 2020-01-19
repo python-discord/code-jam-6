@@ -14,10 +14,10 @@ class MyGame(Engine):
 
         for i in range(self.map.shape[0]):
             for j in range(self.map.shape[1]):
-                m = i - 15
-                n = j - 15
+                m = i - 20
+                n = j - 20
                 v = (m**2 + n**2)**0.5
-                a = self.map[i][j] - 0.9 ** (22 - v) + 0.05
+                a = self.map[i][j] - 0.9 ** (20 - v) + 0.25
                 if a > 0.75:
                     thing = Sprite('i.png', (1000 * m, 1000 * n), (1000, 1000))
                     self.add_sprite(thing)
