@@ -25,4 +25,4 @@ jobs:
       run: pipenv sync
     - name: Run tests
       working-directory: ./brilliant-builders
-      run: pipenv run test
+      run: pipenv run python -m unittest
