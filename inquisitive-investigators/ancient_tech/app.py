@@ -20,6 +20,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
+import kivy.modules.monitor
 
 from .terminal import Terminal, TerminalInput
 from .utils.utils import bytes_conversion

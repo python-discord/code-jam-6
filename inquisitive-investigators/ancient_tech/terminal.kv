@@ -6,7 +6,8 @@
     pos: self.pos
     size: self.size
 
-    ScrollView:
+    RecycleView:
+        viewclass: 'TerminalInput'
         id: scroll_view
         size_hint: 1, None
         
@@ -18,3 +19,4 @@
             foreground_color: root.foreground_color
             background_color: root.background_color
             height: max(self.parent.height, self.minimum_height)
+            size_hint_y: None
