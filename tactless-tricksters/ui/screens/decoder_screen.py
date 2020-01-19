@@ -40,7 +40,7 @@ class DecoderScreen(Screen):
         toolbar_anchor.add_widget(toolbar)
 
         record_button_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom',
-                                            padding=[dp(50), dp(50), dp(50), dp(50)])
+                                            padding=[dp(25), dp(25), dp(25), dp(25)])
 
         self.record_button = MDFloatingActionButton(icon='record', size=[dp(56), dp(56)])
         self.record_button.md_bg_color = App.get_running_app().theme_cls.primary_color
@@ -57,7 +57,7 @@ class DecoderScreen(Screen):
         self.decode_input.children[2].children[0].bind(on_press=lambda x: self.clear_text())
 
         decode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
-                             size_hint_x=0.85, size_hint_y=0.6, pos_hint={'top': 0.85, 'center_x': 0.5})
+                             size_hint_x=0.85, size_hint_y=0.7, pos_hint={'top': 0.85, 'center_x': 0.5})
         decode_label = MDLabel(text='Decode Morse Code Audio', font_style='Body1', halign='center',
                                size_hint=(1, 0.5))
         decode_label.theme_text_color = 'Custom'
