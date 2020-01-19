@@ -20,6 +20,7 @@
             size: self.size
             pos: self.pos
     FileHeader:
+        id: header
         pos_hint: {'top':1,'x':.01}
         size_hint: .98,.1
     Column:
@@ -104,7 +105,7 @@
                 pos: self.pos
         pos_hint: {'top':1, 'right':1}
         size_hint: 1,.4
-        text: 'Current Directory Click to Copy'
+        text: self.parent.current_dir
         color: 0.34,1,1,1
     FloatLayout:
         pos_hint: {'top':.5, 'right':1}
