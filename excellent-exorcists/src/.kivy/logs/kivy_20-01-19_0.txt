@@ -1,0 +1,15 @@
+[INFO   ] Logger: Record log in /storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/logs/kivy_20-01-19_0.txt
+[WARNING] [Config      ] Upgrading configuration in progress.
+[WARNING] [Config      ] Older configuration version detected (0 instead of 21)
+[ERROR  ] Error when copying logo directory
+Traceback (most recent call last):
+  File "/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/__init__.py", line 322, in <module>
+    shutil.copytree(join(kivy_data_dir, 'logo'), icon_dir)
+  File "/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/shutil.py", line 365, in copytree
+    raise Error(errors)
+shutil.Error: [('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-128.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-128.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-512.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-512.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-16.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-16.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-32.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-32.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-48.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-48.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-24.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-24.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-256.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-256.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo/kivy-icon-64.png', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon/kivy-icon-64.png', '[Errno 1] Operation not permitted'), ('/data/user/0/ru.iiec.pydroid3/files/arm-linux-androideabi/lib/python3.7/site-packages/kivy/data/logo', '/storage/emulated/0/code-jam-6/excellent-exorcists/src/.kivy/icon', '[Errno 1] Operation not permitted')]
+[INFO   ] Kivy: v1.11.0.dev0, git-8b6af30, 20190320
+[INFO   ] Python: v3.7.2 (default, Mar 20 2019, 14:25:26) 
+[GCC 8.2.0]
+[INFO   ] Factory: 184 symbols loaded
+[INFO   ] Image: Providers: img_tex, img_dds, img_sdl2, img_pil, img_gif (img_ffpyplayer ignored)
