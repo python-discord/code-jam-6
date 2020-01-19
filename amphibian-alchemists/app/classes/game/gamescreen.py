@@ -7,6 +7,7 @@ from random import sample
 from enigma.machine import EnigmaMachine
 import os
 from kivy.lang import Builder
+from kivy.core.window import Window
 
 DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
 
@@ -120,6 +121,10 @@ class GameScreen(Screen):
         store = JsonStore(DATA_DIR)
         store.put("latest_game_id", id=None)
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        Window.bind(on_key_down=self._on_key_down)
+
     def on_enter(self, *args):
         store = JsonStore(DATA_DIR)
         # TODO Add load game screen and select a game id by
@@ -129,3 +134,11 @@ class GameScreen(Screen):
             setup_new_game_settings()
         else:
             on_config_change()
+
+    def _on_key_down(self, window, key, scancode, codepoint, modifiers):
+        keys = {"q", "w", "e", "r", "t", "z", "u", "i", "o", "a", "s", "d", "f", "g", "h", "j", "k", "p", "y", "x", "c", "v", "b", "n", "m", "l"}
+        if self.manager.current == "game_screen" and codepoint in keys:
+            self.ids.enigma_keyboard.ids.keyboard.ids[codepoint.upper()].trigger_action()
+
+    def handle_key(self, key):
+        """Here goes what we're gonna do whenever a key in the machine is pressed"""
