@@ -8,7 +8,7 @@ from random import shuffle
 from copy import deepcopy
 from kivy.uix.image import Image
 from kivy.uix.popup import Popup
-from kivy.uix.label import Label
+from kivy.uix.screenmanager import ScreenManager, Screen
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
@@ -24,8 +24,19 @@ class Swiper(Carousel):
         self.static_pic_list = listdir(self.pic_dir)
         self.pic_list = deepcopy(self.static_pic_list)
         self.cycler = self.r_cycle(self.pic_list)
-        self.selected = set()
+        self._selected = set()
+        self.limit = 3
         self.add_widget(Image(source=f"{self.pic_dir}/{next(self.cycler)}"))
+
+    @property
+    def selected(self):
+        return self._selected
+
+    @selected.setter
+    def selected(self, value):
+        self._selected = value
+        if len(self._selected) >= self.limit:
+            App.get_running_app().root.current = "After"
 
     def on_touch_down(self, touch):
         if touch.is_mouse_scrolling:
@@ -43,9 +54,8 @@ class Swiper(Carousel):
                 self.load_previous()
 
         if touch.is_double_tap:
-            pop_content = Label(text="I'm poppy")
-            popup = Popup(content=pop_content, size_hint=(None, None), size=(400, 400))
-            self.selected.add(self.current_slide.source.split("/")[1])
+            popup = SwipePopup()
+            self.selected |= {self.current_slide.source.split("/")[1]}
             popup.open()
 
     @staticmethod
@@ -56,10 +66,28 @@ class Swiper(Carousel):
                 yield element
 
 
+class SwipePopup(Popup):
+    def change_screen(self):
+        App.get_running_app().root.current = "After"
+        self.dismiss()
+
+
+class SwipingScreen(Screen):
+    pass
+
+
+class AfterSwipeScreen(Screen):
+    pass
+
+
 class CarouselApp(App):
     def build(self):
-        card_swiper = Root()
-        return card_swiper
+        self.sm = ScreenManager()
+        self.start_screen = SwipingScreen()
+        self.second_screen = AfterSwipeScreen()
+        self.sm.add_widget(self.start_screen)
+        self.sm.add_widget(self.second_screen)
+        return self.sm
 
 
 if __name__ == "__main__":

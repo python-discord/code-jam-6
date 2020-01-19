@@ -1,15 +1,29 @@
 #:kivy 1.11.1
-<Root>:
-    orientation: 'vertical'
-    id: root_box
-    swiper_obj: swipe_carousel
-    Swiper:
-        id: swipe_carousel
-        size_hint_y: 0.7
-        direction: 'right'
+<SwipingScreen>:
+    name: 'swipe'
+    BoxLayout:
+        orientation: 'vertical'
+        id: root_box
+        swiper_obj: swipe_carousel
+        Swiper:
+            id: swipe_carousel
+            size_hint_y: 0.7
+            direction: 'right'
 
-    RelativeLayout:
-        size_hint_y: 0.3
+<AfterSwipeScreen>:
+    name: 'After'
+    BoxLayout:
         Button:
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            size_hint: (0.25,0.25)
+            text: 'Post swipe screen'
+
+<SwipePopup>:
+    title: 'Selection popup'
+    size_hint: .5, .7
+    size: 200, 200
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Click ouside popup to close"
+        Button:
+            text: 'Change screen'
+            on_release: root.change_screen()
