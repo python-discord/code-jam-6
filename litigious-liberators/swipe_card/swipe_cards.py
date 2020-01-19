@@ -54,7 +54,7 @@ class Swiper(Carousel):
     def selected(self, value):
         self._selected = value
         if len(self._selected) >= self.limit:
-            App.get_running_app().root.current = "After"
+            self.parent.parent.manager.current = "after"
 
     def on_touch_down(self, touch):
         if touch.is_mouse_scrolling:
@@ -64,7 +64,7 @@ class Swiper(Carousel):
                     break
             if touch.button == "scrolldown":
                 self.direction = "right"
-                popup = SwipePopup()
+                popup = SwipePopup(caller=self)
                 popup.open()
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
@@ -85,7 +85,7 @@ class Swiper(Carousel):
                 self.load_next()
 
         if touch.is_double_tap:
-            popup = SwipePopup()
+            popup = SwipePopup(caller=self)
             self.selected |= {self.current_slide.ids["picture"].source.split("/")[1]}
             popup.open()
 
@@ -98,8 +98,12 @@ class Swiper(Carousel):
 
 
 class SwipePopup(Popup):
+    def __init__(self, *, caller, **kwargs):
+        self.caller = caller
+        super(SwipePopup, self).__init__(**kwargs)
+
     def change_screen(self):
-        App.get_running_app().root.current = "After"
+        App.get_running_app().root.current = "after"
         self.dismiss()
 
 
@@ -114,12 +118,10 @@ class AfterSwipeScreen(Screen):
 class CarouselApp(App):
     def build(self):
         Window.clearcolor = (188 / 255, 170 / 255, 164 / 255, 1)
-        self.sm = ScreenManager()
-        self.start_screen = SwipingScreen()
-        self.second_screen = AfterSwipeScreen()
-        self.sm.add_widget(self.start_screen)
-        self.sm.add_widget(self.second_screen)
-        return self.sm
+        sm = ScreenManager()
+        sm.add_widget(SwipingScreen(name="swipe_cards"))
+        sm.add_widget(AfterSwipeScreen(name="after"))
+        return sm
 
 
 if __name__ == "__main__":

@@ -49,4 +49,6 @@
             text: "Click ouside popup to close"
         Button:
             text: 'Change screen'
-            on_release: root.change_screen()
+            on_release:
+                root.caller.parent.parent.manager.current = 'after'
+                root.dismiss()
