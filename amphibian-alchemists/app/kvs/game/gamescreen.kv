@@ -1,0 +1,30 @@
+<GameScreen>:
+    name: "game_screen"
+    AnchorLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.75, 0.7
+            Button:
+                text: "Rotors"
+                on_release: root.manager.current = "rotor"
+            Button:
+                text: "Keyboard"
+                on_release: root.manager.current = "keyboard"
+    AnchorLayout:
+        anchor_x : "left"
+        Button:
+            text: "paper"
+            size_hint: 0.1, 1
+            on_release: root.manager.current = "paper"
+    AnchorLayout:
+        anchor_x : "right"
+        Button:
+            text: "Output paper"
+            size_hint: 0.1, 1
+            on_release: root.manager.current = "paper"
+    AnchorLayout:
+        anchor_y: "bottom"
+        Button:
+            text: "plugboard"
+            size_hint: 0.75, 0.15
+            on_release: root.manager.current = "plugboard"
