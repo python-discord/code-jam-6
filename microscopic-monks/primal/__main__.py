@@ -1,9 +1,8 @@
+from engine.engine import Engine
+from engine.perlin import perlin_array
+from engine.sprite import Player, Terrain
 from kivy.app import App
 from kivy.core.window import Window
-
-from engine.engine import Engine
-from engine.sprite import Sprite, Player, Terrain
-from engine.perlin import perlin_array
 
 
 class MyGame(Engine):

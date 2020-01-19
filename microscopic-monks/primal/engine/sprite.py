@@ -1,9 +1,9 @@
 from pathlib import Path
 
+from kivy.core.window import Window
 from kivy.graphics import Rectangle
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
-from kivy.core.window import Window
 from kivy.uix.widget import Widget
 
 
