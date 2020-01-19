@@ -56,21 +56,20 @@ class WindowManager(ScreenManager):
     pass
 
 
-kv = Builder.load_file('main.kv')
-sm = WindowManager()
-
-screens = [MainScreen(name='main')]
-for screen in screens:
-    sm.add_widget(screen)
-
-sm.current = 'main'
-
-
 class SunClock(App):
     """
     Core class.
     """
     def build(self):
+        kv = Builder.load_file('main.kv')
+        sm = WindowManager()
+
+        screens = [MainScreen(name='main')]
+        for screen in screens:
+            sm.add_widget(screen)
+
+        sm.current = 'main'
+
         return sm
 
 
