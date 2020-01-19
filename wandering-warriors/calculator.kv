@@ -1,0 +1,55 @@
+<Calculator>:
+    BoxLayout:
+        orientation: 'vertical'
+        TopMenu:
+        Abacus:
+        BoxLayout:
+            orientation: 'horizontal'
+            Ledger:
+            OperationsBar:
+            CuneiformDrawingInput:
+
+<TopMenu>:
+    size_hint_y: None
+    height: 32
+    canvas:
+        Color:
+            rgb: 1, 0, 0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Abacus>:
+    canvas:
+        Color:
+            rgb: 0, 1, 0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<Ledger>:
+    size_hint_x: 1.6
+    canvas:
+        Color:
+            rgb: 0, 0, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<OperationsBar>:
+    size_hint_x: None
+    width: 48
+    canvas:
+        Color:
+            rgb: 1, 1, 0
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<CuneiformDrawingInput>:
+    canvas:
+        Color:
+            rgb: 0, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
