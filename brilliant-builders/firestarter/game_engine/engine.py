@@ -9,6 +9,7 @@ from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from kivy.core.window import Keyboard, Window
 from kivy.uix.widget import Widget
+
 import toml
 
 IMAGE_EXTENSIONS = ['png']
@@ -41,7 +42,8 @@ class Engine(Widget):
         """Load all images in the resources/sprites directory to the gpu"""
         assets = {}
         for sprite_sheet in [
-            sp for sp in os.listdir(self.resource_dir / 'sprites') if sp.rsplit('.', 1)[-1] in IMAGE_EXTENSIONS
+            sp for sp in os.listdir(self.resource_dir / 'sprites')
+            if sp.rsplit('.', 1)[-1] in IMAGE_EXTENSIONS
         ]:
             img_path = (self.resource_dir / 'sprites' / sprite_sheet).as_posix()
             texture = CoreImage(img_path).texture
