@@ -1,0 +1,133 @@
+#:kivy 1.11.1
+
+<Footer>:
+    canvas:
+        Color:
+            rgb: 0.3,0.4,0.5
+        Rectangle:
+            size: root.size
+            pos: root.pos
+    orientation: 'horizontal'
+
+    Button:
+        size_hint: 1,1
+        text: '1: About'
+        on_press: root.about()
+    Button:
+        size_hint: 1,1
+        text: '2: Menu'
+    Button:
+        size_hint: 1,1
+        text: '3: View'
+    Button:
+        size_hint: 1,1
+        text: '4: Edit'
+    Button:
+        size_hint: 1,1
+        text: '5: Copy'
+    Button:
+        size_hint: 1,1
+        text: '6: DWN'
+    Button:
+        size_hint: 1,1
+        text: '7: UP'
+    Button:
+        size_hint: 1,1
+        text: '8: Mkdir  '
+        on_press: root.mkDir()
+    Button:
+        size_hint: 1,1
+        text: '9: Delete'
+    Button:
+        size_hint: 1,1
+        text: '0: Quit'
+        on_press: root.quit()
+
+<AboutPopup>:
+    title: 'About NAMEOFPROJECT'
+    BoxLayout:
+        orientation: "vertical"
+        ScrollView:
+            effect_cls: "ScrollEffect"
+            Label:
+                id: AboutInfo
+                size_hint_y: None
+                height: self.texture_size[1]
+                text_size: (self.width-20), None
+                line_height: 1.5
+                valign: "top"
+                color: 0.34,1,1,1
+        Button:
+            text: "[ Close ]"
+            size_hint_y: None
+            height: "40dp"
+            on_press: root.dismiss()
+            color: 0.34,1,1,1
+
+<MKDIR>:
+    title: 'Make a new Directory in your Current Directory?'
+    FloatLayout:
+        TextInput:
+            id: create
+            size_hint: .5,.2
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            hint_text: 'Enter Directory Name'
+        Button:
+            size_hint: .5,.1
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            text: '[ Create New Directory ]'
+            color: 0.34,1,1,1
+            on_press: root.mk_dir()
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .2}
+            text: '[ Cancel ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
+<QuitPopup>:
+    title: 'Quit?'
+    FloatLayout:
+        Label:
+            size_hint: .5,.1
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            color: 0.34,1,1,1
+            text: 'Are you sure you want to Quit?'
+        Button:
+            id: yes
+            size_hint: .2,.2
+            pos_hint: {'center_x': .3, 'center_y': .5}
+            text: '[ YES ]'
+            color: 0.34,1,1,1
+            on_press: quit(0)
+        Button:
+            id: no
+            size_hint: .2,.2
+            pos_hint: {'center_x': .7, 'center_y': .5}
+            text: '[ NO ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
+
+<ModalView@Popup>:
+    background_color: 0,0,0,0
+
+<Popup>:
+    auto_dismiss: False
+    canvas.before:
+        Color:
+            rgb: 0.34,1,1
+        Rectangle:
+            size: root.size[0] + 5, root.size[1] + 5
+            pos: root.pos[0] - 2.5, root.pos[1] - 2.5
+    seperator_color: 0.34,1,1
+    title_color: 0.34,1,1,1
+    title_align: 'center'
+    title_font: './ancient_tech/static/retro_font.ttf'
+
+<TextInput>:
+    font_name: './ancient_tech/static/retro_font.ttf'
+    multiline: False
+    background_color: 0,0,.65,1
+    foreground_color: 0.34,1,1,1
+    hint_text_color: 0.34,1,1,1

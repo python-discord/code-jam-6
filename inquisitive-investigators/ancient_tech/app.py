@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import datetime
 
 from kivy import Config
+from kivy.uix.label import Label
 
 Config.set('graphics', 'minimum_width', '1250')
 Config.set('graphics', 'minimum_height', '500')
@@ -21,8 +22,12 @@ from kivy.uix.popup import Popup
 from kivy.properties import (
     StringProperty,
 )
-
+from kivy.lang import Builder
 from .utils.utils import bytes_conversion
+
+Builder.load_file('./ancient_tech/Main.kv')
+Builder.load_file('./ancient_tech/FileManager.kv')
+Builder.load_file('./ancient_tech/Footer.kv')
 
 
 class Main(FloatLayout):
@@ -38,6 +43,10 @@ class Column(Widget):
 
 
 class Border(Widget):
+    pass
+
+
+class Header(Label):
     pass
 
 
