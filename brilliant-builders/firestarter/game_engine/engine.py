@@ -8,6 +8,7 @@ from firestarter.game_engine.sprite import Sprite, SpriteConfig
 from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from kivy.core.window import Keyboard, Window
+from kivy.logger import Logger
 from kivy.uix.widget import Widget
 
 import toml
@@ -52,12 +53,18 @@ class Engine(Widget):
             if sp.rsplit('.', 1)[-1] in IMAGE_EXTENSIONS
         ]:
             img_path = (self.resource_dir / 'sprites' / sprite_sheet).as_posix()
-            texture = CoreImage(img_path).texture
-            texture.mag_filter = 'nearest'
-
             config_file = (
                 self.resource_dir / 'sprites' / (sprite_sheet.rsplit('.', 1)[0] + '_config.toml')
             ).as_posix()
+            if not os.path.exists(config_file):
+                Logger.error(
+                    f"Engine: No configuration file found for {sprite_sheet}, not loading it."
+                )
+                continue
+
+            texture = CoreImage(img_path).texture
+            texture.mag_filter = 'nearest'
+
             with open(config_file) as f:
                 config_dict = toml.load(f)['animation']
 
