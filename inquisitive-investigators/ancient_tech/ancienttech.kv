@@ -11,40 +11,7 @@
         pos_hint: {'top': .04}
         size_hint: 1,.04
 
-<QuitPopup>:
-    title: 'Quit?'
-    FloatLayout:
-        Label:
-            size_hint: .2,.1
-            pos_hint: {'center_x': .5, 'center_y': .7}
-            color: 0.34,1,1,1
-            text: 'Are you sure you want to Quit?'
-        Button:
-            id: yes
-            size_hint: .2,.1
-            pos_hint: {'center_x': .3, 'center_y': .5}
-            text: '[ YES ]'
-            color: 0.34,1,1,1
-            on_press: root.check(True)
-        Button:
-            id: no
-            size_hint: .2,.1
-            pos_hint: {'center_x': .7, 'center_y': .5}
-            text: '[ NO ]'
-            color: 0.34,1,1,1
-            on_press: root.check(False)
 
-<Popup>:
-    canvas.before:
-        Color:
-            rgb: 0.34,1,1
-        Rectangle:
-            size: root.size[0] + 5, root.size[1] + 5
-            pos: root.pos[0] - 2.5, root.pos[1] - 2.5
-    seperator_color: 0.34,1,1
-    title_color: 0.34,1,1,1
-    title_align: 'center'
-    title_font: './ancient_tech/static/retro_font.ttf'
 
 
 <FileBrowser>:
@@ -71,16 +38,21 @@
         size_hint: .2, .91
         pos_hint: {'top': .91, 'x': .79}
 
-    ScrollView:
+    RV:
         size_hint: .98,.90
         pos_hint: {'x':.01,'y': 0}
         scroll_distance: 10
 
-        Files:
-            height: self.minimum_height
-            on_parent:
-                self.generate('<-')
-                for d in self.dirs: self.generate(d)
+
+<RV>:
+    viewclass: 'NewFile'
+    Files:
+        height: self.minimum_height
+        on_parent:
+            self.generate('<-')
+            for d in self.dirs: self.generate(d)
+
+
 
 <Column>:
     canvas.before:
@@ -192,6 +164,42 @@
     orientation: 'rl-tb'
     spacing: [0,-70]
     size_hint: 1, None
+
+
+<QuitPopup>:
+    title: 'Quit?'
+    FloatLayout:
+        Label:
+            size_hint: .2,.1
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            color: 0.34,1,1,1
+            text: 'Are you sure you want to Quit?'
+        Button:
+            id: yes
+            size_hint: .2,.1
+            pos_hint: {'center_x': .3, 'center_y': .5}
+            text: '[ YES ]'
+            color: 0.34,1,1,1
+            on_press: root.check(True)
+        Button:
+            id: no
+            size_hint: .2,.1
+            pos_hint: {'center_x': .7, 'center_y': .5}
+            text: '[ NO ]'
+            color: 0.34,1,1,1
+            on_press: root.check(False)
+
+<Popup>:
+    canvas.before:
+        Color:
+            rgb: 0.34,1,1
+        Rectangle:
+            size: root.size[0] + 5, root.size[1] + 5
+            pos: root.pos[0] - 2.5, root.pos[1] - 2.5
+    seperator_color: 0.34,1,1
+    title_color: 0.34,1,1,1
+    title_align: 'center'
+    title_font: './ancient_tech/static/retro_font.ttf'
 
 
 <Footer>:

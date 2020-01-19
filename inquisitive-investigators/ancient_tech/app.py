@@ -3,6 +3,7 @@ from datetime import datetime
 
 from kivy import Config
 from kivy.uix.popup import Popup
+from kivy.uix.recycleview import RecycleView
 
 Config.set('graphics', 'minimum_width', '1250')
 Config.set('graphics', 'minimum_height', '500')
@@ -21,8 +22,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
 
 from kivy.properties import (
-    ObjectProperty, 
-    StringProperty, 
+    ObjectProperty,
+    StringProperty,
     NumericProperty
 )
 
@@ -46,9 +47,6 @@ class FileHeader(FloatLayout):
 
 
 class Files(StackLayout):
-    do_layout_event = ObjectProperty(None, allownone=True)
-    layout_delay_s = NumericProperty(0.15)
-
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         self.dirs = Path.home().iterdir()
@@ -57,13 +55,11 @@ class Files(StackLayout):
     def generate(self, widget):
         self.add_widget(NewFile(self, str(widget), text=''))
 
-    def do_layout(self, *args, **kwargs):
-        if self.do_layout_event is not None:
-            self.do_layout_event.cancel()
-        real_do_layout = super().do_layout
-        self.do_layout_event = Clock.schedule_once(
-            lambda dt: real_do_layout(*args, **kwargs),
-            self.layout_delay_s)
+
+class RV(RecycleView):
+    def __init__(self, **kwargs):
+        super(RV, self).__init__(**kwargs)
+        self.data = [{'text': str(x)} for x in range(100)]
 
 
 class Column(Widget):
@@ -167,8 +163,6 @@ class Footer(BoxLayout):
 
 
 class QuitPopup(Popup):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
 
     def check(self, value: bool):
         if not value:
