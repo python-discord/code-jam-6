@@ -2,10 +2,13 @@ from pathlib import Path
 
 from kivy.core.window import Window
 from kivy.graphics import Rectangle
+import kivy.graphics.instructions
+from kivy.graphics.context_instructions import Rotate
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
 from kivy.uix.widget import Widget
-
+from kivy.core.window import WindowBase
+import math
 
 class Sprite(Widget):
     vel_x = NumericProperty(0)
@@ -20,6 +23,7 @@ class Sprite(Widget):
         self.pos = pos
 
         with self.canvas:
+            self.rotate = Rotate(angle=0, origin=self.center)
             self.bg_rect = Rectangle(source=(self.resource_dir / image).as_posix(),
                                      pos=self.pos,
                                      size=self.size)
@@ -47,8 +51,14 @@ class Player(Sprite):
 
     def __init__(self, image: str, pos: tuple = (0, 0), size: tuple = (50, 50), **kwargs) -> None:
         super().__init__(image, pos, size, **kwargs)
+        Window.bind(mouse_pos=self._update)
 
-    def update(self) -> None:
+    def _update(self, t, n) -> None:
+        self.rotate.origin = self.center
+        x, y = n
+        d = math.atan2(y - Window.size[1] / 2, x - Window.size[0] / 2)
+        d *= 180 / math.pi
+        self.rotate.angle = d
         self.redraw()
 
 

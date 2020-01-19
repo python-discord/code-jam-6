@@ -5,7 +5,7 @@ from kivy.app import App
 from kivy.core.window import Window
 
 
-class MyGame(Engine):
+class PrimalGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.player = Player('testimg.png', [i / 2 for i in Window.size])
@@ -40,7 +40,7 @@ class Application(App):
         Window.clearcolor = (51 / 255, 51 / 255, 51 / 255, 1)
         Window.fullscreen = "auto"
         self.title = "Primal"
-        game = MyGame()
+        game = PrimalGame()
         return game
 
 
