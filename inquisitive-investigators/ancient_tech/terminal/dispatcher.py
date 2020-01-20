@@ -1,4 +1,5 @@
 import subprocess
+from typing import Any
 
 from kivy.event import EventDispatcher
 from kivy.properties import ObjectProperty
@@ -11,7 +12,11 @@ class Shell(EventDispatcher):
     process = ObjectProperty()
 
     @threaded
-    def run_cmd(self, cmd, show_output=True, *args, **kwargs):
+    def run_cmd(
+        self, cmd: str, 
+        show_output: bool = True, 
+        *args: Any, **kwargs: Any
+        ) -> None:
         """
         Runs a command inputted into the terminal
         on a separate thread.
@@ -34,9 +39,9 @@ class Shell(EventDispatcher):
                 self.dispatch('on_output', line)
 
         self.dispatch('on_output', '\n'.encode())
-        self.dispatch('on_complete', output)
+        self.dispatch('on_complete')
 
     @threaded
-    def stop(self, *args, **kwargs):
+    def stop(self, *args: Any, **kwargs: Any) -> None:
         if self.process:
             self.process.kill()

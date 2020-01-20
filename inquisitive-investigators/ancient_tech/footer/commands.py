@@ -1,9 +1,10 @@
+from typing import Any
 from kivy.uix.popup import Popup
 
 
 class AboutPopup(Popup):
 
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.ids.AboutInfo.text = '''
         Scroll Effect! Hopefully it works!
@@ -17,7 +18,7 @@ class AboutPopup(Popup):
 
 class Mkdir(Popup):
 
-    def mkdir(self):
+    def mkdir(self) -> None:
         print(self.ids.create.text)
 
 

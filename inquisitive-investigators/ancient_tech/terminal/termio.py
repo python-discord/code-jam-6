@@ -1,12 +1,16 @@
+from __future__ import annotations
+from typing import Any, Tuple, Union
 import os
 import sys
 import shlex
 
 from kivy.uix.textinput import TextInput
+from kivy.core.window import Keyboard
 from kivy.properties import (
     Clock,
     partial,
-    ObjectProperty
+    ObjectProperty,
+    ObservableList
 )
 
 
@@ -18,12 +22,12 @@ class TerminalInput(TextInput):
 
     shell = ObjectProperty()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(TerminalInput, self).__init__(*args, **kwargs)
         self._cursor_pos = 0
         self.init_terminal()
 
-    def init_terminal(self, *args, **kwargs):
+    def init_terminal(self) -> None:
         """
         Get the current working directory 
         and username for the terminal.
@@ -37,9 +41,16 @@ class TerminalInput(TextInput):
 
         self.prompt()
 
-    def keyboard_on_key_down(self, window, keycode, text, modifiers):
+    def keyboard_on_key_down(
+            self, 
+            window: Keyboard, 
+            keycode: Tuple[int, str], 
+            text: str, 
+            modifiers: ObservableList
+        ) -> Union[None, bool]:
         """
-        Overrides _keyboard_on_key_down.
+        Captures specific key presses
+        and executes accordingly.
         """
         # Enter = 13
         # Execute command
@@ -69,7 +80,14 @@ class TerminalInput(TextInput):
             window, keycode, text, modifiers
         )
 
-    def _run_cmd(self, cmd, *args, **kwargs):
+    def _run_cmd(
+            self, cmd: str, 
+            *args: Any, **kwargs: Any
+        ) -> None:
+        """
+        Checks OS for posix and
+        executes commands.
+        """
         posix_ = True
 
         # Check OS
@@ -79,19 +97,25 @@ class TerminalInput(TextInput):
         cmds = shlex.split(str(cmd), posix=posix_)
         self.shell.run_cmd(cmds)
 
-    def validate_cursor_pos(self, *args, **kwargs):
+    def validate_cursor_pos(
+            self, *args: Any, **kwargs: Any
+        ) -> None:
         if self.cursor_index() < self._cursor_pos:
-            self.cursor = self.get_cursor_from_index(self._cursor_pos)
+            self.cursor = self.get_cursor_from_index(
+                self._cursor_pos
+            )
 
 
-    def prompt(self, *args, **kwargs):
-        at_info = f'[{self.user}@{self.host} {os.path.basename(str(self.current))}]>'
+    def prompt(self, *args: Any, **kwargs: Any) -> None:
+        at_info = (f'[{self.user}@{self.host} '
+            f'{os.path.basename(str(self.current))}]>'
+        )
 
         self._cursor_pos = self.cursor_index() + len(at_info)
         self.text += at_info
 
-    def on_output(self, output):
+    def on_output(self, output: bytes) -> None:
         self.text += output.decode()
 
-    def on_complete(self, output):
+    def on_complete(self) -> None:
         self.prompt()

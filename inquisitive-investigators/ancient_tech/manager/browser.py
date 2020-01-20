@@ -1,4 +1,6 @@
+from __future__ import annotations
 from pathlib import Path
+from typing import Any, Dict, List, Union
 
 from kivy.lang import Builder
 from kivy.uix.label import Label
@@ -17,13 +19,13 @@ Builder.load_file('./ancient_tech/manager/filemanager.kv')
 class FileHeader(FloatLayout):
     current_dir = StringProperty()
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.current_dir = str(Path().home())
 
 
 class RV(RecycleView):
-    def __init__(self, **kwargs):
+    def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
 
         self.dirs = Path.home().iterdir()
@@ -31,12 +33,17 @@ class RV(RecycleView):
 
         self.update(state=0, file=[])
 
-    def generate(self, f):
+    def generate(
+            self, f: Any
+        ) -> Union[Dict[str, str], Dict[str, RV]]:
         return file_info(self, str(f))
 
-    def update(self, state, file):
+    def update(self, state: int, file: List[str]) -> None:
         if state == 0:
-            self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
+            self.data = [
+                self.generate('<-'), 
+                *(self.generate(file_name) for file_name in self.dirs)
+            ]
         elif state == 1:
             self.data = [self.generate('<-'), *file]
         elif state == 2:
