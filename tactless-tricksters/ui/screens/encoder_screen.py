@@ -37,12 +37,11 @@ class EncoderScreen(Screen):
         play_button_anchor.add_widget(play_button)
 
         self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5}, size_hint=(0.85, 0.5))
-        self.encode_input.icon_left_dasabled = True
-        # Moves widget out of the field of view
-        self.encode_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
-        # This binds the right icon to record the input
         self.encode_input.icon_right = 'login'
         self.encode_input.children[2].children[0].bind(on_press=lambda x: self.encode_audio(self.encode_input.text))
+        self.encode_input.icon_left = 'microphone'
+        self.encode_input.children[2].children[2].disabled = False
+        self.encode_input.children[2].children[2].bind(on_press=lambda x: self.speech_to_text())
 
         encode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
                              size_hint_x=0.85, size_hint_y=0.7, pos_hint={'top': 0.85, 'center_x': 0.5})
@@ -88,6 +87,9 @@ class EncoderScreen(Screen):
             self.util.morse_transmit_thread()
         else:
             self.encode_output_label.text = 'Enter Text to Encode before playing'
+
+    def speech_to_text(self):
+        print('Insert speech to text functionality here')
 
     def return_home(self):
         self.manager.current = 'welcome'
