@@ -52,7 +52,6 @@ def get_wiki_summary() -> str:
 
 
 def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> str:
-    # TODO UNTESTED!!!!!!!!
     machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
@@ -71,6 +70,7 @@ def setup_new_game_settings():
     else:
         store.put("latest_game_id", id=int(currrent_game_id) + 1)
     game_id = store.get("latest_game_id")["id"]
+    App.get_running_app().game_id = game_id
     plug_array = sample(ascii_uppercase, 20)
     plugs = []
     for i in range(10):
@@ -94,6 +94,7 @@ def setup_new_game_settings():
         game_id,
         ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
         unciphered_text=text,
+        current_output_text="",
         encrypted_state={"reflector": "B", "rotors": rotors, "plugs": plugs},
         current_state={
             "reflector": "B",
@@ -174,8 +175,8 @@ class GameScreen(Screen):
         Here goes what we're gonna do whenever a key in the machine is pressed
         """
 
-        anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.5) + Animation(
-            _color=[1, 1, 1], duration=0.5
+        anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
+            _color=[1, 1, 1], duration=0.2
         )
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
@@ -183,3 +184,22 @@ class GameScreen(Screen):
             self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(
                 key.name
             )
+        App.get_running_app().machine.key_press(key.name)
+        store = JsonStore(DATA_DIR)
+        game_id = str(App.get_running_app().game_id)
+        game = store.get(game_id)
+        ciphered_text = game["ciphered_text"]
+        unciphered_text = game["unciphered_text"]
+        current_output_text = game["current_output_text"]
+        encrypted_state = game["encrypted_state"]
+        current_state = game["current_state"]
+        last_saved_state = game["last_saved_state"]
+        store.put(
+            game_id,
+            ciphered_text=ciphered_text,
+            unciphered_text=unciphered_text,
+            current_output_text=current_output_text + key.name,
+            encrypted_state=encrypted_state,
+            current_state=current_state,
+            last_saved_state=last_saved_state,
+        )

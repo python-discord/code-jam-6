@@ -37,6 +37,8 @@ class UIManager(ScreenManager):
 class AncientTechApp(App):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        # NOTE This is essentially a singleton
+        # All global variables go here.
         self.machine = EnigmaMachine.from_key_sheet(
             rotors="I II III",
             reflector="B",
