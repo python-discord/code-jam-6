@@ -13,7 +13,9 @@ class PlugboardScreen(Screen):
         if self.plugs_in_screen == self.property("plugs_in_screen").get_min(self):
             self.ids.remove_plug.text = "Drag the plug here to discard..."
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
-            plug = Factory.Plug()
+            plug = Factory.Plug(
+                size_hint=(None, None), size=self.ids.plug_board.plug_reference.size
+            )
             self.ids.floating_widgets.add_widget(plug)
             self.last_plugs_count = self.plugs_in_screen
             self.plugs_in_screen += 1
@@ -30,16 +32,15 @@ class PlugboardScreen(Screen):
                 self.last_plugs_count = self.plugs_in_screen
                 self.plugs_in_screen -= 1
 
-            for floatlayouts in self.ids.plug_board.children:
-                for children in floatlayouts.children:
-                    if (
-                        instance.collide_widget(children)
-                        and type(children) == Factory.PlugHole
+            for relativelayout in self.ids.plug_board.children:
+                for child in relativelayout.children:
+                    if isinstance(child, Factory.PlugHole) and instance.collide_widget(
+                        child
                     ):
-                        if children.name not in self.all_plugged:
-                            instance.center = children.center
-                            instance.plugged_in = children.name
-                        elif instance.plugged_in == children.name:
+                        if child.name not in self.all_plugged:
+                            instance.center = child.center
+                            instance.plugged_in = child.name
+                        elif instance.plugged_in == child.name:
                             self.all_plugged.remove(instance.plugged_in)
                             instance.plugged_in == ""
                             instance.pos = [0, 0]
@@ -49,10 +50,10 @@ class PlugboardScreen(Screen):
 
     def on_plugged_in(self, instance, value):
         self.all_plugged.clear()
-        for plugs in self.ids.floating_widgets.children:
-            if type(plugs) == Factory.Plug and plugs.plugged_in != "":
-                self.all_plugged.append(plugs.plugged_in)
-        if len(self.all_plugged) % 2 == 0:
+        for plug in self.ids.floating_widgets.children:
+            if isinstance(plug, Factory.Plug) and plug.plugged_in != "":
+                self.all_plugged.append(plug.plugged_in)
+        if len(self.all_plugged) >= 2 and len(self.all_plugged) % 2 == 0:
             self.pairs_of_plugs.update(
                 {
                     f"{self.all_plugged[0]}{self.all_plugged[1]}": [
@@ -71,3 +72,17 @@ class PlugboardScreen(Screen):
                 self.ids.floating_widgets.get_a_plug.disabled = True
         else:
             self.ids.floating_widgets.get_a_plug.disabled = False
+
+    def on_plughole_recenter(self, instance, value):
+        """This avoids to unplug everything when resizing"""
+        # FIXME: avoid calling this when moving the widow.
+        # It can be achieved using a RelativeLayout instead
+        # of a FloatLayout, but breaks the handle_touch_up method
+        if self.manager.current == "plugboard_screen" and self.all_plugged:
+            for child in self.ids.floating_widgets.children:
+                if (
+                    isinstance(child, Factory.Plug)
+                    and child.plugged_in == instance.name
+                ):
+                    child.size = self.ids.plug_board.plug_reference.size
+                    child.center = instance.center
