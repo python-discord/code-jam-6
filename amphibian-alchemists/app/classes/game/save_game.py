@@ -4,23 +4,22 @@ from datetime import datetime
 from kivy.app import App
 from kivy.storage.jsonstore import JsonStore
 
-DATA_DIR = os.path.join(
-    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
-)
+DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
 
 
 def store_put(
-        game_id=None,
-        game_title: str = None,
-        ciphered_text: str = None,
-        unciphered_text: str = None,
-        current_output_text: str = None,
-        last_saved_output_text: str = None,
-        created_date: str = None,
-        last_saved_date: str = None,
-        encrypted_state=None,
-        current_state=None,
-        last_saved_state=None):
+    game_id=None,
+    game_title: str = None,
+    ciphered_text: str = None,
+    unciphered_text: str = None,
+    current_output_text: str = None,
+    last_saved_output_text: str = None,
+    created_date: str = None,
+    last_saved_date: str = None,
+    encrypted_state=None,
+    current_state=None,
+    last_saved_state=None,
+):
     if game_id is None:
         game_id = str(App.get_running_app().game_id)
     store = JsonStore(DATA_DIR)
