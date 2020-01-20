@@ -16,7 +16,7 @@
             pos: self.pos
     rv: rv
     orientation: "vertical"
-    GridLayout:
+    BoxLayout:
         cols: 3
         rows: 1
         size_hint_y: None
@@ -25,27 +25,24 @@
         spacing: dp(16)
         Button:
             text: "Go back"
-            on_press:
-                root.manager.transition.direction = "left"
-                root.manager.current = "main_screen"
+            on_release: root.manager.current = "main_screen"
         Button:
             text: "Load game"
-            on_press: root.load_game
+            on_release: root.load_game
         Button:
             text: "New game"
-            on_press: root.start_new_game
-            on_release: root.manager.current = "game_screen"
+            on_release: root.start_new_game
 
-    RecycleView:
+    SelectableRecycleBoxLayout:
         id: rv
         scroll_type: ['bars', 'content']
         scroll_wheel_distance: dp(114)
         bar_width: dp(12)
         viewclass: "SelectableLabel"
-        RecycleBoxLayout:
-            default_size: None, dp(56)
-            default_size_hint: 1, None
-            size_hint_y: None
-            height: self.minimum_height
-            orientation: "vertical"
-            spacing: dp(2)
+#        RecycleBoxLayout:
+#            default_size: None, dp(56)
+#            default_size_hint: 1, None
+#            size_hint_y: None
+#            height: self.minimum_height
+#            orientation: "vertical"
+#            spacing: dp(2)
