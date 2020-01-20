@@ -32,16 +32,23 @@ class Shell(EventDispatcher):
         """
         output = ''
         self.process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE
+            cmd, stdout=subprocess.PIPE, 
+            stderr=subprocess.PIPE,
+            shell=True
         )
-        line_iter = iter(self.process.stdout.readline, '')
+        stdout, stderr = self.process.communicate()
+        lines = stdout + stderr
+
+        if isinstance(lines, bytes):
+            lines = lines.splitlines()
+
         self.dispatch('on_output', '\n'.encode())
         
-        for line in line_iter:
-            output += line.decode()
+        for line in lines:
+            output += line.decode() + '\n'
 
             if show_output:
-                self.dispatch('on_output', line)
+                self.dispatch('on_output', line + b'\n')
 
         self.dispatch('on_output', '\n'.encode())
         self.dispatch('on_complete', output)
@@ -124,6 +131,7 @@ class TerminalInput(TextInput):
     def validate_cursor_pos(self, *args, **kwargs):
         if self.cursor_index() < self._cursor_pos:
             self.cursor = self.get_cursor_from_index(self._cursor_pos)
+
 
     def prompt(self, *args, **kwargs):
         at_info = f'[{self.user}@{self.host} {os.path.basename(str(self.current))}]>'
