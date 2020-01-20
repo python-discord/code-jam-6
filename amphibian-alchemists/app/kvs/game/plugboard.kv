@@ -1,13 +1,22 @@
+<Plug@DragBehavior+Image>:
+    # TODO: Apparently the widget size interferes with the plug behavior.
+    drag_rectangle: self.x, self.y, self.width, self.height
+    drag_timeout: 10000000
+    drag_distance: 0
+    size_hint: 0.1, 0.1
+    source: "misc/plug.png"
+    on_touch_up: app.root.get_screen("plugboard_screen").handle_touch_up(*args)
+
 <PlugHole@ButtonBehavior+Image>:
     source: "misc/ports.png"
     pos_hint: {'center_x': 0.5, 'center_y': 0.5}
     on_release: app.root.get_screen("plugboard_screen").plug_handler()
 
 <PlugBoard@GridLayout>:
-    padding: dp(30), dp(30), dp(30), dp(30)
+    padding: dp(30)
     canvas:
         Color:
-            rgba: 101/255, 67/255, 33/255, 1
+            rgba: 101 / 255, 67 / 255, 33 / 255, 1
         RoundedRectangle:
             pos: self.pos
             size: self.size
@@ -21,200 +30,175 @@
         Label:
             text: 'Q'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'W'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'E'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'R'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'T'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'Z'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'U'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'I'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'O'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'A'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'S'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'D'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'F'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'G'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'H'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'J'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'K'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'P'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'Y'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'X'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'C'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'V'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'B'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'N'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
         Label:
             text: 'M'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-    Label:
-        text: ''
+    Widget:
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
@@ -224,13 +208,24 @@
 
 <PlugboardScreen>
     name: "plugboard_screen"
-    AnchorLayout:
-        anchor_x: "left"
-        anchor_y: "top"
-        Button:
-            size_hint: 0.1, 0.1
-            text: "Go back!"
-            on_release: root.manager.current = "game_screen"
-    AnchorLayout:
-        padding: dp(30)
-        PlugBoard:
+    FloatLayout:
+        id: floating_widgets
+        AnchorLayout:
+            anchor_x: "left"
+            anchor_y: "top"
+            BoxLayout:
+                size_hint_y: 0.1
+                Button:
+                    text: "Go back!"
+                    on_release: root.manager.current = "game_screen"
+                Button:
+                    text: "Get a plug"
+                    on_release: root.get_plug()
+                Label:
+                    id: remove_plug
+                    text: ""
+
+        AnchorLayout:
+            padding: dp(30)
+            PlugBoard:
+                id: plug_board
