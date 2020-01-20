@@ -1,5 +1,6 @@
 # Microscopic Monks
 
+[banner](https://raw.githubusercontent.com/pyxiis/code-jam-6/master/microscopic-monks/banner.jpg)
 Primal is an uncompromising "roguelike" wilderness survival game. Explore the world, craft new technologies… the rest is up to you.
 
 ## Installation
