@@ -1,101 +1,27 @@
 from kivy.app import App
-from kivy.uix.image import AsyncImage
-from kivy.uix.label import Label
-from kivy.uix.floatlayout import FloatLayout
-from kivy.animation import Animation
-
-lorem = ""
-sentences = [
-    "Dino Tinder is a Tinder Clone adapted\n for the middle ages.",
-    "my",
-    "friends",
-]
-images = [
-    "https://placekitten.com/g/1080/1920",
-    "https://placekitten.com/g/200/300",
-    "https://placekitten.com/g/300/400",
-]
+from kivy.uix.screenmanager import ScreenManager
+from onboarding.onboarding import OnboardingScreen
+from swipe_card.swipe_cards import SwipingScreen, AfterSwipeScreen
+from profile_creation.createprofile import CreateProfile
+from kivy.lang import Builder
+from kivy.core.window import Window
 
 
-class MyOnboardWidget(FloatLayout):
-    steps = 0
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-        for index, image_url in enumerate(images):
-            image_object = AsyncImage(source=image_url, size_hint=(1, 1))
-            image_object.opacity = 1 if index == 0 else 0
-            setattr(self, f"image_{index}", image_object)
-            self.add_widget(image_object)
-
-        for index, sentence in enumerate(sentences):
-            label_object = Label(
-                text=lorem,
-                pos_hint={"center_x": 0.50, "center_y": 0.2},
-                color=[1, 0, 0, 1],
-                halign="left",
-                valign="middle",
-                font_size="15sp",
-                text_size=(400, 600),
-            )
-            label_object.opacity = 1 if index == 0 else 0
-            setattr(self, f"description_{index}", label_object)
-            self.add_widget(label_object)
-
-        self.add_widget(
-            Label(
-                text="Welcome to DinoTinder",
-                pos_hint={"center_x": 0.40, "center_y": 0.3},
-                color=[1, 0, 0, 1],
-                halign="left",
-                valign="middle",
-                font_size="25sp",
-            )
-        )
-
-    def animate(self, obj_out, obj_in):
-        appear = Animation(opacity=1, duration=1)
-        disappear = Animation(opacity=0, duration=1)
-        appear.start(obj_in)
-        disappear.start(obj_out)
-
-    def on_touch_down(self, touch):
-        if self.steps == 0:
-            self.animate(obj_out=self.image_0, obj_in=self.image_1)
-            self.animate(obj_out=self.description_0, obj_in=self.description_1)
-        if self.steps == 1:
-            self.animate(obj_out=self.image_1, obj_in=self.image_2)
-            self.animate(obj_out=self.description_1, obj_in=self.description_2)
-
-        self.steps += 1
-
-        return True
-
-
-class OnboardingApp(App):
+class TindosaurApp(App):
     def build(self):
-        return MyOnboardWidget()
+        Builder.load_file("onboarding/onboarding.kv")
+        Builder.load_file("profile_creation/createprofile.kv")
+        Builder.load_file("swipe_card/carousel.kv")
+        Window.clearcolor = (188 / 255, 170 / 255, 164 / 255, 1)
+        sm = ScreenManager()
+        sm.add_widget(OnboardingScreen(name="onboarding"))
+        sm.add_widget(CreateProfile(name="create_profile"))
+        sm.add_widget(SwipingScreen(name="swipe_cards"))
+        sm.add_widget(AfterSwipeScreen(name="after"))
+        return sm
 
 
 if __name__ == "__main__":
-    OnboardingApp().run()
-
-
-# def ola():
-#     print("HELLLOOO")
-#
-#
-# class CarouselApp(App):
-#     def build(self):
-#        #  carousel = Carousel(direction="right", loop=True)
-#        #  src = "https://placekitten.com/g/1080/1920"
-#        #  src_1 = "https://placekitten.com/g/1080/1920"
-#        #  image = AsyncImage(source=src)
-#        #  image1 = AsyncImage(source=src_1)
-#        #  carousel.add_widget(image)
-#        #  carousel.add_widget(image1)
-#        #  return carousel
-#
-#
-# CarouselApp().run()
+    # calling run method of the application will build the widget tree,
+    # and start the event loop.
+    TindosaurApp().run()
