@@ -17,6 +17,20 @@ class Footer(BoxLayout):
         super(Footer, self).__init__(**kwargs)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
+        self._open = False
+
+        self.actions = {
+            '1': self.about,
+            '8': self.mkdir,
+            '0': self.quit
+        }
+
+    def _match(
+        self, key: str, *args: Any, **kwargs: Any
+        ) -> Union[bool, None]:
+        
+        func = self.actions.get(key)
+        return func(*args, **kwargs) if func else None
 
     def _keyboard_closed(self) -> None:
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
@@ -29,38 +43,21 @@ class Footer(BoxLayout):
             text: str, 
             modifiers: ObservableList
         ) -> Union[bool, None]:
-        print(keycode)
 
-        if keycode[1] == '1':
-            self.about()
-        if keycode[1] == '2':
-            print('2')
-        if keycode[1] == '3':
-            print('3')
-        if keycode[1] == '4':
-            print('4')
-        if keycode[1] == '5':
-            print('5')
-        if keycode[1] == '6':
-            print('6')
-        if keycode[1] == '7':
-            print('7')
-        if keycode[1] == '8':
-            self.mkdir()
-        if keycode[1] == '9':
-            print('9')
-        if keycode[1] == '0':
-            self.quit()
-        return True
+        if not self._open and self._match(keycode[1]):
+            self._open = True
 
     def about(self) -> None:
-        popup = AboutPopup(size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
+        popup = AboutPopup(self, size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
+        return True
 
     def mkdir(self) -> None:
-        popup = Mkdir(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
+        popup = Mkdir(self, size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
+        return True
 
     def quit(self) -> None:
-        popup = QuitPopup(size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
+        popup = QuitPopup(self, size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
+        return True

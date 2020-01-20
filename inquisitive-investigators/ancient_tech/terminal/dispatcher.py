@@ -27,15 +27,13 @@ class Shell(EventDispatcher):
         self.process = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, 
             stderr=subprocess.STDOUT,
-            shell=True
+            shell=True,
         )
         line_iter = iter(self.process.stdout.readline, b'')
         self.dispatch('on_output', '\n'.encode())
         
-        for line in line_iter:
-            output += line.decode()
-
-            if show_output:
+        if show_output:
+            for line in line_iter:  
                 self.dispatch('on_output', line)
 
         self.dispatch('on_output', '\n'.encode())

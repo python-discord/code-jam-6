@@ -1,11 +1,27 @@
 from typing import Any
 from kivy.uix.popup import Popup
+from kivy.properties import ObjectProperty
 
 
-class AboutPopup(Popup):
+class BasePopup(Popup):
+    
+    def __init__(
+            self, ctx: 'Footer', *args: Any, **kwargs: Any
+        ) -> None:
+        super().__init__(*args, **kwargs)
+        self.ctx = ctx
 
-    def __init__(self, **kwargs: Any) -> None:
-        super().__init__(**kwargs)
+    def on_dismiss(self, *args: Any, **kwargs: Any):
+        self.ctx._open = False
+        return super(BasePopup, self).on_dismiss(
+            *args, **kwargs
+        )
+
+
+class AboutPopup(BasePopup):
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
         self.ids.AboutInfo.text = '''
         Scroll Effect! Hopefully it works!
         
@@ -16,11 +32,11 @@ class AboutPopup(Popup):
         '''
 
 
-class Mkdir(Popup):
+class Mkdir(BasePopup):
 
     def mkdir(self) -> None:
         print(self.ids.create.text)
 
 
-class QuitPopup(Popup):
+class QuitPopup(BasePopup):
     pass
