@@ -218,4 +218,4 @@ class GameScreen(Screen):
         )
 
     def change_game_title(self, btn, title):
-        print(title)
+        store_put(game_title=title)

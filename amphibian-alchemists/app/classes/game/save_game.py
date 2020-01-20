@@ -1,5 +1,4 @@
 import os
-from datetime import datetime
 
 from kivy.app import App
 from kivy.storage.jsonstore import JsonStore
