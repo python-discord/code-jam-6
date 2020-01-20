@@ -70,7 +70,8 @@ class MyOnboardWidget(FloatLayout):
             self.animate(obj_out=self.description_1, obj_in=self.description_2)
 
         self.steps += 1
-
+        if self.steps > 2:
+            self.parent.manager.current = "create_profile"
         return True
 
 
@@ -78,10 +79,15 @@ class OnboardingScreen(Screen):
     pass
 
 
+class CreateProfileTest(Screen):
+    pass
+
+
 class OnboardingApp(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(OnboardingScreen(name="onboarding"))
+        sm.add_widget(CreateProfileTest(name="create_profile"))
         return sm
 
 
