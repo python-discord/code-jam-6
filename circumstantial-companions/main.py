@@ -60,7 +60,9 @@ class Renderer(Widget):
         if self.mesh.indices == self.indices:
             print(touch.spos)
             x, y ,z = self.mesh.indices[:3]
-            print(*(self.mesh.vertices[i * 4:i * 4 + 4] for i in (x, y, z)))
+            # with objloader sorted i can find the actual face coordinates and compare them
+            # to touch.spos --- hopefully this leads to collision detection
+            print(*(self.mesh.vertices[i * 8:i * 8 + 3] for i in (x, y, z)))
             self.mesh.indices = self.fewer
         else:
             self.mesh.indices = self.indices
