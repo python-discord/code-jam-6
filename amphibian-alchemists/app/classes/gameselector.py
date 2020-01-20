@@ -3,7 +3,6 @@ import os
 from kivy.app import App
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
-from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.label import Label
 from kivy.properties import BooleanProperty
@@ -50,10 +49,12 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
 
 
 class GameSelectorScreen(Screen):
+
     def on_enter(self, *args):
         if not os.path.exists(DATA_DIR):
             store = JsonStore(DATA_DIR)
             store.put("latest_game_id", id=None)
+        self.populate()  # FIXME: this is going to be called whenever you enter on the screen
 
     def populate(self):
         from string import ascii_lowercase
@@ -68,4 +69,3 @@ class GameSelectorScreen(Screen):
 
     def load_game(self):
         print(1)
-

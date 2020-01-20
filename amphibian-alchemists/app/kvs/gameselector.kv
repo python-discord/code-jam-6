@@ -1,4 +1,4 @@
-<SelectableLabel@RecycleDataViewBehavior+Label>:
+<SelectableLabel>:
     canvas.before:
         Color:
             rgba: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 1)
@@ -15,34 +15,39 @@
             size: self.size
             pos: self.pos
     rv: rv
-    orientation: "vertical"
-    BoxLayout:
-        cols: 3
-        rows: 1
-        size_hint_y: None
-        height: dp(108)
-        padding: dp(8)
-        spacing: dp(16)
-        Button:
-            text: "Go back"
-            on_release: root.manager.current = "main_screen"
-        Button:
-            text: "Load game"
-            on_release: root.load_game
-        Button:
-            text: "New game"
-            on_release: root.start_new_game
+    AnchorLayout:
+        anchor_y: "top"
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint_y: 0.2
+            padding: dp(8)
+            spacing: dp(16)
+            Button:
+                text: "Go back"
+                on_press:
+                    root.manager.transition.direction = "left"
+                    root.manager.current = "main_screen"
+            Button:
+                text: "Load game"
+                on_press: root.load_game
+            Button:
+                text: "New game"
+                on_press: root.start_new_game
+                on_release: root.manager.current = "game_screen"
 
-    SelectableRecycleBoxLayout:
-        id: rv
-        scroll_type: ['bars', 'content']
-        scroll_wheel_distance: dp(114)
-        bar_width: dp(12)
-        viewclass: "SelectableLabel"
-#        RecycleBoxLayout:
-#            default_size: None, dp(56)
-#            default_size_hint: 1, None
-#            size_hint_y: None
-#            height: self.minimum_height
-#            orientation: "vertical"
-#            spacing: dp(2)
+    AnchorLayout:
+        RecycleView:
+            id: rv
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(114)
+            bar_width: dp(12)
+            viewclass: "SelectableLabel"
+            size_hint: 0.8, 0.5
+            SelectableRecycleBoxLayout:
+                default_size: None, dp(56)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: "vertical"
+                spacing: dp(2)
