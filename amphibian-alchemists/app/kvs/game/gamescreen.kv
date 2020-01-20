@@ -1,3 +1,16 @@
+<GameMenuPopup@Popup>:
+    title: "Select..."
+    size_hint: 0.5, 0.5
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: "Save Progress to Fallback to"
+            on_release:
+                root.dismiss()
+        Button:
+            text: "Exit"
+            on_release: root.dismiss()
+
 <GameScreen>:
     name: "game_screen"
     AnchorLayout:
@@ -12,10 +25,16 @@
                 id: enigma_keyboard
     AnchorLayout:
         anchor_x : "left"
-        Button:
-            text: "paper"
-            size_hint: 0.1, 1
-            on_release: root.manager.current = "paper"
+        BoxLayout:
+            orientation: "vertical"
+            Button:
+                text: "Menu"
+                size_hint: 0.1, 0.1
+                on_release: Factory.GameMenuPopup().open()
+            Button:
+                text: "paper"
+                size_hint: 0.1, 1
+                on_release: root.manager.current = "paper"
     AnchorLayout:
         anchor_x : "right"
         Button:

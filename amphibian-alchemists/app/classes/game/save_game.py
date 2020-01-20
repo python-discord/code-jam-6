@@ -15,6 +15,7 @@ def store_put(
         ciphered_text: str = None,
         unciphered_text: str = None,
         current_output_text: str = None,
+        last_saved_output_text: str = None,
         created_date: str = None,
         last_saved_date: str = None,
         encrypted_state=None,
@@ -32,6 +33,8 @@ def store_put(
         unciphered_text = game["unciphered_text"]
     if current_output_text is None:
         current_output_text = game["current_output_text"]
+    if last_saved_output_text is None:
+        last_saved_output_text = game["last_saved_output_text"]
     if created_date is None:
         created_date = game["created_date"]
     if last_saved_state is None:
@@ -48,6 +51,7 @@ def store_put(
         ciphered_text=ciphered_text,
         unciphered_text=unciphered_text,
         current_output_text=current_output_text,
+        last_saved_output_text=last_saved_output_text,
         created_date=created_date,
         last_saved_date=last_saved_date,
         encrypted_state=encrypted_state,
@@ -56,13 +60,24 @@ def store_put(
     )
 
 
+def load_old_game():
+    game_id = App.get_running_app().game_id
+    store = JsonStore(DATA_DIR)
+    game = store.get(str(game_id))
+    store_put(
+        last_saved_date=datetime.now().isoformat(),
+        current_state=game["last_saved_state"],
+        current_output_text=game["last_saved_output_text"]
+    )
+
+
 def save_game(title: str = None):
     game_id = App.get_running_app().game_id
     store = JsonStore(DATA_DIR)
     game = store.get(str(game_id))
-    current_state = game["current_state"]
     store_put(
         game_title=title,
         last_saved_date=datetime.now().isoformat(),
-        last_saved_state=current_state
+        last_saved_state=game["current_state"],
+        last_saved_output_text=game["current_outpust_text"]
     )

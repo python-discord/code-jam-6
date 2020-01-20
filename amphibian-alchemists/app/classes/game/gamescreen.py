@@ -1,9 +1,7 @@
-from datetime import datetime
 import os
+from datetime import datetime
 from random import sample
 from string import ascii_uppercase
-
-from .save_game import store_put
 
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
@@ -13,6 +11,8 @@ from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from requests import get
+
+from .save_game import store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
@@ -99,6 +99,7 @@ def setup_new_game_settings():
         ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
         unciphered_text=text,
         current_output_text="",
+        last_saved_output_text="",
         created_date=datetime.now().isoformat(),
         last_saved_date=datetime.now().isoformat(),
         encrypted_state={"reflector": "B", "rotors": rotors, "plugs": plugs},
