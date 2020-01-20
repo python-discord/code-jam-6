@@ -1,57 +1,13 @@
 import os
 import sys
 import shlex
-import subprocess
 
-from kivy.event import EventDispatcher
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.textinput import TextInput
 from kivy.properties import (
     Clock,
     partial,
-    ListProperty,
-    ObjectProperty,
-    StringProperty,
-    NumericProperty,
+    ObjectProperty
 )
-
-from .utils.utils import threaded
-
-
-class Shell(EventDispatcher):
-    __events__ = ('on_output', 'on_complete')
-    process = ObjectProperty()
-
-    @threaded
-    def run_cmd(self, cmd, show_output=True, *args, **kwargs):
-        """
-        Runs a command inputted into the terminal
-        on a separate thread.
-
-        Dispatches the output during execution.
-        """
-        output = ''
-        self.process = subprocess.Popen(
-            cmd, stdout=subprocess.PIPE, 
-            stderr=subprocess.STDOUT,
-            shell=True
-        )
-        line_iter = iter(self.process.stdout.readline, b'')
-        self.dispatch('on_output', '\n'.encode())
-        
-        for line in line_iter:
-            output += line.decode()
-
-            if show_output:
-                self.dispatch('on_output', line)
-
-        self.dispatch('on_output', '\n'.encode())
-        self.dispatch('on_complete', output)
-
-    @threaded
-    def stop(self, *args, **kwargs):
-        if self.process:
-            self.process.kill()
 
 
 class TerminalInput(TextInput):
@@ -139,24 +95,3 @@ class TerminalInput(TextInput):
 
     def on_complete(self, output):
         self.prompt()
-
-
-class Terminal(BoxLayout, Shell):
-    terminal_input = ObjectProperty()
-    scroll_view = ObjectProperty()
-
-    foreground_color = ListProperty((1, 1, 1, 1))
-    background_color = ListProperty((0, 0, 0, 1))
-
-    font_name = StringProperty('./ancient_tech/static/retro_font.ttf')
-    font_size = NumericProperty(14)
-
-    def __init__(self, *args, **kwargs):
-        super(Terminal, self).__init__(*args, **kwargs)
-
-    def on_output(self, output):
-        self.terminal_input.on_output(output)
-
-    def on_complete(self, output):
-        self.terminal_input.on_complete(output)
-        self.terminal_input.focus = True
