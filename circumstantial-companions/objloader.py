@@ -1,3 +1,5 @@
+from itertools import islice
+
 class MeshData(object):
     def __init__(self, **kwargs):
         self.name = kwargs.get("name")
@@ -8,12 +10,13 @@ class MeshData(object):
         self.indices = []
 
     def calculate_normals(self):
-        for i in range(len(self.indices) / (3)):
-            fi = i * 3
-            indices = v1i, v2i, v3i = self.indices[fi:fi + 3]
+        indices = iter(self.indices)
+        while True:
+            slices = islice(indices, 3)
+            if not slices:
+                break
 
-            vs = self.vertices
-            p1, p2, p3 = [vs[index:index + 3] for index in indices]
+            p1, p2, p3 = [self.vertices[index:index + 3] for index in indices]
 
             v = [p2[i] - p1[i] for i in range(3)]
             u = [p3[i] - p1[i] for i in range(3)]
@@ -21,7 +24,7 @@ class MeshData(object):
             pairs = ((1, 2), (2, 0), (0, 1))
             n = [u[a] * v[b] - u[b] * v[a] for a, b in pairs]
 
-            for index in indices:
+            for index in slices:
                 self.vertices[index + 3: index + 6] = n
 
 class ObjFile:
