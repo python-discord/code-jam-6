@@ -57,26 +57,3 @@ def store_put(
         current_state=current_state,
         last_saved_state=last_saved_state,
     )
-
-
-def load_old_game():
-    game_id = App.get_running_app().game_id
-    store = JsonStore(DATA_DIR)
-    game = store.get(str(game_id))
-    store_put(
-        last_saved_date=datetime.now().isoformat(),
-        current_state=game["last_saved_state"],
-        current_output_text=game["last_saved_output_text"],
-    )
-
-
-def save_game(title: str = None):
-    game_id = App.get_running_app().game_id
-    store = JsonStore(DATA_DIR)
-    game = store.get(str(game_id))
-    store_put(
-        game_title=title,
-        last_saved_date=datetime.now().isoformat(),
-        last_saved_state=game["current_state"],
-        last_saved_output_text=game["current_outpust_text"],
-    )

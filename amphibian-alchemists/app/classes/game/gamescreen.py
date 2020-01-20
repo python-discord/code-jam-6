@@ -196,3 +196,26 @@ class GameScreen(Screen):
         game_id = str(App.get_running_app().game_id)
         current_output_text = store.get(game_id)["current_output_text"]
         store_put(current_output_text=current_output_text + key.name)
+
+    def load_old_game(self):
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        game = store.get(str(game_id))
+        store_put(
+            last_saved_date=datetime.now().isoformat(),
+            current_state=game["last_saved_state"],
+            current_output_text=game["last_saved_output_text"],
+        )
+
+    def save_game(self):
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        game = store.get(str(game_id))
+        store_put(
+            last_saved_date=datetime.now().isoformat(),
+            last_saved_state=game["current_state"],
+            last_saved_output_text=game["current_outpust_text"],
+        )
+
+    def change_game_title(self, btn, title):
+        print(title)

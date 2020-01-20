@@ -1,15 +1,41 @@
+<GameTitlePopup@Popup>:
+    title: "There is already a default"
+    size_hint: 0.5, 0.5
+    BoxLayout:
+        orientation: "vertical"
+        TextInput:
+            id: game_title_input
+            size_hint_x: 0.7
+        Button:
+            text: "Save game title"
+            on_release:
+                app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
+                root.dismiss()
+        Button:
+            text: "Cancel"
+            on_release: root.dismiss()
+
 <GameMenuPopup@Popup>:
     title: "Select..."
     size_hint: 0.5, 0.5
     BoxLayout:
         orientation: "vertical"
         Button:
-            text: "Save Progress to Fallback to"
+            text: "Give this current game a title"
+            on_release: Factory.GameTitlePopup().open()
+        Button:
+            text: "Save a copy of current progress"
             on_release:
+                app.root.get_screen("game_screen").save_game()
+                root.dismiss()
+        Button:
+            text: "Load old copy (WARNING: Overrides current progress!)"
+            on_release:
+                app.root.get_screen("game_screen").load_old_game()
                 root.dismiss()
         Button:
             text: "Exit"
-            on_release: root.dismiss()
+            on_release: root.manager.current = "main_screen"
 
 <GameScreen>:
     name: "game_screen"
