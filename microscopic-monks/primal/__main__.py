@@ -20,16 +20,16 @@ class PrimalGame(Engine):
         self.player.pos = [i / 2 for i in Window.size]
         if 'w' in self.pressed_keys:
             for i in self.sprites:
-                i.vel_y -= 10
+                i.vel_y -= 50
         if 's' in self.pressed_keys:
             for i in self.sprites:
-                i.vel_y += 10
+                i.vel_y += 50
         if 'a' in self.pressed_keys:
             for i in self.sprites:
-                i.vel_x += 10
+                i.vel_x += 50
         if 'd' in self.pressed_keys:
             for i in self.sprites:
-                i.vel_x -= 10
+                i.vel_x -= 50
 
 
 class Application(App):
