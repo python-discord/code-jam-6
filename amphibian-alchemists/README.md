@@ -1,6 +1,8 @@
 # Enigma Communication
 By: Amphibian Alchemists
 
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 The Enigma Machine from WWII is the most infamous encryption device of the era. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths.
 
 Table of Contents:
@@ -10,9 +12,9 @@ Table of Contents:
 
 ---
 ### Setup
-1. Clone or download this repository. 
-2. Creating a virtual environment. 
-3. Activate it and `pip install kivy`. 
+1. Clone or download this repository.
+2. Creating a virtual environment.
+3. Activate it and `pip install kivy`.
 4. In terminal, run main.py by doing `python main.py`
 
 ---
@@ -27,12 +29,12 @@ Every 24 hours, the Germans switched the rotors and plugboard settings according
 
 You are given these settings in order to decrypt the message. Your job is to configure the Enigma machine and produce logical, Anglicized/English text. Once you have configured the machine, using your keyboard, you can (randomly) type out the ciphered characters and will be magically typing out the outputted, logical characters if the machine is configured correctly.
 
-When you create a new game, you are shown the Enigma machine. 
+When you create a new game, you are shown the Enigma machine.
 
 - By pressing on a rotor, you will first be led to a new screen where you can rotate the rotor to its proper initial settings
 - By pressing on the plugboard, you will be led to a new screen where you can drag-and-drop plugs to its proper initial place.
 
-Once you have finished configuring both the plugboard and rotors, go to the main enigma machine and start randomly pressing keys. You can see which keys are being typed by the animations or you can press on the piece of paper at the top right to see the ciphered text. 
+Once you have finished configuring both the plugboard and rotors, go to the main enigma machine and start randomly pressing keys. You can see which keys are being typed by the animations or you can press on the piece of paper at the top right to see the ciphered text.
 
 The output characters when you type will be shown and automatically configured in another piece of paper. You can restart the game if you misconfigured the machine. __Remember, only start typing when you have finished configurations!__
 
