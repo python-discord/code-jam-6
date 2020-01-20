@@ -4,34 +4,33 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pyaudio import PyAudio, paInt16
 from scipy.io import wavfile
-np.seterr(all='raise')
-CHUNK = 4000
-DATA_RATE = 400
+
 RATE = 16000
+DOT_DURATION_THRESHOLD_SEC = .08
+DASH_DURATION_THRESHOLD_SEC = .24
+LETTER_END_DURATION_THRESHOLD_SEC = .24
+WORD_END_DURATION_THRESHOLD_SEC = .56
+ACTIVE_THRESHOLD = 15
+DATA_RATE = 200
+CHUNK = 4000
+
+NUM_CHUNK_PER_SEC = RATE/CHUNK
 NUM_BITS_PER_CHUNK = int(CHUNK/DATA_RATE)
-NUM_BITS_PER_SEC = int(RATE/DATA_RATE)
-NUM_CHANNELS = 1
-active_threshold = 15
+NUM_BITS_PER_SEC = RATE / DATA_RATE
 
-DOT_DURATION_THRESHOLD_MS = .08
-DASH_DURATION_THRESHOLD_MS = .24
-LETTER_END_DURATION_THRESHOLD_MS = .24
-WORD_END_DURATION_THRESHOLD_MS = .56
-
-DOT_DURATION_THRESHOLD_BIT = int(DATA_RATE*DOT_DURATION_THRESHOLD_MS/NUM_BITS_PER_CHUNK)
-DASH_DURATION_THRESHOLD_BIT = int(DATA_RATE*DASH_DURATION_THRESHOLD_MS/NUM_BITS_PER_CHUNK)
-LETTER_END_DURATION_THRESHOLD_BIT = int(DATA_RATE*LETTER_END_DURATION_THRESHOLD_MS/NUM_BITS_PER_CHUNK)
-WORD_END_DURATION_THRESHOLD_BIT = int(DATA_RATE*WORD_END_DURATION_THRESHOLD_MS/NUM_BITS_PER_CHUNK)
+DOT_DURATION_THRESHOLD_BIT = int(DOT_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+DASH_DURATION_THRESHOLD_BIT = int(DASH_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+LETTER_END_DURATION_THRESHOLD_BIT = int(LETTER_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+WORD_END_DURATION_THRESHOLD_BIT = int(WORD_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 
 
 class MorseSpeechToText:
     def __init__(self, debug=False, debug_plot=False):
         self.debug = debug
         self.debug_plot = debug_plot
-        self.channels = NUM_CHANNELS
         self.pa = PyAudio()
         self.stream = self.pa.open(format=paInt16,
-                                   channels=NUM_CHANNELS,
+                                   channels=1,
                                    rate=RATE,
                                    input=True,
                                    input_device_index=-1,
@@ -64,12 +63,15 @@ class MorseSpeechToText:
     def get_voice_activity(self, data):
         data_reshaped = data.reshape((NUM_BITS_PER_CHUNK, DATA_RATE))
         intensity = np.log(np.mean(data_reshaped ** 2, axis=1))
-        speech_activity = (intensity > active_threshold).astype(int)
+        speech_activity = (intensity > ACTIVE_THRESHOLD).astype(int)
         if self.debug:
             print(f'max intensity: {max(intensity)}')
             print(f'min intensity: {min(intensity)}')
         if self. debug_plot:
-            plt.plot(np.arange(len(data)) / RATE, (data-min(data))/(max(data)-min(data)))
+            plt.plot(np.arange(len(data)) / RATE, (data-min(data))/(max(data)-min(data)), label='chunked signal')
+            plt.plot(np.arange(len(speech_activity)) / DATA_RATE, speech_activity, label='active_vec')
+            plt.legend()
+            plt.show()
 
         return speech_activity
 
@@ -103,13 +105,11 @@ class MorseSpeechToText:
             print('onoffset_indices: ' + str(onoffset_indices))
             print('segment_durations: ' + str(segment_durations))
             print('old buffer: ' + str(old_buffer))
-        if self.debug_plot:
-            plt.plot(np.arange(0, len(active_vec)) / 40, active_vec)
-            plt.show()
+
         return morse, old_buffer
 
 
 if __name__ == "__main__":
     ms = MorseSpeechToText(debug=False, debug_plot=False)
     # ms.run()
-    ms.run_wav(r'morse_code_alphabet_16k.wav')
+    ms.run_wav(r'C:\Users\kkawa\PycharmProjects\code-jam-6\code-jam-6\tactless-tricksters\speech_to_morse_prototype\morse_code_alphabet_16k.wav')
