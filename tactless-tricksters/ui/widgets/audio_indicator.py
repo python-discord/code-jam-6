@@ -1,7 +1,6 @@
 from kivy.uix.boxlayout import BoxLayout
 from kivy.metrics import dp
 from kivy.app import App
-from kivy.graphics import Color, Rectangle
 
 from kivymd.label import MDLabel
 from kivymd.cards import MDCard
