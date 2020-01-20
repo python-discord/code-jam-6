@@ -26,9 +26,8 @@ class Footer(BoxLayout):
         }
 
     def _match(
-        self, key: str, *args: Any, **kwargs: Any
-        ) -> Union[bool, None]:
-        
+            self, key: str, *args: Any, **kwargs: Any
+    ) -> Union[bool, None]:
         func = self.actions.get(key)
         return func(*args, **kwargs) if func else None
 
@@ -37,13 +36,12 @@ class Footer(BoxLayout):
         self._keyboard = None
 
     def _on_keyboard_down(
-            self, 
-            keyboard: Keyboard, 
-            keycode: Tuple[str, int], 
-            text: str, 
+            self,
+            keyboard: Keyboard,
+            keycode: Tuple[str, int],
+            text: str,
             modifiers: ObservableList
-        ) -> Union[bool, None]:
-
+    ) -> Union[bool, None]:
         if not self._open and self._match(keycode[1]):
             self._open = True
 
