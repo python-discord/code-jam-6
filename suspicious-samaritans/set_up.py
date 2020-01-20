@@ -25,13 +25,35 @@ locale = {
         "detectedos": "Detected OS: Windows ({os_bit}bit)",
         "detectedoscolour": (
             "{blue_italic}Detected OS: {light_green_italic}Mac OS "
-            "{blue_italic}({light_green_italic}{{os_bit}} {blue_italic})"
+            "{blue_italic}({light_green_italic}{{os_bit}}bit{blue_italic})"
         ).format(blue_italic="\x1b[0;3;34m", light_green_italic="\x1b[0;1;3;32m"),
         "macos32bit": "Your Mac OS reported as being 32bit - this isn't supported by FFmpeg",
         "ffmpegdown": "Downloading FFmpeg...",
         "extract": "Extracting files...",
         "path": "Adding FFmpeg to PATH",
-        "run": "Now run main.py",
+        "run": "Now run pipenv run main.py",
+    },
+    "fr": {
+        "depinstall": "Installation des dépendances...",
+        "done": "Terminé!",
+        "getsys": "Identification de l'OS...",
+        "nolinuxmain": "Il semblerait que vous utilisez une distribution de linux. "
+        "Utilisez le gestionaire de paquets pour installer FFmpeg.\n"
+        "(Utilisez apt sur Ubuntu par exemple)\n\n"
+        "Si ce message est apparu de manière erronée, téléchargez le build"
+        " dont vous avez besoin ici: https://ffmpeg.zeranoe.com/builds/\n\n",
+        "nolinuxstatus": " --- Le script va se terminer, FFmpeg n'a pas été installé --- ",
+        "detectedos": "OS détecté: Windows ({os_bit}bit)",
+        "detectedoscolour": (
+            "{blue_italic}OS détecté: {light_green_italic}Mac OS "
+            "{blue_italic}({light_green_italic}{{os_bit}}bit{blue_italic})"
+        ).format(blue_italic="\x1b[0;3;34m", light_green_italic="\x1b[0;1;3;32m"),
+        "macos32bit": "Votre Mac OS a été détecté en tant que 32bit"
+        " - ce format n'est pas pris en charge par FFmpeg",
+        "ffmpegdown": "Téléchargement de FFmpeg...",
+        "extract": "Extraction des fichiers...",
+        "path": "Ajout de FFmpeg à PATH",
+        "run": "Veuillez lancer pipenv run main.py",
     }
 }
 
