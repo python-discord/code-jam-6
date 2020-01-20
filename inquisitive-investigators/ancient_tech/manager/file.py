@@ -34,7 +34,7 @@ class NewFile(Button):
             else:
                 self.ctx.update(state=2, file=data)
 
-            self.ctx.current_dir = str(path)
+            self.parent.parent.parent.ids.header.current_dir = str(path)
 
         else:
             Logger.info('FileBrowser: Not a directory!')
