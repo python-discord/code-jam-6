@@ -88,7 +88,7 @@ class ObjFile:
                 vertex = list(map(float, rest))
                 if swapyz:
                     vertex[1:] = vertex[-1:0:-1]
-               (self.vertices if start == 'v' else self.normals).append(vertex)
+                (self.vertices if start == 'v' else self.normals).append(vertex)
             elif start == 'vt':
                 self.texcoords.append(map(float, rest))
             elif start == 'f':
