@@ -1,4 +1,6 @@
+from kivy.animation import Animation
 from kivy.factory import Factory
+from kivy.metrics import dp
 from kivy.properties import BoundedNumericProperty
 from kivy.uix.screenmanager import Screen
 
@@ -14,7 +16,11 @@ class PlugboardScreen(Screen):
             self.ids.remove_plug.text = "Drag the plug here to discard..."
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
             plug = Factory.Plug(
-                size_hint=(None, None), size=self.ids.plug_board.plug_reference.size
+                size_hint=(None, None),
+                size=[
+                    self.ids.plug_board.plug_reference.size[0] - dp(10),
+                    self.ids.plug_board.plug_reference.size[1] - dp(10),
+                ],
             )
             self.ids.floating_widgets.add_widget(plug)
             self.last_plugs_count = self.plugs_in_screen
@@ -22,12 +28,8 @@ class PlugboardScreen(Screen):
 
     def handle_touch_up(self, instance, touch):
         if instance.collide_point(*touch.pos):
+            self.delete_from_pair(instance)
             if instance.collide_widget(self.ids.remove_plug):
-                for item in self.pairs_of_plugs.items():
-                    if instance.plugged_in in item[1]:
-                        del self.pairs_of_plugs[item[0]]
-                        break
-
                 self.ids.floating_widgets.remove_widget(instance)
                 self.last_plugs_count = self.plugs_in_screen
                 self.plugs_in_screen -= 1
@@ -40,12 +42,8 @@ class PlugboardScreen(Screen):
                         if child.name not in self.all_plugged:
                             instance.center = child.center
                             instance.plugged_in = child.name
-                        elif instance.plugged_in == child.name:
-                            self.all_plugged.remove(instance.plugged_in)
-                            instance.plugged_in == ""
-                            instance.pos = [0, 0]
                         else:
-                            instance.pos = [0, 0]
+                            self.on_plugged_out(instance)
                         return
 
     def on_plugged_in(self, instance, value):
@@ -62,7 +60,25 @@ class PlugboardScreen(Screen):
                     ]
                 }
             )
+
             self.ids.floating_widgets.get_a_plug.disabled = False
+
+    def on_plugged_out(self, instance):
+        if instance.plugged_in in self.all_plugged:
+            self.all_plugged.remove(instance.plugged_in)
+        instance.plugged_in == ""
+        self.animate_positioning(instance)
+        return True
+
+    def animate_positioning(self, instance):
+        anim = Animation(pos=[0, 0], duration=0.5)
+        anim.start(instance)
+
+    def delete_from_pair(self, instance):
+        for item in self.pairs_of_plugs.items():
+            if instance.plugged_in in item[1]:
+                del self.pairs_of_plugs[item[0]]
+                break
 
     def on_plugs_in_screen(self, instance, value):
         if value % 2 == 0:
@@ -84,5 +100,9 @@ class PlugboardScreen(Screen):
                     isinstance(child, Factory.Plug)
                     and child.plugged_in == instance.name
                 ):
-                    child.size = self.ids.plug_board.plug_reference.size
                     child.center = instance.center
+                else:
+                    child.size = (
+                        self.ids.plug_board.plug_reference.size[0] - dp(10),
+                        self.ids.plug_board.plug_reference.size[1] - dp(10),
+                    )
