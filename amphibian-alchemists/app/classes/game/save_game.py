@@ -67,7 +67,7 @@ def load_old_game():
     store_put(
         last_saved_date=datetime.now().isoformat(),
         current_state=game["last_saved_state"],
-        current_output_text=game["last_saved_output_text"]
+        current_output_text=game["last_saved_output_text"],
     )
 
 
@@ -79,5 +79,5 @@ def save_game(title: str = None):
         game_title=title,
         last_saved_date=datetime.now().isoformat(),
         last_saved_state=game["current_state"],
-        last_saved_output_text=game["current_outpust_text"]
+        last_saved_output_text=game["current_outpust_text"],
     )
