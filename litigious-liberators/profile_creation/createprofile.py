@@ -20,7 +20,7 @@ class CreateProfileApp(App):
     def build(self):
         sm = ScreenManager()
         sm.add_widget(CreateProfile(name="create_profile"))
-        sm.add_widget(AfterSwipeScreen(name="swipe_cards"))
+        sm.add_widget(AfterSwipeScreen(name="profile_selection"))
         return sm
 
 
