@@ -17,7 +17,7 @@ from kivy.uix.button import Button
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview import RecycleView
@@ -73,7 +73,7 @@ class RV(RecycleView):
         self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
 
     def generate(self, f):
-        return NewFile(self, str(f), text='').getDict()
+        return NewFile(ctx=self, txt=str(f), text='').getDict()
 
 
 class Files(RecycleBoxLayout):
@@ -81,14 +81,14 @@ class Files(RecycleBoxLayout):
 
 
 class NewFile(Button):
+    ctx = ObjectProperty()
+    txt = StringProperty()
 
-    def __init__(self, ctx, txt, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.txt = txt
-        self.ctx = ctx
 
         if self.txt != '<-':
-            path = Path(txt)
+            path = Path(self.txt)
             stats = path.stat()
 
             self.ids.name.text = path.name
