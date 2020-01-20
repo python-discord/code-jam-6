@@ -1,38 +1,44 @@
 from kivy.config import Config
 from kivy.app import App
-from kivy.core.window import Window
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 import os
 from os import listdir
 from random import shuffle
 from copy import deepcopy
-from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition, SwapTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from yaml import safe_load
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
-
-
-class Slide(Screen):
-    def __init__(self, profile, **kwargs):
-        super(Slide, self).__init__(**kwargs)
-        self.ids.picture.source = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), f"../profiles/pictures/{profile['Picture']}"
-        )
-        self.ids.name.text += profile["Name"]
-        self.ids.species.text += profile["Species"]
-        self.ids.age.text += str(profile["Age"])
-        self.ids.job.text += profile["What I do"]
 
 
 class Root(BoxLayout):
     swiper_obj = ObjectProperty(None)
 
 
-class Swiper(ScreenManager):
+class SelectionScreen(Screen):
+    pass
+
+
+class PostSelectionScreen(Screen):
+    pass
+
+
+class ProfileCard(Screen):
+    def __init__(self, profile, **kwargs):
+        super(ProfileCard, self).__init__(**kwargs)
+        self.ids.picture.source = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), f"../profiles/pictures/{profile['Picture']}"
+        )
+        about_text = f"I'm a {profile['Age']} year old {profile['Species']}"
+        self.ids.name.text = profile["Name"]
+        self.ids.about.text = about_text
+        self.ids.job.text += profile["What I do"]
+
+
+class ProfileList(ScreenManager):
     def __init__(self, **kwargs):
-        super(Swiper, self).__init__(**kwargs)
+        super(ProfileList, self).__init__(**kwargs)
         self.profile_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "../profiles/write-ups"
         )
@@ -44,7 +50,7 @@ class Swiper(ScreenManager):
         self.loop = True
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
             profile = safe_load(profile_file.read())
-            self.add_widget(Slide(profile))
+            self.add_widget(ProfileCard(profile))
 
     @property
     def selected(self):
@@ -54,7 +60,7 @@ class Swiper(ScreenManager):
     def selected(self, value):
         self._selected = value
         if len(self._selected) >= self.limit:
-            App.get_running_app().root.current = "After"
+            App.get_running_app().root.current = "post_selection_screen"
 
     def on_touch_down(self, touch):
         if touch.is_mouse_scrolling:
@@ -63,8 +69,6 @@ class Swiper(ScreenManager):
                 if next_profile not in self.selected:
                     break
             if touch.button == "scrolldown":
-                #  popup = SwipePopup()
-                #  popup.open()
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
                     current = self.current_screen
@@ -72,15 +76,14 @@ class Swiper(ScreenManager):
                     name_for_set = name_for_set.split(".")[0] + ".yml"
                     self.selected |= {name_for_set}
                     trans = SwapTransition()
-                    self.switch_to(Slide(profile), direction="right", transition=trans)
+                    self.switch_to(ProfileCard(profile), direction="right", transition=trans)
                     self.remove_widget(current)
 
             elif touch.button == "scrollup":
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
                     current = self.current_screen
-                    trans = CardTransition(mode="push")
-                    self.switch_to(Slide(profile), direction="left", transition=trans)
+                    self.switch_to(ProfileCard(profile), direction="right")
                     self.remove_widget(current)
 
     @staticmethod
@@ -91,32 +94,17 @@ class Swiper(ScreenManager):
                 yield element
 
 
-class SwipePopup(Popup):
-    def change_screen(self):
-        App.get_running_app().root.current = "After"
-        self.dismiss()
-
-
-class SwipingScreen(Screen):
-    pass
-
-
-class AfterSwipeScreen(Screen):
-    pass
-
-
-class CarouselApp(App):
+class ProfilesApp(App):
     def build(self):
-        Window.clearcolor = (188 / 255, 170 / 255, 164 / 255, 1)
         self.sm = ScreenManager()
-        self.start_screen = SwipingScreen()
-        self.second_screen = AfterSwipeScreen()
-        self.sm.add_widget(self.start_screen)
-        self.sm.add_widget(self.second_screen)
+        self.selection_screen = SelectionScreen()
+        self.post_selection_screen = PostSelectionScreen()
+        self.sm.add_widget(self.selection_screen)
+        self.sm.add_widget(self.post_selection_screen)
         return self.sm
 
 
 if __name__ == "__main__":
     # calling run method of the application will build the widget tree,
     # and start the event loop.
-    CarouselApp().run()
+    ProfilesApp().run()
