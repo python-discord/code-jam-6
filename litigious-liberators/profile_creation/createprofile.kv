@@ -1,0 +1,176 @@
+#:kivy 1.11.1
+<CreateProfile>
+    ProfileSwiper:
+        id: profile_carousel
+        direction: "right"
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'My Name is'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                TextInput:
+                    font_size: '30dp'
+                    multiline: False
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_next()
+                Button:
+                    text: 'Continue'
+                    on_release: root.ids.profile_carousel.load_next()
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'I am a'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                ToggleButton:
+                    text: 'Woman'
+                    group: 'sex'
+                    state: 'down'
+                ToggleButton:
+                    text: 'Man'
+                    group: 'sex'
+                ToggleButton:
+                    text: 'Other'
+                    group: 'sex'
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_previous()
+                Button:
+                    text: 'Continue'
+                    on_release: root.ids.profile_carousel.load_next()
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'My sexual orientation is'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                height: root.height / 2
+                ToggleButton:
+                    text: 'Straight'
+                ToggleButton:
+                    text: 'Gay'
+                ToggleButton:
+                    text: 'Lesbian'
+                ToggleButton:
+                    text: 'Bisexual'
+                ToggleButton:
+                    text: 'Asexual'
+                ToggleButton:
+                    text: 'Demisexual'
+                ToggleButton:
+                    text: 'Pansexual'
+                ToggleButton:
+                    text: 'Queer'
+                ToggleButton:
+                    text: 'Bicurious'
+                ToggleButton:
+                    text: 'Aromantic'
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_previous()
+                Button:
+                    text: 'Continue'
+                    on_release: root.ids.profile_carousel.load_next()
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'Show me'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                ToggleButton:
+                    text: 'Women'
+                    group: 'sex'
+                    state: 'down'
+                ToggleButton:
+                    text: 'Men'
+                    group: 'sex'
+                ToggleButton:
+                    text: 'Everyone'
+                    group: 'sex'
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_previous()
+                Button:
+                    text: 'Continue'
+                    on_release: root.ids.profile_carousel.load_next()
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'What I do'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: 10
+                spacing: 10
+                TextInput:
+                    font_size: '30dp'
+                    multiline: False
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_previous()
+                Button:
+                    text: 'Continue'
+                    on_release: root.ids.profile_carousel.load_next()
+
+
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'Bio'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                TextInput:
+                    font_size: '20dp'
+                    multiline: True
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_previous()
+                Button:
+                    text: 'Continue'
+                    # TODO: Validate input data from all cards? Or validate it on each step?
+                    on_release: root.manager.current = "swipe_cards"

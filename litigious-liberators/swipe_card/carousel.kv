@@ -1,0 +1,53 @@
+#:kivy 1.11.1
+<SwipingScreen>:
+    name: 'swipe'
+    BoxLayout:
+        orientation: 'vertical'
+        id: root_box
+        swiper_obj: swipe_carousel
+        Swiper:
+            id: swipe_carousel
+            size_hint_y: 0.7
+
+<Slide>:
+    orientation: 'vertical'
+    Image:
+        id: picture
+        size_hint_y: None
+        height: 200
+    Label:
+        color: 0, 0, 0, 1
+        id: name
+        text: 'Name: '
+    Label:
+        color: 0, 0, 0, 1
+        id: species
+        text: 'Species: '
+    Label:
+        color: 0, 0, 0, 1
+        id: age
+        text: 'Age: '
+    Label:
+        color: 0, 0, 0, 1
+        id: job
+        text: 'Job: '
+
+<AfterSwipeScreen>:
+    name: 'After'
+    BoxLayout:
+        Button:
+            text: 'Post swipe screen'
+
+<SwipePopup>:
+    title: 'Selection popup'
+    size_hint: .5, .7
+    size: 200, 200
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: "Click ouside popup to close"
+        Button:
+            text: 'Change screen'
+            on_release:
+                root.caller.parent.parent.manager.current = 'after'
+                root.dismiss()
