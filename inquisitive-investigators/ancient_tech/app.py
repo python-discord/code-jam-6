@@ -19,8 +19,8 @@ from kivy.core.window import Window
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.stacklayout import StackLayout
-import kivy.modules.monitor
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.recycleview import RecycleView
 
 from .terminal import Terminal, TerminalInput
 from .utils.utils import bytes_conversion
@@ -63,15 +63,21 @@ class FileHeader(FloatLayout):
         self.current_dir = str(Path().home())
 
 
-class Files(StackLayout):
-
-    def __init__(self, *args, **kwargs):
+class RV(RecycleView):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
         self.dirs = Path.home().iterdir()
         self.prev_dir = str(Path.home().parent)
 
-    def generate(self, widget):
-        self.add_widget(NewFile(self, str(widget), text=''))
+        self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
+
+    def generate(self, f):
+        return NewFile(self, str(f), text='').getDict()
+
+
+class Files(RecycleBoxLayout):
+    pass
 
 
 class NewFile(Button):
@@ -109,7 +115,7 @@ class NewFile(Button):
 
                 else:
                     t = path.suffix[1:].upper()
-                
+
                 self.ids.size.text = ' '.join(
                     bytes_conversion(
                         int(stats.st_size)
@@ -121,6 +127,10 @@ class NewFile(Button):
         else:
             self.ids.name.text = '<-'
             self.ids.type.text = 'PARENT'
+
+    def getDict(self):
+        return {'name': self.ids.name.text, 'type': self.ids.type.text, 's': self.ids.size.text,
+                'date': self.ids.date.text}
 
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
