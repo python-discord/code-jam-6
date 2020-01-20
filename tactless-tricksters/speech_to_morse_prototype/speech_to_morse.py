@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 import numpy as np
@@ -10,14 +11,10 @@ DOT_DURATION_THRESHOLD_SEC = .08
 DASH_DURATION_THRESHOLD_SEC = .24
 LETTER_END_DURATION_THRESHOLD_SEC = .24
 WORD_END_DURATION_THRESHOLD_SEC = .56
-ACTIVE_THRESHOLD = 15
 DATA_RATE = 200
 CHUNK = 4000
 
-NUM_CHUNK_PER_SEC = RATE/CHUNK
-NUM_BITS_PER_CHUNK = int(CHUNK/DATA_RATE)
 NUM_BITS_PER_SEC = RATE / DATA_RATE
-
 DOT_DURATION_THRESHOLD_BIT = int(DOT_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 DASH_DURATION_THRESHOLD_BIT = int(DASH_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 LETTER_END_DURATION_THRESHOLD_BIT = int(LETTER_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
@@ -25,9 +22,10 @@ WORD_END_DURATION_THRESHOLD_BIT = int(WORD_END_DURATION_THRESHOLD_SEC * NUM_BITS
 
 
 class MorseSpeechToText:
-    def __init__(self, debug=False, debug_plot=False):
+    def __init__(self, debug=False, debug_plot=False, active_threshold=15):
         self.debug = debug
         self.debug_plot = debug_plot
+        self.active_threshold = active_threshold
         self.pa = PyAudio()
         self.stream = self.pa.open(format=paInt16,
                                    channels=1,
@@ -35,6 +33,9 @@ class MorseSpeechToText:
                                    input=True,
                                    input_device_index=-1,
                                    frames_per_buffer=CHUNK)
+
+    def calibrate_active_threshold(self):
+        pass
 
     def run(self):
         try:
@@ -61,9 +62,9 @@ class MorseSpeechToText:
                 print(''.join(morse_code), end='')
 
     def get_voice_activity(self, data):
-        data_reshaped = data.reshape((NUM_BITS_PER_CHUNK, DATA_RATE))
+        data_reshaped = data.reshape((-1, DATA_RATE))
         intensity = np.log(np.mean(data_reshaped ** 2, axis=1))
-        speech_activity = (intensity > ACTIVE_THRESHOLD).astype(int)
+        speech_activity = (intensity > self.active_threshold).astype(int)
         if self.debug:
             print(f'max intensity: {max(intensity)}')
             print(f'min intensity: {min(intensity)}')
@@ -112,4 +113,4 @@ class MorseSpeechToText:
 if __name__ == "__main__":
     ms = MorseSpeechToText(debug=False, debug_plot=False)
     # ms.run()
-    ms.run_wav(r'C:\Users\kkawa\PycharmProjects\code-jam-6\code-jam-6\tactless-tricksters\speech_to_morse_prototype\morse_code_alphabet_16k.wav')
+    ms.run_wav(os.path.join('data', 'morse_code_alphabet_16k.wav'))
