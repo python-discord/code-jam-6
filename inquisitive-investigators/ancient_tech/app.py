@@ -70,10 +70,16 @@ class RV(RecycleView):
         self.dirs = Path.home().iterdir()
         self.prev_dir = str(Path.home().parent)
 
-        self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
+        self.update(state=0, file={})
 
     def generate(self, f):
         return file_info(self, str(f))
+
+    def update(self, state: int, file: dict):
+        if state == 0:
+            self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
+        elif state == 1:
+            self.data = [self.generate('<-'), *file]
 
 
 class Files(RecycleBoxLayout):
@@ -100,9 +106,9 @@ class NewFile(Button):
 
             if len(path.parts) > 1:
                 self.ctx.prev_dir = str(path.parent)
-                self.ctx.data += data
-            else:
-                self.ctx.data = data
+                self.ctx.update(state=1, file=data)
+            # else:
+            #    self.ctx.data = data
 
             # self.ctx.parent.parent.ids.header.current_dir = str(path)
 
