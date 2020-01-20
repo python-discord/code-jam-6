@@ -4,13 +4,14 @@ from datetime import datetime
 from kivy import Config
 
 Config.set('graphics', 'minimum_width', '1300')
-Config.set('graphics', 'minimum_height', '600')
+Config.set('graphics', 'minimum_height', '650')
 Config.set('graphics', 'width', '1300')
-Config.set('graphics', 'height', '600')
+Config.set('graphics', 'height', '650')
 
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.logger import Logger
+from kivy.modules import monitor
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.button import Button
@@ -20,15 +21,14 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
-import kivy.modules.monitor
 
-from .terminal import Terminal, TerminalInput
+from .terminal import Terminal
 from .utils.utils import bytes_conversion
 
-Builder.load_file('./ancient_tech/Main.kv')
-Builder.load_file('./ancient_tech/FileManager.kv')
+Builder.load_file('./ancient_tech/main.kv')
+Builder.load_file('./ancient_tech/filemanager.kv')
 Builder.load_file('./ancient_tech/terminal.kv')
-Builder.load_file('./ancient_tech/Footer.kv')
+Builder.load_file('./ancient_tech/footer.kv')
 
 
 class Main(FloatLayout):

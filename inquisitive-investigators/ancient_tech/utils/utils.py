@@ -1,6 +1,6 @@
 from threading import Thread
 
-from .constants import UNITS
+from .constants import BASE_SIZE, UNITS
 
 def bytes_conversion(size, unit=UNITS[0]):
     """
@@ -9,9 +9,9 @@ def bytes_conversion(size, unit=UNITS[0]):
 
     Returns the size and unit.
     """
-    if size >= 1024:
+    if size >= BASE_SIZE:
         return bytes_conversion(
-            size//1024, 
+            size//BASE_SIZE, 
             unit=UNITS[UNITS.index(unit)+1]
         )
     return str(size), unit

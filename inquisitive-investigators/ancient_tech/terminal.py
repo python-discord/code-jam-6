@@ -159,3 +159,4 @@ class Terminal(BoxLayout, Shell):
 
     def on_complete(self, output):
         self.terminal_input.on_complete(output)
+        self.terminal_input.focus = True
