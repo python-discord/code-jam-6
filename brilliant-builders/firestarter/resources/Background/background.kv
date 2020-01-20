@@ -1,0 +1,104 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+
+<Dino>:
+    canvas:
+        Rectangle:
+            source: "dino.png"
+            size: 750, 600
+            pos: self.pos
+
+<RootScreen>:
+    dino: dino
+
+    transition: FadeTransition()
+
+    StartScreen:
+        name: "start"
+        FloatLayout:
+            Image:
+                size_hint: self.image_ratio, 1
+                keep_ratio: False
+                allow_stretch: True
+                canvas.before:
+                    Color:
+                        rgb: 1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                source: 'background.png'
+            Dino:
+                id: dino
+                pos: 0, -205
+            Image:
+                size_hint: 1.2, 0.9
+                pos_hint: {'x': 0, 'y': 0}
+                keep_ratio: False
+                allow_stretch: True
+                source: "forest.png"
+            Image:
+                size_hint: 1.2, 0.08
+                pos_hint: {'x': -0.1, 'y': 0}
+                keep_ratio: False
+                allow_stretch: True
+                source: "ui_box_medium.png"
+            Image:
+                size_hint: 1, 1
+                source: "sun.png"
+                allow_stretch: True
+                keep_ratio: False
+        Button:
+            text: "PLAY!"
+            size_hint: 0.3, 0.1
+            pos_hint: {'center_x':0.5, 'center_y':0.6}
+            font_size: 50
+            on_release: root.current = "game"
+        Button:
+            text: "OPTION!"
+            size_hint: 0.3, 0.1
+            pos_hint: {'center_x':.5, 'center_y':.5}
+            font_size: 50
+            on_release: root.current = "game"
+
+    GameScreen:
+        name: "game"
+        FloatLayout:
+            Image:
+                size_hint: 1, 1
+                keep_ratio: False
+                allow_stretch: True
+                canvas.before:
+                    Color:
+                        rgb: 1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                source: 'background.png'
+            Dino:
+                id: dino
+                pos: -100 , -205
+            Image:
+                size_hint: 1.2, 0.90
+                pos_hint: {'x': 0, 'y': 0}
+                keep_ratio: False
+                allow_stretch: True
+                source: "forest.png"
+            Image:
+                size_hint: 1, 1
+                source: "sun.png"
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                size_hint: 1, 1
+                pos_hint: {'x': 0, 'y': 0.8}
+                keep_ratio: False
+                allow_stretch: True
+                source: "clouds.png"
+            Image:
+                source: "grass_platform.png"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+                keep_ratio: False
+                allow_stretch: True
+                size_hint: 1, 0.6
+#<StartScreen>:
+#<GameScreen>:
