@@ -25,41 +25,6 @@ class MeshData(object):
                 self.vertices[index + 3: index + 6] = n
 
 class ObjFile:
-    def finish_object(self):
-        if self._current_object is None:
-            return
-
-        mesh = MeshData()
-        idx = 0
-        for f in self.faces:
-            verts = f[0]
-            norms = f[1]
-            tcs = f[2]
-            for i in range(3):
-                # get normal components
-                n = (0.0, 0.0, 0.0)
-                if norms[i] != -1:
-                    n = self.normals[norms[i] - 1]
-
-                # get texture coordinate components
-                t = (0.0, 0.0)
-                if tcs[i] != -1:
-                    t = self.texcoords[tcs[i] - 1]
-
-                # get vertex components
-                v = self.vertices[verts[i] - 1]
-
-                data = [v[0], v[1], v[2], n[0], n[1], n[2], t[0], t[1]]
-                mesh.vertices.extend(data)
-
-            tri = [idx, idx + 1, idx + 2]
-            mesh.indices.extend(tri)
-            idx += 3
-
-        self.objects[self._current_object] = mesh
-        # mesh.calculate_normals()
-        self.faces = []
-
     def __init__(self, filename, swapyz=False):
         """Loads a Wavefront OBJ file. """
         self.objects = {}
@@ -98,3 +63,19 @@ class ObjFile:
                         list_.append(int(index) if index else - 1)
                 self.faces.append((face, norms, texcoords))
         self.finish_object()
+
+    def finish_object(self):
+        if self._current_object is None:
+            return
+
+        mesh = MeshData()
+        for index, face in enumerate(self.faces):
+            for vertex, norm, tex_coord in zip(*face):
+                vertex = self.vertices[vertex - 1]
+                norm = self.normals[norm - 1] if norm != -1 else (0.0, ) * 3
+                tex_coord = self.texcoords[tex_coord - 1] if tex_coord != -1 else (0.0, ) * 2
+                mesh.vertices.extend([*vertex, *norm, *tex_coord]) # Mesh vertices have len == 8
+            mesh.indices.extend(range(index * 3, index * 3 + 3))
+
+        self.objects[self._current_object] = mesh
+        self.faces = []
