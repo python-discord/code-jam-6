@@ -3,14 +3,86 @@ from threading import Thread
 
 class Utility(object):
     def __init__(self):
+        self.user_name = 'user_name'
         self.morse = Morse()
+        # Temp debug data
+        self.message_dict ={'Bob': {
+                                'messages': [
+                                            {
+                                                'text':'hello',
+                                                'author':'user_name',
+                                                'date':'111111'
+                                            },
+                                            {
+                                                'text': 'world',
+                                                'author': 'Bob',
+                                                'date': '222222'
+                                            },
+                                            {
+                                                'text': 'foo',
+                                                'author': 'Bob',
+                                                'date': '333333'
+                                            },
+                                            ],
+                                'img_source': 'ui/img/default_avatar.png',
+                                }
+                             ,
+                             'Rob': {
+                                'messages': [
+                                             {
+                                                 'text': 'hello',
+                                                 'author': 'user_name',
+                                                 'date': '111111'
+                                             },
+                                             {
+                                                 'text': 'world',
+                                                 'author': 'Rob',
+                                                 'date': '222222'
+                                             },
+                                             {
+                                                 'text': 'foo',
+                                                 'author': 'Rob',
+                                                 'date': '333333'
+                                             },
+                                            ],
+                             'img_source': 'ui/img/default_avatar.png',
+                                },
+                            'Rod': {
+                                'messages': [
+                                            {
+                                                'text': 'hello',
+                                                'author': 'user_name',
+                                                'date': '111111'
+                                            },
+                                            {
+                                                'text': 'world',
+                                                'author': 'Rob',
+                                                'date': '222222'
+                                            },
+                                            {
+                                                'text': 'foo',
+                                                'author': 'Rob',
+                                                'date': '333333'
+                                            },
+                                            ],
+                             'img_source': 'ui/img/default_avatar.png',
+                                }
+                            }
+
+        self.morse = Morse()
+
 
     def morse_transmit_thread(self):
         morse_thread = Thread(target=self.morse.transmit)
         morse_thread.daemon = True
         morse_thread.start()
-        
+
     def morse_transmit_speak(self):
         morse_thread = Thread(target=self.morse.speak)
         morse_thread.daemon = True
         morse_thread.start()
+
+    def load_messages(self):
+        # TODO
+        pass
+

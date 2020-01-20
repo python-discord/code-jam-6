@@ -12,6 +12,9 @@ from kivy.app import App
 from ui.screens.welcome_screen import WelcomeScreen
 from ui.screens.encoder_screen import EncoderScreen
 from ui.screens.decoder_screen import DecoderScreen
+from ui.screens.message_screen import MessageScreen
+from ui.screens.conversation_screen import ConversationScreen
+
 from util.utility import Utility
 from ui.widgets.nav_drawer import MyNavigationLayout
 
@@ -31,6 +34,8 @@ class MainBox(FloatLayout):
         self.content.add_widget(WelcomeScreen(name='welcome', util=self.util))
         self.content.add_widget(EncoderScreen(name='encode', util=self.util))
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
+        self.content.add_widget(MessageScreen(name='message', util=self.util))
+        self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
         # Place screens here
 
         self.screens.add_widget(self.content)
