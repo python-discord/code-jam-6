@@ -1,0 +1,7 @@
+size = [32,32]
+
+[animation]
+	animation_modes = 1
+	frames = [35]
+	
+
