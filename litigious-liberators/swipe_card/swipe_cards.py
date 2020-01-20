@@ -3,19 +3,18 @@ from kivy.app import App
 from kivy.core.window import Window
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.carousel import Carousel
 import os
 from os import listdir
 from random import shuffle
 from copy import deepcopy
 from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, CardTransition, SwapTransition
 from yaml import safe_load
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
 
-class Slide(BoxLayout):
+class Slide(Screen):
     def __init__(self, profile, **kwargs):
         super(Slide, self).__init__(**kwargs)
         self.ids.picture.source = os.path.join(
@@ -31,7 +30,7 @@ class Root(BoxLayout):
     swiper_obj = ObjectProperty(None)
 
 
-class Swiper(Carousel):
+class Swiper(ScreenManager):
     def __init__(self, **kwargs):
         super(Swiper, self).__init__(**kwargs)
         self.profile_dir = os.path.join(
@@ -42,6 +41,7 @@ class Swiper(Carousel):
         self.cycler = self.r_cycle(self.profile_list)
         self._selected = set()
         self.limit = 3
+        self.loop = True
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
             profile = safe_load(profile_file.read())
             self.add_widget(Slide(profile))
@@ -60,32 +60,28 @@ class Swiper(Carousel):
         if touch.is_mouse_scrolling:
             while True:
                 next_profile = next(self.cycler)
-                print(next_profile)
                 if next_profile not in self.selected:
                     break
             if touch.button == "scrolldown":
-                self.direction = "right"
-                popup = SwipePopup()
-                popup.open()
+                #  popup = SwipePopup()
+                #  popup.open()
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
-                    current = self.current_slide.ids.picture.source
-                    current = current.split("/")[-1].split(".")[0] + ".yml"
-                    self.selected |= {current}
-                    self.add_widget(Slide(profile))
-                self.load_next()
+                    current = self.current_screen
+                    name_for_set = current.ids.picture.source.split("/")[-1]
+                    name_for_set = name_for_set.split(".")[0] + ".yml"
+                    self.selected |= {name_for_set}
+                    trans = SwapTransition()
+                    self.switch_to(Slide(profile), direction="right", transition=trans)
+                    self.remove_widget(current)
 
             elif touch.button == "scrollup":
-                self.direction = "left"
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
-                    self.add_widget(Slide(profile))
-                self.load_next()
-
-        if touch.is_double_tap:
-            popup = SwipePopup()
-            self.selected |= {self.current_slide.ids["picture"].source.split("/")[1]}
-            popup.open()
+                    current = self.current_screen
+                    trans = CardTransition(mode="push")
+                    self.switch_to(Slide(profile), direction="left", transition=trans)
+                    self.remove_widget(current)
 
     @staticmethod
     def r_cycle(x):
