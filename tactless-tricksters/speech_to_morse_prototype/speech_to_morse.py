@@ -69,8 +69,10 @@ class MorseSpeechToText:
             print(f'max intensity: {max(intensity)}')
             print(f'min intensity: {min(intensity)}')
         if self. debug_plot:
-            plt.plot(np.arange(len(data)) / RATE, (data-min(data))/(max(data)-min(data)), label='chunked signal')
-            plt.plot(np.arange(len(speech_activity)) / DATA_RATE, speech_activity, label='active_vec')
+            normed_data = (data-min(data))/(max(data)-min(data))
+            plt.plot(np.arange(len(data)) / RATE, normed_data, label='chunked signal')
+            activity_timestamp = np.arange(len(speech_activity)) / DATA_RATE
+            plt.plot(activity_timestamp, speech_activity, label='active_vec')
             plt.legend()
             plt.show()
 
@@ -84,7 +86,8 @@ class MorseSpeechToText:
         segment_durations = np.diff(onoffset_indices)
         is_active_vec = active_vec[onoffset_indices]
 
-        # for each segment of consecutive data value if the segment exceeds the duration threshold set morse value
+        # for each segment of consecutive data value
+        # if the segment exceeds the duration threshold set morse value
         for seg_dur, is_active in zip(segment_durations, is_active_vec):
             if is_active:
                 if seg_dur >= DASH_DURATION_THRESHOLD_BIT:
