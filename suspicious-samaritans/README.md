@@ -3,11 +3,11 @@
 ## Team biography
 
 - Starwort
-  - Team leader; backend development
+  - Team leader; direction and coordination, RAD tool development
   - Nationality: British
   - Gender: Male
   - Age: 16
-  - 'Rules with a mercury fist'
+  - 'UX is top priority, second only to making our lives easier'
 - Liam
   - Frontend and backend development
   - Nationality: Latin-American
