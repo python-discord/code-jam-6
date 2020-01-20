@@ -23,7 +23,7 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview import RecycleView
 
 from .terminal import Terminal, TerminalInput
-from .utils.utils import bytes_conversion
+from .utils.utils import file_info
 
 Builder.load_file('./ancient_tech/Main.kv')
 Builder.load_file('./ancient_tech/FileManager.kv')
@@ -73,7 +73,7 @@ class RV(RecycleView):
         self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
 
     def generate(self, f):
-        return NewFile(ctx=self, txt=str(f), text='').getDict()
+        return file_info(self, str(f))
 
 
 class Files(RecycleBoxLayout):
@@ -84,54 +84,6 @@ class NewFile(Button):
     ctx = ObjectProperty()
     txt = StringProperty()
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        if self.txt != '<-':
-            path = Path(self.txt)
-            stats = path.stat()
-
-            self.ids.name.text = path.name
-            self.ids.date.text = datetime.fromtimestamp(
-                stats.st_mtime
-            ).strftime('%d-%m-%Y')
-
-            if path.is_dir():
-                t = 'DIR'
-
-                self.ids.size.text = '-'
-                # self.ids.size.text = ' '.join(
-                #    bytes_conversion(
-                #        sum(
-                #            f.stat().st_size for f in path.glob('**/*') if f.is_file()
-                #        )
-                #    )
-                # )
-
-            else:
-
-                if str(path).startswith('.') or path.suffix == '':
-                    t = str(path.parts[-1])
-
-                else:
-                    t = path.suffix[1:].upper()
-
-                self.ids.size.text = ' '.join(
-                    bytes_conversion(
-                        int(stats.st_size)
-                    )
-                )
-
-            self.ids.type.text = t
-
-        else:
-            self.ids.name.text = '<-'
-            self.ids.type.text = 'PARENT'
-
-    def getDict(self):
-        return {'name': self.ids.name.text, 'type': self.ids.type.text, 's': self.ids.size.text,
-                'date': self.ids.date.text}
-
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
@@ -141,17 +93,18 @@ class NewFile(Button):
             path = Path(self.txt)
 
         if path.is_dir():
-            self.ctx.clear_widgets()
+            self.ctx.data = [self.ctx.generate('<-')]
             self.ctx.dirs = path.iterdir()
+
+            data = [self.ctx.generate(file_name) for file_name in self.ctx.dirs]
 
             if len(path.parts) > 1:
                 self.ctx.prev_dir = str(path.parent)
-                self.ctx.generate('<-')
+                self.ctx.data += data
+            else:
+                self.ctx.data = data
 
-            for d in self.ctx.dirs:
-                self.ctx.generate(d)
-
-            self.ctx.parent.parent.ids.header.current_dir = str(path)
+            # self.ctx.parent.parent.ids.header.current_dir = str(path)
 
         else:
             Logger.info('FileBrowser: Not a directory!')

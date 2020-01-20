@@ -1,6 +1,9 @@
+from pathlib import Path
 from threading import Thread
+from datetime import datetime
 
 from .constants import UNITS
+
 
 def bytes_conversion(size, unit=UNITS[0]):
     """
@@ -27,3 +30,56 @@ def threaded(func):
         thread.start()
         
     return wrapper
+
+def file_info(ctx, dir_):
+    name = type_ = size = date = ''
+
+    if dir_ != '<-':
+        path = Path(dir_)
+        stats = path.stat()
+
+        name = path.name
+        date = datetime.fromtimestamp(
+            stats.st_mtime
+        ).strftime('%d-%m-%Y')
+
+        if path.is_dir():
+            t = 'DIR'
+
+            size = '-'
+            # size = ' '.join(
+            #    bytes_conversion(
+            #        sum(
+            #            f.stat().st_size for f in path.glob('**/*') if f.is_file()
+            #        )
+            #    )
+            # )
+
+        else:
+
+            if str(path).startswith('.') or path.suffix == '':
+                t = str(path.parts[-1])
+
+            else:
+                t = path.suffix[1:].upper()
+
+            size = ' '.join(
+                bytes_conversion(
+                    int(stats.st_size)
+                )
+            )
+
+        type_ = t
+
+    else:
+        name = '<-'
+        type_ = 'PARENT'
+
+    return {
+        'ctx': ctx,
+        'txt': dir_,
+        'name': name,
+        'type': type_,
+        'size_': size,
+        'date': date,
+    }
