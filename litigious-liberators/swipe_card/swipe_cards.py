@@ -60,6 +60,7 @@ class Swiper(Carousel):
         if touch.is_mouse_scrolling:
             while True:
                 next_profile = next(self.cycler)
+                print(next_profile)
                 if next_profile not in self.selected:
                     break
             if touch.button == "scrolldown":
@@ -68,12 +69,9 @@ class Swiper(Carousel):
                 popup.open()
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
-                    self.selected |= {
-                        os.path.join(
-                            os.path.dirname(os.path.abspath(__file__)),
-                            f"../profiles/pictures/{profile['Picture']}",
-                        )
-                    }
+                    current = self.current_slide.ids.picture.source
+                    current = current.split("/")[-1].split(".")[0] + ".yml"
+                    self.selected |= {current}
                     self.add_widget(Slide(profile))
                 self.load_next()
 
