@@ -10,10 +10,9 @@ from kivy.graphics.opengl import *
 from kivy.graphics import *
 from objloader import ObjFile
 from kivy.core.window import Window
-from math import cos, sin, pi
 
-def to_radians(x):
-    return x / 360 * 2 * pi
+
+ROTATE_SPEED = 500
 
 class Renderer(Widget):
     def __init__(self, **kwargs):
@@ -33,10 +32,12 @@ class Renderer(Widget):
             self.cb = Callback(lambda *args: glDisable(GL_DEPTH_TEST))
 
         Window.bind(on_touch_move=self._on_touch_move)
+        self.indices = self.mesh.indices.copy()
+        self.fewer = self.indices[3:]
 
         def set_aspect():
             asp = self.width / self.height
-            proj = Matrix().view_clip(-asp, asp, -1, 1, 1, 100, 1)
+            proj = Matrix().view_clip(-asp, asp, -1, 1, .5, 100, 1)
             self.canvas['projection_mat'] = proj
         Clock.schedule_once(lambda dt: set_aspect())
 
@@ -46,33 +47,31 @@ class Renderer(Widget):
         stone.  Probably 'right' and 'left' click differentiated.
         """
         if touch.button == 'right':
-            self.rotate(touch.dsx, -touch.dsy)
+            self.rotate(touch.dsx)
         else:
             self.chip_away(touch)
 
     def chip_away(self, touch):
         """
-        Need collision detection with mesh and a method to remove points from mesh.  Just
-        popping vertices/indices from the mesh doesn't seem to change the object on the canvas.
-        I think this function will be the most difficult to flesh out.
-
-        Ok, to update the mesh indices, the list needs to be changed. That's why popping didn't
-        work.
+        Need collision detection with mesh and a method to remove points from mesh.  I think
+        this function will be the most difficult to flesh out.
         """
-        self.mesh.indices = self.mesh.indices[3:] # This makes a pretty creepy monkey.
 
-    def rotate(self, dx, dy):
-        x = to_radians(self.rotx.angle)
-        self.rotx.angle += dx * 500 # Hard-coded 500 should be a constant
-        self.roty.angle += dy * 500 * cos(x) # Rotation is still a bit off -- probably need
-        self.rotz.angle += dy * 500 * sin(x) # to account for more than just rotx.angle.
+        if self.mesh.indices == self.indices:
+            print(touch.spos)
+            x, y ,z = self.mesh.indices[:3]
+            print(*(self.mesh.vertices[i * 4:i * 4 + 4] for i in (x, y, z)))
+            self.mesh.indices = self.fewer
+        else:
+            self.mesh.indices = self.indices
+        #self.mesh.indices = self.mesh.indices[3:] # This makes a pretty creepy monkey.
 
+    def rotate(self, dx):
+        self.rotx.angle += dx * ROTATE_SPEED
 
     def setup_scene(self):
         Translate(0, 0, -2) # Maybe zoom in more?
         self.rotx = Rotate(0, 0, 1, 0)
-        self.roty = Rotate(0, 1, 0, 0)
-        self.rotz = Rotate(0, 0, 0, 1)
         m, *_ = self.scene.objects.values()
         UpdateNormalMatrix()
         self.mesh = Mesh(vertices=m.vertices,

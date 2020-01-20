@@ -1,40 +1,28 @@
 class MeshData(object):
     def __init__(self, **kwargs):
         self.name = kwargs.get("name")
-        self.vertex_format = [
-            (b'v_pos', 3, 'float'),
-            (b'v_normal', 3, 'float'),
-            (b'v_tc0', 2, 'float')]
+        self.vertex_format = [(b'v_pos', 3, 'float'),
+                              (b'v_normal', 3, 'float'),
+                              (b'v_tc0', 2, 'float')]
         self.vertices = []
         self.indices = []
 
     def calculate_normals(self):
         for i in range(len(self.indices) / (3)):
             fi = i * 3
-            v1i = self.indices[fi]
-            v2i = self.indices[fi + 1]
-            v3i = self.indices[fi + 2]
+            indices = v1i, v2i, v3i = self.indices[fi:fi + 3]
 
             vs = self.vertices
-            p1 = [vs[v1i + c] for c in range(3)]
-            p2 = [vs[v2i + c] for c in range(3)]
-            p3 = [vs[v3i + c] for c in range(3)]
+            p1, p2, p3 = [vs[index:index + 3] for index in indices]
 
-            u, v = [0, 0, 0], [0, 0, 0]
-            for j in range(3):
-                v[j] = p2[j] - p1[j]
-                u[j] = p3[j] - p1[j]
+            v = [p2[i] - p1[i] for i in range(3)]
+            u = [p3[i] - p1[i] for i in range(3)]
 
-            n = [0, 0, 0]
-            n[0] = u[1] * v[2] - u[2] * v[1]
-            n[1] = u[2] * v[0] - u[0] * v[2]
-            n[2] = u[0] * v[1] - u[1] * v[0]
+            pairs = ((1, 2), (2, 0), (0, 1))
+            n = [u[a] * v[b] - u[b] * v[a] for a, b in pairs]
 
-            for k in range(3):
-                self.vertices[v1i + 3 + k] = n[k]
-                self.vertices[v2i + 3 + k] = n[k]
-                self.vertices[v3i + 3 + k] = n[k]
-
+            for index in indices:
+                self.vertices[index + 3: index + 6] = n
 
 class ObjFile:
     def finish_object(self):
@@ -82,66 +70,31 @@ class ObjFile:
 
         self._current_object = None
 
-        material = None
-        for line in open(filename, "r"):
-            if line.startswith('#'):
+        with open(filename, 'r') as obj:
+            obj = obj.readlines()
+
+        for line in obj:
+            if (   not line.strip()
+                or line.startswith('#')
+                or line.startswith('s')):
                 continue
-            if line.startswith('s'):
-                continue
-            values = line.split()
-            if not values:
-                continue
-            if values[0] == 'o':
+
+            start, *rest = line.split()
+            if start == 'o':
                 self.finish_object()
-                self._current_object = values[1]
-            # elif values[0] == 'mtllib':
-            #    self.mtl = MTL(values[1])
-            # elif values[0] in ('usemtl', 'usemat'):
-            #    material = values[1]
-            if values[0] == 'v':
-                v = list(map(float, values[1:4]))
+                self._current_object, *_ = rest
+
+            if start in ('v', 'vn'):
+                vertex = list(map(float, rest))
                 if swapyz:
-                    v = v[0], v[2], v[1]
-                self.vertices.append(v)
-            elif values[0] == 'vn':
-                v = list(map(float, values[1:4]))
-                if swapyz:
-                    v = v[0], v[2], v[1]
-                self.normals.append(v)
-            elif values[0] == 'vt':
-                self.texcoords.append(map(float, values[1:3]))
-            elif values[0] == 'f':
-                face = []
-                texcoords = []
-                norms = []
-                for v in values[1:]:
-                    w = v.split('/')
-                    face.append(int(w[0]))
-                    if len(w) >= 2 and len(w[1]) > 0:
-                        texcoords.append(int(w[1]))
-                    else:
-                        texcoords.append(-1)
-                    if len(w) >= 3 and len(w[2]) > 0:
-                        norms.append(int(w[2]))
-                    else:
-                        norms.append(-1)
-                self.faces.append((face, norms, texcoords, material))
+                    vertex[1:] = vertex[-1:0:-1]
+               (self.vertices if start == 'v' else self.normals).append(vertex)
+            elif start == 'vt':
+                self.texcoords.append(map(float, rest))
+            elif start == 'f':
+                lists = [face, texcoords, norms] = [[], [], []]
+                for indices in rest:
+                    for list_, index in zip(lists, indices.split('/')):
+                        list_.append(int(index) if index else - 1)
+                self.faces.append((face, norms, texcoords))
         self.finish_object()
-
-
-def MTL(filename):
-    contents = {}
-    mtl = None
-    return
-    for line in open(filename, "r"):
-        if line.startswith('#'):
-            continue
-        values = line.split()
-        if not values:
-            continue
-        if values[0] == 'newmtl':
-            mtl = contents[values[1]] = {}
-        elif mtl is None:
-            raise ValueError("mtl file doesn't start with newmtl stmt")
-        mtl[values[0]] = values[1:]
-    return contents
