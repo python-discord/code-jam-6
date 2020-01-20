@@ -69,6 +69,7 @@ class Utility(object):
                                 }
                             }
 
+        self.morse = Morse()
 
 
     def morse_transmit_thread(self):
@@ -84,3 +85,4 @@ class Utility(object):
     def load_messages(self):
         # TODO
         pass
+
