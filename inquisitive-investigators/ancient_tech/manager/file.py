@@ -10,11 +10,16 @@ from kivy.properties import (
 )
 
 
-class NewFile(Button):
+class NewFile(Label):
     ctx = ObjectProperty()
     txt = StringProperty()
 
-    def on_release(self) -> None:
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            if touch.is_double_tap:
+                self.activate()
+
+    def activate(self) -> None:
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
         if self.txt == '<-':

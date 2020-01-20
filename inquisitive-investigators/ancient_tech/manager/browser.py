@@ -35,13 +35,13 @@ class RV(RecycleView):
 
     def generate(
             self, f: Any
-        ) -> Union[Dict[str, str], Dict[str, RV]]:
+    ) -> Union[Dict[str, str], Dict[str, RV]]:
         return file_info(self, str(f))
 
     def update(self, state: int, file: List[str]) -> None:
         if state == 0:
             self.data = [
-                self.generate('<-'), 
+                self.generate('<-'),
                 *(self.generate(file_name) for file_name in self.dirs)
             ]
         elif state == 1:
