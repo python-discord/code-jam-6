@@ -1,3 +1,12 @@
+<Wire@Widget>:
+    points: []
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 0.5
+        Line:
+            points: root.points
+            width: 5
+
 <PlugResume@Popup>:
     size_hint: 0.5, 0.5
     title: "Plugs resume"
@@ -17,7 +26,7 @@
                     Label:
                         size_hint_y: None
                         height: self.texture_size[1]
-                        text: "\n".join(app.root.get_screen("plugboard_screen").pairs_of_plugs)
+                        text: "\n".join(app.root.get_screen("plugboard_screen").wires)
                 Label:
                     text: str(app.root.get_screen("plugboard_screen").plugs_in_screen)
         BoxLayout:
@@ -34,6 +43,7 @@
     drag_distance: 0
     size_hint: 0.1, 0.1
     source: "misc/plug.png"
+    on_touch_move: app.root.get_screen("plugboard_screen").handle_wire_pos(*args)
     on_touch_up: app.root.get_screen("plugboard_screen").handle_touch_up(*args)
     on_plugged_in: app.root.get_screen("plugboard_screen").on_plugged_in(*args)
 
@@ -43,7 +53,7 @@
     on_center: app.root.get_screen("plugboard_screen").on_plughole_recenter(*args)
 
 <PlugBoard@GridLayout>:
-    plug_reference: plug_reference
+    plug_reference: Q
     padding: dp(30)
     canvas:
         Color:
@@ -58,7 +68,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
-            id: plug_reference
+            id: Q
             name: "Q"
         Label:
             text: "Q"
@@ -67,6 +77,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: W
             name: "W"
         Label:
             text: "W"
@@ -75,6 +86,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: E
             name: "E"
         Label:
             text: "E"
@@ -83,6 +95,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: R
             name: "R"
         Label:
             text: "R"
@@ -91,6 +104,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: T
             name: "T"
         Label:
             text: "T"
@@ -99,6 +113,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: Z
             name: "Z"
         Label:
             text: "Z"
@@ -107,6 +122,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: U
             name: "U"
         Label:
             text: "U"
@@ -115,6 +131,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: I
             name: "I"
         Label:
             text: "I"
@@ -123,6 +140,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: O
             name: "O"
         Label:
             text: "O"
@@ -131,6 +149,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: A
             name: "A"
         Label:
             text: "A"
@@ -139,6 +158,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: S
             name: "S"
         Label:
             text: "S"
@@ -147,6 +167,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: D
             name: "D"
         Label:
             text: "D"
@@ -155,6 +176,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: F
             name: "F"
         Label:
             text: "F"
@@ -163,6 +185,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: G
             name: "G"
         Label:
             text: "G"
@@ -171,6 +194,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: H
             name: "H"
         Label:
             text: "H"
@@ -179,6 +203,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: J
             name: "J"
         Label:
             text: "J"
@@ -187,6 +212,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: K
             name: "K"
         Label:
             text: "K"
@@ -195,6 +221,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: P
             name: "P"
         Label:
             text: "P"
@@ -203,6 +230,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: Y
             name: "Y"
         Label:
             text: "Y"
@@ -211,6 +239,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: X
             name: "X"
         Label:
             text: "X"
@@ -219,6 +248,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: C
             name: "C"
         Label:
             text: "C"
@@ -227,6 +257,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: V
             name: "V"
         Label:
             text: "V"
@@ -235,6 +266,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: B
             name: "B"
         Label:
             text: "B"
@@ -243,6 +275,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: N
             name: "N"
         Label:
             text: "N"
@@ -251,6 +284,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: M
             name: "M"
         Label:
             text: "M"
@@ -259,6 +293,7 @@
     FloatLayout:
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
         PlugHole:
+            id: L
             name: "L"
         Label:
             text: "L"
