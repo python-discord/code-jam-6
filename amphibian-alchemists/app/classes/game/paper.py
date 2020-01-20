@@ -1,5 +1,4 @@
 from kivy.uix.screenmanager import Screen
-from kivy.uix.anchorlayout import AnchorLayout
 
 
 class PaperScreen(Screen):
