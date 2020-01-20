@@ -198,8 +198,8 @@ class GameScreen(Screen):
             game_id,
             ciphered_text=ciphered_text,
             unciphered_text=unciphered_text,
-            current_output_text=current_output_text+key.name,
+            current_output_text=current_output_text + key.name,
             encrypted_state=encrypted_state,
             current_state=current_state,
-            last_saved_state=last_saved_state
+            last_saved_state=last_saved_state,
         )
