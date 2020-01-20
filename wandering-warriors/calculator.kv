@@ -32,7 +32,14 @@
     size_hint_x: 1.6
     canvas:
         Color:
-            rgb: 0, 0, 1
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: map(lambda a: a + 7, self.pos)
+            size: map(lambda a: a - 14, self.size)
+            source: 'assets/graphics/sandstone.jpg'  # TODO: make this platform independent?
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.7
         Rectangle:
             size: self.size
             pos: self.pos
