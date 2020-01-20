@@ -4,9 +4,8 @@ from kivy.uix.widget import Widget
 
 class Screen(Widget):
     def __init__(self, **kwargs):
+        self.canvas = RenderContext()
         super().__init__(**kwargs)
-
-        self.render_context = RenderContext()
 
     def render(self, delta):
         """Override this method and render graphics"""
@@ -31,6 +30,10 @@ class Screen(Widget):
 
     def clear(self):
         self.canvas.clear()
+
+    def set_projection_matrix(self, matrices):
+        self.canvas['projection_mat'] = matrices[0]
+        self.canvas['modelview_mat'] = matrices[1]
 
     def render_screen(self, delta):
         """Wrapper method for render, should not be overrided"""
