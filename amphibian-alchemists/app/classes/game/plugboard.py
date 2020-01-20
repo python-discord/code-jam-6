@@ -9,9 +9,6 @@ class PlugboardScreen(Screen):
     plugs_in_screen = BoundedNumericProperty(0, min=0, max=20)
     last_plugs_count = 0
 
-    def plug_handler(self):
-        print("CLICK")
-
     def get_plug(self):
         if self.plugs_in_screen == self.property("plugs_in_screen").get_min(self):
             self.ids.remove_plug.text = "Drag the plug here to discard..."
@@ -35,10 +32,7 @@ class PlugboardScreen(Screen):
 
             for floatlayouts in self.ids.plug_board.children:
                 for children in floatlayouts.children:
-                    if (
-                        instance.collide_widget(children)
-                        and type(children) == Factory.PlugHole
-                    ):
+                    if instance.collide_widget(children) and type(children) == Factory.PlugHole:
                         if children.name not in self.all_plugged:
                             instance.center = children.center
                             instance.plugged_in = children.name
