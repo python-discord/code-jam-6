@@ -70,7 +70,7 @@ class TerminalInput(TextInput):
 
         # C = 99
         # Stop execution
-        elif keycode[0] == 99 and modifiers == ['ctrl']:
+        elif keycode[0] == 99 and 'ctrl' in modifiers:
             self.shell.stop()
 
         if self.cursor_index() < self._cursor_pos:

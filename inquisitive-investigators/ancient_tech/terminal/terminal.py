@@ -17,7 +17,7 @@ Builder.load_file('./ancient_tech/terminal/terminal.kv')
 
 class Terminal(BoxLayout, Shell):
     terminal_input = ObjectProperty()
-    scroll_view = ObjectProperty()
+    recycle_view = ObjectProperty()
 
     foreground_color = ListProperty((1, 1, 1, 1))
     background_color = ListProperty((0, 0, 0, 1))

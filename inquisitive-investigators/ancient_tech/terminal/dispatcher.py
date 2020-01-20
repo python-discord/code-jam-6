@@ -23,7 +23,6 @@ class Shell(EventDispatcher):
 
         Dispatches the output during execution.
         """
-        output = ''
         self.process = subprocess.Popen(
             cmd, stdout=subprocess.PIPE, 
             stderr=subprocess.STDOUT,

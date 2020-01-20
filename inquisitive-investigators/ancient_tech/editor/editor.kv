@@ -1,15 +1,15 @@
 #:kivy 1.11.1
 
-<Terminal>:
-    terminal_input: terminal_input
-    recycle_view: recycle_view
+<TextEditor>:
+    editor: editor
+    recycler
 
     RecycleView:
-        viewclass: 'TerminalInput'
-        id: recycle_view
+        viewclass: 'Editor'
+        id: recycler
         
-        TerminalInput:
-            id: terminal_input
+        Editor:
+            id: editor
             shell: root
             font_name: root.font_name
             font_size: root.font_size
