@@ -8,3 +8,5 @@ verify_ssl = true
 [packages]
 kivy = "*"
 flake8 = "*"
+geopy = "*"
+suntime = "*"

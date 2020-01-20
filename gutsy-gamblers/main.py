@@ -1,4 +1,6 @@
-from datetime import datetime, timedelta
+from datetime import datetime
+
+from geopy.geocoders import Nominatim
 
 import kivy
 import requests
@@ -10,6 +12,8 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
+
+from suntime import Sun, SunTimeException
 
 from config import GEOLOCATION_KEY
 
@@ -25,7 +29,7 @@ class RotatingWidget(FloatLayout):
     """
     angle = NumericProperty(0)
 
-    def __init__(self, day_length, dial_image, dial_size, **kwargs):
+    def __init__(self, day_length, dial_image, dial_size, suntimes, **kwargs):
         super(RotatingWidget, self).__init__(**kwargs)
 
         self.dial_file = dial_image
@@ -35,21 +39,13 @@ class RotatingWidget(FloatLayout):
         anim = Animation(angle=360, duration=day_length)
         anim += Animation(angle=360, duration=day_length)
         anim.repeat = True
-        # anim.start(self)
+        anim.start(self)
+
+        # Split suntime tuple into named variables
+        sunrise = suntimes[0]
+        sunset = suntimes[1]
 
         # Add icons that can be arbitrarily rotated on canvas.
-        # Plus a time test
-        now = datetime.now()
-
-        sunrise = now - timedelta(hours=6)
-        sunset = now + timedelta(hours=3)
-
-        sunrise = now - sunrise
-        sunrise = sunrise.seconds / 3600 * 15
-
-        sunset = now - sunset
-        sunset = sunset.seconds / 3600 * -15
-
         self.add_widget(SunRise(sunrise))
         self.add_widget(SunSet(sunset))
 
@@ -78,13 +74,96 @@ class SunSet(FloatLayout):
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.add_widget(RotatingWidget(50, 'assets/dial.png', (0.8, 0.8)))
+        self.add_widget(RotatingWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
         self.add_widget(NowMarker())
+        self.suntimes()
 
     def settings_button(self):
         SettingsScreen()
 
+    def ipgeolocate(self):
+        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
+        resp = r.json()
+        city = resp['city']
+        state_prov = resp['state_prov']
 
+        geolocate = Nominatim(user_agent="Code Jam 6: SunClock")
+        location = geolocate.geocode(f"{city} {state_prov}")
+
+        # pickle the object for testing purposes
+
+        # temp_latlong = [location.latitude, location.longitude]
+
+        # with open('latlong.tmp', 'wb') as f:
+        #     pickle.dump(temp_latlong, f)
+
+        return location.latitude, location.longitude
+
+    def suntimes(self):
+        lat_long = self.ipgeolocate()
+
+        # pickled object for testing purposes
+        # with open('latlong.tmp', 'rb') as f:
+        #     lat_long = pickle.load(f)
+
+        sun_time = Sun(lat_long[0], lat_long[1])
+
+        try:
+            today_sunrise = sun_time.get_sunrise_time()
+        except SunTimeException:
+            raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
+
+        try:
+            today_sunset = sun_time.get_sunset_time()
+        except SunTimeException:
+            raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
+
+        # This is *super* ugly, I'm sure we can find a more elegant way to do this
+        now = datetime.now()
+        today_sunrise = today_sunrise.replace(tzinfo=None)
+        today_sunset = today_sunset.replace(tzinfo=None)
+
+        if now > today_sunrise and today_sunset:
+            # Don't need TZInfo to perform this operation
+            today_sunrise = now - today_sunrise.replace(tzinfo=None)
+            today_sunset = now - today_sunset.replace(tzinfo=None)
+
+            # Convert timedelta into minutes and round
+            today_sunrise = round(today_sunrise.seconds / 60)
+            today_sunset = round(today_sunset.seconds / 60)
+
+            # Since icons are in the "past" (to the left) keep the angles positive
+            # After Sunrise, after Sunset
+            today_sunrise = today_sunrise * 0.25
+            today_sunset = today_sunset * 0.25
+
+        elif now < today_sunrise and today_sunset:
+            today_sunrise = today_sunrise.replace(tzinfo=None) - now
+            today_sunset = today_sunset.replace(tzinfo=None) - now
+
+            today_sunrise = round(today_sunrise.seconds / 60)
+            today_sunset = round(today_sunset.seconds / 60)
+
+            # Since icons are in the "future" (to the right) keep angles negative
+            # Before Sunrise, after Sunset
+            today_sunrise = today_sunrise * 0.25 * -1
+            today_sunset = today_sunset * 0.25 * -1
+
+        else:
+            today_sunrise = now - today_sunrise.replace(tzinfo=None)
+            today_sunset = today_sunset.replace(tzinfo=None) - now
+
+            today_sunrise = round(today_sunrise.seconds / 60)
+            today_sunset = round(today_sunset.seconds / 60)
+
+            # After Sunrise, before Sunset
+            today_sunrise = today_sunrise * 0.25
+            today_sunset = today_sunset * 0.25 * -1
+
+        return today_sunrise, today_sunset
+
+
+# Settings panel #
 class SettingsScreen(Popup):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
