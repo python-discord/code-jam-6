@@ -1,0 +1,17 @@
+#:kivy 1.11.1
+
+<WidgetBackground>:
+    canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<ColorBoxLayout>:
+    padding: dp(12)
+
+<IconButton>:
+    size_hint: None, 1
+    source: root.icon
+    size: dp(32), dp(32)

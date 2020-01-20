@@ -1,0 +1,34 @@
+#:kivy 1.11.1
+
+<VideoContainer>:
+    container: container
+    play_button: play_button
+    volume_button: volume_button
+    screen_button: screen_button
+    orientation: "vertical"
+
+    ColorBoxLayout:
+        id: container
+        size_hint_y: 0.9
+    ColorBoxLayout:
+        padding: dp(5)
+        spacing: dp(12)
+        size_hint_y: None
+        height: dp(32)
+        background_color: 0.2, 0.2, 0.2, 1
+        IconButton:
+            id: play_button
+            source: root.play_icon
+            on_press: root.toggle_videoplay()
+        IconButton:
+            source: root.stop_icon
+            on_press: root.stop_video()
+        IconButton:
+            id: volume_button
+            source: root.full_volume_icon
+            on_press: root.change_volume()
+        Widget:
+        IconButton:
+            id: screen_button
+            source: root.fullscreen_icon
+            on_press: root.change_screen()

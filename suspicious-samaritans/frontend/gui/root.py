@@ -1,19 +1,11 @@
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.behaviors.button import ButtonBehavior
-from kivy.uix.image import Image
-from kivy.properties import ListProperty, StringProperty
+from kivy.properties import ObjectProperty
+from kivy.uix.tabbedpanel import TabbedPanel
+
+from frontend.gui.custom_widgets import WidgetBackground
+from frontend.gui.videocontainer import VideoContainer
 
 
-class ColorBoxLayout(BoxLayout):
-    """Box layout but with background color"""
-    background_color = ListProperty([1, 1, 1, 1])
-
-
-class IconButton(ButtonBehavior, Image):
-    """A button with an icon"""
-    icon = StringProperty("")
-
-
-class RootLayout(ColorBoxLayout):
-    """Root widget for the entire screen"""
-    pass
+class TabbedRoot(TabbedPanel, WidgetBackground):
+    """Root panel to contain all tabs"""
+    vid_container = ObjectProperty()
+    do_default_tab = False
