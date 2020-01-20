@@ -1,4 +1,5 @@
 from datetime import datetime
+import pickle
 
 from geopy.geocoders import Nominatim
 
@@ -6,8 +7,10 @@ import kivy
 import requests
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.graphics import *
 from kivy.lang import Builder
 from kivy.properties import NumericProperty
+from kivy.uix.effectwidget import EffectWidget, HorizontalBlurEffect, VerticalBlurEffect
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -21,7 +24,7 @@ kivy.require('1.11.1')
 
 
 # Widget element things #
-class RotatingWidget(FloatLayout):
+class DialWidget(FloatLayout):
     """
     Speed will become a fixed value of 86400 once completed.
     Image should, i suppose, be a fixed image?
@@ -30,7 +33,7 @@ class RotatingWidget(FloatLayout):
     angle = NumericProperty(0)
 
     def __init__(self, day_length, dial_image, dial_size, suntimes, **kwargs):
-        super(RotatingWidget, self).__init__(**kwargs)
+        super(DialWidget, self).__init__(**kwargs)
 
         self.dial_file = dial_image
         self.dial_size = dial_size      # X / Y tuple.
@@ -46,8 +49,8 @@ class RotatingWidget(FloatLayout):
         sunset = suntimes[1]
 
         # Add icons that can be arbitrarily rotated on canvas.
-        self.add_widget(SunRise(sunrise))
-        self.add_widget(SunSet(sunset))
+        self.add_widget(SunRiseMarker(sunrise))
+        self.add_widget(SunSetMarker(sunset))
 
     def on_angle(self, item, angle):
         if angle == 360:
@@ -58,28 +61,65 @@ class NowMarker(FloatLayout):
     pass
 
 
-class SunRise(FloatLayout):
+class SunRiseMarker(FloatLayout):
     def __init__(self, rot_angle, **kwargs):
-        super(SunRise, self).__init__(**kwargs)
+        super(SunRiseMarker, self).__init__(**kwargs)
         self.rot_angle = rot_angle
 
 
-class SunSet(FloatLayout):
+class SunSetMarker(FloatLayout):
     def __init__(self, rot_angle, **kwargs):
-        super(SunSet, self).__init__(**kwargs)
+        super(SunSetMarker, self).__init__(**kwargs)
         self.rot_angle = rot_angle
+
+
+class SunShading(FloatLayout):
+    def __init__(self, suntimes, **kwargs):
+        super(SunShading, self).__init__(**kwargs)
+
+        # Split suntime tuple into named variables
+        sunrise = suntimes[0]
+        sunset = suntimes[1]
+
+        sunstart = 360 - sunrise
+        sunend = 360 - sunset
+
+        with self.canvas:
+            Color(0, 0.2, 0.40)
+            Ellipse(pos=(self.width / 2 + 20, self.height / 2), angle_start=180, angle_end=360,
+                    size=(500, 500))
+            Color(252 / 255, 212 / 255, 64 / 255)
+            Ellipse(pos=(self.width / 2 + 20, self.height / 2), angle_start=0, angle_end=180,
+                    size=(500, 500))
+
+        self.opacity = 0.5
+
+
+class DialEffectWidget(EffectWidget):
+    def __init__(self, **kwargs):
+        super(DialEffectWidget, self).__init__(**kwargs)
+        self.add_widget(SunShading((124.75, 1.25)))
+        self.effects = [HorizontalBlurEffect(size=20.0), VerticalBlurEffect(size=20.0)]
+
+
+class DialTestScreen(Screen):
+    def __init__(self, **kwargs):
+        super(DialTestScreen, self).__init__(**kwargs)
+        self.add_widget(DialEffectWidget())
 
 
 # Screens in the App #
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.add_widget(RotatingWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
+        self.add_widget(DialWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
+        self.add_widget(DialEffectWidget())
         self.add_widget(NowMarker())
         self.suntimes()
 
     def settings_button(self):
-        SettingsScreen()
+        # SettingsScreen()
+        DialTestScreen()
 
     def ipgeolocate(self):
         r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
@@ -91,20 +131,18 @@ class MainScreen(Screen):
         location = geolocate.geocode(f"{city} {state_prov}")
 
         # pickle the object for testing purposes
-
-        # temp_latlong = [location.latitude, location.longitude]
-
-        # with open('latlong.tmp', 'wb') as f:
-        #     pickle.dump(temp_latlong, f)
+        temp_latlong = [location.latitude, location.longitude]
+        with open('latlong.tmp', 'wb') as f:
+            pickle.dump(temp_latlong, f)
 
         return location.latitude, location.longitude
 
     def suntimes(self):
-        lat_long = self.ipgeolocate()
+        # lat_long = self.ipgeolocate()
 
         # pickled object for testing purposes
-        # with open('latlong.tmp', 'rb') as f:
-        #     lat_long = pickle.load(f)
+        with open('latlong.tmp', 'rb') as f:
+            lat_long = pickle.load(f)
 
         sun_time = Sun(lat_long[0], lat_long[1])
 
@@ -160,6 +198,7 @@ class MainScreen(Screen):
             today_sunrise = today_sunrise * 0.25
             today_sunset = today_sunset * 0.25 * -1
 
+        print(today_sunrise, today_sunset)
         return today_sunrise, today_sunset
 
 
@@ -195,10 +234,11 @@ class SunClock(App):
         Builder.load_file('main.kv')
         sm = WindowManager()
 
-        screens = [MainScreen(name='main')]
+        screens = [MainScreen(name='main'), DialTestScreen(name='test')]
         for screen in screens:
             sm.add_widget(screen)
 
+        # Don't forget to change this shit back.
         sm.current = 'main'
 
         return sm

@@ -20,6 +20,11 @@
             text:"Submit"
             on_press: root.settings_button()
 
+<DialTestScreen>
+    FloatLayout:
+        Label:
+            text: "Wanker"
+
 <NowMarker>:
 	Image:
 		source: 'assets/arrow_marker.png'
@@ -59,7 +64,7 @@
 		size_hint: 0.05, 0.05
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
-<RotatingWidget>:
+<DialWidget>:
     dial_file: ''
     dial_size: (0, 0)
 
@@ -77,3 +82,23 @@
 	    source: root.dial_file
 		size_hint: root.dial_size
 		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+##:import ew kivy.uix.effectwidget
+#<DialShading>:
+#    canvas.before:
+#        PushMatrix
+#        Color:
+#            rgba: 1, 1, 0, 1
+#        Ellipse:
+#            angle_start: 0
+#            angle_end: 270
+#            size: self.width / 2, self.height / 2
+#            pos: self.width / 2, self.height / 2
+#        Color:
+#            rgba: 0, 0, 1, 1
+#        Ellipse:
+#            angle_start: 270
+#            angle_end: 360
+#            size: self.width / 2, self.height / 2
+#            pos: self.width / 2, self.height / 2
+#        PopMatrix
