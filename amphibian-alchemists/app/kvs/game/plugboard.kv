@@ -4,15 +4,22 @@
     BoxLayout:
         orientation: "vertical"
         GridLayout:
-            cols: 2
-            Label:
-                text: "Pair of plugs:"
-            Label:
-                text: "Number of plugs in screen:"
-            Label:
-                text: str(app.root.get_screen("plugboard_screen").pairs_of_plugs)
-            Label:
-                text: str(app.root.get_screen("plugboard_screen").plugs_in_screen)
+            rows: 2
+            BoxLayout:
+                size_hint_y: 0.5
+                Label:
+                    text: "Pair of plugs:"
+                Label:
+                    text: "Number of plugs in screen:"
+            BoxLayout:
+                # TODO: fix label position (try to put it to the top)
+                ScrollView:
+                    Label:
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                        text: "\n".join(app.root.get_screen("plugboard_screen").pairs_of_plugs)
+                Label:
+                    text: str(app.root.get_screen("plugboard_screen").plugs_in_screen)
         BoxLayout:
             size_hint: 0.3, 0.3
             pos_hint: {"center_x": 0.5}
