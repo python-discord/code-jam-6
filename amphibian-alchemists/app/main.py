@@ -12,6 +12,9 @@ kivy.require("1.11.1")
 Factory.register("MainScreen", module="classes.mainscreen")
 Builder.load_file("kvs/mainscreen.kv")
 
+Factory.register("GameSelectorScreen", module="classes.gameselector")
+Builder.load_file("kvs/gameselector.kv")
+
 Factory.register("GameScreen", module="classes.game.gamescreen")
 Builder.load_file("kvs/game/gamescreen.kv")
 
