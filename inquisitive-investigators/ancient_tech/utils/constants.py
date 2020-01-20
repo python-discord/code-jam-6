@@ -1,8 +1,8 @@
-# Constants
+from typing import List
 
-BASE_SIZE = 1024
+BASE_SIZE: int = 1024
 
-UNITS = [
+UNITS: List[str] = [
     'B',
     'KB',
     'MB',

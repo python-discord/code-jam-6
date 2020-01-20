@@ -1,11 +1,19 @@
 from pathlib import Path
 from threading import Thread
 from datetime import datetime
+from typing import (
+    Callable, 
+    Dict, 
+    Tuple, 
+    Union
+)
 
 from .constants import BASE_SIZE, UNITS
 
 
-def bytes_conversion(size, unit=UNITS[0]):
+def bytes_conversion(
+        size: int, unit: str = UNITS[0]
+    ) -> Tuple[str, str]:
     """
     Recursively converts bytes to the biggest
     possible unit without decimals.
@@ -19,7 +27,7 @@ def bytes_conversion(size, unit=UNITS[0]):
         )
     return str(size), unit
 
-def threaded(func):
+def threaded(func: Callable) -> Callable:
     """
     A decorator that runs a function on
     a separate thread.
@@ -31,7 +39,13 @@ def threaded(func):
         
     return wrapper
 
-def file_info(ctx, dir_):
+def file_info(
+        ctx: 'RV', dir_: str
+    ) -> Union[Dict[str, str], Dict[str, 'RV']]:
+    """
+    Returns information on the
+    file/directory given.
+    """
     name = type_ = size = date = ''
 
     if dir_ != '<-':

@@ -1,3 +1,5 @@
+from typing import Any
+
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder
 from kivy.properties import (
@@ -20,15 +22,17 @@ class Terminal(BoxLayout, Shell):
     foreground_color = ListProperty((1, 1, 1, 1))
     background_color = ListProperty((0, 0, 0, 1))
 
-    font_name = StringProperty('./ancient_tech/static/retro_font.ttf')
+    font_name = StringProperty(
+        './ancient_tech/static/retro_font.ttf'
+    )
     font_size = NumericProperty(14)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(Terminal, self).__init__(*args, **kwargs)
 
-    def on_output(self, output):
+    def on_output(self, output: bytes) -> None:
         self.terminal_input.on_output(output)
 
-    def on_complete(self, output):
-        self.terminal_input.on_complete(output)
+    def on_complete(self) -> None:
+        self.terminal_input.on_complete()
         self.terminal_input.focus = True

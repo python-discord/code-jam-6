@@ -14,7 +14,7 @@ class NewFile(Button):
     ctx = ObjectProperty()
     txt = StringProperty()
 
-    def on_release(self):
+    def on_release(self) -> None:
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
         if self.txt == '<-':
