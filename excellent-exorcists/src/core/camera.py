@@ -4,10 +4,10 @@ from kivy.graphics.transformation import Matrix
 
 class Camera:
     def get_viewport(self) -> Tuple[int, int]:
-        raise NotImplemented
+        raise NotImplementedError
 
     def get_projection(self) -> Tuple[Matrix, Matrix]:
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class OrthographicCamera(Camera):
@@ -41,16 +41,18 @@ class OrthographicCamera(Camera):
         self.zoom = zoom
 
     def get_projection(self) -> Tuple[Matrix, Matrix]:
-        width = self.viewport_width / 2
-        height = self.viewport_height / 2
+        viewport_w = self.viewport_width
+        viewport_h = self.viewport_height
+        width = viewport_w / 2
+        height = viewport_h / 2
 
-        x = -self.pos_x + width
-        y = -self.pos_y + height
+        x = -self.pos_x
+        y = -self.pos_y
 
         projection = Matrix()
-        projection.view_clip(0, self.viewport_width, 0, self.viewport_height, -1.0, 1.0, 0)
-        projection.translate(x / width * self.zoom, y / height * self.zoom, 0)
+        projection.view_clip(0, viewport_w, 0, viewport_h, -1.0, 1.0, 0)
         projection.scale(self.zoom, self.zoom, self.zoom)
+        projection.translate(1 + x / width * self.zoom, 1 + y / height * self.zoom, 0)
 
         model_view = Matrix()
 
