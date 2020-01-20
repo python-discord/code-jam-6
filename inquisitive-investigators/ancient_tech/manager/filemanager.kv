@@ -23,18 +23,25 @@
     Column:
         size_hint: .2, .91
         pos_hint: {'top': .91, 'x': .79}
-    ScrollView:
+    RV:
+        viewclass: 'NewFile'
         effect_cls: "ScrollEffect"
         size_hint: .98,.90
         pos_hint: {'x':.01,'y': 0}
         scroll_distance: 10
-        Files:
+        RecycleGridLayout:
+            default_size: None, dp(56)
+            default_size_hint: 1, None
+            size_hint_y: None
             height: self.minimum_height
-            on_parent:
-                self.generate('<-')
-                for d in self.dirs: self.generate(d)
+            cols: 1
+
 
 <NewFile>:
+    name: ''
+    type: ''
+    size_: ''
+    date: ''
     size_hint: 1, None
     FloatLayout:
         size: root.size
@@ -43,18 +50,22 @@
             id: name
             size_hint: .45, .3
             pos_hint: {'top': 1, 'x': 0.01}
+            text: root.name
         FileInfo:
             id: type
             size_hint: .15, .3
             pos_hint: {'top': 1, 'x': 0.475}
+            text: root.type
         FileInfo:
             id: size
             size_hint: .1, .25
             pos_hint: {'top': 1, 'x': .65}
+            text: root.size_
         FileInfo:
             id: date
             size_hint: .2, .3
             pos_hint: {'top': 1, 'x': .81}
+            text: root.date
 
 <FileHeader>:
     canvas.before:
@@ -99,13 +110,6 @@
     text_size: self.size
     color: 0.34,1,1,1
     halign: 'left'
-
-<Files>:
-    size: root.size
-    pos: root.pos
-    orientation: 'rl-tb'
-    spacing: [0,-70]
-    size_hint: 1, None
 
 <Column>:
     canvas.before:

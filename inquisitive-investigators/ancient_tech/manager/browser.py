@@ -5,9 +5,11 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.stacklayout import StackLayout
+from kivy.uix.recycleview import RecycleView
+from kivy.uix.recycleboxlayout import RecycleBoxLayout
 
 from .file import NewFile
+from ..utils.utils import file_info
 
 Builder.load_file('./ancient_tech/manager/filemanager.kv')
 
@@ -20,15 +22,29 @@ class FileHeader(FloatLayout):
         self.current_dir = str(Path().home())
 
 
-class Files(StackLayout):
-
-    def __init__(self, *args, **kwargs):
+class RV(RecycleView):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
         self.dirs = Path.home().iterdir()
         self.prev_dir = str(Path.home().parent)
 
-    def generate(self, widget):
-        self.add_widget(NewFile(self, str(widget), text=''))
+        self.update(state=0, file=[])
+
+    def generate(self, f):
+        return file_info(self, str(f))
+
+    def update(self, state, file):
+        if state == 0:
+            self.data = [self.generate('<-'), *(self.generate(file_name) for file_name in self.dirs)]
+        elif state == 1:
+            self.data = [self.generate('<-'), *file]
+        elif state == 2:
+            self.data = file
+
+
+class Files(RecycleBoxLayout):
+    pass
 
 
 class FileBrowser(FloatLayout):

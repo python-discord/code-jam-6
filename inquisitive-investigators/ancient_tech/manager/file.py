@@ -4,57 +4,15 @@ from datetime import datetime
 from kivy.logger import Logger
 from kivy.uix.label import Label
 from kivy.uix.button import Button
-
-from ..utils.utils import bytes_conversion
+from kivy.properties import (
+    ObjectProperty,
+    StringProperty
+)
 
 
 class NewFile(Button):
-
-    def __init__(self, ctx, txt, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.txt = txt
-        self.ctx = ctx
-
-        if self.txt != '<-':
-            path = Path(txt)
-            stats = path.stat()
-
-            self.ids.name.text = path.name
-            self.ids.date.text = datetime.fromtimestamp(
-                stats.st_mtime
-            ).strftime('%d-%m-%Y')
-
-            if path.is_dir():
-                t = 'DIR'
-
-                self.ids.size.text = '-'
-                # self.ids.size.text = ' '.join(
-                #    bytes_conversion(
-                #        sum(
-                #            f.stat().st_size for f in path.glob('**/*') if f.is_file()
-                #        )
-                #    )
-                # )
-
-            else:
-
-                if str(path).startswith('.') or path.suffix == '':
-                    t = str(path.parts[-1])
-
-                else:
-                    t = path.suffix[1:].upper()
-                
-                self.ids.size.text = ' '.join(
-                    bytes_conversion(
-                        int(stats.st_size)
-                    )
-                )
-
-            self.ids.type.text = t
-
-        else:
-            self.ids.name.text = '<-'
-            self.ids.type.text = 'PARENT'
+    ctx = ObjectProperty()
+    txt = StringProperty()
 
     def on_release(self):
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
@@ -65,17 +23,18 @@ class NewFile(Button):
             path = Path(self.txt)
 
         if path.is_dir():
-            self.ctx.clear_widgets()
+            self.ctx.data = [self.ctx.generate('<-')]
             self.ctx.dirs = path.iterdir()
+
+            data = [self.ctx.generate(file_name) for file_name in self.ctx.dirs]
 
             if len(path.parts) > 1:
                 self.ctx.prev_dir = str(path.parent)
-                self.ctx.generate('<-')
+                self.ctx.update(state=1, file=data)
+            else:
+                self.ctx.update(state=2, file=data)
 
-            for d in self.ctx.dirs:
-                self.ctx.generate(d)
-
-            self.ctx.parent.parent.ids.header.current_dir = str(path)
+            self.ctx.current_dir = str(path)
 
         else:
             Logger.info('FileBrowser: Not a directory!')
