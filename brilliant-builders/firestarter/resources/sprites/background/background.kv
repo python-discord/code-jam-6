@@ -1,0 +1,104 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+
+<Dino>:
+    canvas:
+        Rectangle:
+            source: "dino.png"
+            size: 750, 600
+            pos: self.pos
+
+<RootScreen>:
+    dino: dino
+
+    transition: FadeTransition()
+
+    StartScreen:
+        name: "start"
+        FloatLayout:
+            Image:
+                size_hint: 1, 1
+                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                keep_ratio: False
+                allow_stretch: True
+                canvas.before:
+                    Color:
+                        rgb: 0,0,0
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                source: 'ui_background_half.png'
+        Button:
+            text: "PLAY!"
+            color: 0, 0, 0, 1
+            size_hint: 0.3, 0.1
+            pos_hint: {'center_x':0.5, 'center_y':0.6}
+            font_size: 50
+            on_release: root.current = "game"
+            background_normal: 'ui_box_medium.png'
+        Button:
+            text: "OPTION!"
+            color: 0, 0, 0, 1
+            size_hint: 0.3, 0.1
+            pos_hint: {'center_x':.5, 'center_y':.48}
+            font_size: 50
+            on_release: root.current = "game"
+            background_normal: 'ui_box_medium.png'
+
+    GameScreen:
+        name: "game"
+        FloatLayout:
+            Image:
+                size_hint: 1, 1
+                keep_ratio: False
+                allow_stretch: True
+                canvas.before:
+                    Color:
+                        rgb: 1,1,1
+                    Rectangle:
+                        size: self.size
+                        pos: self.pos
+                source: 'background.png'
+            Dino:
+                id: dino
+                pos: -100 , -205
+            Image:
+                source: "mountains_2.png"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+                keep_ratio: False
+                allow_stretch: True
+                size_hint: 1, 0.7
+            Image:
+                size_hint: 1.2, 0.6
+                pos_hint: {'x': 0, 'y': 0}
+                keep_ratio: False
+                allow_stretch: True
+                source: "forest.png"
+            Image:
+                size_hint: 1, 1
+                source: "sun.png"
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                size_hint: 0.5, 0.5
+                pos_hint: {'center_x': 0.2, 'center_y': 0.8}
+                keep_ratio: False
+                allow_stretch: True
+                source: "clouds.png"
+            Image:
+                size_hint: 0.5, 0.5
+                pos_hint: {'center_x': 0.75, 'center_y': 0.8}
+                keep_ratio: False
+                allow_stretch: True
+                source: "clouds.png"
+            Image:
+                source: "grass_platform.png"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.3}
+                keep_ratio: False
+                allow_stretch: True
+                size_hint: 1, 0.6
+            Image:
+                source: "cloud_platform_2.png"
+                keep_ratio: True
+                allow_stretch: True
+                pos_hint: {'center_x': 0.5, 'top': 0.8}
