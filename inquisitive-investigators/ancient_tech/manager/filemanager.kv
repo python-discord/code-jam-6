@@ -30,7 +30,7 @@
         pos_hint: {'x':.01,'y': 0}
         scroll_distance: 10
         RecycleGridLayout:
-            default_size: None, dp(56)
+            default_size: None, dp(35)
             default_size_hint: 1, None
             size_hint_y: None
             height: self.minimum_height
@@ -42,28 +42,27 @@
     type: ''
     size_: ''
     date: ''
-    size_hint: 1, None
     FloatLayout:
         size: root.size
         pos: root.pos
         FileInfo:
             id: name
-            size_hint: .45, .3
+            size_hint: .45, 1
             pos_hint: {'top': 1, 'x': 0.01}
             text: root.name
         FileInfo:
             id: type
-            size_hint: .15, .3
+            size_hint: .15, 1
             pos_hint: {'top': 1, 'x': 0.475}
             text: root.type
         FileInfo:
             id: size
-            size_hint: .1, .25
+            size_hint: .1, 1
             pos_hint: {'top': 1, 'x': .65}
             text: root.size_
         FileInfo:
             id: date
-            size_hint: .2, .3
+            size_hint: .2, 1
             pos_hint: {'top': 1, 'x': .81}
             text: root.date
 
@@ -110,6 +109,7 @@
     text_size: self.size
     color: 0.34,1,1,1
     halign: 'left'
+    valign: 'center'
 
 <Column>:
     canvas.before:
