@@ -1,5 +1,5 @@
 #vim files
-.swp
+*.swp
 
 #virtualenv
-.codegem
+codegem

@@ -5,13 +5,22 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-from PIL import ImageFont,ImageDraw
+# ImageFOnt is not being used. Is there a reason why it is imported?
+from PIL import ImageFont, ImageDraw
 from PIL import Image as Im
 from io import BytesIO
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty
+# Clock is not being used either
 from kivy.clock import Clock
 from math import sin, cos, pi
 from kivy.core.window import Window
+import numpy as np
+
+# Global Variable so there is no magic number.
+SCREEN_WIDTH = 720
+SCREEN_HEIGHT = 720
+PAPER_COLOR = (200, 200, 200, 0)
+STARTING_Y = SCREEN_HEIGHT - 150
 
 
 class JJ(App):
@@ -44,32 +53,50 @@ class Pili(Image):
     sin_wobble_speed = NumericProperty(0)
     """
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.img = Im.new("RGBA", (720,720), (200,200,200,0)) # Im.open('paper.png') #self.size
+        super(Pili, self).__init__(*args, **kwargs)
+        # Creating Blank Paper image to type on.
+        self.img = Im.new("RGBA", (SCREEN_WIDTH, SCREEN_HEIGHT), PAPER_COLOR)
+
+        # Type writer does not type from the top rather type from the bottom.
         self.txt = self.img.copy()
-        self.head = {'x': 0, 'y': 0}
-        self.draw = ImageDraw.Draw(self.txt)
-        self.font_size = 0
+        self.head = {'x': 0, 'y': STARTING_Y}
+
         """
         self.mesh_texture = CoreImage('paper.png').texture
         Clock.schedule_interval(self.update_points, 0)
         """
 
     def update(self):
+        """ Update the paper """
         data = BytesIO()
         i = self.letters[-1]
-        self.draw.text((self.head["x"], self.head["y"]), i.char, font=i.font, fill=i.color)
-        self.font_size =  i.font.getsize("l")[1]
-        self.char_size = i.getKerning()[0]
-        self.head["x"] += self.char_size
-        if self.head["x"] +  self.char_size >= self.img.size[0]:
-            self.head["x"] = 0 
-            self.head["y"] += self.font_size
-        
+
+        # Type on the paper
+        self.type(i)
+
+        # Save updated txt (image) in data var to update the CoreImage Texture.
         self.txt.save(data, format='png')
         data.seek(0)
         im = CoreImage(BytesIO(data.read()), ext='png')
         self.texture = im.texture
+
+    def type(self, key):
+        """ Type on the paper """
+        # Drawing on the image
+        ImageDraw.Draw(self.txt).text((self.head["x"], self.head["y"]),
+                                      key.char, font=key.font, fill=key.color)
+        # Scrolling up
+        self.font_size = key.font.getsize("l")[1]
+        self.char_size = key.getKerning()[0]
+        self.head["x"] += self.char_size
+
+        if self.head["x"] + self.char_size >= SCREEN_WIDTH:
+            self.head["x"] = 0
+            self.head["y"] -= self.font_size
+        arr = np.asarray(self.txt)
+        arr.setflags(write=1)
+        arr[self.head["y"], self.head["x"]] = arr[self.head["x"], self.head["y"]]
+        self.txt = Im.fromarray(np.uint8(arr))
 
     def escaped(self):
         if not self.font_size:
@@ -77,7 +104,7 @@ class Pili(Image):
         if self.text[-2:] == '_b':
             self.head["x"] -= self.char_size
         elif self.text[-2:] == '_n':
-            self.head['y'] += self.font_size
+            self.head['y'] -= self.font_size
             self.head['x'] = 0
     """
     def update_points(self, *args):
@@ -93,6 +120,7 @@ class Pili(Image):
 
         self.mesh_points = points
     """
+
 
 class Butt2(Label):
     ''' Phone Button/Label '''
