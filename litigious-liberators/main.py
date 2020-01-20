@@ -4,7 +4,6 @@ from onboarding.onboarding import OnboardingScreen
 from profile_cards.profile_cards import SelectionScreen, PostSelectionScreen
 from profile_creation.createprofile import CreateProfile
 from kivy.lang import Builder
-from kivy.core.window import Window
 
 
 class TindosaurApp(App):
@@ -12,7 +11,6 @@ class TindosaurApp(App):
         Builder.load_file("onboarding/onboarding.kv")
         Builder.load_file("profile_creation/createprofile.kv")
         Builder.load_file("profile_cards/profiles.kv")
-        Window.clearcolor = (188 / 255, 170 / 255, 164 / 255, 1)
         sm = ScreenManager()
         sm.add_widget(OnboardingScreen(name="onboarding"))
         sm.add_widget(CreateProfile(name="create_profile"))
