@@ -107,10 +107,10 @@ class NewFile(Button):
             if len(path.parts) > 1:
                 self.ctx.prev_dir = str(path.parent)
                 self.ctx.update(state=1, file=data)
-            # else:
-            #    self.ctx.data = data
+            else:
+                self.ctx.update(state=1, file=data)
 
-            # self.ctx.parent.parent.ids.header.current_dir = str(path)
+           # self.ctx.parent.parent.ids.header.current_dir = str(path)
 
         else:
             Logger.info('FileBrowser: Not a directory!')
