@@ -1,2 +1,50 @@
+#:import Clock kivy.clock.Clock
+
 <PaperScreen>
     name: "paper_screen"
+    BoxLayout:
+        InputPaper:
+        OutputPaper:
+    AnchorLayout:
+        anchor_x: 'left'
+        anchor_y: 'top'
+        # Game crashes when going back
+        Button:
+            size_hint: 0.1, 0.1
+            text: "Go Back"
+            on_release:
+                root.manager.current = "game_screen"
+
+<InputPaper@AnchorLayout>:
+    size_hint: 0.5, 1
+    Image:
+        source: "misc/paper.png"
+        allow_stretch: True
+        keep_ratio: False
+    RecycleView:
+        size_hint: 0.6, 0.9
+        viewclass: 'Label'
+        data: Clock.schedule_once(lambda dt: app.root.get_screen("paper_screen").input_data())
+        RecycleBoxLayout:
+            default_size: None, dp(25)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+
+<OutputPaper@AnchorLayout>:
+    size_hint: 0.5, 1
+    Image:
+        source: "misc/paper.png"
+        allow_stretch: True
+        keep_ratio: False
+    RecycleView:
+        size_hint: 0.6, 0.9
+        viewclass: 'Label'
+        data: [{'text': str(x)} for x in range(100)]
+        RecycleBoxLayout:
+            default_size: None, dp(25)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
