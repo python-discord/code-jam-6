@@ -1,5 +1,3 @@
-#:import Clock kivy.clock.Clock
-
 <PaperScreen>
     name: "paper_screen"
     BoxLayout:
@@ -24,7 +22,7 @@
     RecycleView:
         size_hint: 0.6, 0.9
         viewclass: 'Label'
-        data: Clock.schedule_once(lambda dt: app.root.get_screen("paper_screen").input_data())
+        data: app.root.get_screen("paper_screen").input_data() if app.root else []
         RecycleBoxLayout:
             default_size: None, dp(25)
             default_size_hint: 1, None
