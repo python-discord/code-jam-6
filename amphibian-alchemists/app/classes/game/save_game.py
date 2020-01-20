@@ -3,7 +3,9 @@ import os
 from kivy.app import App
 from kivy.storage.jsonstore import JsonStore
 
-DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
+DATA_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
 
 
 def store_put(
