@@ -28,23 +28,30 @@ class PlugboardScreen(Screen):
 
     def handle_touch_up(self, instance, touch):
         if instance.collide_point(*touch.pos):
-            self.delete_from_pair(instance)
             if instance.collide_widget(self.ids.remove_plug):
+                self.delete_from_pair(instance)
                 self.ids.floating_widgets.remove_widget(instance)
                 self.last_plugs_count = self.plugs_in_screen
                 self.plugs_in_screen -= 1
 
-            for relativelayout in self.ids.plug_board.children:
-                for child in relativelayout.children:
-                    if isinstance(child, Factory.PlugHole) and instance.collide_widget(
-                        child
-                    ):
-                        if child.name not in self.all_plugged:
-                            instance.center = child.center
-                            instance.plugged_in = child.name
+            for floatlayout in self.ids.plug_board.children:
+                for plughole in floatlayout.children:
+                    if isinstance(
+                        plughole, Factory.PlugHole
+                    ) and instance.collide_widget(plughole):
+                        if plughole.name not in self.all_plugged:
+                            instance.center = plughole.center
+                            instance.plugged_in = plughole.name
+                            return
                         else:
+                            # This is executed when a plug is plugged in
+                            # the same plughole
                             self.on_plugged_out(instance)
-                        return
+                            return
+            if instance.plugged_in:
+                # This is executed when a plug is being moved from
+                # its original position, not plugging it in any other plug hole
+                self.on_plugged_out(instance)
 
     def on_plugged_in(self, instance, value):
         self.all_plugged.clear()
@@ -65,7 +72,7 @@ class PlugboardScreen(Screen):
         if instance.plugged_in in self.all_plugged:
             self.all_plugged.remove(instance.plugged_in)
             self.delete_from_pair(instance)
-        instance.plugged_in == ""
+        instance.plugged_in = ""
         self.animate_positioning(instance)
         return True
 
@@ -113,13 +120,14 @@ class PlugboardScreen(Screen):
                 ]
 
     def handle_wire_pos(self, instance, touch):
-        if self.collide_point(*touch.pos) and self.wires and instance.plugged_in:
-            for item in self.wires.items():
-                if instance.plugged_in in item[0]:
-                    moving_plug = 0
-                    if item[0].index(instance.plugged_in) != 0:
-                        moving_plug = 2
+        if self.collide_point(*touch.pos):
+            if self.wires and instance.plugged_in:
+                for item in self.wires.items():
+                    if instance.plugged_in in item[0]:
+                        moving_plug = 0
+                        if item[0].index(instance.plugged_in) != 0:
+                            moving_plug = 2
 
-                    item[1].points[moving_plug] = instance.center[0]
-                    item[1].points[moving_plug + 1] = instance.center[1]
-                    break
+                        item[1].points[moving_plug] = instance.center[0]
+                        item[1].points[moving_plug + 1] = instance.center[1]
+                        break
