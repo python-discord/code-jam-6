@@ -5,7 +5,7 @@ from typing import Iterator, List
 from project.core import command
 from project.core.parser import Parser
 from project.core.terminal import Terminal
-from project.core.utils import change_dir, Path
+from project.core.utils import PathLike
 
 type_form = '<{}>'
 time_form = '({}; {})'
@@ -14,12 +14,12 @@ name_form = '{}'
 
 
 class LS(command.Command):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(name='ls')
 
     @command.option('dir', nargs='?', default='.')
     def handle_dir(self, ns: Namespace, term: Terminal) -> None:
-        self.dir = change_dir(term.path, ns.dir)
+        self.dir = term.fs.change_dir(term.path, ns.dir)
 
     @command.option('-a', '--all', action='store_true', default=False)
     def handle_all(self, ns: Namespace, term: Terminal) -> None:
@@ -32,7 +32,7 @@ class LS(command.Command):
     def main(self, ns: Namespace, term: Terminal) -> str:
         entries = []
 
-        for path in sorted(self.dir.iterdir()):
+        for path in sorted(term.fs.iter_dir(self.dir)):
             name = path.name
 
             if name.startswith('.') and not self.show_all:
@@ -45,18 +45,14 @@ class LS(command.Command):
                 to_add = [
                     type_form.format(typeof),
                     time_form.format(
-                        _human_timestamp(stat.st_ctime),
-                        _human_timestamp(stat.st_mtime)
+                        _human_timestamp(stat.st_ctime), _human_timestamp(stat.st_mtime)
                     ),
                     size_form.format(stat.st_size),
-                    name_form.format(name)
+                    name_form.format(name),
                 ]
 
             else:
-                to_add = [
-                    type_form.format(typeof),
-                    name_form.format(name)
-                ]
+                to_add = [type_form.format(typeof), name_form.format(name)]
 
             entries.append(to_add)
 
@@ -84,7 +80,7 @@ def _human_timestamp(seconds: int) -> str:
     return datetime.fromtimestamp(seconds).strftime('%y.%m.%d %H:%M:%S')
 
 
-def _define_type(path: Path) -> str:
+def _define_type(path: PathLike) -> str:
     if path.is_dir():
         return 'dir'
     elif path.is_socket():

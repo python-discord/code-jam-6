@@ -9,7 +9,7 @@ from project.core.terminal import Terminal
 
 
 class Exit(command.Command):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(name='exit')
 
     @command.option('code', nargs='?', type=int, default=0)

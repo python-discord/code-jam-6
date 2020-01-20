@@ -1,5 +1,5 @@
 import importlib
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from project.core.command import Command
 from project.core.log import log
@@ -12,16 +12,22 @@ class Parser:
     def __init__(self) -> None:
         self._commands: Dict[str, Command] = {}
 
+    def list_commands(self) -> List[Command]:
+        return list(self._commands.values())
+
+    def get_command(self, name: str) -> Optional[Command]:
+        return self._commands.get(name)
+
     def add_command(self, command: Command) -> None:
         self._commands[command.name] = command
 
     def load_command(self, module: str, char: str = '.') -> None:
         path: str = make_path(module)
-
         try:
             module = importlib.import_module(path)  # type: ignore
         except ImportError:
             log.warning(f'Could not load command: {module!r}.')
+            return
 
         if not hasattr(module, 'setup'):
             log.warning(f'Command module does not have setup function: {module!r}.')
@@ -37,7 +43,6 @@ class Parser:
 
         commands = self._commands
         command_name = args.pop(0)
-
         if command_name in commands:
             return commands.get(command_name).execute(term=term, args=args)
 

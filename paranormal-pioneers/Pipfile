@@ -10,15 +10,19 @@ flake8-tidy-imports = '*'
 flake8-annotations = '*'
 coverage = '*'
 pytest = '*'
+black = "*"
 
 [packages]
 kivy = '~=1.11'
+typed-ast = "*"
+flake8 = "*"
+importlib-metadata = "*"
 
 [requires]
 python_version = '3.7'
 
 [scripts]
-lint = 'flake8'
+lint = 'flake8 --ignore=TYP101'
 precommit = 'pre-commit install'
 test = 'coverage run -m pytest'
 report = 'coverage report'

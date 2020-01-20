@@ -1,0 +1,5 @@
+name = 'name'
+term_name = 'term'
+ps = '$'
+end = ' '
+format = '{name}@{terminal}:{path}{ps}{end}'

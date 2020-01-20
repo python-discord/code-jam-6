@@ -1,53 +1,100 @@
+from functools import wraps
 from pathlib import Path
-from typing import List, Union
+from typing import Any, Callable, IO, Generator, Iterable, List, Union
 
-from project.core.constants import CANNOT_EXIT_ENV, FILE_SYSTEM
+from project.core.constants import BIN_DIR, CANNOT_EXIT_ENV, FILE_SYSTEM
 from project.core.log import log
 
+Function = Callable[[Any], Any]
 PathLike = Union[str, Path]
+FS = 'project.core.utils.FS'
 
 ROOT = FILE_SYSTEM.resolve()
 CURRENT = '.'
 PARENT = '..'
 
 
-def check_env(path: PathLike):
-    try:
-        path.relative_to(ROOT)
-        return True
-    except ValueError:  # outside
-        if CANNOT_EXIT_ENV:
-            log.warning('error: attempt to exit the environment')
-            return False
+def resolve_path() -> Function:
+    def decorator(method: Function) -> Function:
+        @wraps(method)
+        def wrapper(fs: FS, path: str, *args, **kwargs) -> Any:
+            def resolve(path: str) -> Path:
+                return (ROOT / path).resolve()
+            return method(fs, resolve(path), *args, **kwargs)
+        return wrapper
+    return decorator
 
 
-def change_dir(before: PathLike, after: PathLike) -> PathLike:
-    new_dir: PathLike = find_dir(before, after)
-
-    if not check_env(new_dir):
-        return before
-
-    if not new_dir.exists():
-        log.warning('error: path does not exist')
-        return before
-
-    if new_dir.is_file():
-        log.warning('error: cannot accept files')
-        return before
-
-    return new_dir
+class OSException(Exception):
+    def __init__(self, message: str):
+        super().__init__(message)
 
 
-def find_dir(before: PathLike, after: PathLike) -> PathLike:
-    path: Path = Path(before)
-    parts: List[str] = Path(str(after)).parts
+class FS:
+    @resolve_path()
+    def open_file(self, path: PathLike, mode: str) -> IO:
+        if path.exists():
+            return path.open(mode)
+        raise OSException(f'error: file {path} does not exist')
 
-    for part in parts:
-        if part == CURRENT:
-            continue
-        elif part == PARENT:
-            path = path.parent
-        else:
-            path /= part
+    @resolve_path()
+    def file_exists(self, path: PathLike) -> bool:
+        return path.exists()
 
-    return path
+    @resolve_path()
+    def iter_dir(self, path: PathLike) -> Generator[Path, None, None]:
+        return path.iterdir()
+
+    def resolve_commands(
+        self, search_paths: Iterable[PathLike] = (BIN_DIR,)
+    ) -> Generator[Path, None, None]:
+        for path in search_paths:
+            for file in filter(Path.is_file, self.iter_dir(path)):
+                if file.suffix in {'.py'}:
+                    yield file
+
+    @resolve_path()
+    def check_env(self, path: PathLike) -> bool:
+        try:
+            path.relative_to(ROOT)
+        except ValueError:
+            if CANNOT_EXIT_ENV:
+                raise OSException('error: attempt to exit the environment')
+
+    def change_dir(self, before: PathLike, after: PathLike) -> PathLike:
+        new_dir: PathLike = self.find_dir(before, after)
+
+        self.check_env(new_dir)
+
+        if not new_dir.exists():
+            raise OSException('error: path does not exist')
+
+        if not new_dir.is_dir():
+            raise OSException('error: not a directory')
+
+        return new_dir
+
+    @resolve_path()
+    def find_dir(self, before: PathLike, after: PathLike) -> PathLike:
+        path: Path = Path(before)
+        parts: List[str] = Path(str(after)).parts
+
+        for part in parts:
+            if part == CURRENT:
+                continue
+            elif part == PARENT:
+                path = path.parent
+            else:
+                path /= part
+
+        self.check_env(path)
+
+        return path
+
+    @resolve_path()
+    def is_file(self, path: PathLike) -> bool:
+        return path.is_file()
+
+    @resolve_path()
+    def touch(self, path: PathLike) -> None:
+        path.touch()

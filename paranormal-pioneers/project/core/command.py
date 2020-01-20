@@ -2,18 +2,19 @@ from argparse import ArgumentParser, Namespace
 from types import FunctionType
 from typing import Any, Callable, List, Tuple, Union
 
+from project.core.utils import OSException
+
 Function = Callable[[Any], Any]
 Terminal = 'project.terminal.Terminal'
 
 
 class PatchedParser(ArgumentParser):
-    def exit(self, status: int = 0, message: str = ''):
-        self._print_message(message)
+    def exit(self, status: int = 0, message: str = '') -> None:
+        raise OSException(message.strip('\n'))
 
 
 class Option:
-    def __init__(self, func, *args, **kwargs) -> None:
-
+    def __init__(self, func: Callable, *args: Any, **kwargs: Any) -> None:
         if not isinstance(func, FunctionType):
             raise TypeError(f'Expected function, got type {type(func).__name__}.')
 
@@ -24,23 +25,31 @@ class Option:
     def __repr__(self) -> str:
         return f'<Option func={self._func} args={self._args} kwargs={self._kwargs}>'
 
-    def _call(self, *args, **kwargs) -> Any:
+    def _call(self, *args: Any, **kwargs: Any) -> Any:
         return self._func(*args, **kwargs)
 
     def _expose_to(self, parser: ArgumentParser) -> None:
         parser.add_argument(*self._args, **self._kwargs)
 
 
-def option(*args, **kwargs) -> Function:
+def option(*args: Any, **kwargs: Any) -> Function:
     def wrapper(f: Function) -> Option:
         return Option(f, *args, **kwargs)
+
     return wrapper
+
+
+def setup_parser(**kwargs) -> PatchedParser:
+    kwargs.update(add_help=False)
+    parser = PatchedParser(**kwargs)
+    parser.add_argument('-h', '--help', action='store_true', default=False)
+    return parser
 
 
 class Command:
     def __init__(self, name: str) -> None:
         self._opt: List[Option] = []
-        self._parser: PatchedParser = PatchedParser(prog=name, add_help=False)
+        self._parser: PatchedParser = setup_parser(prog=name)
 
         self._name: str = name
 
@@ -50,22 +59,30 @@ class Command:
         return f'<Command {self.name}>'
 
     @property
+    def parser(self):
+        return self._parser
+
+    @property
     def name(self) -> str:
         return self._name
 
-    @option('-h', '--help', action='store_true', default=False)
-    def _help(self, ns: Namespace, term: Terminal) -> None:
-        if ns.help:
-            self._parser.print_help()
-
-    def execute(self, term: Terminal, args: Union[str, List[str], Tuple[str]] = ()) -> Any:
+    def execute(
+        self, term: Terminal, args: Union[str, List[str], Tuple[str]] = ()
+    ) -> Any:
         ns: Namespace = self._parse(args)
 
-        for option in self._opt:
-            option._call(self, ns=ns, term=term)
-
         if not ns.help:
+
+            for option in self._opt:
+                option._call(self, ns=ns, term=term)
+
             return self.main(ns=ns, term=term)
+
+        else:
+            return self.format_help()
+
+    def format_help(self) -> str:
+        return self.parser.format_help().replace('\n\n', '\n').strip('\n')
 
     def main(self, ns: Namespace, term: Terminal) -> Any:
         pass

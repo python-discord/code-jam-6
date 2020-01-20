@@ -6,7 +6,7 @@ from project.core.terminal import Terminal
 
 
 class Echo(command.Command):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(name='echo')
 
     @command.option('text', nargs='*')
