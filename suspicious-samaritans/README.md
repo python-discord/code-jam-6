@@ -7,7 +7,7 @@
   - Nationality: British
   - Gender: Male
   - Age: 16
-  - 'UX is top priority, second only to making our lives easier'
+  - 'UX is top priority, second only to our own QoL'
 - Liam
   - Frontend and backend development
   - Nationality: Latin-American
