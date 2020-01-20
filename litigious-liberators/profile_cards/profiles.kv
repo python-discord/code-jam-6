@@ -1,0 +1,35 @@
+#:kivy 1.11.1
+<SelectionScreen>:
+    name: 'profile_list'
+    canvas:
+        Rectangle:
+            size: self.size
+            Color:
+                rgba: 0.5, 0.5, 0.5, 1
+    ProfileList:
+        id: profile_list
+        size_hint_y: 0.9
+
+<ProfileCard>:
+    BoxLayout:
+        orientation: 'vertical'
+        Image:
+            id: picture
+            size_hint_y: None
+            height: 200
+        Label:
+            id: name
+            color: 0, 0, 0, 1
+            size_hint_y: None
+        Label:
+            id: about
+            color: 0, 0, 0, 1
+        Label:
+            id: job
+            color: 0, 0, 0, 1
+            text: 'Job: '
+
+<PostSelectionScreen>:
+    name: 'post_selection_screen'
+    Label:
+        text: 'Post selection screen'

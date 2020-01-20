@@ -1,39 +1,44 @@
 from kivy.config import Config
 from kivy.app import App
-from kivy.core.window import Window
 from kivy.properties import ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.carousel import Carousel
 import os
 from os import listdir
 from random import shuffle
 from copy import deepcopy
-from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
 from yaml import safe_load
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
-
-
-class Slide(BoxLayout):
-    def __init__(self, profile, **kwargs):
-        super(Slide, self).__init__(**kwargs)
-        self.ids.picture.source = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), f"../profiles/pictures/{profile['Picture']}"
-        )
-        self.ids.name.text += profile["Name"]
-        self.ids.species.text += profile["Species"]
-        self.ids.age.text += str(profile["Age"])
-        self.ids.job.text += profile["What I do"]
 
 
 class Root(BoxLayout):
     swiper_obj = ObjectProperty(None)
 
 
-class Swiper(Carousel):
+class SelectionScreen(Screen):
+    pass
+
+
+class PostSelectionScreen(Screen):
+    pass
+
+
+class ProfileCard(Screen):
+    def __init__(self, profile, **kwargs):
+        super(ProfileCard, self).__init__(**kwargs)
+        self.ids.picture.source = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), f"../profiles/pictures/{profile['Picture']}"
+        )
+        about_text = f"I'm a {profile['Age']} year old {profile['Species']}"
+        self.ids.name.text = profile["Name"]
+        self.ids.about.text = about_text
+        self.ids.job.text += profile["What I do"]
+
+
+class ProfileList(ScreenManager):
     def __init__(self, **kwargs):
-        super(Swiper, self).__init__(**kwargs)
+        super(ProfileList, self).__init__(**kwargs)
         self.profile_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "../profiles/write-ups"
         )
@@ -42,9 +47,10 @@ class Swiper(Carousel):
         self.cycler = self.r_cycle(self.profile_list)
         self._selected = set()
         self.limit = 3
+        self.loop = True
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
             profile = safe_load(profile_file.read())
-            self.add_widget(Slide(profile))
+            self.add_widget(ProfileCard(profile))
 
     @property
     def selected(self):
@@ -54,7 +60,7 @@ class Swiper(Carousel):
     def selected(self, value):
         self._selected = value
         if len(self._selected) >= self.limit:
-            self.parent.parent.manager.current = "after"
+            App.get_running_app().root.current = "post_selection_screen"
 
     def on_touch_down(self, touch):
         if touch.is_mouse_scrolling:
@@ -63,31 +69,22 @@ class Swiper(Carousel):
                 if next_profile not in self.selected:
                     break
             if touch.button == "scrolldown":
-                self.direction = "right"
-                popup = SwipePopup(caller=self)
-                popup.open()
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
-                    self.selected |= {
-                        os.path.join(
-                            os.path.dirname(os.path.abspath(__file__)),
-                            f"../profiles/pictures/{profile['Picture']}",
-                        )
-                    }
-                    self.add_widget(Slide(profile))
-                self.load_next()
+                    current = self.current_screen
+                    name_for_set = current.ids.picture.source.split("/")[-1]
+                    name_for_set = name_for_set.split(".")[0] + ".yml"
+                    self.selected |= {name_for_set}
+                    trans = SwapTransition()
+                    self.switch_to(ProfileCard(profile), direction="right", transition=trans)
+                    self.remove_widget(current)
 
             elif touch.button == "scrollup":
-                self.direction = "left"
                 with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
                     profile = safe_load(profile_file.read())
-                    self.add_widget(Slide(profile))
-                self.load_next()
-
-        if touch.is_double_tap:
-            popup = SwipePopup(caller=self)
-            self.selected |= {self.current_slide.ids["picture"].source.split("/")[1]}
-            popup.open()
+                    current = self.current_screen
+                    self.switch_to(ProfileCard(profile), direction="right")
+                    self.remove_widget(current)
 
     @staticmethod
     def r_cycle(x):
@@ -97,34 +94,17 @@ class Swiper(Carousel):
                 yield element
 
 
-class SwipePopup(Popup):
-    def __init__(self, *, caller, **kwargs):
-        self.caller = caller
-        super(SwipePopup, self).__init__(**kwargs)
-
-    def change_screen(self):
-        App.get_running_app().root.current = "after"
-        self.dismiss()
-
-
-class SwipingScreen(Screen):
-    pass
-
-
-class AfterSwipeScreen(Screen):
-    pass
-
-
-class CarouselApp(App):
+class ProfilesApp(App):
     def build(self):
-        Window.clearcolor = (188 / 255, 170 / 255, 164 / 255, 1)
-        sm = ScreenManager()
-        sm.add_widget(SwipingScreen(name="swipe_cards"))
-        sm.add_widget(AfterSwipeScreen(name="after"))
-        return sm
+        self.sm = ScreenManager()
+        self.selection_screen = SelectionScreen()
+        self.post_selection_screen = PostSelectionScreen()
+        self.sm.add_widget(self.selection_screen)
+        self.sm.add_widget(self.post_selection_screen)
+        return self.sm
 
 
 if __name__ == "__main__":
     # calling run method of the application will build the widget tree,
     # and start the event loop.
-    CarouselApp().run()
+    ProfilesApp().run()
