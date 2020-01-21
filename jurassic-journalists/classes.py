@@ -1,8 +1,16 @@
-#classes.py
 from PIL import ImageFont
-#letter class- each letter is one of these objects, and is rendered in order.
 class Letter:
+    """ letter class- each letter is one of these objects, and is rendered in order. """
     def __init__(self,char,size,font,color = (255,255,255,255),b=False,i=False,u=False):
+        """
+        char: character.
+        size: size of letter.
+        font: PIL truetype font object. TODO: add handling for other types
+        color: color of letter, RGBA tuple, range 0-1.
+        b: Bold flag.
+        i: Italics flag.
+        u: Underlined flag.
+        """
         self.char = char
         self.size = size
         self.font = ImageFont.truetype(font, size)
@@ -10,20 +18,13 @@ class Letter:
         self.b = b
         self.i = i
         self.u = u
-        #Map:
-        #char: character.
-        #size: size of letter.
-        #font: PIL truetype font object. TODO: add handling for other types
-        #color: color of letter, RGBA tuple, range 0-1.
-        #b: Bold flag.
-        #i: Italics flag.
-        #u: Underlined flag.
-    def getKerning(self):
-        #gets dimensions as tuple(w,h) that it will be when rendered.
+    # Do not mix camel cases with python methods which should be in snake cases
+    def get_kerning(self):
+        """ gets dimensions as tuple(w,h) that it will be when rendered. """
         return self.font.getsize(self.char)
         
-
-#Witeout class- the little squiggle you have to do to erase words.
+# Why is this neccessary ?
 class WiteOut:
+    """ Witeout class- the little squiggle you have to do to erase words. """
     def __init__(self):
         pass

@@ -5,16 +5,12 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-# ImageFOnt is not being used. Is there a reason why it is imported?
-from PIL import ImageFont, ImageDraw
+from PIL import ImageDraw
 from PIL import Image as Im
 from io import BytesIO
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty
-# Clock is not being used either
-from kivy.clock import Clock
 from math import sin, cos, pi
 from kivy.core.window import Window
-import numpy as np
 
 # Global Variable so there is no magic number.
 SCREEN_WIDTH = 720
@@ -23,26 +19,26 @@ PAPER_COLOR = (200, 200, 200, 0)
 STARTING_Y = SCREEN_HEIGHT - 150
 
 
-class JJ(App):
+class JurassicJournalistApp(App):
     ''' App Class '''
     def build(self):
-        Window.borderless = True
-        return Main()
+#        Window.borderless = True
+        return MainScreen()
 
 
-class Main(ScreenManager):
+class MainScreen(ScreenManager):
     ''' ScreenManager '''
 
 
-class TypeWriter(Screen):
+class RoomScreen(Screen):
     ''' Screen One '''
 
 
-class Screen2(Screen):
+class PhoneScreen(Screen):
     ''' Screen Two '''
 
 
-class Pili(Image):
+class TextPaper(Image):
     """
     mesh_points = ListProperty([])
     mesh_texture = ObjectProperty(None)
@@ -93,10 +89,6 @@ class Pili(Image):
         if self.head["x"] + self.char_size >= SCREEN_WIDTH:
             self.head["x"] = 0
             self.head["y"] -= self.font_size
-        arr = np.asarray(self.txt)
-        arr.setflags(write=1)
-        arr[self.head["y"], self.head["x"]] = arr[self.head["x"], self.head["y"]]
-        self.txt = Im.fromarray(np.uint8(arr))
 
     def escaped(self):
         if not self.font_size:
@@ -106,23 +98,8 @@ class Pili(Image):
         elif self.text[-2:] == '_n':
             self.head['y'] -= self.font_size
             self.head['x'] = 0
-    """
-    def update_points(self, *args):
-        points = [Window.width / 2, Window.height / 2, .5, .5]
-        i = 0
-        while i < 2 * pi:
-            i += 0.01 * pi
-            points.extend([
-                Window.width / 2 + cos(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
-                Window.height / 2 + sin(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
-                self.offset_x + sin(i),
-                self.offset_y + cos(i)])
 
-        self.mesh_points = points
-    """
-
-
-class Butt2(Label):
+class PhoneButtons(Label):
     ''' Phone Button/Label '''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -145,4 +122,4 @@ class Butt2(Label):
         return True
 
 
-JJ().run()
+JurassicJournalistApp().run()
