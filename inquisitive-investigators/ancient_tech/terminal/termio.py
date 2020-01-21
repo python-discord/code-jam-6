@@ -13,6 +13,8 @@ from kivy.properties import (
     ObservableList
 )
 
+from ..utils.constants import KEYS
+
 
 class TerminalInput(TextInput):
     """
@@ -52,9 +54,7 @@ class TerminalInput(TextInput):
         Captures specific key presses
         and executes accordingly.
         """
-        # Enter = 13
-        # Execute command
-        if keycode[0] == 13:
+        if keycode[0] in KEYS['enter']:
             self.validate_cursor_pos()
             text = self.text[self._cursor_pos:]
 
@@ -65,12 +65,12 @@ class TerminalInput(TextInput):
 
         # Backspace = 8
         # Delete = 127
-        elif keycode[0] in (8, 127):
+        elif keycode[0] in KEYS['del', 'backspace']:
             self.cancel_selection()
 
         # C = 99
         # Stop execution
-        elif keycode[0] == 99 and 'ctrl' in modifiers:
+        elif keycode[0] in KEYS['c'] and 'ctrl' in modifiers:
             self.shell.stop()
 
         if self.cursor_index() < self._cursor_pos:

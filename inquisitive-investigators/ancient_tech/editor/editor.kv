@@ -1,19 +1,20 @@
 #:kivy 1.11.1
 
 <TextEditor>:
-    editor: editor
-    recycler
+    BoxLayout:
+        editor: editor
+        recycler: recycler
 
-    RecycleView:
-        viewclass: 'Editor'
-        id: recycler
-        
-        Editor:
-            id: editor
-            shell: root
-            font_name: root.font_name
-            font_size: root.font_size
-            foreground_color: root.foreground_color
-            background_color: root.background_color
-            height: max(self.parent.height, self.minimum_height)
-            size_hint_y: None
+        RecycleView:
+            viewclass: 'EditorIO'
+            id: recycler
+                
+            EditorIO:
+                id: editor
+                shell: root
+                font_name: root.font_name
+                font_size: root.font_size
+                foreground_color: root.foreground_color
+                background_color: root.background_color
+                height: max(self.parent.height, self.minimum_height)
+                size_hint_y: None

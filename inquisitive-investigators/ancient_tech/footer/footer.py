@@ -21,6 +21,7 @@ class Footer(BoxLayout):
 
         self.actions = {
             '1': self.about,
+            '3': self.view,
             '8': self.mkdir,
             '0': self.quit
         }
@@ -53,6 +54,11 @@ class Footer(BoxLayout):
     def mkdir(self) -> None:
         popup = Mkdir(self, size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
+        return True
+
+    def view(self) -> None:
+        # not working
+        self.parent.manager.current = 'text_editor'
         return True
 
     def quit(self) -> None:

@@ -3,6 +3,7 @@ from typing import Any
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.screenmanager import Screen
 from kivy.properties import (
     ObjectProperty,
     StringProperty,
@@ -10,10 +11,12 @@ from kivy.properties import (
     ListProperty
 )
 
+from .editorIO import EditorIO
+
 Builder.load_file('./ancient_tech/editor/editor.kv')
 
 
-class TextEditor(BoxLayout):
+class TextEditor(Screen):
     editor = ObjectProperty()
     recycler = ObjectProperty()
 
@@ -27,13 +30,3 @@ class TextEditor(BoxLayout):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(TextEditor, self).__init__(*args, **kwargs)
-
-
-
-class TestApp(App):
-
-    def build(self):
-        return TextEditor()
-
-if __name__ == '__main__':
-    TestApp().run()
