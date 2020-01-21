@@ -1,8 +1,10 @@
 <Wire@Widget>:
     points: []
+    color: [0, 0, 0]
     canvas:
         Color:
-            rgba: 0, 0, 0, 0.5
+            rgb: root.color or [0, 0, 0]
+            a: 0.5
         Line:
             points: root.points
             width: 5

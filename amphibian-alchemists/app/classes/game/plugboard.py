@@ -7,9 +7,24 @@ from kivy.uix.screenmanager import Screen
 
 class PlugboardScreen(Screen):
     all_plugged = []
-    plugs_in_screen = BoundedNumericProperty(0, min=0, max=20)
+    plugs_in_screen = BoundedNumericProperty(0, min=0, max=26)
     last_plugs_count = 0
     wires = DictProperty({})
+    wire_colors = (
+        [0, 0, 0],
+        [0, 0, 1],
+        [0, 1, 0],
+        [1, 0, 0],
+        [1, 1, 0],
+        [1, 0, 1],
+        [0, 1, 1],
+        [1, 1, 1],
+        [128 / 255, 0, 128 / 255],
+        [102 / 255, 128 / 255, 0],
+        [55 / 255, 171 / 255, 200 / 255],
+        [85 / 255, 0, 34 / 255],
+        [1, 102 / 255, 0],
+    )
 
     def get_plug(self):
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
@@ -71,6 +86,7 @@ class PlugboardScreen(Screen):
                 *self.ids.plug_board.ids[self.all_plugged[0]].center,
                 *self.ids.plug_board.ids[self.all_plugged[1]].center,
             ]
+            wire.color = self.wire_colors[int((len(self.all_plugged) / 2) % 13 - 1)]
             self.ids.floating_widgets.add_widget(wire)
             self.wires.update({f"{''.join(self.all_plugged[:2])}": wire})
             self.ids.floating_widgets.get_a_plug.disabled = False
