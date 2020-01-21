@@ -4,65 +4,61 @@
    from within the same directory.
 """
 
-
 import unittest
-import navcont
+
+from navcont import NavControl, Directions
+
 
 # This observer is purely to retrieve callbacks for testing
-class Observer():
+class Observer:
     def __init__(self):
-        self.direction = ''
-        self.distance=-1
+        self.direction = None
+        self.distance = None
 
     def callback(self, direction, distance):
         self.direction = direction
         self.distance = distance
 
+
 class TestNavControl(unittest.TestCase):
+    def setUp(self):
+        self.observer = Observer()
+        self.nav_control = NavControl()
 
-    def test_go(self):
-        ob = Observer()
-        nc = navcont.NavControl()
+        self.nav_control.subscribe(self.observer.callback)
 
-        nc.subscribe(ob.callback)
+    def test_defaults(self):
+        self.nav_control.go()
 
-        # Test initial defaults
-        nc.go()
-        self.assertEqual(ob.direction, 'N')
-        self.assertEqual(ob.distance, 1)
+        self.assertEqual(self.observer.direction, Directions.NORTH)
+        self.assertEqual(self.observer.distance, 1)
 
-        # Test lower case call
-        nc.go('e', 4)
-        self.assertEqual(ob.direction, 'E')
-        self.assertEqual(ob.distance, 4)
+    def test_repeat_distance(self):
+        self.nav_control.go(Directions.SOUTH, 5)
 
-        # Test repeat previous distance
-        nc.go('S')
-        self.assertEqual(ob.direction, 'S')
-        self.assertEqual(ob.distance, 4)
+        self.assertEqual(self.observer.direction, Directions.SOUTH)
+        self.assertEqual(self.observer.distance, 5)
 
-        # Test repeat previous direction
-        nc.go(distance=99)
-        self.assertEqual(ob.direction, 'S')
-        self.assertEqual(ob.distance, 99)
+        self.nav_control.go(Directions.NORTH)
 
-        # Test upper and lower case directions
-        nc.go('N')
-        self.assertEqual(ob.direction, 'N')
-        nc.go('S')
-        self.assertEqual(ob.direction, 'S')
-        nc.go('E')
-        self.assertEqual(ob.direction, 'E')
-        nc.go('W')
-        self.assertEqual(ob.direction, 'W')
-        nc.go('n')
-        self.assertEqual(ob.direction, 'N')
-        nc.go('s')
-        self.assertEqual(ob.direction, 'S')
-        nc.go('e')
-        self.assertEqual(ob.direction, 'E')
-        nc.go('w')
-        self.assertEqual(ob.direction, 'W')
+        self.assertEqual(self.observer.direction, Directions.NORTH)
+        self.assertEqual(self.observer.distance, 5)
 
-        # Test exception
-        self.assertRaises(ValueError, nc.go, 'q')
+    def test_repeat_direction(self):
+        self.nav_control.go(Directions.SOUTH, 5)
+
+        self.assertEqual(self.observer.direction, Directions.SOUTH)
+        self.assertEqual(self.observer.distance, 5)
+
+        self.nav_control.go(distance=100)
+
+        self.assertEqual(self.observer.direction, Directions.SOUTH)
+        self.assertEqual(self.observer.distance, 100)
+
+    def test_invalid_direction(self):
+        with self.assertRaises(ValueError):
+            self.nav_control.go(direction="bruh")
+
+    def test_invalid_distance(self):
+        with self.assertRaises(ValueError):
+            self.nav_control.go(distance=0)
