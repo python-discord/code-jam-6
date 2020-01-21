@@ -16,10 +16,14 @@ All projects will merged into our Code Jam repository, which uses the [MIT licen
 
 ## Setup The Environment
 
-used venv to create the virtual envoronment. It was run with: python3 -m venv venv
+used venv to create the virtual environment. It was run with: python3 -m venv venv
 
 followed by: source ./venv/bin/activate
 
 I assume: python3 -m pip -r requirements.txt
 
 But I am not sure. :)
+
+## Run It
+
+python gui.py

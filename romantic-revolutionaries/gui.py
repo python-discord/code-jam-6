@@ -45,10 +45,6 @@ class MainContainer(BoxLayout, InputEvents):
         pass
 
 
-class DisplayContainer(BoxLayout):
-    pass
-
-
 class CompassContainer(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
