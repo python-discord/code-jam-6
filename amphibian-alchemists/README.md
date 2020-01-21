@@ -13,9 +13,12 @@ Table of Contents:
 ---
 ### Setup
 1. Clone or download this repository.
-2. Creating a virtual environment.
-3. Activate it and `pip install kivy`.
-4. In terminal, run main.py by doing `python main.py`
+2. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
+3. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`. 
+4. Go to the top directory where `reuirements.txt` lives and `pip install -r requirements.txt`.
+5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
+
+THe current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup o=your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
 
 ---
 ### Tutorial
@@ -47,6 +50,7 @@ You can learn more about the enigma machine here:
 
 A diagram of the machine's internal functionality:
 ![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
+
 ---
-### TODO
-- Integration with Discord
+### LICENSE
+Apache 2.0 License
