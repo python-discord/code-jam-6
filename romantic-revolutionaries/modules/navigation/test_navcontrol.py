@@ -6,7 +6,7 @@
 
 import unittest
 
-from navcont import NavControl, Directions
+from modules.navigation.navcont import NavControl, Directions
 
 
 # This observer is purely to retrieve callbacks for testing
