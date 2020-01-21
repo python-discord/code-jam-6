@@ -3,6 +3,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
+from frontend import LedgerLayout
 
 
 class Calculator(Screen):
@@ -150,7 +151,7 @@ class Abacus(Widget):
                 bottom_beads[j].size = (bead_w, bead_w / 2)
 
 
-class Ledger(Widget):
+class Ledger(LedgerLayout):
     pass
 
 
