@@ -7,6 +7,7 @@ import kivy
 import requests
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.core.window import Window
 from kivy.graphics import *
 from kivy.lang import Builder
 from kivy.properties import NumericProperty
@@ -35,9 +36,15 @@ class DialWidget(FloatLayout):
     def __init__(self, day_length, dial_image, dial_size, suntimes, **kwargs):
         super(DialWidget, self).__init__(**kwargs)
 
-        self.dial_file = dial_image
-        self.dial_size = dial_size      # X / Y tuple.
+        self.size = Window.width, Window.height
 
+        self.dial_file = dial_image
+        # self.dial_size = dial_size
+        self.dial_size = dial_size
+
+        size = self.height * 0.8, self.height * 0.8
+
+        # print(size)
         # Duration is how long it takes to perform the overall animation
         anim = Animation(angle=360, duration=day_length)
         anim += Animation(angle=360, duration=day_length)
@@ -48,6 +55,8 @@ class DialWidget(FloatLayout):
         sunrise = suntimes[0]
         sunset = suntimes[1]
 
+        self.add_widget(DialEffectWidget((sunrise, sunset)))
+
         # Add icons that can be arbitrarily rotated on canvas.
         self.add_widget(SunRiseMarker(sunrise))
         self.add_widget(SunSetMarker(sunset))
@@ -57,8 +66,29 @@ class DialWidget(FloatLayout):
             item.angle = 0
 
 
-class NowMarker(FloatLayout):
-    pass
+class SunShading(FloatLayout):
+    def __init__(self, angles, **kwargs):
+        super(SunShading, self).__init__(**kwargs)
+
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
+        self.shade_angle_start = angles[1] - 360
+        self.shade_angle_stop = angles[0] - 360
+
+    def _size_check(self):
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
+
+
+class DialEffectWidget(EffectWidget):
+    def __init__(self, angles, **kwargs):
+        super(DialEffectWidget, self).__init__(**kwargs)
+
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
+        self.add_widget(SunShading(angles))
+        self.effects = [HorizontalBlurEffect(size=20.0), VerticalBlurEffect(size=20.0)]
+        self.opacity = 0.5
+
+    def _pos_check(self):
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
 
 
 class SunRiseMarker(FloatLayout):
@@ -73,53 +103,28 @@ class SunSetMarker(FloatLayout):
         self.rot_angle = rot_angle
 
 
-class SunShading(FloatLayout):
-    def __init__(self, suntimes, **kwargs):
-        super(SunShading, self).__init__(**kwargs)
-
-        # Split suntime tuple into named variables
-        sunrise = suntimes[0]
-        sunset = suntimes[1]
-
-        sunstart = 360 - sunrise
-        sunend = 360 - sunset
-
-        with self.canvas:
-            Color(0, 0.2, 0.40)
-            Ellipse(pos=(self.width / 2 + 20, self.height / 2), angle_start=180, angle_end=360,
-                    size=(500, 500))
-            Color(252 / 255, 212 / 255, 64 / 255)
-            Ellipse(pos=(self.width / 2 + 20, self.height / 2), angle_start=0, angle_end=180,
-                    size=(500, 500))
-
-        self.opacity = 0.5
-
-
-class DialEffectWidget(EffectWidget):
-    def __init__(self, **kwargs):
-        super(DialEffectWidget, self).__init__(**kwargs)
-        self.add_widget(SunShading((124.75, 1.25)))
-        self.effects = [HorizontalBlurEffect(size=20.0), VerticalBlurEffect(size=20.0)]
-
-
-class DialTestScreen(Screen):
-    def __init__(self, **kwargs):
-        super(DialTestScreen, self).__init__(**kwargs)
-        self.add_widget(DialEffectWidget())
+class NowMarker(FloatLayout):
+    pass
 
 
 # Screens in the App #
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
+
         self.add_widget(DialWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
-        self.add_widget(DialEffectWidget())
+        self.add_widget(NowMarker())
+        self.suntimes()
+
+    def on_window_resize(self):
+        print(Window.width)
+        self.canvas.clear()
+        self.add_widget(DialWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
         self.add_widget(NowMarker())
         self.suntimes()
 
     def settings_button(self):
-        # SettingsScreen()
-        DialTestScreen()
+        SettingsScreen()
 
     def ipgeolocate(self):
         r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
@@ -234,7 +239,7 @@ class SunClock(App):
         Builder.load_file('main.kv')
         sm = WindowManager()
 
-        screens = [MainScreen(name='main'), DialTestScreen(name='test')]
+        screens = [MainScreen(name='main')]
         for screen in screens:
             sm.add_widget(screen)
 

@@ -1,30 +1,5 @@
 #:kivy 1.11.1
 
-<MainScreen>
-    canvas:
-        Rotate:
-            angle: 0
-            origin: self.center
-
-	BoxLayout:
-		orientation: 'vertical'
-		size: root.width, root.height
-
-		Label:
-			text: "Well would you lookee here!"
-
-		Label:
-			text: "We've got ourselves a project base!"
-
-        Button:
-            text:"Submit"
-            on_press: root.settings_button()
-
-<DialTestScreen>
-    FloatLayout:
-        Label:
-            text: "Wanker"
-
 <NowMarker>:
 	Image:
 		source: 'assets/arrow_marker.png'
@@ -32,7 +7,7 @@
 		size: 75, 75
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
-<SunRise>:
+<SunRiseMarker>:
     rot_angle: 0
 
     canvas.before:
@@ -48,7 +23,7 @@
 		size_hint: 0.05, 0.05
 		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
 
-<SunSet>:
+<SunSetMarker>:
     rot_angle: 0
 
     canvas.before:
@@ -83,22 +58,36 @@
 		size_hint: root.dial_size
 		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-##:import ew kivy.uix.effectwidget
-#<DialShading>:
-#    canvas.before:
-#        PushMatrix
+<DialEffectWidget>:
+    shade_size: (0, 0)
+	size: 1, 1
+	pos: (self.width / 2) - (root.shade_size[0] / 2), (self.height / 2) - (root.shade_size[1] / 2)
+
+    on_size: root._pos_check()
+
+<SunShading>:
+    shade_size: (0, 0)
+    shade_angle_start: 0
+    shade_angle_stop: 0
+
+    on_size: root._size_check()
+
+    canvas:
+        Color:
+            rgba: 0, 0.1, 0.2, 1
+
+        Ellipse:
+            id: shade
+            size: root.shade_size
+            angle_start: root.shade_angle_start
+            angle_end: root.shade_angle_stop
+            pos: 0, 0
+
 #        Color:
 #            rgba: 1, 1, 0, 1
+#
 #        Ellipse:
-#            angle_start: 0
-#            angle_end: 270
-#            size: self.width / 2, self.height / 2
-#            pos: self.width / 2, self.height / 2
-#        Color:
-#            rgba: 0, 0, 1, 1
-#        Ellipse:
-#            angle_start: 270
+#            size: root.shade_size
+#            angle_start: 90
 #            angle_end: 360
-#            size: self.width / 2, self.height / 2
-#            pos: self.width / 2, self.height / 2
-#        PopMatrix
+#            pos: 0, 0
