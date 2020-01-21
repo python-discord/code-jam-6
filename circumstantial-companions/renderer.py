@@ -15,6 +15,7 @@ ROTATE_SPEED = 500
 
 class Renderer(Widget):
     def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.canvas = RenderContext(compute_normal_mat=True)
         self.canvas.shader.source = 'simple.glsl'
         self.scene = ObjFile('monkey.obj') # We'll want to generate meshes on-the-fly instead.
@@ -26,20 +27,15 @@ class Renderer(Widget):
                                  with_depthbuffer=True, # using a fbo to save rendered vertices.
                                  compute_normal_mat=True,
                                  clear_color = (0.0,) * 4)
-        super().__init__(**kwargs)
-
-        with self.canvas:
-            self.cb = Callback(lambda *args: glEnable(GL_DEPTH_TEST))
-            self.setup_scene()
-            self.cb = Callback(lambda *args: glDisable(GL_DEPTH_TEST))
-
+        self.collision_fbo.shader.source = 'collision.glsl'
+        self.setup_scene()
         self.indices = self.mesh.indices.copy()
         self.fewer = self.indices[3:]
 
         def set_aspect():
             asp = self.width / self.height
             proj = Matrix().view_clip(-asp, asp, -1, 1, .5, 100, 1)
-            self.canvas['projection_mat'] = proj
+            self.canvas['projection_mat'] = self.collision_fbo['projection_mat'] = proj
         Clock.schedule_once(lambda dt: set_aspect())
 
     def on_touch_move(self, touch):
@@ -73,14 +69,22 @@ class Renderer(Widget):
         self.rotx.angle += dx * ROTATE_SPEED
 
     def setup_scene(self):
-        Translate(0, 0, -2) # Maybe zoom in more?
-        self.rotx = Rotate(0, 0, 1, 0)
-        m, *_ = self.scene.objects.values()
-        UpdateNormalMatrix()
-        self.mesh = Mesh(vertices=m.vertices,
-                         indices=m.indices,
-                         fmt=m.vertex_format,
-                         mode='triangles')
+        with self.canvas:
+            self.cb = Callback(lambda *args: glEnable(GL_DEPTH_TEST))
+            self.translate = Translate(0, 0, -2) # Maybe zoom in more?
+            self.rotx = Rotate(0, 0, 1, 0)
+            m, *_ = self.scene.objects.values()
+            UpdateNormalMatrix()
+            self.mesh = Mesh(vertices=m.vertices,
+                             indices=m.indices,
+                             fmt=m.vertex_format,
+                             mode='triangles')
+            self.cb = Callback(lambda *args: glDisable(GL_DEPTH_TEST))
+        with self.collision_fbo:
+            self.translate
+            self.rotx
+            UpdateNormalMatrix()
+            self.mesh
 
 class RendererApp(App):
     def build(self):
