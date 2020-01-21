@@ -9,3 +9,11 @@ Biography: >
   couple good spots to hide in when the apocalypse happens. I also enjoy reading, and am updated
   on most of the well-known authors.
 Interests: ['trekking', 'reading', 'painting']
+right_delta:
+    a1: 1
+    a2: 1
+    a3: 1
+left_delta:
+    a1: 1
+    a2: -2
+    a3: 0

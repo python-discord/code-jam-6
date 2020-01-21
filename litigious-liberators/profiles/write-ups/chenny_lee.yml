@@ -10,3 +10,11 @@ Biography: >
   Pro: not afraid of spiders
   Con: afraid of moths
 Interests: ['bungee jumping', 'yoga', 'cooking']
+right_delta:
+    a1: 3
+    a2: 3
+    a3: 3
+left_delta:
+    a1: -3
+    a2: -3
+    a3: -3

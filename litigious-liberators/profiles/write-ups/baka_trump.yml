@@ -8,3 +8,11 @@ Biography: >
   I spend most of my free time sleeping. I also like building stuff, and help out with construction
   of living spaces during territory expansion campaigns. I like my eggs fried with extra oil.
 Interests: ['architecture', 'painting', 'collecting rocks']
+right_delta:
+    a1: 1
+    a2: 1
+    a3: 1
+left_delta:
+    a1: 1
+    a2: -2
+    a3: 0

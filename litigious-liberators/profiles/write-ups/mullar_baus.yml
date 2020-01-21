@@ -9,3 +9,11 @@ Biography: >
   time watching netflix or playing with the baby dinosaurs, but mostly I'll be trying out some new
   recipe to invigorate everybody who'll be eating my food.
 Interests: ['cooking', 'hide-and-seek', 'singing']
+right_delta:
+    a1: 1
+    a2: 1
+    a3: 1
+left_delta:
+    a1: -1
+    a2: -1
+    a3: -1

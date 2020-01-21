@@ -10,3 +10,11 @@ Biography: >
   non-vegetarian, so mind that - hey, don't blame me, vegans - it's not my fault T-Rexs are
   carnivores...
 Interests: ['singing', 'reading', 'painting']
+right_delta:
+    a1: 1
+    a2: 1
+    a3: 1
+left_delta:
+    a1: 0
+    a2: 0
+    a3: 0

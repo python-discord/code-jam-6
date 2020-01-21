@@ -10,3 +10,11 @@ Biography: >
   participate in most territory-expansion campaigns, and am considered a very valuable member
   of our Air Force.
 Interests: ['flying', 'painting', 'skiing']
+right_delta:
+    a1: 0
+    a2: 0
+    a3: 0
+left_delta:
+    a1: 0
+    a2: 0
+    a3: 0

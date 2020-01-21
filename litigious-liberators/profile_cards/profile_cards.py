@@ -1,37 +1,57 @@
 from kivy.config import Config
 from kivy.app import App
-from kivy.properties import ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
+from kivy.clock import Clock
 import os
 from os import listdir
 from random import shuffle
 from copy import deepcopy
-from kivy.uix.screenmanager import ScreenManager, Screen, SwapTransition
+from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
+from kivy.uix.popup import Popup
 from yaml import safe_load
+from kivy.core.window import Window
+from collections import Counter
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
-
-
-class Root(BoxLayout):
-    swiper_obj = ObjectProperty(None)
 
 
 class SelectionScreen(Screen):
     pass
 
 
-class PostSelectionScreen(Screen):
+class LossScreen(Screen):
+    pass
+
+
+class SwipePopup(Popup):
+    def __init__(self, **kwargs):
+        super(SwipePopup, self).__init__(**kwargs)
+        # call dismiss_popup in 2 seconds
+        self.orientation = "vertical"
+        Clock.schedule_once(self.dismiss_popup, 2)
+
+    def dismiss_popup(self, dt):
+        self.dismiss()
+
+
+class WinScreen(Screen):
     pass
 
 
 class ProfileCard(Screen):
     def __init__(self, profile, **kwargs):
         super(ProfileCard, self).__init__(**kwargs)
-        self.ids.picture.source = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), f"../profiles/pictures/{profile['Picture']}"
-        )
+        pic_addr = f"../profiles/pictures/{profile['Picture']}"
+        self.ids.picture.source = os.path.join(os.path.dirname(os.path.abspath(__file__)), pic_addr)
         about_text = f"I'm a {profile['Age']} year old {profile['Species']}"
-        self.ids.name.text = profile["Name"]
+        self.right_delta = Counter(profile["right_delta"])
+        self.left_delta = Counter(profile["left_delta"])
+        self.ids.r_a1.text += str(profile["right_delta"]["a1"])
+        self.ids.r_a2.text += str(profile["right_delta"]["a2"])
+        self.ids.r_a3.text += str(profile["right_delta"]["a3"])
+        self.ids.l_a1.text += str(profile["left_delta"]["a1"])
+        self.ids.l_a2.text += str(profile["left_delta"]["a2"])
+        self.ids.l_a3.text += str(profile["left_delta"]["a3"])
+        self.ids.name.text += profile["Name"]
         self.ids.about.text = about_text
         self.ids.job.text += profile["What I do"]
         self.ids.name.font_name = "../fonts/Oldenburg/Oldenburg-Regular.ttf"
@@ -46,46 +66,28 @@ class ProfileList(ScreenManager):
         self.static_profile_list = listdir(self.profile_dir)
         self.profile_list = deepcopy(self.static_profile_list)
         self.cycler = self.r_cycle(self.profile_list)
-        self._selected = set()
-        self.limit = 3
-        self.loop = True
+        #  should be initialisable in main app
+        self._attributes = Counter({"a1": 1, "a2": 1, "a3": 1})
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
             profile = safe_load(profile_file.read())
             self.add_widget(ProfileCard(profile))
 
     @property
-    def selected(self):
-        return self._selected
+    def attributes(self):
+        return self._attributes
 
-    @selected.setter
-    def selected(self, value):
-        self._selected = value
-        if len(self._selected) >= self.limit:
-            App.get_running_app().root.current = "post_selection_screen"
-
-    def on_touch_down(self, touch):
-        if touch.is_mouse_scrolling:
-            while True:
-                next_profile = next(self.cycler)
-                if next_profile not in self.selected:
-                    break
-            if touch.button == "scrolldown":
-                with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
-                    profile = safe_load(profile_file.read())
-                    current = self.current_screen
-                    name_for_set = current.ids.picture.source.split("/")[-1]
-                    name_for_set = name_for_set.split(".")[0] + ".yml"
-                    self.selected |= {name_for_set}
-                    trans = SwapTransition()
-                    self.switch_to(ProfileCard(profile), direction="right", transition=trans)
-                    self.remove_widget(current)
-
-            elif touch.button == "scrollup":
-                with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
-                    profile = safe_load(profile_file.read())
-                    current = self.current_screen
-                    self.switch_to(ProfileCard(profile), direction="right")
-                    self.remove_widget(current)
+    @attributes.setter
+    def attributes(self, value):
+        self._attributes = value
+        for k, v in self._attributes.items():
+            self._attributes[k] = min(10, v)
+        if any(x < 0 for x in self._attributes.values()):
+            App.get_running_app().root.current = "loss_screen"
+        elif all(x == 10 for x in self._attributes.values()):
+            App.get_running_app().root.current = "win_screen"
+        print(self.attributes)
 
     @staticmethod
     def r_cycle(x):
@@ -94,14 +96,46 @@ class ProfileList(ScreenManager):
             for element in x:
                 yield element
 
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+        next_profile = next(self.cycler)
+        with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
+            profile = safe_load(profile_file.read())
+        current = self.current_screen
+        trans = SlideTransition()
+        totals = Counter()
+        totals.update(self.attributes)
+        if keycode[1] == "right":
+            #  popup = SwipePopup(size_hint=(0.2, 0.4))
+            #  popup.open()
+            next_card = ProfileCard(profile)
+            totals.update(current.right_delta)
+            self.attributes = totals
+            self.switch_to(next_card, direction="right", transition=trans)
+
+        elif keycode[1] == "left":
+            #  popup = SwipePopup(size_hint=(0.2, 0.4))
+            #  popup.open()
+            next_card = ProfileCard(profile)
+            totals.update(current.left_delta)
+            self.attributes = totals
+            self.switch_to(next_card, direction="left", transition=trans)
+        self.remove_widget(current)
+        return True
+
 
 class ProfilesApp(App):
     def build(self):
         self.sm = ScreenManager()
         self.selection_screen = SelectionScreen()
-        self.post_selection_screen = PostSelectionScreen()
+        self.loss_screen = LossScreen()
+        self.win_screen = WinScreen()
         self.sm.add_widget(self.selection_screen)
-        self.sm.add_widget(self.post_selection_screen)
+        self.sm.add_widget(self.loss_screen)
+        self.sm.add_widget(self.win_screen)
         return self.sm
 
 
