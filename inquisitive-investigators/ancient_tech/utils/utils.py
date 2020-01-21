@@ -55,7 +55,11 @@ def file_info(
         path = Path(dir_)
         stats = path.stat()
 
-        name = path.name
+        if len(path.name) > 22:
+            name = path.name[:10] + '...'
+        else:
+            name = path.name
+
         date = datetime.fromtimestamp(
             stats.st_mtime
         ).strftime('%d-%m-%Y')

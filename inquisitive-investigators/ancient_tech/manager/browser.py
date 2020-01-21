@@ -33,7 +33,7 @@ class RV(RecycleView):
 
         self.update(state=0, file=[])
         self.selected = None
-        self.prev_selected  = None
+        self.prev_selected = None
 
     def generate(
             self, f: Any
@@ -52,13 +52,25 @@ class RV(RecycleView):
             self.data = file
 
     def select(self, file):
-        # When nothing is selected
-        if self.prev_selected is not None:
-            self.prev_selected.alpha = 0
+        if file.type != 'PARENT':
+            if self.prev_selected is not None:
 
-        self.prev_selected = file
-        self.selected = file
-        file.alpha = .5
+                # Reset all Alpha values in self.data
+                self.selected.alpha = 0
+                self.prev_selected.alpha = 0
+                for fileDict in self.data:
+                    if fileDict['alpha'] == .5:
+                        fileDict['alpha'] = 0
+
+            self.prev_selected = file
+            self.selected = file
+
+            # Set selected to Alpha value
+            self.prev_selected.alpha = .5
+            self.selected.alpha = .5
+            for fileDict in self.data:
+                if fileDict['name'] in [self.selected.name, self.prev_selected.name]:
+                    fileDict['alpha'] = .5
 
 
 class Files(RecycleBoxLayout):
