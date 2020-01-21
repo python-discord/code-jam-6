@@ -7,7 +7,6 @@ from kivy.core.window import Window
 from kivy.properties import (
     NumericProperty, ObjectProperty, ReferenceListProperty
 )
-from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
 
@@ -30,36 +29,6 @@ class Dino1(Widget):
 
     def move(self) -> None:
         self.pos = Vector(*self.velocity) + self.pos
-
-
-class RootScreen(ScreenManager):
-    '''Screen Transition'''
-    dino = ObjectProperty(None)
-    dino1 = ObjectProperty(None)
-
-    def dino_move(self, vel: list = (5, 0)) -> None:
-        self.dino.velocity = vel
-        self.dino1.velocity = vel
-
-    def update(self, dt: float) -> None:
-        # call dino.move and other stuff
-        self.dino.move()
-        self.dino1.move()
-
-        # return the dino to the beginning
-        if self.dino.x > self.x + 1900:
-            self.dino.pos = -250, -200
-
-        if self.dino1.x > self.x + 1900:
-            self.dino1.pos = -300, -230
-
-
-class StartScreen(Screen):
-    pass
-
-
-class GameScreen(Screen):
-    pass
 
 
 class MyGame(Engine):
@@ -101,17 +70,35 @@ class MyGame(Engine):
         if 'd' in self.pressed_keys:
             self.player.vel_x = 7.5
 
+    dino = ObjectProperty(None)
+    dino1 = ObjectProperty(None)
+
+    def dino_move(self, vel: tuple = (5, 0)) -> None:
+        self.dino.velocity = vel
+        self.dino1.velocity = vel
+
+    def dino_update(self, dt: float) -> None:
+        # call dino.move and other stuff
+        self.dino.move()
+        self.dino1.move()
+
+        # return the dino to the beginning
+        if self.dino.x > self.x + 1900:
+            self.dino.pos = -250, -200
+
+        if self.dino1.x > self.x + 1900:
+            self.dino1.pos = -300, -230
+
 
 class Application(App):
     """Main application class."""
     def build(self) -> MyGame:
         """Return the root widget."""
         Window.clearcolor = (51 / 255, 51 / 255, 51 / 255, 1)
+        Window.fullscreen = 'auto'
         self.title = 'FireStarter'
         game = MyGame()
-        screen = RootScreen()
-        screen.dino_move()
-        Clock.schedule_interval(screen.update, 0 / 60.0)
+        game.dino_move()
         return game
 
 

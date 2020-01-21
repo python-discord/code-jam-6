@@ -32,6 +32,7 @@ class Engine(Widget):
         # call the update method every frame
         Clock.schedule_interval(self._update, 1.0 / 60.0)
         Clock.schedule_interval(self._animate, 1.0 / 10.0)
+        Clock.schedule_interval(self.dino_update, 60.0 / 60.0)
 
     def load_sprite_sheets(self) -> dict:
         """Load all images in the resources/sprites directory to the gpu"""
