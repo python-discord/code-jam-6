@@ -50,4 +50,4 @@ class NonStackableItem(Item, ABC):
         raise ValueError("Can not add to an un-stackable item")
 
     def __sub__(self, other):
-        raise ValueError("Can not add to an un-stackable item")
+        raise ValueError("Can not subtract from an un-stackable item")
