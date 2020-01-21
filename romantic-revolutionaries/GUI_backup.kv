@@ -1,0 +1,63 @@
+<MainContainer>:
+    command_console: command_console
+    text_display_label: text_display_label
+    text_display_console: text_display_console
+    orientation: 'vertical'
+    padding: [10, 10, 10, 10]
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 0.1
+        Rectangle:
+            size: self.width, self.height
+    DisplayContainer:
+        TextDisplayContainer:
+            orientation: 'vertical'
+            id: text_display_console
+            size_hint: 1, 1
+            font_size: root.font_size
+            foreground_color: root.foreground_color
+            background_color: root.background_color
+            do_scroll_y: True
+
+            TextDisplayLabel:
+                id: text_display_label
+                size_hint: None, None
+                size: self.texture_size
+                text_size: self.parent.width, None
+                font_size: root.font_size
+                font_name: root.font_name
+                markup: True
+
+        CompassContainer:
+            id: compass
+            size_hint: None, 0.95
+            width: root.width/4
+            pos: root.right, root.top
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 0.3
+                Triangle:
+                    points: [(self.width / 2) - ((self.width/3)/2), self.height-((self.width/3)/2)] + [self.width/2,self.height] + [(self.width / 2)+((self.width/3)/2), self.height-((self.width/3)/2)]
+                Triangle:
+                    points: [(self.width / 2) - ((self.width/3)/2), self.height-((self.width/3)*1.5)] + [self.width/2,self.height-((self.width/3)*2)] + [(self.width / 2)+((self.width/3)/2), self.height-((self.width/3)*1.5)]
+                Triangle:
+                    points: [(self.width / 2) - ((self.width/3)/2), self.height-((self.width/3)/2)] + [(self.width/2)-(self.width/3),self.height-(self.width/3)] + [(self.width / 2) - ((self.width/3)/2), self.height-((self.width/3)*1.5)]
+                Triangle:
+                    points: [(self.width / 2) + ((self.width/3)/2), self.height-((self.width/3)/2)] + [(self.width/2)+(self.width/3),self.height-(self.width/3)] + [(self.width / 2) + ((self.width/3)/2), self.height-((self.width/3)*1.5)]
+                Color:
+                    rgba: 1, 1, 1, 0.3
+                RoundedRectangle:
+                    size: self.width, self.height + self.height*.05
+
+    CommandInput:
+        id: command_console
+        shell: root
+        size_hint: 1, None
+        height: self.font_size*2
+        multiline: False
+        focus: True
+        font_size: root.font_size
+        font_name: root.font_name
+        foreground_color: root.foreground_color
+        background_color: root.background_color
+        cursor_color: root.foreground_color
