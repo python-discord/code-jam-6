@@ -3,15 +3,6 @@ from engine.perlin import perlin_array
 from engine.sprite import Player, Terrain
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.textinput import TextInput
-from kivy.uix.label import Label 
-
-class IntroScreen(GridLayout):
-    def __init__(self, **kwargs):
-        super(IntroScreen, self).__init__(**kwargs)
-        self.cols(2)
-        self.add_widget(Label(text = 'Welcome to Primal!'))
 
 
 class PrimalGame(Engine):
