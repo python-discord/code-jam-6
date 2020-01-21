@@ -31,7 +31,7 @@ class ScreenManager(Widget):
 
     def remove_screen(self, screen_class):
         if screen_class not in self.screens:
-            raise InvalidGameScreen(f'Game screen is not registered in screen manager {str(screen_class)}')
+            raise InvalidGameScreen(f'Invalid game screen class {str(screen_class)}')
 
         instance = self.screens[screen_class]
         del self.screens[screen_class]
