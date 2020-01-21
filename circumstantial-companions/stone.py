@@ -5,14 +5,16 @@ from kivy.graphics import Color, Line
 from kivy.lang import Builder
 from kivy.core.window import Window
 from itertools import product
+from random import choice
 
 GRAVITY = .01
 FRICTION = .9
-CHISEL_RADIUS = .1
+CHISEL_RADIUS = .0005
 DISLODGE_VELOCITY = .1
 MAX_VELOCITY = .001
-PEBBLE_RADIUS = 2
-PEBBLE_COUNT = 1000
+PEBBLE_RADIUS = 1.7
+PEBBLE_COUNT = 10000
+PEBBLE_SEGMENTS = 4
 
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
@@ -56,7 +58,8 @@ class Pebble:
             vy *= -1
         # I don't like this way of modifying circles in the Chisel widget, I'll rework it
         # after we get some working physics.
-        self.circles[self.index].circle = self.x * self.x_dim, self.y * self.y_dim, PEBBLE_RADIUS
+        self.circles[self.index].circle = (self.x * self.x_dim, self.y * self.y_dim,
+                                           PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
 
         if not self.y:
             self.__velocity = 0.0, 0.0
@@ -80,7 +83,8 @@ class Chisel(Widget):
         with self.canvas:
             for index, (x, y) in enumerate(self.positions):
                 self.colors.append(Color(.5, .5, .5, 1))
-                self.circles.append(Line(circle=(x * self.width, y * self.height, PEBBLE_RADIUS),
+                self.circles.append(Line(circle=(x * self.width, y * self.height,
+                                                 PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
                 self.pebbles.append(Pebble(index, x, y, self.circles, self.width, self.height))
 
@@ -89,7 +93,8 @@ class Chisel(Widget):
             self.size = Window.size
             for i, pebble in enumerate(self.stone):
                 x, y = pebble.pos
-                self.circles[i].circle = x * self.width, y * self.height, PEBBLE_RADIUS
+                self.circles[i].circle = (x * self.width, y * self.height,
+                                          PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
         Window.bind(size=resize)
 
     def poke_power(self, touch_pos, pebble_x, pebble_y):
@@ -99,9 +104,11 @@ class Chisel(Widget):
         tx, ty = touch_pos
         dx, dy = pebble_x - tx, pebble_y - ty
         distance = dx**2 + dy**2
+        if distance > CHISEL_RADIUS:
+            return 0.0, 0.0
         if not distance:
-            return
-        return .01 * dx / distance, .01 * dy / distance
+            distance = .0001
+        return .001 * dx / distance, .001 * dy / distance # Constant here will be controlled by parameter
 
     def poke(self, touch):
         if touch.button == "left":
