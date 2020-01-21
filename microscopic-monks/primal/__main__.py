@@ -3,6 +3,7 @@ from engine.perlin import perlin_array
 from engine.sprite import Player, Terrain
 from kivy.app import App
 from kivy.core.window import Window
+import random
 
 
 class PrimalGame(Engine):
