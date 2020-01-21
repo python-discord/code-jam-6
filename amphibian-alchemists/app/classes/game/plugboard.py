@@ -12,8 +12,6 @@ class PlugboardScreen(Screen):
     wires = DictProperty({})
 
     def get_plug(self):
-        if self.plugs_in_screen == self.property("plugs_in_screen").get_min(self):
-            self.ids.remove_plug.text = "Drag the plug here to discard..."
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
             plug = Factory.Plug(
                 size_hint=(None, None),
@@ -55,10 +53,19 @@ class PlugboardScreen(Screen):
 
     def on_plugged_in(self, instance, value):
         self.all_plugged.clear()
+        plug_reference = []
         for plug in self.ids.floating_widgets.children:
             if isinstance(plug, Factory.Plug) and plug.plugged_in != "":
                 self.all_plugged.append(plug.plugged_in)
+                plug_reference.append(plug)
         if len(self.all_plugged) >= 2 and len(self.all_plugged) % 2 == 0:
+            for item in self.wires.keys():
+                if self.all_plugged[0] in item[0]:
+                    self.delete_from_pair(plug_reference[0])
+                    break
+                elif self.all_plugged[1] in item[1]:
+                    self.delete_from_pair(plug_reference[1])
+                    break
             wire = Factory.Wire()
             wire.points = [
                 *self.ids.plug_board.ids[self.all_plugged[0]].center,
@@ -88,6 +95,10 @@ class PlugboardScreen(Screen):
                 break
 
     def on_plugs_in_screen(self, instance, value):
+        if value > self.property("plugs_in_screen").get_min(self):
+            self.ids.remove_plug.text = "Drag the plug here to discard..."
+        else:
+            self.ids.remove_plug.text = ""
         if value % 2 == 0:
             if self.last_plugs_count > self.plugs_in_screen:
                 self.ids.floating_widgets.get_a_plug.disabled = False
