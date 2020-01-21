@@ -83,7 +83,7 @@ class OptionOutcome:
     # If no specific card is chosen it will be string "random"
     next_card: str
     # Dict of effects that will happen if this outcome is chosen. Keys are state names and values
-    # are values to change the state by. For example {"health": -30}
+    # are values to change the state by. For example {"player_health": -30}
     effects: dict = None
 
 
@@ -117,8 +117,8 @@ class Card:
     text: str
     # List of Option objects
     options: list
-    # Dict of conditions for example {"health": 0.5} and this card would be only valid if player
-    # health is more or equal than 50% of it's total value.
+    # Dict of conditions for example {"player_health": 0.5} and this card would be only valid
+    # if player health is more or equal than 50% of it's total value.
     conditions: dict = None
 
     def __post_init__(self):
