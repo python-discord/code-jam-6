@@ -1,21 +1,21 @@
 from pathlib import Path
-from datetime import datetime
 
 from kivy.logger import Logger
 from kivy.uix.label import Label
-from kivy.uix.button import Button
 from kivy.properties import (
     ObjectProperty,
-    StringProperty
-)
+    StringProperty,
+    NumericProperty)
 
 
 class NewFile(Label):
     ctx = ObjectProperty()
     txt = StringProperty()
+    alpha = NumericProperty()
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
+            self.ctx.select(file=self)
             if touch.is_double_tap:
                 self.activate()
 
