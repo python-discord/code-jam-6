@@ -3,8 +3,8 @@ from kivy.graphics import Color, Rectangle
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
-from assets.DrawPad import DrawPad
-from frontend import LedgerLayout
+
+from modules import DrawPad, LedgerLayout
 
 
 class Calculator(Screen):
@@ -12,10 +12,6 @@ class Calculator(Screen):
 
 
 class Settings(Screen):
-    pass
-
-
-class Screen_Holder(Screen):
     pass
 
 
