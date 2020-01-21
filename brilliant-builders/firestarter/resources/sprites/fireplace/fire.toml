@@ -1,0 +1,5 @@
+size = [32,32]
+
+[animation]
+	modes = 4
+	frames = [1,19,18,5]
