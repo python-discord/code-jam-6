@@ -2,6 +2,7 @@
   {
     "card_id": "dino_kick",
     "card_type": "event",
+    "card_asset": "test.jpg",
     "text": "Uh, this is a test card. There's a dinosaur, do you kick it?",
     "options": [
       {
@@ -33,6 +34,7 @@
   {
     "card_id": "dino_kick_friendly",
     "card_type": "response",
+    "card_asset": "test.jpg",
     "text": "Turns out the dinosaur wasn't so scary after all. She ran away and left you some lovely eggs for breakfast",
     "options": [
       {

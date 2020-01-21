@@ -114,6 +114,8 @@ class Card:
     card_id: str
     # Either "event" or "response". Response cards only exist to follow up on event cards.
     card_type: str
+    # Asset filename including extension
+    card_asset: str
     text: str
     # List of Option objects
     options: list
