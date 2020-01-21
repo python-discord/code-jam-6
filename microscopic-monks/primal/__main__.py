@@ -3,7 +3,6 @@ from engine.perlin import perlin_array
 from engine.sprite import Player, Terrain
 from kivy.app import App
 from kivy.core.window import Window
-import random
 
 
 class PrimalGame(Engine):
@@ -43,6 +42,8 @@ class PrimalGame(Engine):
         					except KeyError:
         						objects["rock"] = [(x,y)]
         						tileObjects.append(objects)
+        		else:
+        			break
         print(tileObjects)
     def update(self, dt: float) -> None:
         self.player.pos = [i / 2 for i in Window.size]
