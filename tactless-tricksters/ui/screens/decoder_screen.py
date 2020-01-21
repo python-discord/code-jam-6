@@ -40,7 +40,7 @@ class DecoderScreen(Screen):
         # Moves widget out of the field of view
         self.decode_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
         # This binds the right icon to record the input
-        self.decode_input.icon_right = 'logout'
+        self.decode_input.icon_right = 'database-export'
         self.decode_input.children[2].children[0].bind(on_press=lambda x: self.clear_text())
 
         decode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
