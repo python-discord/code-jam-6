@@ -2,9 +2,9 @@ from pathlib import Path
 from threading import Thread
 from datetime import datetime
 from typing import (
-    Callable, 
-    Dict, 
-    Tuple, 
+    Callable,
+    Dict,
+    Tuple,
     Union
 )
 
@@ -13,7 +13,7 @@ from .constants import BASE_SIZE, UNITS
 
 def bytes_conversion(
         size: int, unit: str = UNITS[0]
-    ) -> Tuple[str, str]:
+) -> Tuple[str, str]:
     """
     Recursively converts bytes to the biggest
     possible unit without decimals.
@@ -22,26 +22,29 @@ def bytes_conversion(
     """
     if size >= BASE_SIZE:
         return bytes_conversion(
-            size//BASE_SIZE, 
-            unit=UNITS[UNITS.index(unit)+1]
+            size // BASE_SIZE,
+            unit=UNITS[UNITS.index(unit) + 1]
         )
     return str(size), unit
+
 
 def threaded(func: Callable) -> Callable:
     """
     A decorator that runs a function on
     a separate thread.
     """
+
     def wrapper(*args, **kwargs):
         thread = Thread(target=func, args=args, kwargs=kwargs)
         thread.daemon = True
         thread.start()
-        
+
     return wrapper
+
 
 def file_info(
         ctx: 'RV', dir_: str
-    ) -> Union[Dict[str, str], Dict[str, 'RV']]:
+) -> Union[Dict[str, str], Dict[str, 'RV']]:
     """
     Returns information on the
     file/directory given.
@@ -96,4 +99,5 @@ def file_info(
         'type': type_,
         'size_': size,
         'date': date,
+        'alpha': 0
     }

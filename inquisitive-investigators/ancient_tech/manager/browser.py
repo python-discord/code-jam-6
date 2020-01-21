@@ -32,6 +32,7 @@ class RV(RecycleView):
         self.prev_dir = str(Path.home().parent)
 
         self.update(state=0, file=[])
+        self.selected = []
 
     def generate(
             self, f: Any
@@ -48,6 +49,17 @@ class RV(RecycleView):
             self.data = [self.generate('<-'), *file]
         elif state == 2:
             self.data = file
+
+    def select(self, file):
+        if len(self.selected) > 0:
+            self.selected[0].alpha = 0
+            self.selected.clear()
+        elif file.type in ['DIR', 'PARENT']:
+            print('You cant edit this!')
+        else:
+            self.selected.append(file)
+            file.alpha = .5
+            print(self.selected[0].name)
 
 
 class Files(RecycleBoxLayout):

@@ -5,17 +5,17 @@ from kivy.uix.label import Label
 from kivy.properties import (
     ObjectProperty,
     StringProperty,
-    ColorProperty, NumericProperty)
+    NumericProperty)
 
 
 class NewFile(Label):
     ctx = ObjectProperty()
     txt = StringProperty()
-    a = NumericProperty()
+    alpha = NumericProperty()
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            self.a = .5
+            self.ctx.select(file=self)
             if touch.is_double_tap:
                 self.activate()
 
