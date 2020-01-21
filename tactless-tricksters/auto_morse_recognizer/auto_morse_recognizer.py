@@ -7,59 +7,95 @@ from pyaudio import PyAudio, paInt16
 from scipy.io import wavfile
 
 RATE = 16000
-DOT_DURATION_THRESHOLD_SEC = .08
-DASH_DURATION_THRESHOLD_SEC = .24
-LETTER_END_DURATION_THRESHOLD_SEC = .24
-WORD_END_DURATION_THRESHOLD_SEC = .56
-DATA_RATE = 200
-CHUNK = 4000
+CHUNK = 4000  # number of audio samples per frame of data
+DATA_RATE = 400  # sampling rate of signal activity in audio
 
-NUM_BITS_PER_SEC = RATE / DATA_RATE
+# morse parameters
+SMALLEST_TIME_UNIT = .08  # the unit of time in seconds that other duration will be multiple of
+DOT_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT
+DASH_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 3
+LETTER_END_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 3
+WORD_END_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 7
+
+NUM_BITS_PER_SEC = int(RATE / DATA_RATE)
 DOT_DURATION_THRESHOLD_BIT = int(DOT_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 DASH_DURATION_THRESHOLD_BIT = int(DASH_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 LETTER_END_DURATION_THRESHOLD_BIT = int(LETTER_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 WORD_END_DURATION_THRESHOLD_BIT = int(WORD_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
 
 
-class MorseSpeechToText:
+class AutoMorseRecognizer:
     def __init__(self, debug=False, debug_plot=False, active_threshold=15):
         self.debug = debug
         self.debug_plot = debug_plot
         self.active_threshold = active_threshold
+        self.old_buffer = np.array([])
         self.pa = PyAudio()
-        self.stream = self.pa.open(format=paInt16,
-                                   channels=1,
-                                   rate=RATE,
-                                   input=True,
-                                   input_device_index=-1,
-                                   frames_per_buffer=CHUNK)
+        self.stream = None
 
     def calibrate_active_threshold(self):
         pass
 
+    def start(self):
+        if self.stream is None:
+            self.stream = self.pa.open(format=paInt16,
+                                       channels=1,
+                                       rate=RATE,
+                                       input=True,
+                                       input_device_index=-1,
+                                       frames_per_buffer=CHUNK)
+        else:
+            self.stream.start_stream()
+
+    def stop(self):
+        self.stream.stop_stream()
+
+    def update(self):
+        try:
+            if self.stream is None or self.stream.is_stopped():
+                raise IOError('stream is not started yet (run start() before update())')
+            else:
+                data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
+                morse_code, speech_activity = self.get_morse_from_audio(data)
+        except Exception as e:
+            print(str(e))
+            morse_code, speech_activity = [], [0] * self.bits_per_frame
+        return morse_code, speech_activity
+
     def run(self):
         try:
-            old_buffer = np.array([])
+            self.start()
+            self.old_buffer = np.array([])
             while True:
                 data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
-                speech_activity_vec = np.concatenate((old_buffer, self.get_voice_activity(data)))
-                morse_code, old_buffer = self.activity_to_morse(speech_activity_vec)
+                morse_code, _ = self.get_morse_from_audio(data)
                 if morse_code:
                     print(' '.join(morse_code), end=' ')
         finally:
-            self.stream.close()
-            self.pa.terminate()
+            self.stop()
 
-    def run_wav(self, audio_path):
+    def get_morse_from_wav_file(self, audio_path):
         fs, x = wavfile.read(audio_path)
         x = x.astype(float)
-        old_buffer = np.array([])
+        self.old_buffer = np.array([])
         for i in range(0, len(x)-CHUNK, CHUNK):
             data = x[i:i+CHUNK]
-            speech_activity_vec = np.concatenate((old_buffer, self.get_voice_activity(data)))
-            morse_code, old_buffer = self.activity_to_morse(speech_activity_vec)
+            morse_code, _ = self.get_morse_from_audio(data)
             if morse_code:
                 print(''.join(morse_code), end='')
+
+    @property
+    def bits_per_frame(self):
+        return int(CHUNK / DATA_RATE)
+
+    @property
+    def frame_rate(self):
+        return float(CHUNK/RATE)
+
+    def get_morse_from_audio(self, data):
+        speech_activity_vec = np.concatenate((self.old_buffer, self.get_voice_activity(data)))
+        morse_code, self.old_buffer = self.activity_to_morse(speech_activity_vec)
+        return morse_code, speech_activity_vec
 
     def get_voice_activity(self, data):
         data_reshaped = data.reshape((-1, DATA_RATE))
@@ -96,7 +132,7 @@ class MorseSpeechToText:
                     morse.append('.')
             else:
                 if seg_dur >= WORD_END_DURATION_THRESHOLD_BIT:
-                    morse.append(' ')
+                    morse.append(' / ')
                 elif seg_dur >= LETTER_END_DURATION_THRESHOLD_BIT:
                     morse.append(' ')
         # keep the last segment to be stitched to the next frame
@@ -114,6 +150,6 @@ class MorseSpeechToText:
 
 
 if __name__ == "__main__":
-    ms = MorseSpeechToText(debug=False, debug_plot=False)
+    ms = AutoMorseRecognizer(debug=False, debug_plot=False)
     # ms.run()
-    ms.run_wav(os.path.join('data', 'morse_code_alphabet_16k.wav'))
+    ms.get_morse_from_wav_file(os.path.join('data', 'morse_code_alphabet_16k.wav'))

@@ -1,2 +1,2 @@
-kivymd==0.99.98
+-e git+https://github.com/HeaTTheatR/KivyMD.git@0.99.98#egg=kivymd
 Kivy==1.11.0
