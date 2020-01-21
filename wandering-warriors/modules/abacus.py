@@ -102,7 +102,7 @@ class Abacus(FloatLayout):
     def update(self, *args):
         border_w = max(self.height / 20, self.MIN_BORDER_W)
 
-        self.bar_w = self.MAX_BAR_W - max((800 - self.width) / 800 * 10, 0)
+        self.bar_w = self.MAX_BAR_W - max((800 - min(self.width, 2 * self.height)) / 800 * 10, 0)
 
         inner_w = self.width - 2 * border_w
         bead_w = min(
