@@ -50,7 +50,7 @@ class AncientTechApp(App):
         self.APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
     def build(self):
-        self.title = "ENG"
+        self.title = "Enigma Communication"
         self.icon = "misc/logo.png"
         return UIManager()
 
