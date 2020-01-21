@@ -306,6 +306,7 @@
 
 <PlugboardScreen>
     name: "plugboard_screen"
+    on_leave: root.check_plugs()
     FloatLayout:
         id: floating_widgets
         AnchorLayout:
@@ -324,7 +325,7 @@
                     id: remove_plug
                     text: "Remove the last pair of plugs"
                     disabled: True
-                    on_release: root.remove_plug()
+                    on_release: root.remove_grouped_plugs()
         AnchorLayout:
             padding: dp(30)
             PlugBoard:

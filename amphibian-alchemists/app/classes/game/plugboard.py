@@ -53,7 +53,7 @@ class PlugboardScreen(Screen):
         if instance.name not in self.all_plugged:
             self.get_plug(instance)
 
-    def remove_plug(self):
+    def remove_grouped_plugs(self):
         if self.plugs_in_screen >= 2 and self.plugs_in_screen % 2 == 0:
             self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
             self.ids.floating_widgets.remove_widget(self.plug_reference[-2])
@@ -80,3 +80,14 @@ class PlugboardScreen(Screen):
                                 *self.ids.plug_board.ids[item[0]].center,
                                 *self.ids.plug_board.ids[item[1]].center,
                             )
+
+    def check_plugs(self):
+        """
+        This method will check if there's an unpaired plug in the board.
+        If so, then the plug will be deleted
+        """
+        if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
+            self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
+            del self.plug_reference[-1]
+            del self.all_plugged[-1]
+            self.plugs_in_screen -= 1
