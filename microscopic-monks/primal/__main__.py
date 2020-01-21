@@ -5,7 +5,6 @@ from kivy.app import App
 from kivy.core.window import Window
 import random
 
-
 class PrimalGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -22,11 +21,12 @@ class PrimalGame(Engine):
         	for j in i:
         		if j < .25:
         			continue
+        		currentCoords = {}
         		while True:
         			rand = random.randint(1,2)
         			if rand == 1:
         				while True:
-        					x = random.randint(50,950)
+        					x = random.randint(85,915)
         					y = random.randint(85,915)
         					broken = False
         					try:
@@ -37,14 +37,13 @@ class PrimalGame(Engine):
         						if broken:
         							continue
         						else:
-        							currentCoords = objects["rock"]
-        							currentCoords.append((x,y))
+        							objects["rock"].append((x,y))
         							break
         					except KeyError:
         						objects["rock"] = [(x,y)]
-        						tileObjects.append(objects)
-        		else:
-        			break
+        			else:
+        				break
+        		tileObjects.append(objects)
         print(tileObjects)
     def update(self, dt: float) -> None:
         self.player.pos = [i / 2 for i in Window.size]
