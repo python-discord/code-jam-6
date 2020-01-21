@@ -1,5 +1,5 @@
-from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
+from kivy.uix.screenmanager import Screen
 
 
 class PaperScreen(Screen):
