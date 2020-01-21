@@ -1,14 +1,16 @@
+import json
+
 from kivy.app import App
 from kivy.event import EventDispatcher
 from kivy.lang import global_idmap
 from kivy.properties import StringProperty, ObjectProperty
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.widget import Widget
 
-from cards.main import *
+from cards.main import Game, card_from_dict
 
 
-class MainWidget(Widget):
+class MainWidget(BoxLayout):
     pass
 
 
@@ -19,6 +21,7 @@ class CardWidget(FloatLayout):
 
 class DataController(EventDispatcher):
     """manages global state for the app"""
+
     active_card = ObjectProperty()
 
 
