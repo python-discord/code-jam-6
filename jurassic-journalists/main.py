@@ -49,7 +49,8 @@ class TextPaper(Image):
     sin_wobble_speed = NumericProperty(0)
     """
     def __init__(self, *args, **kwargs):
-        super(Pili, self).__init__(*args, **kwargs)
+        super(TextPaper, self).__init__(*args, **kwargs)
+
         # Creating Blank Paper image to type on.
         self.img = Im.new("RGBA", (SCREEN_WIDTH, SCREEN_HEIGHT), PAPER_COLOR)
 
@@ -83,7 +84,7 @@ class TextPaper(Image):
                                       key.char, font=key.font, fill=key.color)
         # Scrolling up
         self.font_size = key.font.getsize("l")[1]
-        self.char_size = key.getKerning()[0]
+        self.char_size = key.get_kerning()[0]
         self.head["x"] += self.char_size
 
         if self.head["x"] + self.char_size >= SCREEN_WIDTH:

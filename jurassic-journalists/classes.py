@@ -18,12 +18,11 @@ class Letter:
         self.b = b
         self.i = i
         self.u = u
-    # Do not mix camel cases with python methods which should be in snake cases
+
     def get_kerning(self):
         """ gets dimensions as tuple(w,h) that it will be when rendered. """
         return self.font.getsize(self.char)
         
-# Why is this neccessary ?
 class WiteOut:
     """ Witeout class- the little squiggle you have to do to erase words. """
     def __init__(self):

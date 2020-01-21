@@ -4,7 +4,7 @@
 	width: self.parent.width * 1/20
 	height: self.parent.height * 1/20
     size_hint: None, None
-	background_color: 0,0,0,0 # 0,1,1,1
+	background_color: 0,0,0,0
 	text_color: 0,0,0,0
     on_release: self.parent.typw.text += self.txt
 	canvas.before:
@@ -35,7 +35,6 @@
 	Button:
 	    size_hint: None, None
 	    pos_hint: {'x': .7, 'y': .45}
-	    #background_color: 0,0,0,0
 	    background_normal: 'paper.png'
 	    background_down: 'paper.png'
 	    on_release: F.TypeW().open()
