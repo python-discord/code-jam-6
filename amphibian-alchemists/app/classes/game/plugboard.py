@@ -1,14 +1,12 @@
-from kivy.animation import Animation
 from kivy.factory import Factory
-from kivy.metrics import dp
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.uix.screenmanager import Screen
 
 
 class PlugboardScreen(Screen):
-    all_plugged = []
     plugs_in_screen = BoundedNumericProperty(0, min=0, max=26)
-    last_plugs_count = 0
+    all_plugged = []
+    plug_reference = []
     wires = DictProperty({})
     wire_colors = (
         [0, 0, 0],
@@ -26,135 +24,59 @@ class PlugboardScreen(Screen):
         [1, 102 / 255, 0],
     )
 
-    def get_plug(self):
+    def get_plug(self, instance):
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
             plug = Factory.Plug(
                 size_hint=(None, None),
-                size=[
-                    self.ids.plug_board.plug_reference.size[0] - dp(10),
-                    self.ids.plug_board.plug_reference.size[1] - dp(10),
-                ],
+                size=self.ids.plug_board.plug_reference.size,
+                pos=instance.pos,
             )
             self.ids.floating_widgets.add_widget(plug)
-            self.last_plugs_count = self.plugs_in_screen
+            self.all_plugged.append(instance.name)
+            self.plug_reference.append(plug)
+            if self.plugs_in_screen % 2 != 0:
+                wire = Factory.Wire()
+                wire.points = [
+                    *self.ids.plug_board.ids[self.all_plugged[-2]].center,
+                    *self.ids.plug_board.ids[self.all_plugged[-1]].center,
+                ]
+                wire.plugs = "".join(self.all_plugged[-2:])
+                wire.color = self.wire_colors[int((len(self.all_plugged) / 2) % 13 - 1)]
+                self.ids.floating_widgets.add_widget(wire)
+                self.wires.update({wire.plugs: wire})
+                self.ids.remove_plug.disabled = False
+            else:
+                self.ids.remove_plug.disabled = True
             self.plugs_in_screen += 1
 
-    def handle_touch_up(self, instance, touch):
-        if instance.collide_point(*touch.pos):
-            if instance.collide_widget(self.ids.remove_plug):
-                self.delete_from_pair(instance)
-                self.ids.floating_widgets.remove_widget(instance)
-                self.last_plugs_count = self.plugs_in_screen
-                self.plugs_in_screen -= 1
+    def handle_plug_release(self, instance):
+        if instance.name not in self.all_plugged:
+            self.get_plug(instance)
 
-            for floatlayout in self.ids.plug_board.children:
-                for plughole in floatlayout.children:
-                    if isinstance(
-                        plughole, Factory.PlugHole
-                    ) and instance.collide_widget(plughole):
-                        if plughole.name not in self.all_plugged:
-                            instance.center = plughole.center
-                            instance.plugged_in = plughole.name
-                            return
-                        else:
-                            # This is executed when a plug is plugged in
-                            # the same plughole
-                            self.on_plugged_out(instance)
-                            return
-            if instance.plugged_in:
-                # This is executed when a plug is being moved from
-                # its original position, not plugging it in any other plug hole
-                self.on_plugged_out(instance)
-
-    def on_plugged_in(self, instance, value):
-        self.all_plugged.clear()
-        plug_reference = []
-        for plug in self.ids.floating_widgets.children:
-            if isinstance(plug, Factory.Plug) and plug.plugged_in != "":
-                self.all_plugged.append(plug.plugged_in)
-                plug_reference.append(plug)
-        if len(self.all_plugged) >= 2 and len(self.all_plugged) % 2 == 0:
-            for item in self.wires.keys():
-                if self.all_plugged[0] in item[0]:
-                    self.delete_from_pair(plug_reference[0])
-                    break
-                elif self.all_plugged[1] in item[1]:
-                    self.delete_from_pair(plug_reference[1])
-                    break
-            wire = Factory.Wire()
-            wire.points = [
-                *self.ids.plug_board.ids[self.all_plugged[0]].center,
-                *self.ids.plug_board.ids[self.all_plugged[1]].center,
-            ]
-            wire.color = self.wire_colors[int((len(self.all_plugged) / 2) % 13 - 1)]
-            self.ids.floating_widgets.add_widget(wire)
-            self.wires.update({f"{''.join(self.all_plugged[:2])}": wire})
-            self.ids.floating_widgets.get_a_plug.disabled = False
-
-    def on_plugged_out(self, instance):
-        if instance.plugged_in in self.all_plugged:
-            self.all_plugged.remove(instance.plugged_in)
-            self.delete_from_pair(instance)
-        instance.plugged_in = ""
-        self.animate_positioning(instance)
-        return True
-
-    def animate_positioning(self, instance):
-        anim = Animation(pos=[0, 0], duration=0.5)
-        anim.start(instance)
-
-    def delete_from_pair(self, instance):
-        for item in self.wires.items():
-            if instance.plugged_in in item[0]:
-                self.ids.floating_widgets.remove_widget(self.wires[item[0]])
-                del self.wires[item[0]]
-                break
-
-    def on_plugs_in_screen(self, instance, value):
-        if value > self.property("plugs_in_screen").get_min(self):
-            self.ids.remove_plug.text = "Drag the plug here to discard..."
-        else:
-            self.ids.remove_plug.text = ""
-        if value % 2 == 0:
-            if self.last_plugs_count > self.plugs_in_screen:
-                self.ids.floating_widgets.get_a_plug.disabled = False
-            else:
-                self.ids.floating_widgets.get_a_plug.disabled = True
-        else:
-            self.ids.floating_widgets.get_a_plug.disabled = False
+    def remove_plug(self):
+        if self.plugs_in_screen >= 2 and self.plugs_in_screen % 2 == 0:
+            self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
+            self.ids.floating_widgets.remove_widget(self.plug_reference[-2])
+            wire_ref = "".join(self.all_plugged[-2:])
+            self.ids.floating_widgets.remove_widget(self.wires[wire_ref])
+            del self.wires[wire_ref]
+            del self.plug_reference[-2:]
+            del self.all_plugged[-2:]
+            self.plugs_in_screen -= 2
 
     def on_plughole_recenter(self, instance, value):
-        """This avoids to unplug everything when resizing"""
-        # FIXME: avoid calling this when moving the widow.
-        # It can be achieved using a RelativeLayout instead
-        # of a FloatLayout, but breaks the handle_touch_up method
         if self.manager.current == "plugboard_screen" and self.all_plugged:
-            for child in self.ids.floating_widgets.children:
-                if (
-                    isinstance(child, Factory.Plug)
-                    and child.plugged_in == instance.name
-                ):
-                    child.center = instance.center
-                else:
-                    child.size = (
-                        self.ids.plug_board.plug_reference.size[0] - dp(10),
-                        self.ids.plug_board.plug_reference.size[1] - dp(10),
-                    )
-            for wire in self.wires.items():
-                wire[1].points = [
-                    *self.ids.plug_board.ids[wire[0][0]].center,
-                    *self.ids.plug_board.ids[wire[0][1]].center,
-                ]
-
-    def handle_wire_pos(self, instance, touch):
-        if instance.collide_point(*touch.pos):
-            if self.wires and instance.plugged_in:
-                for item in self.wires.items():
-                    if instance.plugged_in in item[0]:
-                        moving_plug = 0
-                        if item[0].index(instance.plugged_in) != 0:
-                            moving_plug = 2
-
-                        item[1].points[moving_plug] = instance.center[0]
-                        item[1].points[moving_plug + 1] = instance.center[1]
-                        break
+            if instance.name in self.all_plugged:
+                self.plug_reference[
+                    self.all_plugged.index(instance.name)
+                ].center = instance.center
+                self.plug_reference[
+                    self.all_plugged.index(instance.name)
+                ].size = instance.size
+                if self.wires:
+                    for item in self.wires.keys():
+                        if instance.name in item:
+                            self.wires[item].points = (
+                                *self.ids.plug_board.ids[item[0]].center,
+                                *self.ids.plug_board.ids[item[1]].center,
+                            )
