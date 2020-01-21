@@ -49,7 +49,7 @@ class Player(Sprite):
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
 
-    def __init__(self, image: str, pos: tuple = (0, 0), size: tuple = (50, 50), **kwargs) -> None:
+    def __init__(self, image: str, pos: tuple = (0, 0), size: tuple = (200, 200), **kwargs) -> None:
         super().__init__(image, pos, size, **kwargs)
         Window.bind(mouse_pos=self._update)
 
