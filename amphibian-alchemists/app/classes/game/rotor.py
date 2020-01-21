@@ -1,5 +1,5 @@
 from kivy.uix.screenmanager import Screen
 
 
-class Rotor(Screen):
+class RotorScreen(Screen):
     pass
