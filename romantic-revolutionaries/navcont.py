@@ -1,7 +1,15 @@
 """Navigation Controller Module"""
+from enum import Enum
 
 
-class NavControl():
+class Directions(Enum):
+    NORTH = 0
+    EAST = 1
+    SOUTH = 2
+    WEST = 3
+
+
+class NavControl:
     """Control navigation requests.
 
         To subscribe pass your callback function to subscribe()
@@ -16,10 +24,11 @@ class NavControl():
         it will repeat the last direction. If you want to call with a distance
         but no direction, you must do so with named argument for your distance.
     """
+
     def __init__(self):
-        self.callbacks=set()
-        self.direction = 'N'
-        self.distance = 1
+        self.callbacks = set()
+        self.last_distance = 1
+        self.last_direction = Directions.NORTH
 
     def subscribe(self, callback):
         self.callbacks.add(callback)
@@ -27,17 +36,21 @@ class NavControl():
     def unsubscribe(self, callback):
         self.callbacks.remove(callback)
 
-    def notify(self):
+    def _notify(self, direction, distance):
         for callback in self.callbacks:
-            callback(self.direction, self.distance)
+            callback(direction, distance)
 
-    def go(self, direction='*', distance=0):
-        if direction != '*':
-            direction = direction.upper()
-            if direction not in "NSEW":
-                raise(ValueError)
+    def go(self, direction: Directions = None, distance: int = None):
+        direction = self.last_direction if direction is None else direction
+        distance = self.last_distance if distance is None else distance
 
-            self.direction = direction
-        if distance != 0:
-            self.distance = distance
-        self.notify()
+        if not isinstance(direction, Directions):
+            raise ValueError("Direction must a value of Directions")
+
+        if distance == 0:
+            raise ValueError("Distance can not be 0")
+
+        self.last_direction = direction
+        self.last_distance = distance
+
+        self._notify(direction, distance)
