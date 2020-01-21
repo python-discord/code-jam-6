@@ -8,14 +8,27 @@ from kivy.core.window import Window
 GRAVITY = 9.8
 FRICTION = .9
 CHISEL_RADIUS = .1
-
+DISLODGE_VELOCITY = 5
+VELOCITY_EPSILON = .01
 
 class Pebble:
     def __init__(self, pos):
         self.pos = pos
-        self.velocity = 0.0
+        self.__velocity = 0.0, 0.0
         self.update = Clock.schedule_interval(self.step, 0)
         self.update.cancel()
+
+    @property
+    def velocity(self):
+        return self.__velocity
+
+    @velocity.setter
+    def velocity(self, velocity_):
+        """Start falling if velocity is over a certain threshold, else do nothing."""
+        x, y = velocity_
+        if x**2 + y**2 < DISLODGE_VELOCITY:
+            return
+        self.__velocity = velocity_
 
     def step(self, dt):
         """Gravity Physics"""
@@ -24,7 +37,7 @@ class Pebble:
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.size = Window.size
+        self.size = Window.size # May want to change all Window.sizes to self.parent.size after completion
 
         self.stone = [Pebble((.5, .5)), Pebble((.4, .4))]
         self.colors = []
@@ -41,8 +54,6 @@ class Chisel(Widget):
             for i, pebble in enumerate(self.stone):
                 x, y = pebble.pos
                 self.circles[i].circle = x * self.width, y * self.height, 3
-
-
         Window.bind(size=resize)
 
     def poke_power(self, touch_pos, pebble_pos):
@@ -60,7 +71,7 @@ class Chisel(Widget):
     def poke(self, touch):
         if touch.button == "left":
             for pebble in self.stone:
-                pebble.velocity += self.poke_power(touch.spos, pebble.pos)
+                pebble.velocity = self.poke_power(touch.spos, pebble.pos)
 
     def on_touch_down(self, touch):
         self.poke(touch)
