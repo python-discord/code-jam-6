@@ -39,7 +39,6 @@ varying vec2 tex_coord0;
 varying int id;
 
 void main (void){
-    id = id_color.x;
     gl_FragColor.x = id;
     gl_FragColor.y = tex_coord0.x;
     gl_FragColor.z = tex_coord0.y;
