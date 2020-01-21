@@ -1,0 +1,32 @@
+#:kivy 1.0.9
+
+<DinoMudGame>:
+    canvas:
+        Rectangle:
+            source: 'cave_art.jpg'
+            pos: self.pos
+            size: self.size
+        Rectangle:
+            pos: 60 , self.top - 45
+            size: 40, 40
+            source: 'triangle_up.png'
+        Rectangle:
+            pos: 20 , self.top - 85
+            size: 40, 40
+            source: 'triangle_lt.png'
+        Rectangle:
+            pos: 100 , self.top - 85
+            size: 40, 40
+            source: 'triangle_rt.png'
+        Rectangle:
+            pos: 60 , self.top - 125
+            size: 40, 40
+            source: 'triangle_dn.png'
+        Ellipse:
+            pos: 60 , self.top - 85
+            size: 40, 40
+
+        Rectangle:
+            pos: self.center_x, self.top - 45
+            size: 40, 40
+            source: 'magnifying_glass_icon.png'
