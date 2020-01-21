@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "9eaaf5424f53c3ff547b219b83b06b68d7caa9a5d10b340b36209dfaebbf98c6"
+            "sha256": "ad7b1f122b28b075bc3f0e24cc4307d2a9c1c4098ba51b339023c33bf77fde96"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -49,6 +49,21 @@
             ],
             "index": "pypi",
             "version": "==3.7.9"
+        },
+        "geographiclib": {
+            "hashes": [
+                "sha256:12bd46ee7ec25b291ea139b17aa991e7ef373e21abd053949b75c0e9ca55c632",
+                "sha256:51cfa698e7183792bce27d8fb63ac8e83689cd8170a730bf35e1a5c5bf8849b9"
+            ],
+            "version": "==1.50"
+        },
+        "geopy": {
+            "hashes": [
+                "sha256:6239cbf4d8e8a10460c10cf2ae1949c9e9d011e9f25c4e49202734455cc5e884",
+                "sha256:9419bc90ee6231590c4ae7acf1cf126cefbd0736942da7a6a1436946e80830e2"
+            ],
+            "index": "pypi",
+            "version": "==1.20.0"
         },
         "idna": {
             "hashes": [
@@ -113,12 +128,34 @@
             ],
             "version": "==2.5.2"
         },
+        "python-dateutil": {
+            "hashes": [
+                "sha256:73ebfe9dbf22e832286dafa60473e4cd239f8592f699aa5adaf10050e6e1823c",
+                "sha256:75bb3f31ea686f1197762692a9ee6a7550b59fc6ca3a1f4b5d7e32fb98e2da2a"
+            ],
+            "version": "==2.8.1"
+        },
         "requests": {
             "hashes": [
                 "sha256:11e007a8a2aa0323f5a921e9e6a2d7e4e67d9877e85773fba9ba6419025cbeb4",
                 "sha256:9cf5292fcd0f598c671cfc1e0d7d1a7f13bb8085e9a590f48c010551dc6c4b31"
             ],
             "version": "==2.22.0"
+        },
+        "six": {
+            "hashes": [
+                "sha256:236bdbdce46e6e6a3d61a337c0f8b763ca1e8717c03b369e87a7ec7ce1319c0a",
+                "sha256:8f3cd2e254d8f793e7f3d6d9df77b92252b52637291d0f0da013c76ea2724b6c"
+            ],
+            "version": "==1.14.0"
+        },
+        "suntime": {
+            "hashes": [
+                "sha256:d957e9ca786ab3cd80bf624b007fed7d07f07c6fa33f3ccc5ec34c9bb0c380c6",
+                "sha256:e4df651dfcde332f905e57da6be49a1cc696499f11853fb0395df29104274649"
+            ],
+            "index": "pypi",
+            "version": "==1.2.5"
         },
         "urllib3": {
             "hashes": [
