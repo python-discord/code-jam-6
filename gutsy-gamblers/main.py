@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import pickle
 
 from geopy.geocoders import Nominatim
@@ -70,9 +70,41 @@ class SunShading(FloatLayout):
     def __init__(self, angles, **kwargs):
         super(SunShading, self).__init__(**kwargs)
 
+        rise_angle = angles[0]
+        set_angle = angles[1]
+
+        print(angles)
+
+        """
+
+                Ellipse:
+                    size: root.shade_size
+                    angle_start: root.shade_angle_start
+                    angle_end: root.shade_angle_stop
+                    pos: 0, 0
+        """
+
+
+        if rise_angle < set_angle:
+            print(360 - (set_angle - rise_angle))
+            print(360 - set_angle)
+            self.shade_one_angle_start = 360 - set_angle
+            self.shade_one_angle_stop = 360 - rise_angle
+            self.shade_one_color = (0, 0.1, 0.3, 1)
+
+        elif rise_angle > set_angle:
+            print(360 - (rise_angle - set_angle))
+            print(360 - rise_angle)
+            self.shade_one_angle_start = 360 - set_angle
+            self.shade_one_angle_stop = 360
+            self.shade_one_color = (0, 0.1, 0.3, 1)
+            self.shade_two_angle_start = 360 - rise_angle
+            self.shade_two_angle_stop = 0
+            self.shade_two_color = (0, 0.1, 0.3, 1)
+
         self.shade_size = Window.height * 0.8, Window.height * 0.8
-        self.shade_angle_start = angles[1] - 360
-        self.shade_angle_stop = angles[0] - 360
+        # self.shade_angle_start = angles[1] - 360
+        # self.shade_angle_stop = 360
 
     def _size_check(self):
         self.shade_size = Window.height * 0.8, Window.height * 0.8
@@ -116,13 +148,6 @@ class MainScreen(Screen):
         self.add_widget(NowMarker())
         self.suntimes()
 
-    def on_window_resize(self):
-        print(Window.width)
-        self.canvas.clear()
-        self.add_widget(DialWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
-        self.add_widget(NowMarker())
-        self.suntimes()
-
     def settings_button(self):
         SettingsScreen()
 
@@ -162,7 +187,7 @@ class MainScreen(Screen):
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
-        now = datetime.now()
+        now = datetime.now() - timedelta(hours=0)
         today_sunrise = today_sunrise.replace(tzinfo=None)
         today_sunset = today_sunset.replace(tzinfo=None)
 
@@ -203,7 +228,6 @@ class MainScreen(Screen):
             today_sunrise = today_sunrise * 0.25
             today_sunset = today_sunset * 0.25 * -1
 
-        print(today_sunrise, today_sunset)
         return today_sunrise, today_sunset
 
 

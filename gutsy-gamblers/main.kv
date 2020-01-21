@@ -67,27 +67,62 @@
 
 <SunShading>:
     shade_size: (0, 0)
-    shade_angle_start: 0
-    shade_angle_stop: 0
+
+    shade_one_angle_start: 0
+    shade_one_angle_stop: 0
+    shade_one_color: 0, 0, 0, 1
+
+    shade_two_angle_start: 0
+    shade_two_angle_stop: 0
+    shade_two_color: 0, 0, 0, 0
+#
+#    sun_one_angle_start: 0
+#    sun_one_angle_stop: 0
+#    sun_one_color: 0, 0, 0, 0
+#
+#    sun_two_angle_start: 0
+#    sun_two_angle_stop: 0
+#    sun_two_color: 0, 0, 0, 0
 
     on_size: root._size_check()
 
     canvas:
+        # Shade One #
         Color:
-            rgba: 0, 0.1, 0.2, 1
+            rgba: root.shade_one_color
 
         Ellipse:
-            id: shade
             size: root.shade_size
-            angle_start: root.shade_angle_start
-            angle_end: root.shade_angle_stop
+            angle_start: root.shade_one_angle_start
+            angle_end: root.shade_one_angle_stop
             pos: 0, 0
 
+        # Shade Two #
+        Color:
+            rgba: root.shade_two_color
+
+        Ellipse:
+            size: root.shade_size
+            angle_start: root.shade_two_angle_start
+            angle_end: root.shade_two_angle_stop
+            pos: 0, 0
+
+#        # Sun One #
 #        Color:
-#            rgba: 1, 1, 0, 1
+#            rgba: root.sun_one_color
 #
 #        Ellipse:
 #            size: root.shade_size
-#            angle_start: 90
-#            angle_end: 360
+#            angle_start: root.sun_one_angle_start
+#            angle_end: root.sun_one_angle_stop
+#            pos: 0, 0
+#
+#        # Sun Two #
+#        Color:
+#            rgba: root.sun_two_color
+#
+#        Ellipse:
+#            size: root.shade_size
+#            angle_start: root.sun_two_angle_start
+#            angle_end: root.sun_two_angle_stop
 #            pos: 0, 0
