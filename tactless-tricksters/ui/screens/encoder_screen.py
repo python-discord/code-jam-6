@@ -31,13 +31,13 @@ class EncoderScreen(Screen):
                                             padding=[dp(25), dp(25), dp(25), dp(25)])
 
         play_button = MDFloatingActionButton(icon='play', size=[dp(56), dp(56)])
-        play_button.md_bg_color = App.get_running_app().theme_cls.primary_color# [76/255, 175/255, 80/255, 1]
+        play_button.md_bg_color = App.get_running_app().theme_cls.primary_color  # [76/255, 175/255, 80/255, 1]
         play_button.text_color = [1, 1, 1, 1]
         play_button.bind(on_press=lambda x: self.play_audio())
         play_button_anchor.add_widget(play_button)
 
         self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5}, size_hint=(0.85, 0.5))
-        self.encode_input.icon_right = 'login'
+        self.encode_input.icon_right = 'database-import'
         self.encode_input.children[2].children[0].bind(on_press=lambda x: self.encode_audio(self.encode_input.text))
         self.encode_input.icon_left = 'microphone'
         self.encode_input.children[2].children[2].disabled = False
