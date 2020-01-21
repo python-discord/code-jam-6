@@ -6,6 +6,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Point, GraphicException
 from math import sqrt
 
+
 class Calculator(Screen):
     pass
 
@@ -33,6 +34,7 @@ class Ledger(Widget):
 class OperationsBar(Widget):
     pass
 
+
 def calculate_points(x1, y1, x2, y2, steps=1):
     dx = x2 - x1
     dy = y2 - y1
@@ -48,56 +50,55 @@ def calculate_points(x1, y1, x2, y2, steps=1):
         o.extend([lastx, lasty])
     return o
 
+
 class CuneiformDrawingInput(FloatLayout):
+    def __init__(self, ** kwargs):
+        super(CuneiformDrawingInput, self).__init__(** kwargs)
+        self.in_pad = False
+        self.pixle_image = []
 
     def on_touch_down(self, touch):
         ud = touch.ud
-        if(touch.pos[0] > self.pos[0] and 
-           touch.pos[0] < self.pos[0] + self.size[0] and 
-           touch.pos[1] > self.pos[1] and 
+        if(touch.pos[0] > self.pos[0] and
+           touch.pos[0] < self.pos[0] + self.size[0] and
+           touch.pos[1] > self.pos[1] and
            touch.pos[1] < self.pos[1] + self.size[1]):
-                ud['group'] = g = str(touch.uid)
-                pointsize = 1
-                ud['color'] = 0
-                with self.canvas:
-                    Color(0, 0, 0)
-                    ud['lines'] = [
-                        Point(points=(touch.x, touch.y), source='particle.png',
-                              pointsize=pointsize, group=g)]
-                return True
+            self.in_pad = True
+            ud['group'] = g = str(touch.uid)
+            pointsize = 1
+            ud['color'] = 0
+            with self.canvas:
+                Color(0, 0, 0)
+                ud['lines'] = [
+                    Point(points=(touch.x, touch.y), source='particle.png',
+                          pointsize=pointsize, group=g)]
+            return True
         else:
             ud['lines'] = []
 
     def on_touch_move(self, touch):
-        try:
-            if(touch.pos[0] > self.pos[0] and 
-               touch.pos[0] < self.pos[0] + self.size[0] and 
-               touch.pos[1] > self.pos[1] and 
-               touch.pos[1] < self.pos[1] + self.size[1]):
-                    ud = touch.ud
+        if(self.in_pad and touch.pos[0] > self.pos[0] and
+           touch.pos[0] < self.pos[0] + self.size[0] and
+           touch.pos[1] > self.pos[1] and
+           touch.pos[1] < self.pos[1] + self.size[1]):
+            ud = touch.ud
 
-                    points = ud['lines'][-1].points
-                    oldx, oldy = points[-2], points[-1]
-                    points = calculate_points(oldx, oldy, touch.x, touch.y)
-                    if points:
-                        try:
-                            lp = ud['lines'][-1].add_point
-                            for idx in range(0, len(points), 2):
-                                lp(points[idx], points[idx + 1])
-                        except GraphicException:
-                            pass
-        except:
-            pass
-        #print(touch.pos)
+            points = ud['lines'][-1].points
+            oldx, oldy = points[-2], points[-1]
+            points = calculate_points(oldx, oldy, touch.x, touch.y)
+            if points:
+                try:
+                    lp = ud['lines'][-1].add_point
+                    for idx in range(0, len(points), 2):
+                        lp(points[idx], points[idx + 1])
+                except GraphicException:
+                    pass
 
     def on_touch_up(self, touch):
-        if touch.grab_current is not self:
-            return
-        touch.ungrab(self)
         ud = touch.ud
-        return (self.canvas.get_group(ud['group'])[1].points)
-        #self.canvas.remove_group(ud['group'])
-        #self.remove_widget(ud['label'])
+        if self.in_pad:
+            self.in_pad = False
+            return (self.canvas.get_group(ud['group'])[1].points)
 
 
 class Screen:
@@ -117,10 +118,3 @@ class CalculatorApp(App):
 
 if __name__ == "__main__":
     CalculatorApp().run()
-''' 
-        drawing_widget = CuneiformDrawingInput()
-        drawing_widget.add_widget(Draw_Pad())
-        holder = Screen_Holder(name="CuneiformDrawingInput")
-        holder.add_widget(drawing_widget)
-        self.sm.add_widget(holder)
-'''
