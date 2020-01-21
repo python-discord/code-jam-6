@@ -3,6 +3,7 @@ from kivy.graphics import Color, Rectangle
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
+from assets.DrawPad import DrawPad
 from frontend import LedgerLayout
 
 
@@ -11,6 +12,10 @@ class Calculator(Screen):
 
 
 class Settings(Screen):
+    pass
+
+
+class Screen_Holder(Screen):
     pass
 
 
@@ -159,7 +164,7 @@ class OperationsBar(Widget):
     pass
 
 
-class CuneiformDrawingInput(Widget):
+class CuneiformDrawingInput(DrawPad):
     pass
 
 

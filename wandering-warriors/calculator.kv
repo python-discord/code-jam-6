@@ -55,9 +55,17 @@
             pos: self.pos
 
 <CuneiformDrawingInput>:
-    canvas:
+    canvas.before:
         Color:
-            rgb: 0, 1, 1
+            rgba: 0, 0, 0
         Rectangle:
             size: self.size
             pos: self.pos
+    canvas:
+        Color:
+            rgb: 1, 1, 1, 1
+        Rectangle:
+            source: 'assets/sandTexture.jpg'
+            size: self.size
+            pos: self.pos
+    
