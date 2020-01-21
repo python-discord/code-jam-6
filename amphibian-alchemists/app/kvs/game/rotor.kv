@@ -1,2 +1,15 @@
+<Rotor@RelativeLayout>:
+
 <RotorScreen>:
     name: "rotor_screen"
+    AnchorLayout:
+        anchor_x: "left"
+        anchor_y: "top"
+
+        BoxLayout:
+            size_hint: 0.2, 0.2
+            Button:
+                text: "Go back!"
+                on_release: root.manager.current = "game_screen"
+    AnchorLayout:
+        Rotor:
