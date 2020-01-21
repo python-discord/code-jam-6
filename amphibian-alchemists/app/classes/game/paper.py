@@ -6,7 +6,9 @@ class PaperScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(
-            lambda dt: setattr(self.ids.input_paper.recycle_view, "data", self.input_data())
+            lambda dt: setattr(
+                self.ids.input_paper.recycle_view, "data", self.input_data()
+            )
         )
 
     # This only runs when the game is first opened (settings sheet)
