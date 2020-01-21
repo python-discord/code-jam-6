@@ -12,6 +12,7 @@ CHISEL_RADIUS = .1
 DISLODGE_VELOCITY = .1
 MAX_VELOCITY = .001
 PEBBLE_RADIUS = 2
+PEBBLE_COUNT = 1000
 
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
@@ -62,15 +63,17 @@ class Pebble:
             self.update.cancel()
         else:
             self.__velocity = vx, vy
-            print(self.__velocity)
 
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.size = Window.size # May want to change all Window.sizes to self.parent.size after completion
 
-        self.positions = product([.25 + .05 * x  for x in range(10)],
-                                 [.01 + .075 * y for y in range(10)])
+        pebble_count = int(PEBBLE_COUNT**.5)
+        x_scale, y_scale = .5 / pebble_count, .75 / pebble_count
+
+        self.positions = product([.25 + x_scale * x  for x in range(pebble_count)],
+                                 [.01 + y_scale * y for y in range(pebble_count)])
         self.colors = []
         self.circles = []
         self.pebbles = []
