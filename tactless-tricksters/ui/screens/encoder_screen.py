@@ -99,7 +99,7 @@ class EncoderScreen(Screen):
             print("Say something!")
             audio = r.listen(source)
 
-        recognize speech using Google Cloud Speech
+        # recognize speech using Google Cloud Speech
         GOOGLE_CLOUD_SPEECH_CREDENTIALS = r"""{
           "type": "service_account",
           "project_id": "helpful-kit-265623",
