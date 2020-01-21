@@ -147,7 +147,7 @@ class PlugboardScreen(Screen):
                 ]
 
     def handle_wire_pos(self, instance, touch):
-        if self.collide_point(*touch.pos):
+        if instance.collide_point(*touch.pos):
             if self.wires and instance.plugged_in:
                 for item in self.wires.items():
                     if instance.plugged_in in item[0]:
