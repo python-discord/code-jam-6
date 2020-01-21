@@ -134,7 +134,7 @@ class AutoMorseRecognizer:
                 if seg_dur >= WORD_END_DURATION_THRESHOLD_BIT:
                     morse.append(' / ')
                 elif seg_dur >= LETTER_END_DURATION_THRESHOLD_BIT:
-                    morse.append(' ')
+                    morse.append('')
         # keep the last segment to be stitched to the next frame
         old_buffer = active_vec[onoffset_indices[-1]:]
         trunc_len = min(len(old_buffer), WORD_END_DURATION_THRESHOLD_BIT)

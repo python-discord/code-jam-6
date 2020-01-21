@@ -92,6 +92,7 @@ class DecoderScreen(Screen):
             self.record_button.md_bg_color = App.get_running_app().theme_cls.primary_color
             Clock.unschedule(self.update_amr)
             self.amr.stop()
+            self.clear_text()
 
     def update_amr(self, kargs):
         print(kargs)
