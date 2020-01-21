@@ -49,7 +49,7 @@ class TextPaper(Image):
     sin_wobble_speed = NumericProperty(0)
     """
     def __init__(self, *args, **kwargs):
-        super(TextPaper, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         # Creating Blank Paper image to type on.
         self.img = Im.new("RGBA", (SCREEN_WIDTH, SCREEN_HEIGHT), PAPER_COLOR)
