@@ -34,6 +34,7 @@ class ProfileCard(Screen):
         self.ids.name.text = profile["Name"]
         self.ids.about.text = about_text
         self.ids.job.text += profile["What I do"]
+        self.ids.name.font_name = "../fonts/Oldenburg/Oldenburg-Regular.ttf"
 
 
 class ProfileList(ScreenManager):

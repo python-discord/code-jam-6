@@ -1,16 +1,23 @@
 #:kivy 1.11.1
+#:import utils kivy.utils
+
 <SelectionScreen>:
     name: 'profile_list'
     canvas:
+        Color:
+            rgba: utils.get_color_from_hex('#321911')
         Rectangle:
             size: self.size
-            Color:
-                rgba: 0.5, 0.5, 0.5, 1
     ProfileList:
         id: profile_list
         size_hint_y: 0.9
 
 <ProfileCard>:
+    canvas:
+        Color:
+            rgba: utils.get_color_from_hex('#bbdefb')
+        Rectangle:
+            size: (self.size[0], self.size[1]  - 100)
     BoxLayout:
         orientation: 'vertical'
         Image:
@@ -21,13 +28,16 @@
             id: name
             color: 0, 0, 0, 1
             size_hint_y: None
+            font_size: sp(30)
         Label:
             id: about
             color: 0, 0, 0, 1
+            font_size: sp(20)
         Label:
             id: job
             color: 0, 0, 0, 1
             text: 'Job: '
+            font_size: sp(20)
 
 <PostSelectionScreen>:
     name: 'post_selection_screen'
