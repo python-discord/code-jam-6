@@ -21,7 +21,7 @@ class PrimalGame(Engine):
         	for j in i:
         		if j < .25:
         			continue
-        		currentCoords = {}
+        		objects = {}
         		while True:
         			rand = random.randint(1,2)
         			if rand == 1:
