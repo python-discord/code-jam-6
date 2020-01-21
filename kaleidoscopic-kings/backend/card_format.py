@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 import random
-from typing import Union, Tuple
+from typing import Union, Tuple, List
 import logging
 
 logger = logging.getLogger(__name__)
@@ -93,8 +93,8 @@ class Option:
     Represents one of 2 options the user is presented for each card.
     """
     text: str
-    # List of OptionOutcome objects
-    outcomes: list
+    # Passed in init as list of dicts then later saved as list of OptionOutcome objects
+    outcomes: List[Union[dict, OptionOutcome]]
 
     def __post_init__(self):
         """
@@ -117,9 +117,9 @@ class Card:
     text: str
     # List of Option objects
     options: list
-    # Dict of conditions for example {"player_health": 0.5} and this card would be only valid
-    # if player health is more or equal than 50% of it's total value.
-    conditions: dict = None
+    # Dict of conditions for example {"player_health": 0.5} would be only valid if player health
+    # is more or equal than 50% of it's total value.
+    conditions: Union[dict, List[Option]] = None
 
     def __post_init__(self):
         """
