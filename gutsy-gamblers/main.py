@@ -109,7 +109,7 @@ class MainScreen(Screen):
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
-        now = datetime.now()
+        now = datetime.utcnow()
         today_sunrise = today_sunrise.replace(tzinfo=None)
         today_sunset = today_sunset.replace(tzinfo=None)
 
