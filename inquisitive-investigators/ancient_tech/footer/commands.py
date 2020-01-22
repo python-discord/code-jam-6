@@ -46,22 +46,25 @@ class Mkdir(BasePopup):
         self.left, self.right = 0, 0
         self.filemanager = manager
         if manager == 1:
-            self.left = .5
+            self.left = .2
         else:
-            self.right = .5
+            self.right = .2
 
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
             if self.filemanager == 1:
                 new_dir = pathlib.Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
-            else:
+                new_dir /= dir_name
+                new_dir.mkdir()
+                self.ctx.parent.ids.left.ids.rv.update(state=0, file=[])
+            elif self.filemanager == 2:
                 new_dir = pathlib.Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
-            new_dir /= dir_name
-            new_dir.mkdir()
+                new_dir /= dir_name
+                new_dir.mkdir()
+                self.ctx.parent.ids.right.ids.rv.update(state=0, file=[])
             self.dismiss()
         else:
             print('Please Enter a File Manager or Directory Name')
-
 
 
 class QuitPopup(BasePopup):
