@@ -32,7 +32,7 @@ class MyMouse(Scatter):
 
     def on_mouse_pos(self, *args):
         x, y = args[-1]
-        self.pos = [x, y - self.mouse_im_size[1]]
+        self.pos = x, y - self.mouse_im_size[1]
 
     def on_cursor_leave(self, *args):
         self.opacity = 0
