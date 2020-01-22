@@ -16,8 +16,8 @@ class OrthographicCamera(Camera):
         self.viewport_width = viewport_width
         self.viewport_height = viewport_height
 
-        self.pos_x = 0.0
-        self.pos_y = 0.0
+        self.pos_x = viewport_width / 2
+        self.pos_y = viewport_height / 2
         self.zoom = 1.0
 
         self.canvas = canvas
