@@ -100,13 +100,12 @@ class Chisel(Widget):
         super().__init__(*args, **kwargs)
         self.size = Window.size # May want to change all Window.sizes to self.parent.size after completion
 
-        self.colors = []
         self.circles = []
         self.pebbles = []
 
         with self.canvas:
             for index, (x, y) in enumerate(pebble_positions()):
-                self.colors.append(Color(*choice(PEBBLE_COLORS)))
+                Color(*choice(PEBBLE_COLORS))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
@@ -135,6 +134,9 @@ class Chisel(Widget):
         return power * dx, power * dy
 
     def poke(self, touch):
+        """
+        Apply a poke to each pebble.
+        """
         for pebble in self.pebbles:
             pebble.velocity = self.poke_power(touch.spos, pebble.x, pebble.y)
 
