@@ -1,11 +1,6 @@
-<Gear@Widget>:
-    size_hint_x: 0.1
-    canvas:
-        Color:
-            rgba: 0, 0, 0, 1
-        RoundedRectangle:
-            size: self.size
-            pos: self.pos
+<Gear@Image>:
+    source: "misc/gear.png"
+
 <RotorLabel@Label>:
     size_hint: 0.2, 0.2
     pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -24,19 +19,13 @@
 
 <RotorButton@ButtonBehavior+Widget>:
     color_normal: 0, 0, 0, 1
-    color_down: 0, 0, 0, 0.5
+    color_down: 0, 0, 0, 0
     text: ""
-    canvas.before:
-        Color:
-            rgba: self.color_normal if self.state == "normal" else self.color_down
-        Ellipse:
-            size: self.size
-            pos: self.pos
     size_hint: 0.2, 0.2
-    pos_hint: {"center_x": 0.5, "top": 0.5}
     Label:
         size: root.size
         pos: root.pos
+        color: root.color_normal if root.state == "normal" else root.color_down
         text: root.text
 
 <Rotor@BoxLayout>:
@@ -45,13 +34,15 @@
     canvas:
         Color:
             rgb: 165 / 255, 165 / 255, 165 / 255
-        Ellipse:
+        Rectangle:
+            source: "misc/rotor.png"
             size: self.size
             pos: self.pos
     RelativeLayout:
         RotorButton:
             id: up
-            text: "Up"
+            text: "+"
+            pos_hint: {"center_x": 0.5, "top": 0.62}
             on_release:
                 if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
     RelativeLayout:
@@ -65,8 +56,9 @@
     RelativeLayout:
         RotorButton:
             id: down
-            text: "Down"
+            text: "-"
             disabled: True
+            pos_hint: {"center_x": 0.5, "top": 0.575}
             on_release:
                 if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
 
@@ -99,7 +91,7 @@
             size_hint: 0.8, 0.8
             canvas:
                 Color:
-                    rgba: 0 / 255, 67 / 255, 33 / 255, 1
+                    rgba: 47 / 255, 43 / 255, 37 / 255, 1
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
