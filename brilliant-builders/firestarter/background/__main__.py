@@ -1,5 +1,7 @@
+import random
+
 from firestarter.game_engine.engine import Engine
-from firestarter.game_engine.sprite import PickUpCoin, Platform, Player
+from firestarter.game_engine.sprite import Duck, PickUpCoin, Platform, Player
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -7,6 +9,7 @@ from kivy.core.window import Window
 from kivy.properties import (
     NumericProperty, ObjectProperty, ReferenceListProperty
 )
+from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
 
@@ -45,6 +48,10 @@ class MyGame(Engine):
         self.platform_04.change_mode(3)
         self.platform_05 = Platform(self.assets['Untitled'], (50 + 60 * 4, 20))
         self.platform_05.change_mode(3)
+        self.duck = Duck(self.assets['duck_animation'], (800, 500))
+        self.duck1 = Duck(self.assets['duck_animation'], (1100, 400))
+        self.duck2 = Duck(self.assets['duck_animation'], (300, 600))
+        self.duck3 = Duck(self.assets['duck_animation'], (900, 300))
 
         self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
         self.coin.change_mode(2)
@@ -52,6 +59,10 @@ class MyGame(Engine):
         self.add_sprites(
             [self.player,
              self.coin,
+             self.duck,
+             self.duck1,
+             self.duck2,
+             self.duck3,
              self.platform_01, self.platform_02,
              self.platform_03, self.platform_04,
              self.platform_05
@@ -60,7 +71,34 @@ class MyGame(Engine):
 
         Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)
 
+        for x in range(20):
+            img = Image(source='Picture/tree.png',
+                        keep_ratio=True,
+                        allow_stretch=False,
+                        size_hint=(0.2, 0.25),
+                        pos_hint={'center_x': random.uniform(0, 1),
+                                  'top': random.uniform(0.26, 0.24)})
+
+            self.background.add_widget(img, index=6)
+
     def update(self, dt: float) -> None:
+        self.duck.pos[0] = self.duck.pos[0] - 3
+        self.duck1.pos[0] = self.duck1.pos[0] - 3
+        self.duck2.pos[0] = self.duck2.pos[0] - 3
+        self.duck3.pos[0] = self.duck3.pos[0] - 3
+
+        if self.duck.pos < self.pos:
+            self.duck.pos[0] = 1400
+
+        if self.duck1.pos < self.pos:
+            self.duck1.pos[0] = 1600
+
+        if self.duck2.pos < self.pos:
+            self.duck2.pos[0] = 1700
+
+        if self.duck3.pos < self.pos:
+            self.duck3.pos[0] = 1650
+
         if 'spacebar' in self.pressed_keys and self.player.is_standing:
             self.player.acc_y = 15
 
@@ -75,7 +113,7 @@ class MyGame(Engine):
 
     def dino_move(self, vel: tuple = (5, 0)) -> None:
         self.dino.velocity = vel
-        self.dino1.velocity = vel
+        self.dino1.velocity = (vel[0] - 1, vel[1])
 
     def dino_update(self, dt: float) -> None:
         # call dino.move and other stuff
@@ -83,11 +121,11 @@ class MyGame(Engine):
         self.dino1.move()
 
         # return the dino to the beginning
-        if self.dino.x > self.x + 1900:
-            self.dino.pos = -250, -200
+        if self.dino.x > self.x + 2200:
+            self.dino.pos = -300, -10
 
-        if self.dino1.x > self.x + 1900:
-            self.dino1.pos = -300, -230
+        if self.dino1.x > self.x + 1850:
+            self.dino1.pos = -450, -20
 
 
 class Application(App):

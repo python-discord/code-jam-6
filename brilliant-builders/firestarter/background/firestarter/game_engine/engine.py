@@ -41,14 +41,17 @@ class Engine(Widget):
             img_path = (self.resource_dir / 'sprites' / sprite_sheet).as_posix()
             texture = CoreImage(img_path).texture
             texture.mag_filter = 'nearest'
+            size = (16.1, 18)
+            animation_modes = 3
+            frame_count = (3, 3, 3)
 
             # TODO: this is all hardcoded!!
             config = SpriteConfig(
                 self.resource_dir / 'sprites' / sprite_sheet,
                 texture,
-                (32, 32),
-                4,
-                (4, 4, 4, 4)
+                size,
+                animation_modes,
+                frame_count
             )
             assets[sprite_sheet.split('.')[0]] = config
         return assets
