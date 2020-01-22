@@ -1,3 +1,11 @@
+<Gear@Widget>:
+    size_hint_x: 0.1
+    canvas:
+        Color:
+            rgba: 0, 0, 0, 1
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
 <RotorLabel@Label>:
     size_hint: 0.2, 0.2
     pos_hint: {"center_x": 0.5, "center_y": 0.5}
@@ -33,7 +41,7 @@
 
 <Rotor@BoxLayout>:
     orientation: "vertical"
-    screen: root.parent.parent.parent.parent.parent
+    screen: root.parent.parent.parent.parent
     canvas:
         Color:
             rgb: 165 / 255, 165 / 255, 165 / 255
@@ -62,18 +70,18 @@
             on_release:
                 if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
 
-<Rotors@RelativeLayout>:
-    size_hint: 0.7, 0.7
-    AnchorLayout:
-        anchor_x: 'left'
-        BoxLayout:
-            orientation: "horizontal"
-            Rotor:
-                id: first_rotor
-            Rotor:
-                id: second_rotor
-            Rotor:
-                id: third_rotor
+<Rotors@BoxLayout>:
+    size_hint_y: 0.7
+    spacing: dp(10)
+    Rotor:
+        id: first_rotor
+    Gear:
+    Rotor:
+        id: second_rotor
+    Gear:
+    Rotor:
+        id: third_rotor
+    Gear:
 
 <RotorScreen>:
     name: "rotor_screen"
@@ -87,6 +95,7 @@
                 on_release: root.manager.current = "game_screen"
     AnchorLayout:
         BoxLayout:
+            padding: dp(20)
             size_hint: 0.8, 0.8
             canvas:
                 Color:
@@ -94,4 +103,5 @@
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
-        Rotors:
+            Rotors:
+                pos_hint: {"center_y": 0.5}
