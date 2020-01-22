@@ -95,6 +95,7 @@ class Pebble:
         else:
             self.__velocity = vx, vy
 
+
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -116,9 +117,8 @@ class Chisel(Widget):
 
         def resize(*args):
             self.size = Window.size
-            for i, pebble in enumerate(self.stone):
-                x, y = pebble.pos
-                self.circles[i].circle = (x * self.width, y * self.height,
+            for i, pebble in enumerate(self.pebbles):
+                self.circles[i].circle = (pebble.x * self.width, pebble.y * self.height,
                                           PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
         Window.bind(size=resize)
 
