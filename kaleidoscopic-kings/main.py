@@ -1,3 +1,4 @@
+import json
 from kivy.app import App
 from kivy.event import EventDispatcher
 from kivy.lang import global_idmap
@@ -5,7 +6,7 @@ from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 
-from cards.main import *
+from backend.main import Game, Card
 
 
 class MainWidget(Widget):
@@ -26,10 +27,15 @@ class myApp(App):
     active_card = ObjectProperty()
 
     def build(self):
+        with open("backend/data/example_game_cards.json") as f:
+            _cards = [Card(**card_dict) for card_dict in json.load(f)]
+        with open("backend/data/example_game_states.json") as f:
+            _game_states = json.load(f)
+
+        game = Game(_cards, _game_states)
+
         global_idmap["data"] = ctl = DataController()
-        with open("cards/TestCards.json") as f:
-            game = Game([card_from_dict(c) for c in json.load(f)])
-        ctl.active_card = game.deck.get_next_card()
+        ctl.active_card = game.start_game()
         return MainWidget()
 
 

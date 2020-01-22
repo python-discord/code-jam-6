@@ -60,7 +60,7 @@ class Deck:
 
 
 class Game:
-    """Stores state about the current game"""
+    """Handles interaction with the saved states and deck."""
 
     def __init__(self, all_cards: List[Card], game_states: dict):
         self.game_state_handler = GameStateHandler(game_states)
