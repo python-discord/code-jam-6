@@ -1,15 +1,29 @@
 <Rotor@RelativeLayout>:
+    size_hint: 0.7, 0.7
+    Button:
+        text: "up"
+        size_hint: 0.1, 0.1
+    Button:
+        text: "down"
+        size_hint: 0.1, 0.1
 
 <RotorScreen>:
     name: "rotor_screen"
     AnchorLayout:
         anchor_x: "left"
         anchor_y: "top"
-
         BoxLayout:
-            size_hint: 0.2, 0.2
+            size_hint: 0.1, 0.1
             Button:
                 text: "Go back!"
                 on_release: root.manager.current = "game_screen"
     AnchorLayout:
+        BoxLayout:
+            size_hint: 0.8, 0.8
+            canvas:
+                Color:
+                    rgba: 0 / 255, 67 / 255, 33 / 255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
         Rotor:
