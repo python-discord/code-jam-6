@@ -5,11 +5,6 @@ from kivy.graphics import Rectangle
 from kivy.uix.widget import Widget
 
 
-class Ship(Rectangle):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
-
 class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
         super().__init__(**kwargs)
