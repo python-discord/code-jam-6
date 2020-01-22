@@ -167,7 +167,10 @@ class DialEffectWidget(EffectWidget):
         self.opacity = 0.25
 
     def _pos_check(self):
-        self.shade_size = Window.height * 0.8, Window.height * 0.8
+        if Window.width > Window.height:
+            self.shade_size = Window.height * 0.8, Window.height * 0.8
+        else:
+            self.shade_size = Window.width * 0.8, Window.width * 0.8
 
 
 class SunShading(FloatLayout):
@@ -208,7 +211,10 @@ class SunShading(FloatLayout):
         self.shade_size = Window.height * 0.8, Window.height * 0.8
 
     def _size_check(self):
-        self.shade_size = Window.height * 0.8, Window.height * 0.8
+        if Window.width > Window.height:
+            self.shade_size = Window.height * 0.8, Window.height * 0.8
+        else:
+            self.shade_size = Window.width * 0.8, Window.width * 0.8
 
 
 class SunRiseMarker(FloatLayout):
@@ -234,6 +240,11 @@ class MainScreen(Screen):
 
         self.add_widget(DialWidget(60, (0.8, 0.8)))
         self.add_widget(NowMarker())
+
+    def on_size(self, a, b):
+        # Maintains a constant aspect ratio of 0.75 (4:3)
+        if (Window.height / Window.width) != 0.75:
+            Window.size = Window.width, Window.width * 0.75
 
     def settings_button(self):
         SettingsScreen()
