@@ -139,15 +139,13 @@ class Chisel(Widget):
 
     def _get_uvsize(self):
         texture = self.bg_rect.texture
-        return (
-            math.ceil(self.width / texture.width),
-            math.ceil(self.height / texture.height),
-        )
+        return (math.ceil(self.width / texture.width),
+                math.ceil(self.height / texture.height))
 
     def _get_background_size(self):
         texture = self.bg_rect.texture
         uv_width, uv_height = texture.uvsize
-        return (uv_width * texture.width, uv_height * texture.height)
+        return uv_width * texture.width, uv_height * texture.height
 
     def _update_bg_rect(self, instance, value=None):
         self.bg_rect.texture.uvsize = self._get_uvsize()
