@@ -10,11 +10,11 @@ from random import choice, random
 
 GRAVITY = .02
 FRICTION = .9
-CHISEL_RADIUS = .0006
-DISLODGE_VELOCITY = .0000001
-MAX_VELOCITY = .000001
+CHISEL_RADIUS = 6e-4
+DISLODGE_VELOCITY = 1e-7
+MAX_VELOCITY = 1e-6
 PEBBLE_RADIUS = 1.7
-PEBBLE_COUNT = 10000
+PEBBLE_COUNT = 1e4
 PEBBLE_SEGMENTS = 4
 PEBBLE_COLORS = ((0.910, 0.784, 0.725),
                  (0.549, 0.514, 0.502),
@@ -23,8 +23,7 @@ PEBBLE_COLORS = ((0.910, 0.784, 0.725),
                  (0.831, 0.796, 0.761),
                  (0.435, 0.329, 0.282),
                  (0.384, 0.207, 0.125))
-
-POWER_SCALE = .001
+POWER_SCALE = 1e-3
 
 def pebble_positions():
     pebble_count = int(PEBBLE_COUNT**.5)
