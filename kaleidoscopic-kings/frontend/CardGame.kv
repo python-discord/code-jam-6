@@ -1,14 +1,58 @@
+# Uncomment out this to have a border drawn around everything
+
 #:import random random.random
-<Widget>:
-    canvas.after:
-        Color:
-            rgba: random(), random(), random(), 1
-        Line:
-            rectangle: [self.x, self.y, self.width, self.height]
+#<Widget>:
+#    canvas.after:
+#        Color:
+#            rgba: random(), random(), random(), 1
+#        Line:
+#            rectangle: [self.x, self.y, self.width, self.height]
 
 
 
+# Add this to MainWidget for the background
+
+#canvas.before:
+#    Rectangle:
+#        pos: self.pos
+#        size: self.size
+#        source: '../assets/cave_background.jpg'
+
+
+
+
+################## LAYOUT ##################
 <MainWidget>:
+    id: main_layout
+    orientation: 'vertical'
+    cols: 2
+    StatusBar:
+        size_hint_x: 0.3
+    CardWidget
+        size_hint_x: 0.7
+
+
+
+
+################## STATUS ##################
+<StatusBar>:
+    orientation: 'vertical'
+    padding: (0, 150)
+    Label:
+        text: "Health"
+    Label:
+        text: "Hunger"
+    Label:
+        text: "Thirst"
+    Label:
+        text: "Sanity"
+
+
+ <StatusWidget>:
+    orientation:
+
+##################  CARD  ##################
+<CardWidget>:
     BoxLayout:
         orientation: 'vertical'
         padding: (5, 5)
@@ -44,4 +88,4 @@
         Rectangle:
             pos: self.pos
             size: self.size
-            source: './assets/stone_tablet.png'
+            source: '../assets/stone_tablet.png'
