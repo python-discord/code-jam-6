@@ -4,7 +4,7 @@ from kivy.uix.screenmanager import Screen
 
 
 class PlugboardScreen(Screen):
-    plugs_in_screen = BoundedNumericProperty(0, min=0, max=26)
+    plugs_in_screen = BoundedNumericProperty(0, min=0, max=20)
     all_plugged = []
     plug_reference = []
     wires = DictProperty({})
