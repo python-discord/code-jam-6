@@ -1,11 +1,14 @@
+import math
+from random import choice, random
+
 from kivy.app import App
 from kivy.clock import Clock
+from kivy.core.image import Image as CoreImage
 from kivy.uix.widget import Widget
-from kivy.graphics import Color, Line
+from kivy.graphics import Color, Line, Rectangle
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.vector import Vector
-from random import choice, random
 
 GRAVITY = .02
 FRICTION = .9
@@ -23,6 +26,11 @@ PEBBLE_COLORS = ((0.910, 0.784, 0.725),
                  (0.435, 0.329, 0.282),
                  (0.384, 0.207, 0.125))
 POWER_SCALE = 1e-3
+
+CHISEL_RADIUS_RANGE = (0, 100)
+DEFAULT_CHISEL_RADIUS = 15
+CHISEL_POWER_RANGE = (0, 100)
+DEFAULT_CHISEL_POWER = 45
 
 def pebble_positions():
     pebble_count = int(PEBBLE_COUNT**.5)
@@ -100,6 +108,7 @@ class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.size = self.parent.size if self.parent else Window.size
+        self.setup_background()
 
         self.circles = []
         self.pebbles = []
@@ -112,6 +121,40 @@ class Chisel(Widget):
                 self.pebbles.append(Pebble(index, x, y, self.circles, self.width, self.height))
 
         (self.parent if self.parent else Window).bind(size=self.resize)
+
+        # TODO: Implement adjustable chisel radius and power
+        self.set_radius(DEFAULT_CHISEL_RADIUS)
+        self.set_power(DEFAULT_CHISEL_POWER)
+
+    def setup_background(self):
+        texture = CoreImage("assets/img/chisel_background.png").texture
+        texture.wrap = "repeat"
+
+        with self.canvas.before:
+            Color(0.4, 0.4, 0.4, 1)
+            self.bg_rect = Rectangle(texture=texture)
+            self._update_bg_rect(self)
+
+        self.bind(size=self._update_bg_rect, pos=self._update_bg_rect)
+
+    def _get_uvsize(self):
+        texture = self.bg_rect.texture
+        return (
+            math.ceil(self.width / texture.width),
+            math.ceil(self.height / texture.height),
+        )
+
+    def _get_background_size(self):
+        texture = self.bg_rect.texture
+        uv_width, uv_height = texture.uvsize
+        return (uv_width * texture.width, uv_height * texture.height)
+
+    def _update_bg_rect(self, instance, value=None):
+        self.bg_rect.texture.uvsize = self._get_uvsize()
+        self.bg_rect.texture = self.bg_rect.texture  # required to trigger update
+        self.bg_rect.pos = instance.pos
+        self.bg_rect.size = self._get_background_size()
+
 
     def resize(self, *args):
         self.size = self.parent.size if self.parent else Window.size
@@ -147,6 +190,17 @@ class Chisel(Widget):
     def on_touch_move(self, touch):
         self.poke(touch)
         return True
+
+    def reset(self):
+        print("TODO: Chisel.reset(self)")
+
+    def set_radius(self, value):
+        print("TODO: Chisel.set_radius(self, value)")
+        self.radius = value
+
+    def set_power(self, value):
+        print("TODO: Chisel.set_power(self, value)")
+        self.power = value
 
 
 if __name__ == '__main__':
