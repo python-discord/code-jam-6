@@ -7,7 +7,7 @@ from pyaudio import PyAudio, paInt16
 from scipy.io import wavfile
 
 RATE = 16000
-CHUNK = 4000  # number of audio samples per frame of data
+CHUNK = 4000  # number of audio samples per frame of test_data
 DATA_RATE = 400  # sampling rate of signal activity in audio
 
 # morse parameters
@@ -122,7 +122,7 @@ class AutoMorseRecognizer:
         segment_durations = np.diff(onoffset_indices)
         is_active_vec = active_vec[onoffset_indices]
 
-        # for each segment of consecutive data value
+        # for each segment of consecutive test_data value
         # if the segment exceeds the duration threshold set morse value
         for seg_dur, is_active in zip(segment_durations, is_active_vec):
             if is_active:
@@ -134,7 +134,7 @@ class AutoMorseRecognizer:
                 if seg_dur >= WORD_END_DURATION_THRESHOLD_BIT:
                     morse.append(' / ')
                 elif seg_dur >= LETTER_END_DURATION_THRESHOLD_BIT:
-                    morse.append('')
+                    morse.append(' ')
         # keep the last segment to be stitched to the next frame
         old_buffer = active_vec[onoffset_indices[-1]:]
         trunc_len = min(len(old_buffer), WORD_END_DURATION_THRESHOLD_BIT)
@@ -152,4 +152,4 @@ class AutoMorseRecognizer:
 if __name__ == "__main__":
     ms = AutoMorseRecognizer(debug=False, debug_plot=False)
     # ms.run()
-    ms.get_morse_from_wav_file(os.path.join('data', 'morse_code_alphabet_16k.wav'))
+    ms.get_morse_from_wav_file(os.path.join('test_data', 'morse_code_alphabet_16k.wav'))

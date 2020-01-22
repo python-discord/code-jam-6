@@ -8,7 +8,7 @@ class Utility(object):
         self.user_name = 'user_name'
         self.morse = Morse()
         self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=9)
-        # Temp debug data
+        # Temp debug test_data
         self.message_dict = {
             'Bob': {
             'messages': [
