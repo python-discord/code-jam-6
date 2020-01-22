@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 import pickle
 
 from geopy.geocoders import Nominatim
@@ -74,27 +74,26 @@ class SunShading(FloatLayout):
         set_angle = angles[1]
 
         print(angles)
-
-        """
-
-                Ellipse:
-                    size: root.shade_size
-                    angle_start: root.shade_angle_start
-                    angle_end: root.shade_angle_stop
-                    pos: 0, 0
-        """
-
+        print(rise_angle)
+        print(set_angle)
 
         if rise_angle < set_angle:
-            print(360 - (set_angle - rise_angle))
-            print(360 - set_angle)
+            # print(360 - (set_angle - rise_angle))
+            # print(360 - set_angle)
             self.shade_one_angle_start = 360 - set_angle
             self.shade_one_angle_stop = 360 - rise_angle
             self.shade_one_color = (0, 0.1, 0.3, 1)
 
+            self.sun_one_angle_start = 0
+            self.sun_one_angle_stop = 360 - set_angle
+            self.sun_one_color = (0.8, 0.7, 0.1, 1)
+            self.sun_two_angle_start = 360 - rise_angle
+            self.sun_two_angle_stop = 360
+            self.sun_two_color = (0.8, 0.7, 0.1, 1)
+
         elif rise_angle > set_angle:
-            print(360 - (rise_angle - set_angle))
-            print(360 - rise_angle)
+            # print(360 - (rise_angle - set_angle))
+            # print(360 - rise_angle)
             self.shade_one_angle_start = 360 - set_angle
             self.shade_one_angle_stop = 360
             self.shade_one_color = (0, 0.1, 0.3, 1)
@@ -187,46 +186,44 @@ class MainScreen(Screen):
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
-        now = datetime.now() - timedelta(hours=0)
+        now = datetime.utcnow() - timedelta(hours=-10)
         today_sunrise = today_sunrise.replace(tzinfo=None)
         today_sunset = today_sunset.replace(tzinfo=None)
 
         if now > today_sunrise and today_sunset:
             # Don't need TZInfo to perform this operation
-            today_sunrise = now - today_sunrise.replace(tzinfo=None)
-            today_sunset = now - today_sunset.replace(tzinfo=None)
+            today_sunrise = now - today_sunrise
+            today_sunset = now - today_sunset
 
             # Convert timedelta into minutes and round
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
-            # Since icons are in the "past" (to the left) keep the angles positive
             # After Sunrise, after Sunset
             today_sunrise = today_sunrise * 0.25
             today_sunset = today_sunset * 0.25
 
         elif now < today_sunrise and today_sunset:
-            today_sunrise = today_sunrise.replace(tzinfo=None) - now
-            today_sunset = today_sunset.replace(tzinfo=None) - now
+            today_sunrise = today_sunrise - now
+            today_sunset = today_sunset - now
 
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
-            # Since icons are in the "future" (to the right) keep angles negative
             # Before Sunrise, after Sunset
-            today_sunrise = today_sunrise * 0.25 * -1
-            today_sunset = today_sunset * 0.25 * -1
+            today_sunrise = 360 - (today_sunrise * 0.25)
+            today_sunset = 360 - (today_sunset * 0.25)
 
         else:
-            today_sunrise = now - today_sunrise.replace(tzinfo=None)
-            today_sunset = today_sunset.replace(tzinfo=None) - now
+            today_sunrise = now - today_sunrise
+            today_sunset = today_sunset - now
 
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
             # After Sunrise, before Sunset
             today_sunrise = today_sunrise * 0.25
-            today_sunset = today_sunset * 0.25 * -1
+            today_sunset = 360 - (today_sunset * 0.25)
 
         return today_sunrise, today_sunset
 
