@@ -100,7 +100,7 @@ class Pebble:
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.resize_event = None
+        self.resize_event = Clock.schedule_once(lambda dt:None, 0)
         self.setup_background()
 
         self.pebbles = {}
@@ -145,8 +145,7 @@ class Chisel(Widget):
         self.bg_rect.size = self._get_background_size()
 
     def delayed_resize(self, *args):
-        if self.resize_event is not None:
-            self.resize_event.cancel()
+        self.resize_event.cancel()
         self.resize_event = Clock.schedule_once(lambda dt: self.resize(*args), .3)
 
     def resize(self, *args):
