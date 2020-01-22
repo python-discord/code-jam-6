@@ -35,11 +35,10 @@ class MyMouse(Scatter):
         self.pos = [x, y - self.mouse_im_size[1]]
 
     def on_cursor_leave(self, *args):
-        App.get_running_app().root.ids.themouse.opacity = 0
+        self.opacity = 0
 
     def on_cursor_enter(self, *args):
-        App.get_running_app().root.ids.themouse.opacity = 1
-
+        self.opacity = 1
 
 
 if __name__ == "__main__":
