@@ -13,14 +13,40 @@
 <TimeWizard>:
     title: 'Time Wizard'
 
-    size_hint: 0.3, 0.8
+    size_hint: 0.2, 0.8
     pos_hint: {'center_x': 0.15, 'center_y': 0.5}
 
     BoxLayout:
-        orientation: 'vertical'
+        orientation: 'horizontal'
 
-        Label:
-            text: "eat a poopie"
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: "FASTEST!"
+                font_size: 14
+            Label:
+                text: "FASTER!"
+                font_size: 12
+            Label:
+                text: "Fast"
+                font_size: 10
+            Label:
+                text: "Slow"
+                font_size: 8
+
+        BoxLayout:
+            orientation: 'vertical'
+            Slider:
+                id: time_slider
+                orientation: 'vertical'
+                min: 1
+                max: 100000
+                value: 1
+
+            Label:
+                text: str(round(time_slider.value)) + 'x'
+                size_hint: None, 0.05
+                pos_hint: {'center_x': 0.5, 'center_y': 0}
 
 <NowMarker>:
 	Image:
