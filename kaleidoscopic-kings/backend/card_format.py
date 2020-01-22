@@ -1,16 +1,50 @@
 from dataclasses import dataclass
 import random
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Type
 import logging
 
 logger = logging.getLogger(__name__)
 
 
 class GameStateHandler:
+    """
+    Class that handles state interactions.
+    Currently 3 type of states are supported: int, float and bool.
+
+    The limits for int and float are defined by constants class attributes.
+    For example if the INTEGER_RANGE_INCLUDING is (0, 100) then that means that states of type int,
+    when updated, will never go over 100 or below 0.
+
+    All possible states are passed as dictionary in init. One example of such dictionary:
+    {
+     "village_population": 80,
+     "world_encountered_dinosaur": false
+    }
+
+    Then these states can easily be called from cards json by using conditions/effects.
+    For example card can have key "conditions" with value {"village_population": 50} which will
+    make the card valid for the player to draw only if the village_population state is equal or
+    higher than 50. Integer and floats are always checked if state is equal or more than condition.
+
+    Same goes for effects for example "effects": {"village_population": -10} will reduce the
+    village_population state population by 10.
+
+    There are some special game states that are global no matter the json file and are not limited
+    by range. These cannot be modified by card conditions/effects. Currently these are:
+    game_turn
+
+    """
     INTEGER_RANGE_INCLUDING = (0, 100)
     FLOAT_RANGE_INCLUDING = (0, 1)
 
     def __init__(self, game_states: dict):
+        """
+        :param game_states: dict of all possible game states. Example:
+                            {
+                             "village_population": 80,
+                             "world_encountered_dinosaur": false
+                            }
+        """
         self._game_states = game_states
         self._game_turn = 0
 
@@ -25,27 +59,47 @@ class GameStateHandler:
         self._game_turn += 1
 
     def update_state(self, effects: dict):
-        # effects can be None
+        """
+        :param effects: dict or None representing changes that modify current game states. Example:
+                        {"village_population": -10}
+
+                        Where key represent name of state to be changed and value is either int,
+                        float or bool. The value types have to match between this dict and their
+                        state dict representation (self._game_states) for example if
+                        village_population state has a int value you can't pass effect
+                        {"village_population": 0.5}
+        :raise: Attribute error is going to be raised if any of the keys in effects is not found in
+                game states.
+        :raise: TypeError if effect value and it's game state value match are not the same type.
+        """
         if effects is None:
             return
 
-        for key, value in effects.items():
-            if type(value) is int:
-                self._game_states[key] += value
-                self._make_sure_in_range(key, GameStateHandler.INTEGER_RANGE_INCLUDING)
-            elif type(value) is float:
-                self._game_states[key] += value
-                self._make_sure_in_range(key, GameStateHandler.FLOAT_RANGE_INCLUDING)
-            elif type(value) is bool:
-                self._game_states[key] = value
+        for state_key, state_value in effects.items():
+            if type(state_value) is int:
+                self._make_sure_game_state_is_correct_type(state_key, int)
+                self._game_states[state_key] += state_value
+                self._make_sure_in_range(state_key, self.INTEGER_RANGE_INCLUDING)
+            elif type(state_value) is float:
+                self._make_sure_game_state_is_correct_type(state_key, float)
+                self._game_states[state_key] += state_value
+                self._make_sure_in_range(state_key, self.FLOAT_RANGE_INCLUDING)
+            elif type(state_value) is bool:
+                self._make_sure_game_state_is_correct_type(state_key, bool)
+                self._game_states[state_key] = state_value
             else:
-                logger.critical(f"Can't update state, unknown state {key}")
+                logger.critical(f"Can't update state, unknown state type for {state_key}")
+
+    def _make_sure_game_state_is_correct_type(self, state_key: str, _type: Type[int, float, bool]):
+        if type(self._game_states[state_key]) is not _type:
+            raise TypeError(f"Type values for effect {state_key} and game state do no match.")
 
     def _make_sure_in_range(self, key: str, value_range: Tuple[int, int]):
-        if self._game_states[key] < value_range[0]:
-            self._game_states[key] = value_range[0]
-        elif self._game_states[key] > value_range[1]:
-            self._game_states[key] = value_range[1]
+        min_including, max_including = value_range
+        if self._game_states[key] < min_including:
+            self._game_states[key] = min_including
+        elif self._game_states[key] > max_including:
+            self._game_states[key] = max_including
 
     def check_game_state(self, state_key: str, state_value: Union[int, float, bool]) -> bool:
         try:
@@ -90,7 +144,7 @@ class OptionOutcome:
 @dataclass
 class Option:
     """
-    Represents one of 2 options the user is presented for each card.
+    Represents one of options the user is presented for each card.
     """
     text: str
     # Passed in init as list of dicts then later saved as list of OptionOutcome objects
@@ -118,10 +172,10 @@ class Card:
     card_asset: str
     text: str
     # List of Option objects
-    options: list
-    # Dict of conditions for example {"player_health": 0.5} would be only valid if player health
-    # is more or equal than 50% of it's total value.
-    conditions: Union[dict, List[Option]] = None
+    options: Union[dict, List[Option]]
+    # Dict of conditions for example {"player_health": 0.5} and this card would only be  valid
+    # if player health is more or equal than 50% of it's total value.
+    conditions: dict = None
 
     def __post_init__(self):
         """
