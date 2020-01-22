@@ -14,6 +14,7 @@ from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
+from modules.navigation import navcont
 
 class InputEvents(EventDispatcher):
     __events__ = ('on_input',)
@@ -58,10 +59,10 @@ class CompassContainer(RelativeLayout):
 
     def on_kv_post(self, base_widget):
         self.buttons = {
-            'n': self.canvas.get_group('n'),
-            's': self.canvas.get_group('s'),
-            'e': self.canvas.get_group('e'),
-            'w': self.canvas.get_group('w')
+            navcont.Directions.NORTH: self.canvas.get_group('n'),
+            navcont.Directions.EAST: self.canvas.get_group('e'),
+            navcont.Directions.SOUTH: self.canvas.get_group('s'),
+            navcont.Directions.WEST: self.canvas.get_group('w')
         }
 
     def point_inside_polygon(self, x, y, poly):
@@ -88,7 +89,7 @@ class CompassContainer(RelativeLayout):
             points = v[0].points
             x, y = self.to_local(touch.pos[0], touch.pos[1])
             if self.point_inside_polygon(x, y, points):
-                self.app.pass_command(k)
+                self.app.navcontrol.go(k)
 
         return super(CompassContainer, self).on_touch_down(touch)
 
@@ -187,6 +188,7 @@ class GUIApp(App):
 
     def start_game(self):
         self.add_text('Welcome to the [color=00FF00]game[/color]!')
+        self.navcontrol = navcont.NavControl()
 
     def add_text(self, text, on_newline=True):
         if on_newline:
@@ -194,9 +196,6 @@ class GUIApp(App):
         self.gui.add_text(text)
 
     def pass_command(self, cmd):
-        """ Pass user input to the controllers """
-        print(cmd)
-        # self.navcontrol.go(cmd)
         pass
 
 
