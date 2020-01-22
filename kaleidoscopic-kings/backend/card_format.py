@@ -102,6 +102,29 @@ class GameStateHandler:
             self._game_states[key] = max_including
 
     def check_game_state(self, state_key: str, state_value: Union[int, float, bool]) -> bool:
+        """
+        Check if passed state value is lower or equal to it's current game state value.
+        For example we have loaded these game states and this is their current values:
+        {
+         "village_population": 80,
+         "world_encountered_dinosaur": false
+        }
+
+        If we pass "village_population" as state_key and state_value 50 then this will return True.
+        :param state_key: state name to check for example "village_population".
+
+        We can also pass floats which would mean percent of total value. For above example if we
+        passed state_value 0.5 and village_population was 90 at start then that would be that same
+        as passing state_value 45.
+        TODO: save inital states along with their copy so we know the start values
+
+        Bool are also supported with example state_key world_encountered_dinosaur and state_value
+        True would return False because they do not match.
+
+        :param state_value: Union[int, float, bool] state value to check
+        :return: bool whether the passed state value is lower or equal to it's current
+                 game state value. If passed state_key is not found in game states returns False.
+        """
         try:
             self_key_value = self._game_states[state_key]
         except AttributeError:
