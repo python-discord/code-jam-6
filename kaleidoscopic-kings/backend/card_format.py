@@ -12,8 +12,8 @@ class GameStateHandler:
     Currently 3 type of states are supported: int, float and bool.
 
     The limits for int and float are defined by constants class attributes.
-    For example if the INTEGER_RANGE_INCLUDING is (0, 100) then that means that states of type int,
-    when updated, will never go over 100 or below 0.
+    For example if the INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of type int,
+    when updated, will never go over 1000 or below 0.
 
     All possible states are passed as dictionary in init. One example of such dictionary:
     {
@@ -34,12 +34,12 @@ class GameStateHandler:
     game_turn
 
     """
-    INTEGER_RANGE_INCLUDING = (0, 100)
+    INTEGER_RANGE_INCLUDING = (0, 1000)
     FLOAT_RANGE_INCLUDING = (0, 1)
 
     def __init__(self, game_states: dict):
         """
-        :param game_states: dict of all possible game states. Example:
+        :param game_states: dict of all possible game states with their default state. Example:
                             {
                              "village_population": 80,
                              "world_encountered_dinosaur": false
@@ -90,7 +90,10 @@ class GameStateHandler:
             else:
                 logger.critical(f"Can't update state, unknown state type for {state_key}")
 
-    def _make_sure_game_state_is_correct_type(self, state_key: str, _type: Type[int, float, bool]):
+    def _make_sure_game_state_is_correct_type(self,
+                                              state_key: str,
+                                              _type: Union[Type[int], Type[float], Type[Type[bool]]]
+                                              ):
         if type(self._game_states[state_key]) is not _type:
             raise TypeError(f"Type values for effect {state_key} and game state do no match.")
 
@@ -112,18 +115,10 @@ class GameStateHandler:
 
         If we pass "village_population" as state_key and state_value 50 then this will return True.
         :param state_key: state name to check for example "village_population".
-
-        We can also pass floats which would mean percent of total value. For above example if we
-        passed state_value 0.5 and village_population was 90 at start then that would be that same
-        as passing state_value 45.
-        TODO: save inital states along with their copy so we know the start values
-
-        Bool are also supported with example state_key world_encountered_dinosaur and state_value
-        True would return False because they do not match.
-
         :param state_value: Union[int, float, bool] state value to check
         :return: bool whether the passed state value is lower or equal to it's current
                  game state value. If passed state_key is not found in game states returns False.
+        :raise: TypeError if effect value and it's game state value match are not the same type.
         """
         try:
             self_key_value = self._game_states[state_key]
@@ -132,10 +127,13 @@ class GameStateHandler:
             return False
 
         if type(state_value) is int:
+            self._make_sure_game_state_is_correct_type(state_key, int)
             return state_value <= self_key_value
         elif type(state_value) is float:
+            self._make_sure_game_state_is_correct_type(state_key, float)
             return state_value * self_key_value <= self_key_value
         elif type(state_value) is bool:
+            self._make_sure_game_state_is_correct_type(state_key, bool)
             return state_value == self_key_value
         else:
             logger.warning("Unsupported type passed for check game state.")
