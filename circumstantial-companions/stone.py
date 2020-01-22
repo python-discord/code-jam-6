@@ -81,10 +81,11 @@ class Pebble:
         vy -= GRAVITY
 
         # Bounce off walls
-        if y > 1:
-            vy *= -1
         if not 0 < x < 1:
             vx *= -1
+        if y > 1:
+            vy *= -1
+
         self.x, self.y = x + vx, max(0, y + vy)
 
         self.circles[self.index].circle = (self.x * self.x_dim, self.y * self.y_dim,
