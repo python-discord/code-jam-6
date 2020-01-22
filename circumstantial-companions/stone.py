@@ -15,7 +15,7 @@ GRAVITY = .02
 FRICTION = .9
 CHISEL_RADIUS = 6e-4
 DISLODGE_VELOCITY = 1e-7
-MAX_VELOCITY = 1e-6
+MAX_VELOCITY = .1
 PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 1e4
 PEBBLE_SEGMENTS = 4
@@ -51,6 +51,16 @@ def pebble_positions():
         for x in range(pebble_count):
             yield new_x_offset + x_scale * x, .001 + y_scale * y
 
+def is_dislodged(velocity):
+        x, y = velocity
+        magnitude = (x**2 + y**2)**.5
+        if magnitude < DISLODGE_VELOCITY:
+            return False
+        if magnitude > MAX_VELOCITY:
+            x *= MAX_VELOCITY / magnitude
+            y *= MAX_VELOCITY / magnitude
+        return x, y
+
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
         self.index = index
@@ -75,7 +85,7 @@ class Pebble:
         if magnitude > MAX_VELOCITY:
             x *= MAX_VELOCITY / magnitude
             y *= MAX_VELOCITY / magnitude
-        self.__velocity = velocity_
+        self.__velocity = x, y
         self.update()
 
     def step(self, dt):
@@ -152,7 +162,6 @@ class Chisel(Widget):
         self.bg_rect.texture = self.bg_rect.texture  # required to trigger update
         self.bg_rect.pos = instance.pos
         self.bg_rect.size = self._get_background_size()
-
 
     def resize(self, *args):
         self.size = self.parent.size if self.parent else Window.size
