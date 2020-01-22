@@ -71,21 +71,21 @@ class MyGame(Engine):
 
         Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)
 
-        for x in range(20):
+        for x in range(1000):
             img = Image(source='Picture/tree.png',
                         keep_ratio=True,
                         allow_stretch=False,
-                        size_hint=(0.2, 0.25),
+                        size_hint=(0.5, 0.5),
                         pos_hint={'center_x': random.uniform(0, 1),
-                                  'top': random.uniform(0.26, 0.24)})
+                                  'top': random.uniform(0.36, 0.38)})
 
             self.background.add_widget(img, index=6)
 
     def update(self, dt: float) -> None:
-        self.duck.pos[0] = self.duck.pos[0] - 3
-        self.duck1.pos[0] = self.duck1.pos[0] - 3
-        self.duck2.pos[0] = self.duck2.pos[0] - 3
-        self.duck3.pos[0] = self.duck3.pos[0] - 3
+        self.duck.pos[0] = self.duck.pos[0] - 2
+        self.duck1.pos[0] = self.duck1.pos[0] - 2
+        self.duck2.pos[0] = self.duck2.pos[0] - 2
+        self.duck3.pos[0] = self.duck3.pos[0] - 2
 
         if self.duck.pos < self.pos:
             self.duck.pos[0] = 1400
