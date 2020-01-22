@@ -52,6 +52,18 @@ class RV(RecycleView):
             self.data = file
 
     def select(self, file):
+        if self.prev_selected is not None and self.selected.name == file.name:
+
+            self.selected.alpha = 0
+            self.prev_selected.alpha = 0
+            for fileDict in self.data:
+                if fileDict['alpha'] == .5:
+                    fileDict['alpha'] = 0
+
+            self.prev_selected = None
+            self.selected = None
+            return None
+
         if file.type != 'PARENT':
             if self.prev_selected is not None:
 
