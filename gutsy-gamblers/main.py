@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta, date
 import pickle
 
 from geopy.geocoders import Nominatim
@@ -8,7 +8,6 @@ import requests
 from kivy.animation import Animation
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.graphics import *
 from kivy.lang import Builder
 from kivy.properties import NumericProperty
 from kivy.uix.effectwidget import EffectWidget, HorizontalBlurEffect, VerticalBlurEffect
@@ -33,18 +32,13 @@ class DialWidget(FloatLayout):
     """
     angle = NumericProperty(0)
 
-    def __init__(self, day_length, dial_image, dial_size, suntimes, **kwargs):
+    def __init__(self, day_length, dial_image, dial_size, sun_angles, **kwargs):
         super(DialWidget, self).__init__(**kwargs)
 
-        self.size = Window.width, Window.height
-
         self.dial_file = dial_image
-        # self.dial_size = dial_size
         self.dial_size = dial_size
+        self.sun_angles = sun_angles
 
-        size = self.height * 0.8, self.height * 0.8
-
-        # print(size)
         # Duration is how long it takes to perform the overall animation
         anim = Animation(angle=360, duration=day_length)
         anim += Animation(angle=360, duration=day_length)
@@ -52,8 +46,8 @@ class DialWidget(FloatLayout):
         anim.start(self)
 
         # Split suntime tuple into named variables
-        sunrise = suntimes[0]
-        sunset = suntimes[1]
+        sunrise = self.sun_angles[0]
+        sunset = self.sun_angles[1]
 
         self.add_widget(DialEffectWidget((sunrise, sunset)))
 
@@ -73,33 +67,33 @@ class SunShading(FloatLayout):
         rise_angle = angles[0]
         set_angle = angles[1]
 
-        print(angles)
-        print(rise_angle)
-        print(set_angle)
+        sun_colour = (0.9, 0.9, 0.08, 1)
+        shade_colour = (0.0, 0.2, 0.4, 1)
 
+        # More of bisks brutally ugly work
         if rise_angle < set_angle:
-            # print(360 - (set_angle - rise_angle))
-            # print(360 - set_angle)
             self.shade_one_angle_start = 360 - set_angle
             self.shade_one_angle_stop = 360 - rise_angle
-            self.shade_one_color = (0, 0.1, 0.3, 1)
+            self.shade_one_color = shade_colour
 
             self.sun_one_angle_start = 0
             self.sun_one_angle_stop = 360 - set_angle
-            self.sun_one_color = (0.8, 0.7, 0.1, 1)
+            self.sun_one_color = sun_colour
             self.sun_two_angle_start = 360 - rise_angle
             self.sun_two_angle_stop = 360
-            self.sun_two_color = (0.8, 0.7, 0.1, 1)
+            self.sun_two_color = sun_colour
 
         elif rise_angle > set_angle:
-            # print(360 - (rise_angle - set_angle))
-            # print(360 - rise_angle)
             self.shade_one_angle_start = 360 - set_angle
             self.shade_one_angle_stop = 360
-            self.shade_one_color = (0, 0.1, 0.3, 1)
+            self.shade_one_color = shade_colour
             self.shade_two_angle_start = 360 - rise_angle
             self.shade_two_angle_stop = 0
-            self.shade_two_color = (0, 0.1, 0.3, 1)
+            self.shade_two_color = shade_colour
+
+            self.sun_one_angle_start = 360 - rise_angle
+            self.sun_one_angle_stop = 360 - set_angle
+            self.sun_one_color = sun_colour
 
         self.shade_size = Window.height * 0.8, Window.height * 0.8
         # self.shade_angle_start = angles[1] - 360
@@ -115,8 +109,8 @@ class DialEffectWidget(EffectWidget):
 
         self.shade_size = Window.height * 0.8, Window.height * 0.8
         self.add_widget(SunShading(angles))
-        self.effects = [HorizontalBlurEffect(size=20.0), VerticalBlurEffect(size=20.0)]
-        self.opacity = 0.5
+        self.effects = [HorizontalBlurEffect(size=50.0), VerticalBlurEffect(size=50.0)]
+        self.opacity = 0.25
 
     def _pos_check(self):
         self.shade_size = Window.height * 0.8, Window.height * 0.8
@@ -143,7 +137,7 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        self.add_widget(DialWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
+        self.add_widget(DialWidget(60, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
         self.add_widget(NowMarker())
         self.suntimes()
 
@@ -175,18 +169,20 @@ class MainScreen(Screen):
 
         sun_time = Sun(lat_long[0], lat_long[1])
 
+        test_date = date(year=2020, month=12, day=20)
+
         try:
-            today_sunrise = sun_time.get_sunrise_time()
+            today_sunrise = sun_time.get_sunrise_time(test_date)
         except SunTimeException:
             raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
 
         try:
-            today_sunset = sun_time.get_sunset_time()
+            today_sunset = sun_time.get_sunset_time(test_date)
         except SunTimeException:
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
-        now = datetime.utcnow() - timedelta(hours=-10)
+        now = datetime.utcnow() - timedelta(hours=0)
         today_sunrise = today_sunrise.replace(tzinfo=None)
         today_sunset = today_sunset.replace(tzinfo=None)
 
