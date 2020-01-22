@@ -5,7 +5,6 @@ from kivy.graphics import Color, Line
 from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.vector import Vector
-from itertools import product
 from random import choice, random
 
 GRAVITY = .02
