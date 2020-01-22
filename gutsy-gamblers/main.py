@@ -144,7 +144,7 @@ class MainScreen(Screen):
         resp = requests.get('http://ip-api.com/json/').json()
 
         # pickle the object for testing purposes
-        temp_latlong = [location.latitude, location.longitude]
+        temp_latlong = [resp['lat'], resp['lon']]
         with open('latlong.tmp', 'wb') as f:
             pickle.dump(temp_latlong, f)
 
