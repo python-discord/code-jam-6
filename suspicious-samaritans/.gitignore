@@ -131,3 +131,8 @@ dmypy.json
 
 # Annoying OSX stuff
 .DS_Store
+
+# shouldn't be put on git
+Pipfile.lock
+ffmpeg_binaries/
+.vcrrcv
