@@ -9,7 +9,8 @@ logger = logging.getLogger(__name__)
 
 class CaveManGame(ABC):
     """
-    This class defines game states that should be easily exposed trough GameState object.
+    This class defines game states that should be easily exposed trough GameState object as
+    they are more important then the others.
     """
     @property
     @abstractmethod
