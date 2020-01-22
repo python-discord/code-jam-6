@@ -7,12 +7,13 @@ from kivy.core.window import Window
 from kivy.event import EventDispatcher
 from kivy.modules import inspector
 from kivy.properties import ListProperty, NumericProperty, ObjectProperty, StringProperty
-from kivy.uix.behaviors import ButtonBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
+
 
 class InputEvents(EventDispatcher):
     __events__ = ('on_input',)
@@ -45,10 +46,23 @@ class MainContainer(BoxLayout, InputEvents):
         pass
 
 
-class CompassContainer(GridLayout):
+class CustomImage(Image):
+    def __init__(self, **kwargs):
+        Image.__init__(self, **kwargs)
+
+
+class CompassContainer(RelativeLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = App.get_running_app()
+
+    def on_kv_post(self, base_widget):
+        self.buttons = {
+            'n': self.canvas.get_group('n'),
+            's': self.canvas.get_group('s'),
+            'e': self.canvas.get_group('e'),
+            'w': self.canvas.get_group('w')
+        }
 
     def point_inside_polygon(self, x, y, poly):
         """Taken from http://www.ariel.com.au/a/python-point-int-poly.html"""
@@ -69,26 +83,14 @@ class CompassContainer(GridLayout):
             p1x, p1y = p2x, p2y
         return inside
 
-    # def on_touch_down(self, touch):
-    #     dirs = {
-    #         'n': self.canvas.children[3],
-    #         's': self.canvas.children[5],
-    #         'w': self.canvas.children[7],
-    #         'e': self.canvas.children[9],
-    #     }
-    #
-    #     for k, v in dirs.items():
-    #         points = v.points
-    #         x, y = self.to_local(touch.pos[0], touch.pos[1])
-    #         if self.point_inside_polygon(x, y, points):
-    #             self.app.pass_command(k)
-    #
-    #     return super(CompassContainer, self).on_touch_down(touch)
+    def on_touch_down(self, touch):
+        for k, v in self.buttons.items():
+            points = v[0].points
+            x, y = self.to_local(touch.pos[0], touch.pos[1])
+            if self.point_inside_polygon(x, y, points):
+                self.app.pass_command(k)
 
-
-class CompassButton(ButtonBehavior, BoxLayout):
-    def button_press(self, dir):
-        print(dir)
+        return super(CompassContainer, self).on_touch_down(touch)
 
 
 class TextDisplayContainer(ScrollView):
@@ -133,10 +135,6 @@ class CommandInput(TextInput):
             self.text = ''
             self.prompt()
 
-        # BACKSPACE or DEL key
-        elif keycode[0] in [8, 127]:
-            self.cancel_selection()
-
         # UP ARROW key
         elif keycode[0] == 273:
             self.set_input_text(self.cmd_history[-1])
@@ -173,10 +171,14 @@ class CommandInput(TextInput):
         if not focused:
             self.focus = True
 
+    def select_all(self):
+        self.select_text(1, len(self.text))
+
 
 class GUIApp(App):
     """ To use this class, import this -> from kivy.app import App
         and use -> app = App.get_running_app() """
+
     def build(self):
         self.gui = MainContainer()
         self.start_game()
@@ -186,11 +188,14 @@ class GUIApp(App):
     def start_game(self):
         self.add_text('Welcome to the [color=00FF00]game[/color]!')
 
-    def add_text(self, text):
+    def add_text(self, text, on_newline=True):
+        if on_newline:
+            text += '\n'
         self.gui.add_text(text)
 
     def pass_command(self, cmd):
         """ Pass user input to the controllers """
+        print(cmd)
         # self.navcontrol.go(cmd)
         pass
 

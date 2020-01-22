@@ -3,64 +3,60 @@
     text_display_label: text_display_label
     text_display_console: text_display_console
     orientation: 'vertical'
-    padding: [10, 10, 10, 10]
+    padding: 10
     canvas:
-        Color:
-            rgba: 1, 1, 1, 0.1
         Rectangle:
             size: self.width, self.height
-
-    CompassContainer:
-        id: compass
-        size_hint: None, None
-        width: root.width/8
-        height: root.width/8
-
-        rows: 3
-
-        CompassButton:
-            on_press: self.button_press('N')
-            Label:
-                canvas.before:
-                    PushMatrix
-                    Rotate:
-                        angle: 180
-                        origin: self.center
-                canvas.after:
-                    PopMatrix
-                text: 'V'
-        GridLayout:
-            cols: 2
-            CompassButton:
-                on_press: self.button_press('W')
-                Label:
-                    canvas.before:
-                        PushMatrix
-                        Rotate:
-                            angle: -90
-                            origin: self.center
-                    canvas.after:
-                        PopMatrix
-                    text: 'V'
-            CompassButton:
-                on_press: self.button_press('E')
-                Label:
-                    canvas.before:
-                        PushMatrix
-                        Rotate:
-                            angle: 90
-                            origin: self.center
-                    canvas.after:
-                        PopMatrix
-                    text: 'V'
-        CompassButton:
-            on_press: self.button_press('S')
-            Label:
-                text: 'V'
+            pos: self.pos
+            source: 'images/cave_background.png'
+        Color:
+            rgba: 0, 0, 0, 0.8
+        Rectangle:
+            size: self.width, self.height
+            pos: self.pos
 
     BoxLayout:
         size_hint: 1, None
-        height: 25
+        height: root.height/5
+        padding: 10
+        canvas:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 0.0
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+
+        CompassContainer:
+            size_hint: None, 1
+            width: self.height
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    size: self.width/3, self.width/3
+                    pos: self.height/2-(self.width/3)/2, self.width/2-(self.width/3)/2
+                    source: 'images/log.png'
+                Triangle:
+                    group: 's'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2,0]
+                    source: 'images/triangle_ns.png'
+                Triangle:
+                    group: 'w'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [0,self.width/2]
+                    source: 'images/triangle_w.png'
+                Triangle:
+                    group: 'n'
+                    points: [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2,self.width]
+                    source: 'images/triangle_ns.png'
+                Triangle:
+                    group: 'e'
+                    points: [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width, self.width/2]
+                    source: 'images/triangle_e.png'
+
+    BoxLayout:
+        size_hint: 1, None
+        height: 10
+
 
     TextDisplayContainer:
         orientation: 'vertical'
@@ -93,11 +89,3 @@
             foreground_color: root.foreground_color
             background_color: root.background_color
             cursor_color: root.foreground_color
-
-<CompassButton>:
-    canvas:
-        Color:
-            rgba: 1, 1, 1, 0.3
-        Rectangle:
-            size: self.size
-            pos: self.pos
