@@ -4,11 +4,13 @@ from kivy.graphics import Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.slider import Slider
 from kivy.garden.navigationdrawer import NavigationDrawer
 
+from cursor import Cursor
 from i18n import DEFAULT_LOCALE, SYSTEM_LOCALE, LOCALES, TRANSLATIONS
 from stone import Chisel, CHISEL_RADIUS_RANGE, CHISEL_POWER_RANGE
 
@@ -88,6 +90,7 @@ class ChiselApp(App):
         super().__init__()
 
     def build(self):
+        root = FloatLayout()
         navdrawer = NavigationDrawer()
         navdrawer.anim_type = "slide_above_anim"
         chisel = Chisel()
@@ -97,7 +100,9 @@ class ChiselApp(App):
         navdrawer.add_widget(chisel)
         options_panel.build()
 
-        return navdrawer
+        root.add_widget(navdrawer)
+        root.add_widget(Cursor())
+        return root
 
 
 if __name__ == "__main__":

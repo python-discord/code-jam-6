@@ -11,8 +11,6 @@ from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
 from kivy.vector import Vector
 
-from Mouse import KV, MyMouse
-
 GRAVITY = .02
 FRICTION = .9
 CHISEL_RADIUS = 6e-4
@@ -122,8 +120,6 @@ class Chisel(Widget):
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
                 self.pebbles.append(Pebble(index, x, y, self.circles, self.width, self.height))
-        # Adds the mouse widget here so it stays on top of the canvas
-        self.add_widget(Builder.load_string(KV))
         (self.parent if self.parent else Window).bind(size=self.resize)
 
         # TODO: Implement adjustable chisel radius and power
