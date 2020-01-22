@@ -56,7 +56,10 @@ class Mkdir(BasePopup):
                 dir_ = pathlib.Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
                 new_dir = dir_ / dir_name
 
-                new_dir.mkdir()
+                if not new_dir.exists():
+                    new_dir.mkdir()
+                else:
+                    print('File Named already named the same')
 
                 self.ctx.parent.ids.left.ids.rv.dirs = dir_.iterdir()
                 data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in self.ctx.parent.ids.left.ids.rv.dirs]
@@ -70,7 +73,10 @@ class Mkdir(BasePopup):
                 dir_ = pathlib.Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
                 new_dir = dir_ / dir_name
 
-                new_dir.mkdir()
+                if not new_dir.exists():
+                    new_dir.mkdir()
+                else:
+                    print('File Named already named the same')
 
                 self.ctx.parent.ids.right.ids.rv.dirs = dir_.iterdir()
                 data = [self.ctx.parent.ids.right.ids.rv.generate(file_name) for file_name in self.ctx.parent.ids.right.ids.rv.dirs]
