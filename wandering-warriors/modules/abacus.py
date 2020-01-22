@@ -1,10 +1,24 @@
 from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
 
+from math import floor
+
+from threading import Thread, Timer
+
+from time import sleep
+
 
 class Bead(Rectangle):
     def __init__(self, **kwargs):
         super(Bead, self).__init__(source='assets/graphics/bead.png', **kwargs)
+        
+        self.anim = None
+
+    def get_anim_offset(self):
+        if not self.anim:
+            return 0
+
+        return self.anim.progress
 
 
 class AbacusColumn:
@@ -17,15 +31,19 @@ class AbacusColumn:
             self.down.append(Bead())
 
     def shift_up(self, n):
+        if n == -1:
+            n = len(self.down)
+
         if len(self.down) < n:
             return False
 
         for i in range(n):
             self.up.append(self.down.pop())
 
-        return len(self.down)
-
     def shift_down(self, n):
+        if n == -1:
+            n = len(self.up)
+
         if len(self.up) < n:
             return False
 
@@ -35,14 +53,41 @@ class AbacusColumn:
         return len(self.up)
 
 
+class AbacusAnim:
+    ANIM_SPEED = 50
+
+    def __init__(self):
+        self.progress = 0
+        self.speed = self.ANIM_SPEED
+
+        self.up_shifts = []
+        self.down_shifts = []
+
+    def add_shift_up(self, column, n_beads):
+        if n_beads == -1:
+            n_beads = len(column.down)
+
+        self.up_shifts.append((column, n_beads))
+
+    def add_shift_down(self, column, n_beads):
+        if n_beads == -1:
+            n_beads = len(column.up)
+
+        self.down_shifts.append((column, n_beads))
+
 class Abacus(FloatLayout):
     MAX_BAR_W = 10
     MIN_BORDER_W = 16
     MAX_BEAD_SPACING = 8
 
     N_BARS = 12
-    N_TOP_BEADS = 2
-    N_BOTTOM_BEADS = 5
+    N_TOP_BEADS = 1
+    N_BOTTOM_BEADS = 4
+
+    TOP_V = N_BOTTOM_BEADS + 1
+    PLACE = (N_TOP_BEADS + 1) * TOP_V
+
+    ANIM_CLOCK_CYCLE = 0.02
 
     def __init__(self, **kwargs):
         super(Abacus, self).__init__(**kwargs)
@@ -80,12 +125,6 @@ class Abacus(FloatLayout):
 
                 self.top_beads.append(AbacusColumn(self.N_TOP_BEADS))
                 self.bottom_beads.append(AbacusColumn(self.N_BOTTOM_BEADS))
-
-            # temp tests
-
-            self.top_beads[1].shift_up(1)
-
-            print(self.get_value())
 
         self.bind(pos=self.update, size=self.update)
         self.update()
@@ -157,35 +196,42 @@ class Abacus(FloatLayout):
 
             top_beads = self.top_beads[i]
 
+            bead_space = div_y - border_w - bead_w / 2 * self.N_BOTTOM_BEADS - self.y
+
             for j in range(len(top_beads.down)):
-                top_beads.down[j].pos = (
+                bead = top_beads.down[j]
+
+                bead.pos = (
                     bead_x,
-                    self.y + self.height - border_w - bead_w / 2 - j * bead_w / 2
+                    self.y + self.height - border_w - bead_w / 2 - j * bead_w / 2 - floor(bead_space * bead.get_anim_offset())
                 )
-                top_beads.down[j].size = (bead_w, bead_w / 2)
+                bead.size = (bead_w, bead_w / 2)
 
             for j in range(len(top_beads.up)):
-                top_beads.up[j].pos = (
+                bead = top_beads.up[j]
+
+                bead.pos = (
                     bead_x,
-                    div_y + border_w + bead_w / 2 * (len(top_beads.up) - j - 1)
+                    div_y + border_w + bead_w / 2 * (len(top_beads.up) - j - 1) + floor(bead_space * bead.get_anim_offset())
                 )
-                top_beads.up[j].size = (bead_w, bead_w / 2)
+                bead.size = (bead_w, bead_w / 2)
 
             bottom_beads = self.bottom_beads[i]
 
             for j in range(len(bottom_beads.down)):
-                bottom_beads.down[j].pos = (bead_x, self.y + border_w + j * bead_w / 2)
-                bottom_beads.down[j].size = (bead_w, bead_w / 2)
+                bead = bottom_beads.down[j]
+
+                bead.pos = (bead_x, self.y + border_w + (len(bottom_beads.down) - j - 1) * bead_w / 2 + floor(bead_space * bead.get_anim_offset()))
+                bead.size = (bead_w, bead_w / 2)
 
             for j in range(len(bottom_beads.up)):
-                bottom_beads.up[j].pos = (bead_x, div_y - bead_w / 2 * (len(bottom_beads.up) - j))
-                bottom_beads.up[j].size = (bead_w, bead_w / 2)
+                bead = bottom_beads.up[j]
+
+                bead.pos = (bead_x, div_y - bead_w / 2 * (len(bottom_beads.up) - j) - floor(bead_space * bead.get_anim_offset()))
+                bead.size = (bead_w, bead_w / 2)
 
     def get_value(self):
         v = 0
-
-        top_v = self.N_BOTTOM_BEADS + 1
-        place = (self.N_TOP_BEADS + 1) * top_v
 
         for i in range(self.N_BARS, 0, -1):
             i -= 1
@@ -193,6 +239,95 @@ class Abacus(FloatLayout):
             top_beads = self.top_beads[i]
             bottom_beads = self.bottom_beads[i]
 
-            v += place ** i * (len(top_beads.up) * top_v + len(bottom_beads.up))
+            v += self.PLACE ** i * (len(top_beads.up) * self.TOP_V + len(bottom_beads.up))
 
         return v
+
+    def build_anim(self, anim):
+        for col, n in anim.up_shifts:
+            for bead in col.down[:n]:
+                bead.anim = anim
+
+        for col, n in anim.down_shifts:
+            for bead in col.up[:n]:
+                bead.anim = anim
+
+        def f():
+            for i in range(anim.speed):
+                anim.progress += 1 / anim.speed
+
+                self.update()
+
+                sleep(self.ANIM_CLOCK_CYCLE)
+
+            for col, n in anim.up_shifts:
+                col.shift_up(n)
+
+                for bead in col.up + col.down:
+                    bead.anim = None
+
+            for col, n in anim.down_shifts:
+                col.shift_down(n)
+
+                for bead in col.up + col.down:
+                    bead.anim = None
+
+            self.update()
+        
+        return f
+
+    # animations
+
+    def preset(self, x):
+        anim = AbacusAnim()
+
+        i = 0
+
+        while x > 0:
+            n = x % self.PLACE
+
+            top = n // self.TOP_V
+            bottom = n % self.TOP_V
+
+            anim.add_shift_up(self.top_beads[i], top)
+            anim.add_shift_up(self.bottom_beads[i], bottom)
+
+            x //= self.PLACE
+
+            i += 1
+
+            if i > self.N_BARS:
+                return False
+
+        return self.build_anim(anim)
+
+    def add(self, x, y):
+        pass
+
+    def sub(self, x, y):
+        pass
+
+    def mult(self, x, y):
+        pass
+
+    def div(self, x, y):
+        pass
+
+    def power(self, x, y):
+        pass
+
+    def sqrt(self, x, y):
+        pass
+
+    def reset(self):
+        anim = AbacusAnim()
+
+        for i in range(self.N_BARS):
+            if len(self.top_beads[i].up) > 0:
+                anim.add_shift_down(self.top_beads[i], -1)
+
+            if len(self.bottom_beads[i].up) > 0:
+                anim.add_shift_down(self.bottom_beads[i], -1)
+
+        return self.build_anim(anim)
+    
