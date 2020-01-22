@@ -41,8 +41,8 @@ class Abacus(FloatLayout):
     MAX_BEAD_SPACING = 8
 
     N_BARS = 12
-    N_TOP_BEADS = 1
-    N_BOTTOM_BEADS = 4
+    N_TOP_BEADS = 2
+    N_BOTTOM_BEADS = 5
 
     def __init__(self, **kwargs):
         super(Abacus, self).__init__(**kwargs)
@@ -84,17 +84,8 @@ class Abacus(FloatLayout):
             # temp tests
 
             self.top_beads[1].shift_up(1)
-            self.top_beads[3].shift_up(1)
-            self.top_beads[6].shift_up(1)
 
-            self.bottom_beads[0].shift_up(3)
-            self.bottom_beads[1].shift_up(1)
-            self.bottom_beads[4].shift_up(4)
-            self.bottom_beads[7].shift_up(2)
-
-            self.top_beads[3].shift_down(1)
-
-            self.bottom_beads[0].shift_down(1)
+            print(self.get_value())
 
         self.bind(pos=self.update, size=self.update)
         self.update()
@@ -189,3 +180,19 @@ class Abacus(FloatLayout):
             for j in range(len(bottom_beads.up)):
                 bottom_beads.up[j].pos = (bead_x, div_y - bead_w / 2 * (len(bottom_beads.up) - j))
                 bottom_beads.up[j].size = (bead_w, bead_w / 2)
+
+    def get_value(self):
+        v = 0
+
+        top_v = self.N_BOTTOM_BEADS + 1
+        place = (self.N_TOP_BEADS + 1) * top_v
+
+        for i in range(self.N_BARS, 0, -1):
+            i -= 1
+
+            top_beads = self.top_beads[i]
+            bottom_beads = self.bottom_beads[i]
+
+            v += place ** i * (len(top_beads.up) * top_v + len(bottom_beads.up))
+
+        return v
