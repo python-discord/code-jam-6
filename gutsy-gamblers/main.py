@@ -138,9 +138,9 @@ class MainScreen(Screen):
         self.suntimes()
 
     def on_size(self, a, b):
-        # Maintains a constant aspect ratio of 0.75 (4:3)
-        if (Window.height / Window.width) != 0.75:
-            Window.size = Window.width, Window.width * 0.75
+        # Maintains a constant aspect ratio of 0.5625 (16:9)
+        if (Window.height / Window.width) != 0.5625 and Window.fullscreen is False:
+            Window.size = Window.width, Window.width * 0.5625
 
     def settings_button(self):
         SettingsScreen()
