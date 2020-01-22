@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from geopy.geocoders import Nominatim
-
 import kivy
 import requests
 from kivy.animation import Animation
@@ -14,8 +12,6 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 
 from suntime import Sun, SunTimeException
-
-from config import GEOLOCATION_KEY
 
 kivy.require('1.11.1')
 
@@ -82,13 +78,7 @@ class MainScreen(Screen):
         SettingsScreen()
 
     def ipgeolocate(self):
-        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
-        resp = r.json()
-        city = resp['city']
-        state_prov = resp['state_prov']
-
-        geolocate = Nominatim(user_agent="Code Jam 6: SunClock")
-        location = geolocate.geocode(f"{city} {state_prov}")
+        resp = requests.get('http://ip-api.com/json/').json()
 
         # pickle the object for testing purposes
 
@@ -97,7 +87,7 @@ class MainScreen(Screen):
         # with open('latlong.tmp', 'wb') as f:
         #     pickle.dump(temp_latlong, f)
 
-        return location.latitude, location.longitude
+        return resp['lat'], resp['lon']
 
     def suntimes(self):
         lat_long = self.ipgeolocate()
@@ -168,16 +158,14 @@ class SettingsScreen(Popup):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
 
-        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
-        resp = r.json()
+        resp = requests.get('http://ip-api.com/json/').json()
         city = resp['city']
-        state_prov = resp['state_prov']
-        country = resp['country_name']
-        zipcode = resp['zipcode']
+        region = resp['regionName']
+        country = resp['country']
 
         settings_popup = Popup(title="Settings",
                                content=Label(
-                                   text=f'Currently in {city}, {state_prov}, {country} {zipcode}'
+                                   text=f'Currently in {city}, {region}, {country}'
                                ),
                                size_hint=(None, None), size=(500, 200))
         settings_popup.open()
