@@ -1,8 +1,6 @@
 from datetime import datetime, timedelta, date
 import pickle
 
-from geopy.geocoders import Nominatim
-
 import kivy
 import requests
 from kivy.animation import Animation
@@ -17,8 +15,6 @@ from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 
 from suntime import Sun, SunTimeException
-
-from config import GEOLOCATION_KEY
 
 kivy.require('1.11.1')
 
@@ -137,7 +133,7 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        self.add_widget(DialWidget(60, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
+        self.add_widget(DialWidget(86400, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
         self.add_widget(NowMarker())
         self.suntimes()
 
@@ -145,27 +141,21 @@ class MainScreen(Screen):
         SettingsScreen()
 
     def ipgeolocate(self):
-        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
-        resp = r.json()
-        city = resp['city']
-        state_prov = resp['state_prov']
-
-        geolocate = Nominatim(user_agent="Code Jam 6: SunClock")
-        location = geolocate.geocode(f"{city} {state_prov}")
+        resp = requests.get('http://ip-api.com/json/').json()
 
         # pickle the object for testing purposes
         temp_latlong = [location.latitude, location.longitude]
         with open('latlong.tmp', 'wb') as f:
             pickle.dump(temp_latlong, f)
 
-        return location.latitude, location.longitude
+        return resp['lat'], resp['lon']
 
     def suntimes(self):
-        # lat_long = self.ipgeolocate()
+        lat_long = self.ipgeolocate()
 
         # pickled object for testing purposes
-        with open('latlong.tmp', 'rb') as f:
-            lat_long = pickle.load(f)
+        # with open('latlong.tmp', 'rb') as f:
+        #     lat_long = pickle.load(f)
 
         sun_time = Sun(lat_long[0], lat_long[1])
 
@@ -182,7 +172,7 @@ class MainScreen(Screen):
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
-        now = datetime.utcnow() - timedelta(hours=0)
+        now = datetime.utcnow()
         today_sunrise = today_sunrise.replace(tzinfo=None)
         today_sunset = today_sunset.replace(tzinfo=None)
 
@@ -195,6 +185,7 @@ class MainScreen(Screen):
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
+            # Since icons are in the "past" (to the left) keep the angles positive
             # After Sunrise, after Sunset
             today_sunrise = today_sunrise * 0.25
             today_sunset = today_sunset * 0.25
@@ -206,6 +197,7 @@ class MainScreen(Screen):
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
+            # Since icons are in the "future" (to the right) keep angles negative
             # Before Sunrise, after Sunset
             today_sunrise = 360 - (today_sunrise * 0.25)
             today_sunset = 360 - (today_sunset * 0.25)
@@ -229,16 +221,14 @@ class SettingsScreen(Popup):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
 
-        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
-        resp = r.json()
+        resp = requests.get('http://ip-api.com/json/').json()
         city = resp['city']
-        state_prov = resp['state_prov']
-        country = resp['country_name']
-        zipcode = resp['zipcode']
+        region = resp['regionName']
+        country = resp['country']
 
         settings_popup = Popup(title="Settings",
                                content=Label(
-                                   text=f'Currently in {city}, {state_prov}, {country} {zipcode}'
+                                   text=f'Currently in {city}, {region}, {country}'
                                ),
                                size_hint=(None, None), size=(500, 200))
         settings_popup.open()
@@ -260,7 +250,6 @@ class SunClock(App):
         for screen in screens:
             sm.add_widget(screen)
 
-        # Don't forget to change this shit back.
         sm.current = 'main'
 
         return sm

@@ -11,14 +11,10 @@ Keep track of important times such as:
 * When sun is inbetween those two things
 
 ### Functionality
-The main dial in the app represents 24 hours and the major events you're likely to care about as a neolithic human. 
+The main dial in the app represents 24 hours and the major events you're likely to care about as a neolithic human.
 
 Your location can either be specified in settings or gathered by IP geolocation.
 
 ## License
 
 All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
-
-## Setup
-1. Create a file called `config.py`
-2. Create a variable called `GEOLOCATION_KEY` and paste in
