@@ -247,7 +247,7 @@ class MainScreen(Screen):
         self.window_width = Window.width
 
         # Maintains a constant aspect ratio of 0.75 (4:3)
-        if (Window.height / Window.width) != 0.5625:
+        if (Window.height / Window.width) != 0.5625 and Window.fullscreen is False:
             Window.size = Window.width, Window.width * 0.5625
 
     def time_control_button(self):
