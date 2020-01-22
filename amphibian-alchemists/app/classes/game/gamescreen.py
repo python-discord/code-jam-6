@@ -11,9 +11,7 @@ from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from requests import get
 
-DATA_DIR = os.path.join(
-    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
-)
+DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
 
 
 def on_config_change():
@@ -166,9 +164,7 @@ class GameScreen(Screen):
             and codepoint in keys
             and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
         ):
-            self.ids.enigma_keyboard.ids.keyboard.ids[
-                codepoint.upper()
-            ].trigger_action()
+            self.ids.enigma_keyboard.ids.keyboard.ids[codepoint.upper()].trigger_action()
 
     def handle_key(self, key):
         """
@@ -181,9 +177,7 @@ class GameScreen(Screen):
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
         if not self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus:
-            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(
-                key.name
-            )
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(key.name)
         App.get_running_app().machine.key_press(key.name)
         store = JsonStore(DATA_DIR)
         game_id = str(App.get_running_app().game_id)

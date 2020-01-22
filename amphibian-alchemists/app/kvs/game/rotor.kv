@@ -1,11 +1,30 @@
-<Rotor@RelativeLayout>:
+<Rotors@RelativeLayout>:
     size_hint: 0.7, 0.7
-    Button:
-        text: "up"
-        size_hint: 0.1, 0.1
-    Button:
-        text: "down"
-        size_hint: 0.1, 0.1
+    AnchorLayout:
+        anchor_x: 'left'
+        BoxLayout:
+            orientation: "horizontal"
+            BoxLayout:
+                orientation: "vertical"
+                Button:
+                    text: "up"
+                Button:
+                    text: "down"
+            # rotor image will go in between
+            BoxLayout:
+                orientation: "vertical"
+                Button:
+                    text: "up"
+                Button:
+                    text: "down"
+            # rotor image will go in between
+            BoxLayout:
+                orientation: "vertical"
+                Button:
+                    text: "up"
+                Button:
+                    text: "down"
+            # rotor image will go in between
 
 <RotorScreen>:
     name: "rotor_screen"
@@ -26,4 +45,4 @@
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
-        Rotor:
+        Rotors:

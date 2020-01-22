@@ -67,12 +67,8 @@ class PlugboardScreen(Screen):
     def on_plughole_recenter(self, instance, value):
         if self.manager.current == "plugboard_screen" and self.all_plugged:
             if instance.name in self.all_plugged:
-                self.plug_reference[
-                    self.all_plugged.index(instance.name)
-                ].center = instance.center
-                self.plug_reference[
-                    self.all_plugged.index(instance.name)
-                ].size = instance.size
+                self.plug_reference[self.all_plugged.index(instance.name)].center = instance.center
+                self.plug_reference[self.all_plugged.index(instance.name)].size = instance.size
                 if self.wires:
                     for item in self.wires.keys():
                         if instance.name in item:
