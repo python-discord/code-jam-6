@@ -38,6 +38,7 @@
     Button:
         size_hint: 1,1
         text: '9: Delete'
+        on_press: root.delete()
     Button:
         size_hint: 1,1
         text: '0: Quit'
@@ -110,6 +111,36 @@
             text: '[ Cancel ]'
             color: 0.34,1,1,1
             on_press: root.dismiss()
+
+<DeletePopup>:
+    title: 'Delete Currently Selected Files/Dirs?'
+    FloatLayout:
+        Label:
+            id: left
+            size_hint: .5,.1
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            color: 0.34,1,1,1
+        Label:
+            id: right
+            size_hint: .5,.1
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            color: 0.34,1,1,1
+        Button:
+            id: yes
+            size_hint: .2,.2
+            pos_hint: {'center_x': .4, 'center_y': .3}
+            text: '[ YES ]'
+            color: 0.34,1,1,1
+            on_press: root.delete()
+        Button:
+            id: no
+            size_hint: .2,.2
+            pos_hint: {'center_x': .6, 'center_y': .3}
+            text: '[ NO ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
+
 
 <QuitPopup>:
     title: 'Quit?'

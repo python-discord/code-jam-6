@@ -62,7 +62,8 @@ class Mkdir(BasePopup):
                     print('File Named already named the same')
 
                 self.ctx.parent.ids.left.ids.rv.dirs = dir_.iterdir()
-                data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in self.ctx.parent.ids.left.ids.rv.dirs]
+                data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in
+                        self.ctx.parent.ids.left.ids.rv.dirs]
 
                 if len(dir_.parts) > 1:
                     self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
@@ -79,7 +80,8 @@ class Mkdir(BasePopup):
                     print('File Named already named the same')
 
                 self.ctx.parent.ids.right.ids.rv.dirs = dir_.iterdir()
-                data = [self.ctx.parent.ids.right.ids.rv.generate(file_name) for file_name in self.ctx.parent.ids.right.ids.rv.dirs]
+                data = [self.ctx.parent.ids.right.ids.rv.generate(file_name) for file_name in
+                        self.ctx.parent.ids.right.ids.rv.dirs]
 
                 if len(dir_.parts) > 1:
                     self.ctx.parent.ids.right.ids.rv.update(state=1, file=data)
@@ -88,6 +90,37 @@ class Mkdir(BasePopup):
             self.dismiss()
         else:
             print('Please Enter a File Manager or Directory Name')
+
+
+class DeletePopup(BasePopup):
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
+        super().__init__(ctx, *args, **kwargs)
+        self.filer = None
+        self.filel = None
+        self.getdirectory()
+
+    def getdirectory(self):
+        selectr = self.ctx.parent.ids.right.ids.rv.selected
+        selectl = self.ctx.parent.ids.left.ids.rv.selected
+
+        if selectr is not None:
+            self.ids.right.text = f'Right Directory: {selectr.name}'
+            self.filer = selectr
+        else:
+            self.ids.right.text = 'No File/Directory Selected'
+
+        if selectl is not None:
+            self.ids.left.text = f'Left Directory: {selectl.name}'
+            self.filel = selectl
+        else:
+            self.ids.left.text = 'No File/Directory Selected'
+
+    def delete(self):
+        filer_to_rem = pathlib.Path(self.filer.txt)
+        filer_to_rem.unlink()
+        filel_to_rem = pathlib.Path(self.filel.txt)
+        filel_to_rem.unlink()
+        self.dismiss()
 
 
 class QuitPopup(BasePopup):

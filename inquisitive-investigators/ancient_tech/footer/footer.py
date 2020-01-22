@@ -23,6 +23,7 @@ class Footer(BoxLayout):
             '1': self.about,
             '3': self.view,
             '8': self.mkdir,
+            '9': self.delete,
             '0': self.quit
         }
 
@@ -59,6 +60,11 @@ class Footer(BoxLayout):
     def view(self) -> None:
         # not working
         self.parent.manager.current = 'text_editor'
+        return True
+
+    def delete(self) -> None:
+        popup = DeletePopup(self, size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
+        popup.open()
         return True
 
     def quit(self) -> None:
