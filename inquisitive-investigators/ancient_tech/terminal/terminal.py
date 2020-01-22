@@ -33,6 +33,9 @@ class Terminal(BoxLayout, Shell):
     def on_output(self, output: bytes) -> None:
         self.terminal_input.on_output(output)
 
+    def on_cwd_change(self, cwd: str) -> None:
+        self.terminal_input.on_cwd_change(cwd)
+
     def on_complete(self) -> None:
         self.terminal_input.on_complete()
         self.terminal_input.focus = True

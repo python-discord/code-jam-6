@@ -114,6 +114,9 @@ class TerminalInput(TextInput):
         self._cursor_pos = self.cursor_index() + len(at_info)
         self.text += at_info
 
+    def on_cwd_change(self, cwd: str) -> None:
+        self.current = cwd
+
     def on_output(self, output: bytes) -> None:
         self.text += output.decode()
 
