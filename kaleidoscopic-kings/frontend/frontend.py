@@ -1,5 +1,3 @@
-import json
-
 from kivy.app import App
 from kivy.event import EventDispatcher
 from kivy.lang import global_idmap
@@ -9,7 +7,7 @@ from kivy.config import Config
 from kivy.uix.gridlayout import GridLayout
 
 from backend.card_format import Card
-from backend.main import Game
+from backend.main import Game, load_game
 
 
 class MainWidget(GridLayout):
@@ -35,7 +33,7 @@ class CardBoxLayout(BoxLayout):
 
 
 class DataController(EventDispatcher):
-    """manages global state for the app"""
+    """Manages global state for the app"""
 
     active_card: Card = ObjectProperty(rebind=True)
     active_text = StringProperty()
@@ -56,15 +54,6 @@ class DataController(EventDispatcher):
 
     def get_active_card(self):
         return self.active_card
-
-
-def load_game() -> Game:
-    """Loads the backend and returns a game object"""
-    with open("../backend/data/example_game_cards.json") as f:
-        _cards = [Card(**card_dict) for card_dict in json.load(f)]
-    with open("../backend/data/example_game_states.json") as f:
-        _game_states = json.load(f)
-    return Game(_cards, _game_states)
 
 
 class CardGameApp(App):
