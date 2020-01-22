@@ -5,35 +5,40 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-from PIL import ImageFont,ImageDraw
+from PIL import ImageDraw
 from PIL import Image as Im
 from io import BytesIO
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty
-from kivy.clock import Clock
 from math import sin, cos, pi
 from kivy.core.window import Window
 
+# Global Variable so there is no magic number.
+SCREEN_WIDTH = 720
+SCREEN_HEIGHT = 720
+PAPER_COLOR = (200, 200, 200, 0)
+STARTING_Y = SCREEN_HEIGHT - 150
 
-class JJ(App):
+
+class JurassicJournalistApp(App):
     ''' App Class '''
     def build(self):
-        Window.borderless = True
-        return Main()
+#        Window.borderless = True
+        return MainScreen()
 
 
-class Main(ScreenManager):
+class MainScreen(ScreenManager):
     ''' ScreenManager '''
 
 
-class TypeWriter(Screen):
+class RoomScreen(Screen):
     ''' Screen One '''
 
 
-class Screen2(Screen):
+class PhoneScreen(Screen):
     ''' Screen Two '''
 
 
-class Pili(Image):
+class TextPaper(Image):
     """
     mesh_points = ListProperty([])
     mesh_texture = ObjectProperty(None)
@@ -45,31 +50,46 @@ class Pili(Image):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.img = Im.new("RGBA", (720,720), (200,200,200,0)) # Im.open('paper.png') #self.size
+
+        # Creating Blank Paper image to type on.
+        self.img = Im.new("RGBA", (SCREEN_WIDTH, SCREEN_HEIGHT), PAPER_COLOR)
+
+        # Type writer does not type from the top rather type from the bottom.
         self.txt = self.img.copy()
-        self.head = {'x': 0, 'y': 0}
-        self.draw = ImageDraw.Draw(self.txt)
-        self.font_size = 0
+        self.head = {'x': 0, 'y': STARTING_Y}
+
         """
         self.mesh_texture = CoreImage('paper.png').texture
         Clock.schedule_interval(self.update_points, 0)
         """
 
     def update(self):
+        """ Update the paper """
         data = BytesIO()
         i = self.letters[-1]
-        self.draw.text((self.head["x"], self.head["y"]), i.char, font=i.font, fill=i.color)
-        self.font_size =  i.font.getsize("l")[1]
-        self.char_size = i.getKerning()[0]
-        self.head["x"] += self.char_size
-        if self.head["x"] +  self.char_size >= self.img.size[0]:
-            self.head["x"] = 0 
-            self.head["y"] += self.font_size
-        
+
+        # Type on the paper
+        self.type(i)
+
+        # Save updated txt (image) in data var to update the CoreImage Texture.
         self.txt.save(data, format='png')
         data.seek(0)
         im = CoreImage(BytesIO(data.read()), ext='png')
         self.texture = im.texture
+
+    def type(self, key):
+        """ Type on the paper """
+        # Drawing on the image
+        ImageDraw.Draw(self.txt).text((self.head["x"], self.head["y"]),
+                                      key.char, font=key.font, fill=key.color)
+        # Scrolling up
+        self.font_size = key.font.getsize("l")[1]
+        self.char_size = key.get_kerning()[0]
+        self.head["x"] += self.char_size
+
+        if self.head["x"] + self.char_size >= SCREEN_WIDTH:
+            self.head["x"] = 0
+            self.head["y"] -= self.font_size
 
     def escaped(self):
         if not self.font_size:
@@ -77,24 +97,10 @@ class Pili(Image):
         if self.text[-2:] == '_b':
             self.head["x"] -= self.char_size
         elif self.text[-2:] == '_n':
-            self.head['y'] += self.font_size
+            self.head['y'] -= self.font_size
             self.head['x'] = 0
-    """
-    def update_points(self, *args):
-        points = [Window.width / 2, Window.height / 2, .5, .5]
-        i = 0
-        while i < 2 * pi:
-            i += 0.01 * pi
-            points.extend([
-                Window.width / 2 + cos(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
-                Window.height / 2 + sin(i) * (self.radius + self.sin_wobble * sin(i * self.sin_wobble_speed)),
-                self.offset_x + sin(i),
-                self.offset_y + cos(i)])
 
-        self.mesh_points = points
-    """
-
-class Butt2(Label):
+class PhoneButtons(Label):
     ''' Phone Button/Label '''
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -117,4 +123,4 @@ class Butt2(Label):
         return True
 
 
-JJ().run()
+JurassicJournalistApp().run()

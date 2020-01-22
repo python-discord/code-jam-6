@@ -1,10 +1,10 @@
 #:import F kivy.factory.Factory
 #:import Letter classes.Letter
-<Butt@Button>:
+<TypeWriterButton@Button>:
 	width: self.parent.width * 1/20
 	height: self.parent.height * 1/20
     size_hint: None, None
-	background_color: 0,0,0,0 # 0,1,1,1
+	background_color: 0,0,0,0
 	text_color: 0,0,0,0
     on_release: self.parent.typw.text += self.txt
 	canvas.before:
@@ -15,47 +15,46 @@
             size: self.size
             radius: 5,
 
-<Butt2@Label>
+<PhoneButtons@Label>
     width: self.parent.width * 1/5
 	height: self.parent.height * 1/10
     size_hint: None, None
 		
-<TypeWriter>:
-    name: 'Typewriter'
+<RoomScreen>:
+    name: 'RoomScreen'
     canvas:
         Rectangle:
             pos: self.pos
 			size: self.size
             source: 'room.png'
     Button:
-		on_release: root.manager.current = 'Screen2'
+		on_release: root.manager.current = 'PhoneScreen'
 		pos_hint : {'x': .9, 'y': .9}
 		size_hint: None, None
 		background_color: 0,0,0,.2
 	Button:
 	    size_hint: None, None
 	    pos_hint: {'x': .7, 'y': .45}
-	    #background_color: 0,0,0,0
 	    background_normal: 'paper.png'
 	    background_down: 'paper.png'
 	    on_release: F.TypeW().open()
 
 
-<Main@ScreenManager>:
-    TypeWriter
-	Screen2
+<MainScreen@ScreenManager>:
+    RoomScreen
+	PhoneScreen
 
 
-<Pili@Image>
+<TextPaper@Image>
 
-<Screen2>:
-    name: 'Screen2'
+<PhoneScreen>:
+    name: 'PhoneScreen'
 	typw2: typw2
 	Button:
 		pos_hint : {'x': 0, 'y': 0}
 		size_hint: None, None
 		background_color: 0,0,0,.2
-		on_release: root.manager.current = 'Typewriter'
+		on_release: root.manager.current = 'RoomScreen'
 	TextInput: #CodeInput
 		id: typw2
 		background_color: .95,.93,.8,.8 # 0,0,0,0
@@ -68,42 +67,42 @@
 		cursor_color: 0,0,0,1
 		cursor_width: 10
 		text: ''
-	Butt2:
+	PhoneButtons:
 		text: ''
 		pos_hint: {'x': .2, 'y':.3}
 		disabled: True
-	Butt2:
+	PhoneButtons:
 		text: 'abc'
 		pos_hint: {'x': .4, 'y':.3}
-	Butt2:
+	PhoneButtons:
 		text: 'def'
 		pos_hint: {'x': .6, 'y':.3}
-	Butt2:
+	PhoneButtons:
 		text: 'ghi'
 		pos_hint: {'x': .2, 'y':.2}
-	Butt2:
+	PhoneButtons:
 		text: 'jkl'
 		pos_hint: {'x': .4, 'y':.2}
-	Butt2:
+	PhoneButtons:
 		text: 'mno'
 		pos_hint: {'x': .6, 'y':.2}
-	Butt2:
+	PhoneButtons:
 		text: 'pqrs'
 		pos_hint: {'x': .2, 'y':.1}
-	Butt2:
+	PhoneButtons:
 		text: 'tuv'
 		pos_hint: {'x': .4, 'y':.1}
-	Butt2:
+	PhoneButtons:
 		text: 'wxyz'
 		pos_hint: {'x': .6, 'y':.1}
-	Butt2:
+	PhoneButtons:
 		text: ''
 		pos_hint: {'x': .2, 'y':0}
 		disabled: True
-	Butt2:
+	PhoneButtons:
 		text: '+'
 		pos_hint: {'x': .4, 'y':0}
-	Butt2:
+	PhoneButtons:
 		text: ''
 		pos_hint: {'x': .6, 'y':0}
 	    disabled: True
@@ -129,19 +128,9 @@
 		typw: typw
 		GestureSurface:
 			on_gesture_complete: typw.text += '_b'
-		Pili: #CodeInput
-#		    canvas:
-#			    Color:
-#				    rgba: .95,.93,.8,.8
-#			    Mesh:
-#                    vertices: self.mesh_points
-#                    indices: range(len(self.mesh_points) // 4)
-#                    texture: self.mesh_texture
-#                    mode: 'triangle_fan'
+		TextPaper:
 			id: typw
 			source: 'blank.png'
-			#background_color:  .95,.93,.8,.8 
-			#padding: 12,12,12,12
 			pos_hint: {'x': 0.2, 'y':.5}
 			size_hint: .7, .5
 			allow_stretch: True
@@ -150,130 +139,96 @@
 			on_text: 
 			    self.letters.append(Letter(self.text[-1], 32, '1942.ttf')) if '_' not in self.text[-2:] else self.escaped()
 			on_letters: self.update()
-		Butt:
+		TypeWriterButton:
 			txt: 'q'
 			pos_hint: {'x': .16, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'w'
 			pos_hint: {'x': .235, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'e'
 			pos_hint: {'x': .31, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'r'
 			pos_hint: {'x': .385, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 't'
 			pos_hint: {'x': .46, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'y'
 			pos_hint: {'x': .535, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'u'
 			pos_hint: {'x': .61, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'i'
 			pos_hint: {'x': .685, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'o'
 			pos_hint: {'x': .76, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'p'
 			pos_hint: {'x': .835, 'y':.175}
-		Butt:
+		TypeWriterButton:
 			txt: 'a'
 			pos_hint: {'x': .2, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 's'
 			pos_hint: {'x': .275, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 'd'
 			pos_hint: {'x': .35, 'y':.125}
-		Butt
+		TypeWriterButton
 			txt: 'f'
 			pos_hint: {'x': .425, 'y':.125}
-		Butt
+		TypeWriterButton
 			txt: 'g'
 			pos_hint: {'x': .5, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 'h'
 			pos_hint: {'x': .575, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 'j'
 			pos_hint: {'x': .65, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 'k'
 			pos_hint: {'x': .725, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 'l'
 			pos_hint: {'x': .8, 'y':.125}
-		Butt:
+		TypeWriterButton:
 			txt: 'z'
 			pos_hint: {'x': .2, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: 'x'
 			pos_hint: {'x': .275, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: 'c'
 			pos_hint: {'x': .35, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: 'v'
 			pos_hint: {'x': .425, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: 'b'
 			pos_hint: {'x': .5, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: 'n'
 			pos_hint: {'x': .575, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: 'm'
 			pos_hint: {'x': .65, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: ';'
 			pos_hint: {'x': .725, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			txt: ':'
 			pos_hint: {'x': .8, 'y':.08}
-		Butt:
+		TypeWriterButton:
 			pos_hint: {'x': .2, 'y':0}
 			size_hint: .65, None
 	    	height: self.parent.height * 1/20
 			txt: ' '
-		Butt:
+		TypeWriterButton:
 		    pos_hint: {'x': .85, 'y': .4}
 			size_hint: .15, .15
 			txt: '_n'
-			
-			
-			
-#		BoxLayout:
-#		    pili: typw
-#            orientation: 'vertical'
-#            size_hint_x: None
-#            width: 100
-#            Slider:
-#                value: pili.offset_x
-#                on_value: pili.offset_x = args[1]
-#                min: -1
-#                max: 1
-#            Slider:
-#                value: pili.offset_y
-#                on_value: pili.offset_y = args[1]
-#                min: -1
-#                max: 1
-#            Slider:
-#                value: pili.radius
-#                on_value: pili.radius = args[1]
-#                min: 10
-#                max: 1000
-#            Slider:
-#                value: pili.sin_wobble
-#                on_value: pili.sin_wobble = args[1]
-#                min: -50
-#                max: 50
-#            Slider:
-#                value: .pili.sin_wobble_speed
-#                on_value: pili.sin_wobble_speed = args[1]
-#                min: 0
-#                max: 50
-#                step: 1
