@@ -5,7 +5,7 @@ from kivy.uix.widget import Widget
 
 class CursorImage(Image):
     def __init__(self):
-        super().__init__(source="chisel.png")
+        super().__init__(source="MouseCursor/hammer.png")
         self.size = (40, 40 / self.image_ratio)
 
 

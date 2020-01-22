@@ -71,7 +71,6 @@ class Pebble:
         self.x_dim, self.y_dim = x_dim, y_dim
         self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
-        self.update()
 
     def step(self, dt):
         """Gravity Physics"""
@@ -175,8 +174,7 @@ class Chisel(Widget):
         for i, (x, y) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(touch.spos, x, y))
             if velocity: # Attach an object to the circle to move it.
-                self.pebbles[i] = Pebble(i,
-                                         self.circles,
+                self.pebbles[i] = Pebble(i, self.circles,
                                          self.positions, x, y,
                                          self.pebbles,
                                          self.width, self.height,
