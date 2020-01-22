@@ -99,14 +99,10 @@ class Pebble:
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.parent:
-            self.size = self.parent.size
-        else:
-            self.size = Window.size
+        self.size = self.parent.size if self.parent else Window.size
 
         self.circles = []
         self.pebbles = []
-
         with self.canvas:
             for index, (x, y) in enumerate(pebble_positions()):
                 Color(*choice(PEBBLE_COLORS))
@@ -115,12 +111,13 @@ class Chisel(Widget):
                                          width=PEBBLE_RADIUS))
                 self.pebbles.append(Pebble(index, x, y, self.circles, self.width, self.height))
 
-        def resize(*args):
-            self.size = Window.size
-            for i, pebble in enumerate(self.pebbles):
-                self.circles[i].circle = (pebble.x * self.width, pebble.y * self.height,
-                                          PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
-        Window.bind(size=resize)
+        (self.parent if self.parent else Window).bind(size=self.resize)
+
+    def resize(self, *args):
+        self.size = self.parent.size if self.parent else Window.size
+        for i, pebble in enumerate(self.pebbles):
+            self.circles[i].circle = (pebble.x * self.width, pebble.y * self.height,
+                                      PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
 
     def poke_power(self, touch_pos, pebble_x, pebble_y):
         """
