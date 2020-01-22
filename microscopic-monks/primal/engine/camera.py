@@ -1,5 +1,6 @@
 from typing import Tuple
 from kivy.graphics.transformation import Matrix
+from kivy.graphics.context_instructions import MatrixInstruction, PushMatrix, PopMatrix
 
 
 class Camera:
@@ -11,7 +12,7 @@ class Camera:
 
 
 class OrthographicCamera(Camera):
-    def __init__(self, viewport_width: int, viewport_height: int):
+    def __init__(self, canvas, viewport_width: int, viewport_height: int):
         self.viewport_width = viewport_width
         self.viewport_height = viewport_height
 
@@ -19,20 +20,28 @@ class OrthographicCamera(Camera):
         self.pos_y = 0.0
         self.zoom = 1.0
 
+        self.canvas = canvas
+        self.modelview_matrix = MatrixInstruction(Matrix(), 'modelview_mat')
+        self.projection_matrix = MatrixInstruction(Matrix(), 'projection_mat')
+
     def get_viewport(self) -> Tuple[int, int]:
         return self.viewport_width, self.viewport_height
+
+    def start_region(self):
+        self.canvas.add(PushMatrix())
+        self.canvas.add(self.modelview_matrix)
+        self.canvas.add(PushMatrix())
+        self.canvas.add(self.projection_matrix)
+
+    def end_region(self):
+        self.canvas.add(PopMatrix())
+        self.canvas.add(PopMatrix())
 
     def set_position(self, x: float, y: float):
         self.pos_x = x
         self.pos_y = y
 
-    def update(self, delta: float):
-        pass
-
-    def set_zoom(self, zoom: float):
-        self.zoom = zoom
-
-    def get_projection(self):
+    def update(self, delta: float = 0.0):
         width = self.viewport_width / 2
         height = self.viewport_height / 2
 
@@ -46,4 +55,8 @@ class OrthographicCamera(Camera):
 
         model_view = Matrix()
 
-        return projection, model_view
+        self.projection_matrix.matrix = projection
+        self.modelview_matrix.matrix = model_view
+
+    def set_zoom(self, zoom: float):
+        self.zoom = zoom

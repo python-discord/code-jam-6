@@ -31,7 +31,3 @@ class Screen(Widget):
 
     def clear(self, canvas: RenderContext):
         canvas.clear()
-
-    def set_projection_matrix(self, canvas: RenderContext, matrices):
-        canvas['projection_mat'] = matrices[0]
-        canvas['modelview_mat'] = matrices[1]

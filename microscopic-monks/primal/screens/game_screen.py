@@ -10,11 +10,11 @@ class GameScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self.zoom = 0.5
-        self.camera = OrthographicCamera(1280, 720)
+        self.camera = OrthographicCamera(self.canvas, 1280, 720)
 
         self.map = perlin_array()
 
+        self.camera.start_region()
         self.terrain = []
         for i in range(-2000, 7000, 1000):
             for j in range(-2000, 6000, 1000):
@@ -24,6 +24,7 @@ class GameScreen(Screen):
 
         self.player = Player('testimg.png', (200, 200), (100, 100))
         self.player.draw(self.canvas)
+        self.camera.end_region()
 
     def generate_terrain(self):
         tileObjects = []
@@ -75,4 +76,4 @@ class GameScreen(Screen):
         self.player.set_rotation(self.get_mouse_position())
 
         self.camera.set_position(pos_x, pos_y)  # Updates the position
-        self.set_projection_matrix(self.canvas, self.camera.get_projection())
+        self.camera.update()
