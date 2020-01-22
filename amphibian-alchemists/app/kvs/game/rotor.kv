@@ -1,30 +1,36 @@
+<Rotor@BoxLayout>:
+    orientation: "vertical"
+    screen: root.parent.parent.parent.parent.parent
+    Button:
+        id: up
+        text: "up"
+        on_release:
+            if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
+    Label:
+        id: rotor_value
+        index: 0
+        on_index:
+            if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
+            elif self.index == 0: setattr(down, "disabled", True)
+        text: root.screen.keys[self.index]
+    Button:
+        id: down
+        text: "down"
+        disabled: True
+        on_release:
+            if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
 <Rotors@RelativeLayout>:
     size_hint: 0.7, 0.7
     AnchorLayout:
         anchor_x: 'left'
         BoxLayout:
             orientation: "horizontal"
-            BoxLayout:
-                orientation: "vertical"
-                Button:
-                    text: "up"
-                Button:
-                    text: "down"
-            # rotor image will go in between
-            BoxLayout:
-                orientation: "vertical"
-                Button:
-                    text: "up"
-                Button:
-                    text: "down"
-            # rotor image will go in between
-            BoxLayout:
-                orientation: "vertical"
-                Button:
-                    text: "up"
-                Button:
-                    text: "down"
-            # rotor image will go in between
+            Rotor:
+                id: first_rotor
+            Rotor:
+                id: second_rotor
+            Rotor:
+                id: third_rotor
 
 <RotorScreen>:
     name: "rotor_screen"
