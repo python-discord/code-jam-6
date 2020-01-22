@@ -62,36 +62,21 @@ def is_dislodged(velocity):
         return x, y
 
 class Pebble:
-    def __init__(self, index, x, y, circles, x_dim, y_dim):
+    def __init__(self, index, circles, positions, x, y, pebbles, x_dim, y_dim, velocity):
+        self.stopped = False
         self.index = index
+        self.circles, self.positions = circles, positions
         self.x, self.y = x, y
-        self.circles = circles
+        self.pebbles = pebbles
         self.x_dim, self.y_dim = x_dim, y_dim
-        self.__velocity = 0.0, 0.0
+        self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
-        self.update.cancel()
-
-    @property
-    def velocity(self):
-        return self.__velocity
-
-    @velocity.setter
-    def velocity(self, velocity_):
-        """Start falling if velocity is over a certain threshold, else do nothing."""
-        x, y = velocity_
-        magnitude = (x**2 + y**2)**.5
-        if magnitude < DISLODGE_VELOCITY:
-            return
-        if magnitude > MAX_VELOCITY:
-            x *= MAX_VELOCITY / magnitude
-            y *= MAX_VELOCITY / magnitude
-        self.__velocity = x, y
         self.update()
 
     def step(self, dt):
         """Gravity Physics"""
         x, y = self.x, self.y
-        vx, vy = self.__velocity
+        vx, vy = self.velocity
         vx *= FRICTION
         vy *= FRICTION
         vy -= GRAVITY
@@ -102,17 +87,17 @@ class Pebble:
         if y > 1:
             vy *= -1
 
-        self.x, self.y = x + vx, max(0, y + vy)
+        self.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
 
-        self.circles[self.index].circle = (self.x * self.x_dim, self.y * self.y_dim,
+        scaled_x, scaled_y = self.x * self.x_dim, self.y * self.y_dim
+        self.circles[self.index].circle = (scaled_x, scaled_y,
                                            PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
 
         if not self.y:
-            self.__velocity = 0.0, 0.0
             self.update.cancel()
+            del self.pebbles[self.index] # Remove reference -- kill this object
         else:
-            self.__velocity = vx, vy
-
+            self.velocity = vx, vy
 
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
@@ -120,16 +105,16 @@ class Chisel(Widget):
         self.size = self.parent.size if self.parent else Window.size
         self.setup_background()
 
+        self.pebbles = {}
+        self.positions = [*pebble_positions()]
         self.circles = []
-        self.pebbles = []
         self.sound = SoundLoader.load('dig.wav')
         with self.canvas:
-            for index, (x, y) in enumerate(pebble_positions()):
+            for index, (x, y) in enumerate(self.positions):
                 Color(*choice(PEBBLE_COLORS))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
-                self.pebbles.append(Pebble(index, x, y, self.circles, self.width, self.height))
         (self.parent if self.parent else Window).bind(size=self.resize)
 
         # TODO: Implement adjustable chisel radius and power
@@ -187,8 +172,15 @@ class Chisel(Widget):
         """
         Apply a poke to each pebble.
         """
-        for pebble in self.pebbles:
-            pebble.velocity = self.poke_power(touch.spos, pebble.x, pebble.y)
+        for i, (x, y) in enumerate(self.positions):
+            velocity = is_dislodged(self.poke_power(touch.spos, x, y))
+            if velocity: # Attach an object to the circle to move it.
+                self.pebbles[i] = Pebble(i,
+                                         self.circles,
+                                         self.positions, x, y,
+                                         self.pebbles,
+                                         self.width, self.height,
+                                         velocity)
 
     def on_touch_down(self, touch):
         self.poke(touch)
