@@ -1,5 +1,4 @@
 from kivy.app import App
-from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
@@ -46,7 +45,6 @@ class Screen:
 
 class CalculatorApp(App):
     def build(self):
-        Builder.load_file("calculator.kv")
         return Screen().get_manager()
 
 
