@@ -12,10 +12,17 @@ GRAVITY = .01
 FRICTION = .9
 CHISEL_RADIUS = .0005
 DISLODGE_VELOCITY = .1
-MAX_VELOCITY = .001
+MAX_VELOCITY = .0005
 PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 10000
 PEBBLE_SEGMENTS = 4
+PEBBLE_COLORS = ((0.910, 0.784, 0.725),
+                 (0.549, 0.514, 0.502),
+                 (0.953, 0.816, 0.667),
+                 (0.820, 0.694, 0.592),
+                 (0.831, 0.796, 0.761),
+                 (0.435, 0.329, 0.282),
+                 (0.384, 0.207, 0.125))
 POWER_SCALE = .001
 
 class Pebble:
@@ -79,13 +86,14 @@ class Chisel(Widget):
 
         self.positions = product([.25 + x_scale * x  for x in range(pebble_count)],
                                  [.01 + y_scale * y for y in range(pebble_count)])
+
         self.colors = []
         self.circles = []
         self.pebbles = []
 
         with self.canvas:
             for index, (x, y) in enumerate(self.positions):
-                self.colors.append(Color(.5, .5, .5, 1))
+                self.colors.append(Color(*choice(PEBBLE_COLORS)))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
