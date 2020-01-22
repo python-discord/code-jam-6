@@ -33,7 +33,7 @@ def on_config_change():
     for x in store.get(game_id)["current_state"]["rotors"]:
         if x is None:
             continue
-        rotors = rotors.join(x)
+        rotors += x
     App.get_running_app().machine.set_display(rotors)
 
 
