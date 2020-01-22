@@ -29,7 +29,7 @@ Config.set("graphics", "width", "600")
 Config.set("graphics", "height", "800")
 
 
-class myApp(App):
+class CardGameApp(App):
     active_card = ObjectProperty()
 
     def build(self):
@@ -52,4 +52,4 @@ class myApp(App):
 
 
 if __name__ == "__main__":
-    myApp().run()
+    CardGameApp().run()
