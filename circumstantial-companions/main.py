@@ -7,6 +7,7 @@ from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.slider import Slider
 from kivy.garden.navigationdrawer import NavigationDrawer
 
@@ -97,7 +98,9 @@ class ChiselApp(App):
         options_panel = OptionsPanel(chisel)
 
         navdrawer.add_widget(options_panel)
-        navdrawer.add_widget(chisel)
+        rel_layout = RelativeLayout()
+        rel_layout.add_widget(chisel)  # to push it when side panel is opened
+        navdrawer.add_widget(rel_layout)
         options_panel.build()
 
         root.add_widget(navdrawer)
