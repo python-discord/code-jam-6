@@ -6,17 +6,42 @@
         Line:
             rectangle: [self.x, self.y, self.width, self.height]
 
+
+
 <MainWidget>:
     BoxLayout:
         orientation: 'vertical'
+        padding: (5, 5)
+        CardBoxLayout:
+            id: card
+            Label:
+                size_hint:(1, .15)
+                text: data.active_card.text
+            Image:
+                padding: (100, 100)
+                size_hint:(1, .5)
+                # TODO replace this with actual art from the card
+                # TODO properly size
+                source: data.placeholder_art
+
         BoxLayout:
+            size_hint:(1, .3)
+            id: choices
+            orientation: 'horizontal'
             Button:
-                text: 'one'
+                text: data.active_card.option_1.text
+                on_press: data.choice_1_callback()
             Button:
-                text: 'two'
-        BoxLayout:
-            orientation: 'vertical'
-            Button:
-                text: 'three'
-            Button:
-                text: 'four'
+                text: data.active_card.option_2.text
+                on_press: data.choice_2_callback()
+
+
+<CardBoxLayout>:
+    id: card
+    orientation: 'vertical'
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: './assets/stone_tablet.png'
