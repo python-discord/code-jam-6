@@ -32,12 +32,13 @@ class DialWidget(FloatLayout):
     """
     angle = NumericProperty(0)
 
-    def __init__(self, day_length, dial_image, dial_size, sun_angles, **kwargs):
+    def __init__(self, day_length, dial_image, dial_size, **kwargs):
         super(DialWidget, self).__init__(**kwargs)
 
         self.dial_file = dial_image
         self.dial_size = dial_size
-        self.sun_angles = sun_angles
+        self.sun_angles = self.suntimes()
+        self.test_date = 0
 
         # Duration is how long it takes to perform the overall animation
         anim = Animation(angle=360, duration=day_length)
@@ -46,18 +47,111 @@ class DialWidget(FloatLayout):
         anim.start(self)
 
         # Split suntime tuple into named variables
-        sunrise = self.sun_angles[0]
-        sunset = self.sun_angles[1]
+        self.sunrise = self.sun_angles[0]
+        self.sunset = self.sun_angles[1]
 
-        self.add_widget(DialEffectWidget((sunrise, sunset)))
+        # Shading widget
+        self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
 
         # Add icons that can be arbitrarily rotated on canvas.
-        self.add_widget(SunRiseMarker(sunrise))
-        self.add_widget(SunSetMarker(sunset))
+        self.sun_rise_marker = SunRiseMarker(self.sunrise)
+        self.sun_set_marker = SunSetMarker(self.sunset)
+
+        # Add widgets
+        self.add_widget(self.dial_widget)
+        self.add_widget(self.sun_rise_marker)
+        self.add_widget(self.sun_set_marker)
 
     def on_angle(self, item, angle):
         if angle == 360:
             item.angle = 0
+
+            self.remove_widget(self.dial_widget)
+            self.remove_widget(self.sun_rise_marker)
+            self.remove_widget(self.sun_set_marker)
+
+            self.test_date += 30
+            sun_angles = self.suntimes(self.test_date)
+
+            # Split suntime tuple into named variables
+            self.sunrise = sun_angles[0]
+            self.sunset = sun_angles[1]
+
+            # Shading widget
+            self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
+
+            # Add icons that can be arbitrarily rotated on canvas.
+            self.sun_rise_marker = SunRiseMarker(self.sunrise)
+            self.sun_set_marker = SunSetMarker(self.sunset)
+
+            # Add widgets
+            self.add_widget(self.dial_widget)
+            self.add_widget(self.sun_rise_marker)
+            self.add_widget(self.sun_set_marker)
+
+    def suntimes(self, test_date=0):
+        # lat_long = self.ipgeolocate()
+
+        # pickled object for testing purposes
+        with open('latlong.tmp', 'rb') as f:
+            lat_long = pickle.load(f)
+
+        sun_time = Sun(lat_long[0], lat_long[1])
+
+        new_date = datetime.now() + timedelta(days=test_date)
+        print(f"New Date: {new_date}")
+
+        try:
+            today_sunrise = sun_time.get_sunrise_time(new_date)
+        except SunTimeException:
+            raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
+
+        try:
+            today_sunset = sun_time.get_sunset_time(new_date)
+        except SunTimeException:
+            raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
+
+        # This is *super* ugly, I'm sure we can find a more elegant way to do this
+        now = datetime.utcnow() - timedelta(hours=0)
+        today_sunrise = today_sunrise.replace(tzinfo=None)
+        today_sunset = today_sunset.replace(tzinfo=None)
+
+        if now > today_sunrise and today_sunset:
+            # Don't need TZInfo to perform this operation
+            today_sunrise = now - today_sunrise
+            today_sunset = now - today_sunset
+
+            # Convert timedelta into minutes and round
+            today_sunrise = round(today_sunrise.seconds / 60)
+            today_sunset = round(today_sunset.seconds / 60)
+
+            # After Sunrise, after Sunset
+            today_sunrise = today_sunrise * 0.25
+            today_sunset = today_sunset * 0.25
+
+        elif now < today_sunrise and today_sunset:
+            today_sunrise = today_sunrise - now
+            today_sunset = today_sunset - now
+
+            today_sunrise = round(today_sunrise.seconds / 60)
+            today_sunset = round(today_sunset.seconds / 60)
+
+            # Before Sunrise, after Sunset
+            today_sunrise = 360 - (today_sunrise * 0.25)
+            today_sunset = 360 - (today_sunset * 0.25)
+
+        else:
+            today_sunrise = now - today_sunrise
+            today_sunset = today_sunset - now
+
+            today_sunrise = round(today_sunrise.seconds / 60)
+            today_sunset = round(today_sunset.seconds / 60)
+
+            # After Sunrise, before Sunset
+            today_sunrise = today_sunrise * 0.25
+            today_sunset = 360 - (today_sunset * 0.25)
+
+        return today_sunrise, today_sunset
 
 
 class SunShading(FloatLayout):
@@ -137,9 +231,8 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        self.add_widget(DialWidget(60, 'assets/dial.png', (0.8, 0.8), self.suntimes()))
+        self.add_widget(DialWidget(60, 'assets/dial.png', (0.8, 0.8)))
         self.add_widget(NowMarker())
-        self.suntimes()
 
     def settings_button(self):
         SettingsScreen()
@@ -159,69 +252,6 @@ class MainScreen(Screen):
             pickle.dump(temp_latlong, f)
 
         return location.latitude, location.longitude
-
-    def suntimes(self):
-        # lat_long = self.ipgeolocate()
-
-        # pickled object for testing purposes
-        with open('latlong.tmp', 'rb') as f:
-            lat_long = pickle.load(f)
-
-        sun_time = Sun(lat_long[0], lat_long[1])
-
-        test_date = date(year=2020, month=12, day=20)
-
-        try:
-            today_sunrise = sun_time.get_sunrise_time(test_date)
-        except SunTimeException:
-            raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
-
-        try:
-            today_sunset = sun_time.get_sunset_time(test_date)
-        except SunTimeException:
-            raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
-
-        # This is *super* ugly, I'm sure we can find a more elegant way to do this
-        now = datetime.utcnow() - timedelta(hours=0)
-        today_sunrise = today_sunrise.replace(tzinfo=None)
-        today_sunset = today_sunset.replace(tzinfo=None)
-
-        if now > today_sunrise and today_sunset:
-            # Don't need TZInfo to perform this operation
-            today_sunrise = now - today_sunrise
-            today_sunset = now - today_sunset
-
-            # Convert timedelta into minutes and round
-            today_sunrise = round(today_sunrise.seconds / 60)
-            today_sunset = round(today_sunset.seconds / 60)
-
-            # After Sunrise, after Sunset
-            today_sunrise = today_sunrise * 0.25
-            today_sunset = today_sunset * 0.25
-
-        elif now < today_sunrise and today_sunset:
-            today_sunrise = today_sunrise - now
-            today_sunset = today_sunset - now
-
-            today_sunrise = round(today_sunrise.seconds / 60)
-            today_sunset = round(today_sunset.seconds / 60)
-
-            # Before Sunrise, after Sunset
-            today_sunrise = 360 - (today_sunrise * 0.25)
-            today_sunset = 360 - (today_sunset * 0.25)
-
-        else:
-            today_sunrise = now - today_sunrise
-            today_sunset = today_sunset - now
-
-            today_sunrise = round(today_sunrise.seconds / 60)
-            today_sunset = round(today_sunset.seconds / 60)
-
-            # After Sunrise, before Sunset
-            today_sunrise = today_sunrise * 0.25
-            today_sunset = 360 - (today_sunset * 0.25)
-
-        return today_sunrise, today_sunset
 
 
 # Settings panel #
