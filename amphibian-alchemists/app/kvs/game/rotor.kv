@@ -20,12 +20,14 @@
 <RotorButton@ButtonBehavior+Widget>:
     color_normal: 0, 0, 0, 1
     color_down: 0, 0, 0, 0
+    color_disabled: 1, 0, 0, 1
     text: ""
     size_hint: 0.2, 0.2
     Label:
         size: root.size
         pos: root.pos
         color: root.color_normal if root.state == "normal" else root.color_down
+        on_disabled: self.color = root.color_disabled if self.disabled else root.color_normal
         text: root.text
 
 <Rotor@BoxLayout>:
