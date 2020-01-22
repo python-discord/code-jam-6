@@ -57,7 +57,7 @@ class GameState(CaveManGame):
 
     """
     _INTEGER_RANGE_INCLUDING = (0, 1000)
-    _FLOAT_RANGE_INCLUDING = (0, 1.0)
+    _FLOAT_RANGE_INCLUDING = (0.0, 1.0)
 
     def __init__(self, game_states: dict):
         """
