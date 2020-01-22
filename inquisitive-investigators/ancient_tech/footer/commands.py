@@ -53,15 +53,32 @@ class Mkdir(BasePopup):
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
             if self.filemanager == 1:
-                new_dir = pathlib.Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
-                new_dir /= dir_name
+                dir_ = pathlib.Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
+                new_dir = dir_ / dir_name
+
                 new_dir.mkdir()
-                self.ctx.parent.ids.left.ids.rv.update(state=0, file=[])
+
+                self.ctx.parent.ids.left.ids.rv.dirs = dir_.iterdir()
+                data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in self.ctx.parent.ids.left.ids.rv.dirs]
+
+                if len(dir_.parts) > 1:
+                    self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
+                else:
+                    self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
+
             elif self.filemanager == 2:
-                new_dir = pathlib.Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
-                new_dir /= dir_name
+                dir_ = pathlib.Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
+                new_dir = dir_ / dir_name
+
                 new_dir.mkdir()
-                self.ctx.parent.ids.right.ids.rv.update(state=0, file=[])
+
+                self.ctx.parent.ids.right.ids.rv.dirs = dir_.iterdir()
+                data = [self.ctx.parent.ids.right.ids.rv.generate(file_name) for file_name in self.ctx.parent.ids.right.ids.rv.dirs]
+
+                if len(dir_.parts) > 1:
+                    self.ctx.parent.ids.right.ids.rv.update(state=1, file=data)
+                else:
+                    self.ctx.parent.ids.right.ids.rv.update(state=2, file=data)
             self.dismiss()
         else:
             print('Please Enter a File Manager or Directory Name')
