@@ -34,7 +34,7 @@
     Button:
         size_hint: 1,1
         text: '8: Mkdir  '
-        on_press: root.mkDir()
+        on_press: root.mkdir()
     Button:
         size_hint: 1,1
         text: '9: Delete'
@@ -65,7 +65,7 @@
             color: 0.34,1,1,1
 
 <Mkdir>:
-    title: 'Make a new Directory in your Current Directory?'
+    title: 'Make a new Directory?'
     FloatLayout:
         TextInput:
             id: create
@@ -73,14 +73,40 @@
             pos_hint: {'center_x': .5, 'center_y': .7}
             hint_text: 'Enter Directory Name'
         Button:
-            size_hint: .5,.1
-            pos_hint: {'center_x': .5, 'center_y': .4}
-            text: '[ Create New Directory ]'
+            id: left
+            canvas:
+                Color:
+                    rgba: 0,0,0, root.left
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .4}
+            text: '[ Left Manager ]'
             color: 0.34,1,1,1
-            on_press: root.mk_dir()
+            on_press: root.buttonselect(1)
+        Button:
+            id: right
+            canvas:
+                Color:
+                    rgba: 0,0,0, root.right
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .4}
+            text: '[ Right Manager ]'
+            color: 0.34,1,1,1
+            on_press: root.buttonselect(2)
         Button:
             size_hint: .3,.1
-            pos_hint: {'center_x': .5, 'center_y': .2}
+            pos_hint: {'center_x': .5, 'center_y': .25}
+            text: '[ Create New Directory ]'
+            color: 0.34,1,1,1
+            on_press: root.mkdir(root.ids.create.text)
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .1}
             text: '[ Cancel ]'
             color: 0.34,1,1,1
             on_press: root.dismiss()
