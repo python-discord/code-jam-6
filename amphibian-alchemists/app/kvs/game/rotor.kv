@@ -1,24 +1,67 @@
+<RotorLabel@Label>:
+    size_hint: 0.2, 0.2
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    canvas.before:
+        Color:
+            rgba: 232 / 255, 213 / 255, 170 / 255, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    canvas.after:
+        Color:
+            rgba: 0, 0, 0, 1
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+    color: 0, 0, 0, 1
+
+<RotorButton@ButtonBehavior+Widget>:
+    color_normal: 0, 0, 0, 1
+    color_down: 0, 0, 0, 0.5
+    text: ""
+    canvas.before:
+        Color:
+            rgba: self.color_normal if self.state == "normal" else self.color_down
+        Ellipse:
+            size: self.size
+            pos: self.pos
+    size_hint: 0.2, 0.2
+    pos_hint: {"center_x": 0.5, "top": 0.5}
+    Label:
+        size: root.size
+        pos: root.pos
+        text: root.text
+
 <Rotor@BoxLayout>:
     orientation: "vertical"
     screen: root.parent.parent.parent.parent.parent
-    Button:
-        id: up
-        text: "up"
-        on_release:
-            if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
-    Label:
-        id: rotor_value
-        index: 0
-        on_index:
-            if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
-            elif self.index == 0: setattr(down, "disabled", True)
-        text: root.screen.keys[self.index]
-    Button:
-        id: down
-        text: "down"
-        disabled: True
-        on_release:
-            if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
+    canvas:
+        Color:
+            rgb: 165 / 255, 165 / 255, 165 / 255
+        Ellipse:
+            size: self.size
+            pos: self.pos
+    RelativeLayout:
+        RotorButton:
+            id: up
+            text: "Up"
+            on_release:
+                if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
+    RelativeLayout:
+        RotorLabel:
+            id: rotor_value
+            index: 0
+            text: root.screen.keys[self.index]
+            on_index:
+                if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
+                elif self.index == 0: setattr(down, "disabled", True)
+    RelativeLayout:
+        RotorButton:
+            id: down
+            text: "Down"
+            disabled: True
+            on_release:
+                if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
+
 <Rotors@RelativeLayout>:
     size_hint: 0.7, 0.7
     AnchorLayout:
