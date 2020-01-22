@@ -1,10 +1,8 @@
-import inspect
 import json
-from os.path import extsep, exists, splitext
 
 from kivy.app import App
 from kivy.event import EventDispatcher
-from kivy.lang import global_idmap, Builder
+from kivy.lang import global_idmap
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.config import Config
@@ -37,25 +35,12 @@ class DataController(EventDispatcher):
     """manages global state for the app"""
 
 
-def load_kv():
-    """
-    This magical function lookup module name, and load the kv file
-    with the same name (in the same directory)
-    """
-    filename = inspect.currentframe().f_back.f_code.co_filename
-    f = extsep.join((splitext(filename)[0], "kv"))
-    print(f)
-    if exists(f) and f not in Builder.files:
-        Builder.load_file(f)
-
-
 class CardGameApp(App):
     active_card = ObjectProperty()
 
     def build(self):
         Config.set("graphics", "width", "900")
         Config.set("graphics", "height", "900")
-        load_kv()
 
         global_idmap["data"] = ctl = DataController()
         with open("../cards/TestCards.json") as f:
