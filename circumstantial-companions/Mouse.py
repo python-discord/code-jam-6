@@ -1,7 +1,6 @@
-from kivy.app import App
-from kivy.lang import Builder
 from kivy.uix.scatter import Scatter
 from kivy.core.window import Window
+
 
 KV = """
 FloatLayout
@@ -19,7 +18,7 @@ FloatLayout
     Image
         id: mouse_im
         size: 40, 40 / self.image_ratio
-        source: 'hammer.png'
+        source: 'chisel.png'
 """
 
 class MyMouse(Scatter):
@@ -39,11 +38,3 @@ class MyMouse(Scatter):
 
     def on_cursor_enter(self, *args):
         self.opacity = 1
-
-
-if __name__ == "__main__":
-    class MyApp(App):
-        def build(self):
-            return Builder.load_string(KV)
-
-    MyApp().run()
