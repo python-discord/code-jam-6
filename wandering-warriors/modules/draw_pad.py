@@ -37,7 +37,7 @@ class DrawPad(FloatLayout):
             with self.canvas:
                 Color(0, 0, 0)
                 ud['lines'] = [
-                    Point(points=(touch.x, touch.y), source='particle.png',
+                    Point(points=(touch.x, touch.y),
                           pointsize=pointsize, group=g)]
             return True
         else:
@@ -66,3 +66,6 @@ class DrawPad(FloatLayout):
         if self.in_pad:
             self.in_pad = False
             return (self.canvas.get_group(ud['group'])[1].points)
+
+    def buttonImage(self):
+        return 'assets/graphics/clay.png'

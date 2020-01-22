@@ -43,6 +43,7 @@
         Rectangle:
             size: self.size
             pos: self.pos
+    TopRightButton:
 
 <OperationsBar>:
     size_hint_x: None
@@ -59,7 +60,32 @@
         Color:
             rgb: 1, 1, 1, 1
         Rectangle:
-            source: 'assets/graphics/sandTexture.jpg'
+            source: 'assets/graphics/sandbox.jpg'
             size: self.size
             pos: self.pos
-    
+    TopRightButton:
+
+<TopRightButton>:
+    Button:
+        size: 50, 50
+        background_color: .5, .5, .5, 1 
+        #:set offset 10
+        x: self.parent.parent.x + self.parent.parent.size[0] - self.size[0] - offset
+        y: self.parent.parent.y + self.parent.parent.size[1] - self.size[1] - offset
+        on_press:
+            self.background_color = 0, 0, 0.055
+            self.parent.parent.on_press()
+        on_release:
+            self.background_color = .5, .5, .5, 1 
+        canvas.before:
+            Color:
+                rgba: self.background_color
+            Line:
+                width: 2
+                rectangle: self.x, self.y, self.width, self.height
+        Image:
+            source: self.parent.parent.parent.buttonImage()
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size
