@@ -32,12 +32,16 @@ class DialWidget(FloatLayout):
     """
     angle = NumericProperty(0)
 
-    def __init__(self, day_length, dial_image, dial_size, **kwargs):
+    def __init__(self, day_length, dial_size, **kwargs):
         super(DialWidget, self).__init__(**kwargs)
 
-        self.dial_file = dial_image
         self.dial_size = dial_size
+
+        # Split suntime tuple into named variables
         self.sun_angles = self.suntimes()
+        self.sunrise = self.sun_angles[0]
+        self.sunset = self.sun_angles[1]
+
         self.test_date = 0
 
         # Duration is how long it takes to perform the overall animation
@@ -45,10 +49,6 @@ class DialWidget(FloatLayout):
         anim += Animation(angle=360, duration=day_length)
         anim.repeat = True
         anim.start(self)
-
-        # Split suntime tuple into named variables
-        self.sunrise = self.sun_angles[0]
-        self.sunset = self.sun_angles[1]
 
         # Shading widget
         self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
@@ -97,17 +97,19 @@ class DialWidget(FloatLayout):
             lat_long = pickle.load(f)
 
         sun_time = Sun(lat_long[0], lat_long[1])
+        current_date = datetime.now()
 
-        new_date = datetime.now() + timedelta(days=test_date)
-        print(f"New Date: {new_date}")
+        # For testing date roll over
+        date_testing = datetime.now() + timedelta(days=test_date)
+        print(f"New Date: {date_testing}")
 
         try:
-            today_sunrise = sun_time.get_sunrise_time(new_date)
+            today_sunrise = sun_time.get_sunrise_time(date_testing)
         except SunTimeException:
             raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
 
         try:
-            today_sunset = sun_time.get_sunset_time(new_date)
+            today_sunset = sun_time.get_sunset_time(date_testing)
         except SunTimeException:
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
@@ -116,8 +118,9 @@ class DialWidget(FloatLayout):
         today_sunrise = today_sunrise.replace(tzinfo=None)
         today_sunset = today_sunset.replace(tzinfo=None)
 
+        # After Sunrise, after Sunset
         if now > today_sunrise and today_sunset:
-            # Don't need TZInfo to perform this operation
+            # Get timedelta for each
             today_sunrise = now - today_sunrise
             today_sunset = now - today_sunset
 
@@ -125,10 +128,11 @@ class DialWidget(FloatLayout):
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
-            # After Sunrise, after Sunset
+            # Convert minutes into angles
             today_sunrise = today_sunrise * 0.25
             today_sunset = today_sunset * 0.25
 
+        # Before Sunrise, after Sunset
         elif now < today_sunrise and today_sunset:
             today_sunrise = today_sunrise - now
             today_sunset = today_sunset - now
@@ -136,10 +140,10 @@ class DialWidget(FloatLayout):
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
-            # Before Sunrise, after Sunset
             today_sunrise = 360 - (today_sunrise * 0.25)
             today_sunset = 360 - (today_sunset * 0.25)
 
+        # After Sunrise, before Sunset
         else:
             today_sunrise = now - today_sunrise
             today_sunset = today_sunset - now
@@ -147,11 +151,23 @@ class DialWidget(FloatLayout):
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
-            # After Sunrise, before Sunset
             today_sunrise = today_sunrise * 0.25
             today_sunset = 360 - (today_sunset * 0.25)
 
         return today_sunrise, today_sunset
+
+
+class DialEffectWidget(EffectWidget):
+    def __init__(self, angles, **kwargs):
+        super(DialEffectWidget, self).__init__(**kwargs)
+
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
+        self.add_widget(SunShading(angles))
+        self.effects = [HorizontalBlurEffect(size=50.0), VerticalBlurEffect(size=50.0)]
+        self.opacity = 0.25
+
+    def _pos_check(self):
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
 
 
 class SunShading(FloatLayout):
@@ -190,23 +206,8 @@ class SunShading(FloatLayout):
             self.sun_one_color = sun_colour
 
         self.shade_size = Window.height * 0.8, Window.height * 0.8
-        # self.shade_angle_start = angles[1] - 360
-        # self.shade_angle_stop = 360
 
     def _size_check(self):
-        self.shade_size = Window.height * 0.8, Window.height * 0.8
-
-
-class DialEffectWidget(EffectWidget):
-    def __init__(self, angles, **kwargs):
-        super(DialEffectWidget, self).__init__(**kwargs)
-
-        self.shade_size = Window.height * 0.8, Window.height * 0.8
-        self.add_widget(SunShading(angles))
-        self.effects = [HorizontalBlurEffect(size=50.0), VerticalBlurEffect(size=50.0)]
-        self.opacity = 0.25
-
-    def _pos_check(self):
         self.shade_size = Window.height * 0.8, Window.height * 0.8
 
 
@@ -231,7 +232,7 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        self.add_widget(DialWidget(60, 'assets/dial.png', (0.8, 0.8)))
+        self.add_widget(DialWidget(60, (0.8, 0.8)))
         self.add_widget(NowMarker())
 
     def settings_button(self):
