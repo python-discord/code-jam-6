@@ -137,6 +137,11 @@ class MainScreen(Screen):
         self.add_widget(NowMarker())
         self.suntimes()
 
+    def on_size(self, a, b):
+        # Maintains a constant aspect ratio of 0.75 (4:3)
+        if (Window.height / Window.width) != 0.75:
+            Window.size = Window.width, Window.width * 0.75
+
     def settings_button(self):
         SettingsScreen()
 
