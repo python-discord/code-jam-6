@@ -4,6 +4,7 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Line
 from kivy.lang import Builder
 from kivy.core.window import Window
+from kivy.vector import Vector
 from itertools import product
 from random import choice
 
@@ -15,6 +16,7 @@ MAX_VELOCITY = .001
 PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 10000
 PEBBLE_SEGMENTS = 4
+POWER_SCALE = .001
 
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
@@ -80,6 +82,7 @@ class Chisel(Widget):
         self.colors = []
         self.circles = []
         self.pebbles = []
+
         with self.canvas:
             for index, (x, y) in enumerate(self.positions):
                 self.colors.append(Color(.5, .5, .5, 1))
@@ -87,7 +90,6 @@ class Chisel(Widget):
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
                 self.pebbles.append(Pebble(index, x, y, self.circles, self.width, self.height))
-
 
         def resize(*args):
             self.size = Window.size
@@ -108,12 +110,12 @@ class Chisel(Widget):
             return 0.0, 0.0
         if not distance:
             distance = .0001
-        return .001 * dx / distance, .001 * dy / distance # Constant here will be controlled by parameter
+        power = POWER_SCALE / distance
+        return power * dx, power * dy
 
     def poke(self, touch):
-        if touch.button == "left":
-            for pebble in self.pebbles:
-                pebble.velocity = self.poke_power(touch.spos, pebble.x, pebble.y)
+        for pebble in self.pebbles:
+            pebble.velocity = self.poke_power(touch.spos, pebble.x, pebble.y)
 
     def on_touch_down(self, touch):
         self.poke(touch)
