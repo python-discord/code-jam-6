@@ -55,7 +55,7 @@ If you wish to use an autoformatter like `black`, that is absolutely fine. Do no
 You may use any third party package that's available on [PyPI](https://pypi.org/), but you should provide some form of method to easily install your project dependancies, such as a strictly pinned `requirements.txt`, a Pipfile, or some other form of dependency management list.
 
 ### Restrict Files to Team Folder
-You should **make no changes outside of your team's folder**. This means that all of the files you want to include, including your code, assets and dependancy management files should all be contained that directory and not in the root level of the repository.
+You should **make no changes outside of your team's folder**. This means that all of the files you want to include, including your code, assets and dependancy management files should all be contained that directory and not in the root level of the repository. 
 
 This ensures that we can merge your pull request into the repository once the Code Jam is over, you get GitHub contribution credit towards our organization and, most importantly, it will showcase your project on GitHub.
 
