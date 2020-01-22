@@ -3,7 +3,7 @@ from kivy.uix.floatlayout import FloatLayout
 
 from math import floor
 
-from threading import Thread, Timer
+from threading import Thread
 
 from time import sleep
 
