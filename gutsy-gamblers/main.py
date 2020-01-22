@@ -237,14 +237,18 @@ class NowMarker(FloatLayout):
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
+        self.window_width = Window.width
 
         self.add_widget(DialWidget(60, (0.8, 0.8)))
         self.add_widget(NowMarker())
 
     def on_size(self, a, b):
+        # Redefine window_width for kv file
+        self.window_width = Window.width
+
         # Maintains a constant aspect ratio of 0.75 (4:3)
-        if (Window.height / Window.width) != 0.75:
-            Window.size = Window.width, Window.width * 0.75
+        if (Window.height / Window.width) != 0.5625:
+            Window.size = Window.width, Window.width * 0.5625
 
     def settings_button(self):
         SettingsScreen()

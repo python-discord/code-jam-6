@@ -1,5 +1,15 @@
 #:kivy 1.11.1
 
+<MainScreen>:
+    window_width: 0
+
+    Button:
+        text: "Time Control"
+        font_size: root.window_width * 0.015
+        pos_hint: {'center_x': 0.15, 'center_y': 0.95}
+        size_hint: 0.2, 0.05
+        on_press:
+
 <NowMarker>:
 	Image:
 		source: 'assets/arrow_marker.png'
