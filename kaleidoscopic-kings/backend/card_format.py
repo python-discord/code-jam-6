@@ -8,6 +8,9 @@ logger = logging.getLogger(__name__)
 
 
 class CaveManGame(ABC):
+    """
+    This class defines game states that should be easily exposed trough GameState object.
+    """
     @property
     @abstractmethod
     def player_health(self):
