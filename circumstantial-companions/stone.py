@@ -6,7 +6,7 @@ from kivy.lang import Builder
 from kivy.core.window import Window
 from kivy.vector import Vector
 from itertools import product
-from random import choice
+from random import choice, random
 
 GRAVITY = .01
 FRICTION = .9
@@ -24,6 +24,25 @@ PEBBLE_COLORS = ((0.910, 0.784, 0.725),
                  (0.435, 0.329, 0.282),
                  (0.384, 0.207, 0.125))
 POWER_SCALE = .001
+
+def pebble_positions():
+    pebble_count = int(PEBBLE_COUNT**.5)
+    x_scale, y_scale = .5 / pebble_count, .75 / pebble_count
+    x_offset = .25
+    for y in range(pebble_count - 10):
+        x_offset += (random() - .5) / 40
+        for x in range(pebble_count):
+            yield x_offset + x_scale * x, .001 + y_scale * y
+
+    # Taper the top a bit to look more natural
+    x_length = .5
+    for y in range(y, y + 10):
+        x_length *= .9
+        pebble_count = int(pebble_count * .9)
+        x_offset = (1 - x_length) / 2 + (random() - .5) / 40
+        x_scale = x_length / pebble_count
+        for x in range(pebble_count):
+            yield x_offset + x_scale * x, .001 + y_scale * y
 
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
@@ -81,18 +100,12 @@ class Chisel(Widget):
         super().__init__(*args, **kwargs)
         self.size = Window.size # May want to change all Window.sizes to self.parent.size after completion
 
-        pebble_count = int(PEBBLE_COUNT**.5)
-        x_scale, y_scale = .5 / pebble_count, .75 / pebble_count
-
-        self.positions = product([.25 + x_scale * x  for x in range(pebble_count)],
-                                 [.01 + y_scale * y for y in range(pebble_count)])
-
         self.colors = []
         self.circles = []
         self.pebbles = []
 
         with self.canvas:
-            for index, (x, y) in enumerate(self.positions):
+            for index, (x, y) in enumerate(pebble_positions()):
                 self.colors.append(Color(*choice(PEBBLE_COLORS)))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
