@@ -30,7 +30,9 @@ class Deck:
             card = random.choice(tuple(valid_event_cards))
         else:
             # Choose card from smallest timeout
-            card = min(self._timeout_event_cards, key=self._timeout_event_cards.get)
+            valid_timeout_cards = {card for card in self._timeout_event_cards if
+                                   card.is_valid(game_state_handler)}
+            card = min(valid_timeout_cards, key=self._timeout_event_cards.get)
             logger.info(f"No more cards to draw - drawing from timed out cards. "
                         f"Drawn card {card}")
             del self._timeout_event_cards[card]
