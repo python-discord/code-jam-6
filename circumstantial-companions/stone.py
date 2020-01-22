@@ -4,6 +4,7 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Line
 from kivy.lang import Builder
 from kivy.core.window import Window
+from kivy.core.audio import SoundLoader
 from kivy.vector import Vector
 from random import choice, random
 from Mouse import KV, MyMouse
@@ -104,6 +105,7 @@ class Chisel(Widget):
 
         self.circles = []
         self.pebbles = []
+        self.sound = SoundLoader.load('dig.wav')
         with self.canvas:
             for index, (x, y) in enumerate(pebble_positions()):
                 Color(*choice(PEBBLE_COLORS))
@@ -144,6 +146,7 @@ class Chisel(Widget):
 
     def on_touch_down(self, touch):
         self.poke(touch)
+        self.sound.play()
         return True
 
     def on_touch_move(self, touch):
