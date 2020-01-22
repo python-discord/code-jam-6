@@ -150,8 +150,8 @@ class Chisel(Widget):
 
     def resize(self, *args):
         self.size = self.parent.size if self.parent else Window.size
-        for i, pebble in enumerate(self.pebbles):
-            self.circles[i].circle = (pebble.x * self.width, pebble.y * self.height,
+        for i, (x, y) in enumerate(self.positions):
+            self.circles[i].circle = (x * self.width, y * self.height,
                                       PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
 
     def poke_power(self, touch_pos, pebble_x, pebble_y):
