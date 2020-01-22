@@ -18,8 +18,8 @@ FloatLayout
 
     Image
         id: mouse_im
-        size: 30, 30 / self.image_ratio
-        source: 'chisel.png'
+        size: 40, 40 / self.image_ratio
+        source: 'hammer.png'
 """
 
 class MyMouse(Scatter):
