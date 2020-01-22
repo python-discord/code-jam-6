@@ -14,6 +14,7 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
+
 class InputEvents(EventDispatcher):
     __events__ = ('on_input',)
 
