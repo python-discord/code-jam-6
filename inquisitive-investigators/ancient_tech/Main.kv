@@ -34,3 +34,16 @@
         Rectangle:
             size: root.size
             pos: root.pos
+
+<TextInput>:
+    canvas.before:
+        Color:
+            rgba:
+                ((1,1,1,1)
+                if self.focus and not self._cursor_blink
+                else (0, 0, 0, 0))
+        Rectangle:
+            pos: self._cursor_visual_pos
+            size: root.cursor_width + 10, -self._cursor_visual_height
+        Color:
+            rgba: self.disabled_foreground_color if self.disabled else (self.hint_text_color if not self.text else self.foreground_color)
