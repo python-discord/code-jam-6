@@ -64,20 +64,18 @@
             Image:
                 padding: (100, 100)
                 size_hint:(1, .5)
-                # TODO replace this with actual art from the card
-                # TODO properly size
-                source: data.placeholder_art
+                source: data.active_card.card_asset
 
         BoxLayout:
             size_hint:(1, .3)
             id: choices
             orientation: 'horizontal'
             Button:
-                text: data.active_card.option_1.text
-                on_press: data.choice_1_callback()
+                text: data.active_card.options[0].text
+                on_press: data.choice_handler('1')
             Button:
-                text: data.active_card.option_2.text
-                on_press: data.choice_2_callback()
+                text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
+                on_press: data.choice_handler('2')
 
 
 <CardBoxLayout>:
