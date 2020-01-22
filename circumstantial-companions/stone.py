@@ -7,7 +7,6 @@ from kivy.core.image import Image as CoreImage
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Line, Rectangle
 from kivy.lang import Builder
-from kivy.core.window import Window
 from kivy.core.audio import SoundLoader
 from kivy.vector import Vector
 
@@ -101,7 +100,7 @@ class Pebble:
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.size = self.parent.size if self.parent else Window.size
+        self.resize_event = None
         self.setup_background()
 
         self.pebbles = {}
@@ -114,7 +113,7 @@ class Chisel(Widget):
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
-        (self.parent if self.parent else Window).bind(size=self.resize)
+        self.bind(size=self.delayed_resize, pos=self.delayed_resize)
 
         # TODO: Implement adjustable chisel radius and power
         self.set_radius(DEFAULT_CHISEL_RADIUS)
@@ -128,8 +127,6 @@ class Chisel(Widget):
             Color(0.4, 0.4, 0.4, 1)
             self.bg_rect = Rectangle(texture=texture)
             self._update_bg_rect(self)
-
-        self.bind(size=self._update_bg_rect, pos=self._update_bg_rect)
 
     def _get_uvsize(self):
         texture = self.bg_rect.texture
@@ -147,8 +144,13 @@ class Chisel(Widget):
         self.bg_rect.pos = instance.pos
         self.bg_rect.size = self._get_background_size()
 
+    def delayed_resize(self, *args):
+        if self.resize_event is not None:
+            self.resize_event.cancel()
+        self.resize_event = Clock.schedule_once(lambda dt: self.resize(*args), .3)
+
     def resize(self, *args):
-        self.size = self.parent.size if self.parent else Window.size
+        self._update_bg_rect(*args)
         for i, (x, y) in enumerate(self.positions):
             self.circles[i].circle = (x * self.width, y * self.height,
                                       PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
