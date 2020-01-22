@@ -32,6 +32,9 @@ CHISEL_POWER_RANGE = (0, 100)
 DEFAULT_CHISEL_POWER = 45
 
 def pebble_positions():
+    """
+    Generate the initial positions of the pebbles.
+    """
     pebble_count = int(PEBBLE_COUNT**.5)
     x_scale, y_scale = .5 / pebble_count, .75 / pebble_count
     x_offset = .25
@@ -51,6 +54,10 @@ def pebble_positions():
             yield new_x_offset + x_scale * x, .001 + y_scale * y
 
 def is_dislodged(velocity):
+        """
+        Return False if velocity isn't enough to dislodge a pebble, else return the clipped
+        velocity vector.
+        """
         x, y = velocity
         magnitude = (x**2 + y**2)**.5
         if magnitude < DISLODGE_VELOCITY:
@@ -61,6 +68,9 @@ def is_dislodged(velocity):
         return x, y
 
 class Pebble:
+    """
+    This handles physics for dislodged pebbles. Deletes itself after pebbles reach the floor.
+    """
     def __init__(self, index, circles, positions, x, y, pebbles, x_dim, y_dim, velocity):
         self.stopped = False
         self.index = index
@@ -93,7 +103,7 @@ class Pebble:
 
         if not self.y:
             self.update.cancel()
-            del self.pebbles[self.index] # Remove reference -- kill this object
+            del self.pebbles[self.index] # Remove reference // kill this object
         else:
             self.velocity = vx, vy
 
