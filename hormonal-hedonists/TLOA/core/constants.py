@@ -1,6 +1,9 @@
 from enum import Enum, unique
 
 
+ATLAS_PATH = "atlas://assets/{}"
+
+
 @unique
 class Actions(Enum):
     MOVE_LEFT = 'LEFT'

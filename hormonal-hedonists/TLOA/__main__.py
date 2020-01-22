@@ -1,4 +1,4 @@
-from project.core.app import HormonalHedonistsApp
+from TLOA.app import HormonalHedonistsApp
 
 
 def main():
