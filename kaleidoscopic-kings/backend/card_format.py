@@ -1,19 +1,41 @@
-from dataclasses import dataclass
 import random
-from typing import Union, Tuple, List, Type
 import logging
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Union, Tuple, List, Type
 
 logger = logging.getLogger(__name__)
 
 
-class GameStateHandler:
+class CaveManGame(ABC):
+    """
+    This class defines game states that should be easily exposed trough GameState object as
+    they are more important then the others.
+    """
+    @property
+    @abstractmethod
+    def player_health(self):
+        ...
+
+    @property
+    @abstractmethod
+    def player_water(self):
+        ...
+
+    @property
+    @abstractmethod
+    def player_food(self):
+        ...
+
+
+class GameState(CaveManGame):
     """
     Class that handles state interactions.
     Currently 3 type of states are supported: int, float and bool.
 
     The limits for int and float are defined by constants class attributes.
-    For example if the INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of type int,
-    when updated, will never go over 1000 or below 0.
+    For example if the _INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of
+    type int, when updated, will never go over 1000 or below 0.
 
     All possible states are passed as dictionary in init. One example of such dictionary:
     {
@@ -34,8 +56,8 @@ class GameStateHandler:
     game_turn
 
     """
-    INTEGER_RANGE_INCLUDING = (0, 1000)
-    FLOAT_RANGE_INCLUDING = (0, 1)
+    _INTEGER_RANGE_INCLUDING = (0, 1000)
+    _FLOAT_RANGE_INCLUDING = (0, 1.0)
 
     def __init__(self, game_states: dict):
         """
@@ -58,6 +80,18 @@ class GameStateHandler:
     def increase_turn(self):
         self._game_turn += 1
 
+    @property
+    def player_health(self):
+        return self._game_states["player_health"]
+
+    @property
+    def player_water(self):
+        return self._game_states["player_water"]
+
+    @property
+    def player_food(self):
+        return self._game_states["player_food"]
+
     def update_state(self, effects: dict):
         """
         :param effects: dict or None representing changes that modify current game states. Example:
@@ -79,11 +113,11 @@ class GameStateHandler:
             if type(state_value) is int:
                 self._make_sure_game_state_is_correct_type(state_key, int)
                 self._game_states[state_key] += state_value
-                self._make_sure_in_range(state_key, self.INTEGER_RANGE_INCLUDING)
+                self._make_sure_in_range(state_key, self._INTEGER_RANGE_INCLUDING)
             elif type(state_value) is float:
                 self._make_sure_game_state_is_correct_type(state_key, float)
                 self._game_states[state_key] += state_value
-                self._make_sure_in_range(state_key, self.FLOAT_RANGE_INCLUDING)
+                self._make_sure_in_range(state_key, self._FLOAT_RANGE_INCLUDING)
             elif type(state_value) is bool:
                 self._make_sure_game_state_is_correct_type(state_key, bool)
                 self._game_states[state_key] = state_value
@@ -97,7 +131,8 @@ class GameStateHandler:
         if type(self._game_states[state_key]) is not _type:
             raise TypeError(f"Type values for effect {state_key} and game state do no match.")
 
-    def _make_sure_in_range(self, key: str, value_range: Tuple[int, int]):
+    def _make_sure_in_range(self, key: str,
+                            value_range: Union[Tuple[int, int], Tuple[float, float]]):
         min_including, max_including = value_range
         if self._game_states[key] < min_including:
             self._game_states[key] = min_including
@@ -208,7 +243,7 @@ class Card:
     def __hash__(self):
         return hash(self.card_id)
 
-    def is_valid(self, game_state: GameStateHandler):
+    def is_valid(self, game_state: GameState):
         if self.conditions is None:
             return True
         else:

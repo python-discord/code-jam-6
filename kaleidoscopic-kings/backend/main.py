@@ -1,9 +1,13 @@
+import json
 import random
-from typing import List, Union
 import logging
-from backend.card_format import Card, GameStateHandler, OptionOutcome
+from pathlib import Path
+from typing import List, Union
+from backend.card_format import Card, GameState, OptionOutcome
 
 logger = logging.getLogger(__name__)
+BASE_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = "backend/data"
 
 
 class Deck:
@@ -18,19 +22,21 @@ class Deck:
         self._timeout_event_cards = {}
         self._next_card_id = "random"
 
-    def get_card(self, game_state_handler: GameStateHandler) -> Card:
+    def get_card(self, game_state: GameState) -> Card:
         if self._next_card_id != "random":
             self._reduce_timeouts()
             return self._response_cards[self._next_card_id]
 
         possible_event_cards = self._event_cards - self._timeout_event_cards.keys()
         valid_event_cards = {card for card in possible_event_cards if
-                             card.is_valid(game_state_handler)}
+                             card.is_valid(game_state)}
         if len(valid_event_cards) > 0:
             card = random.choice(tuple(valid_event_cards))
         else:
             # Choose card from smallest timeout
-            card = min(self._timeout_event_cards, key=self._timeout_event_cards.get)
+            valid_timeout_cards = {card for card in self._timeout_event_cards if
+                                   card.is_valid(game_state)}
+            card = min(valid_timeout_cards, key=self._timeout_event_cards.get)
             logger.info(f"No more cards to draw - drawing from timed out cards. "
                         f"Drawn card {card}")
             del self._timeout_event_cards[card]
@@ -58,11 +64,15 @@ class Deck:
 
 
 class Game:
-    """Stores state about the current game"""
+    """Handles interaction with the saved states and deck."""
 
     def __init__(self, all_cards: List[Card], game_states: dict):
-        self.game_state_handler = GameStateHandler(game_states)
-        self.deck = Deck(all_cards)
+        self._game_state = GameState(game_states)
+        self._deck = Deck(all_cards)
+
+    @property
+    def game_state(self):
+        return self._game_state
 
     def start_game(self) -> Card:
         return self._draw_card()
@@ -72,14 +82,24 @@ class Game:
         :param previous_card_outcome: OptionOutcome from previous card.
         :return: Card
         """
-        self.game_state_handler.update_state(previous_card_outcome.effects)
-        self.deck.set_next_response_card(previous_card_outcome.next_card)
+        self._game_state.update_state(previous_card_outcome.effects)
+        self._deck.set_next_response_card(previous_card_outcome.next_card)
         return self._draw_card()
 
     def _draw_card(self) -> Card:
-        card = self.deck.get_card(self.game_state_handler)
-        self.game_state_handler.increase_turn()
+        card = self._deck.get_card(self._game_state)
+        self._game_state.increase_turn()
         logger.debug(f"Drawn card: {card}")
         logger.info(f"Card text: {card.text}")
-        logger.debug(f"Game state: {self.game_state_handler}")
+        logger.debug(f"Game state: {self._game_state}")
         return card
+
+
+def load_game(game_cards_filename: str = "example_game_cards.json",
+              game_stats_filename: str = "example_game_states.json") -> Game:
+    """Loads the backend and returns a game object"""
+    with open(BASE_DIR.joinpath(DATA_DIR, game_cards_filename)) as f:
+        _cards = [Card(**card_dict) for card_dict in json.load(f)]
+    with open(BASE_DIR.joinpath(DATA_DIR, game_stats_filename)) as f:
+        _game_states = json.load(f)
+    return Game(_cards, _game_states)
