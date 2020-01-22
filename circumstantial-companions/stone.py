@@ -23,6 +23,7 @@ PEBBLE_COLORS = ((0.910, 0.784, 0.725),
                  (0.831, 0.796, 0.761),
                  (0.435, 0.329, 0.282),
                  (0.384, 0.207, 0.125))
+
 POWER_SCALE = .001
 
 def pebble_positions():
@@ -37,8 +38,8 @@ def pebble_positions():
     # Taper the top a bit to look more natural
     x_length = .5
     for y in range(y, y + 10):
-        x_length *= .95
-        pebble_count = int(pebble_count * .95)
+        x_length *= .85
+        pebble_count = int(pebble_count * .83)
         new_x_offset = (1 - x_length) / 2 + (x_offset - .25)
         x_scale = x_length / pebble_count
         for x in range(pebble_count):
@@ -47,13 +48,11 @@ def pebble_positions():
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
         self.index = index
-        self.x = x
-        self.y = y
-        self.circles = circles # This is a pretty nasty hack, we'll change this later.
-        self.x_dim = x_dim
-        self.y_dim = y_dim
+        self.x, self.y = x, y
+        self.circles = circles
+        self.x_dim, self.y_dim = x_dim, y_dim
         self.__velocity = 0.0, 0.0
-        self.update = Clock.schedule_interval(self.step, 1/60)
+        self.update = Clock.schedule_interval(self.step, 0)
         self.update.cancel()
 
     @property
@@ -75,17 +74,19 @@ class Pebble:
 
     def step(self, dt):
         """Gravity Physics"""
+        x, y = self.x, self.y
         vx, vy = self.__velocity
         vx *= FRICTION
         vy *= FRICTION
         vy -= GRAVITY
 
-        self.x, self.y = max(0, min(1, self.x + vx)), max(0, self.y + vy)
-
-        if self.y > 1:
+        # Bounce off walls
+        if y > 1:
             vy *= -1
-        # I don't like this way of modifying circles in the Chisel widget, I'll rework it
-        # after we get some working physics.
+        if not 0 < x < 1:
+            vx *= -1
+        self.x, self.y = x + vx, max(0, y + vy)
+
         self.circles[self.index].circle = (self.x * self.x_dim, self.y * self.y_dim,
                                            PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
 
@@ -149,10 +150,8 @@ class Chisel(Widget):
         return True
 
 
-class ChiselApp(App):
-    def build(self):
-        return Chisel()
-
-
 if __name__ == '__main__':
+    class ChiselApp(App):
+        def build(self):
+            return Chisel()
     ChiselApp().run()
