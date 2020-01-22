@@ -11,7 +11,7 @@ from time import sleep
 class Bead(Rectangle):
     def __init__(self, **kwargs):
         super(Bead, self).__init__(source='assets/graphics/bead.png', **kwargs)
-        
+
         self.anim = None
 
     def get_anim_offset(self):
@@ -74,6 +74,7 @@ class AbacusAnim:
             n_beads = len(column.up)
 
         self.down_shifts.append((column, n_beads))
+
 
 class Abacus(FloatLayout):
     MAX_BAR_W = 10
@@ -201,18 +202,22 @@ class Abacus(FloatLayout):
             for j in range(len(top_beads.down)):
                 bead = top_beads.down[j]
 
+                anim_offset = floor(bead_space * bead.get_anim_offset())
+
                 bead.pos = (
                     bead_x,
-                    self.y + self.height - border_w - bead_w / 2 - j * bead_w / 2 - floor(bead_space * bead.get_anim_offset())
+                    self.y + self.height - border_w - bead_w / 2 - j * bead_w / 2 - anim_offset
                 )
                 bead.size = (bead_w, bead_w / 2)
 
             for j in range(len(top_beads.up)):
                 bead = top_beads.up[j]
 
+                anim_offset = floor(bead_space * bead.get_anim_offset())
+
                 bead.pos = (
                     bead_x,
-                    div_y + border_w + bead_w / 2 * (len(top_beads.up) - j - 1) + floor(bead_space * bead.get_anim_offset())
+                    div_y + border_w + bead_w / 2 * (len(top_beads.up) - j - 1) + anim_offset
                 )
                 bead.size = (bead_w, bead_w / 2)
 
@@ -221,13 +226,20 @@ class Abacus(FloatLayout):
             for j in range(len(bottom_beads.down)):
                 bead = bottom_beads.down[j]
 
-                bead.pos = (bead_x, self.y + border_w + (len(bottom_beads.down) - j - 1) * bead_w / 2 + floor(bead_space * bead.get_anim_offset()))
+                anim_offset = floor(bead_space * bead.get_anim_offset())
+
+                bead.pos = (
+                    bead_x,
+                    self.y + border_w + (len(bottom_beads.down) - j - 1) * bead_w / 2 + anim_offset
+                )
                 bead.size = (bead_w, bead_w / 2)
 
             for j in range(len(bottom_beads.up)):
                 bead = bottom_beads.up[j]
 
-                bead.pos = (bead_x, div_y - bead_w / 2 * (len(bottom_beads.up) - j) - floor(bead_space * bead.get_anim_offset()))
+                anim_offset = floor(bead_space * bead.get_anim_offset())
+
+                bead.pos = (bead_x, div_y - bead_w / 2 * (len(bottom_beads.up) - j) - anim_offset)
                 bead.size = (bead_w, bead_w / 2)
 
     def get_value(self):
@@ -273,7 +285,7 @@ class Abacus(FloatLayout):
                     bead.anim = None
 
             self.update()
-        
+
         return f
 
     # animations
@@ -330,4 +342,3 @@ class Abacus(FloatLayout):
                 anim.add_shift_down(self.bottom_beads[i], -1)
 
         return self.build_anim(anim)
-    
