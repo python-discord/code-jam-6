@@ -8,11 +8,11 @@ from kivy.vector import Vector
 from itertools import product
 from random import choice, random
 
-GRAVITY = .01
+GRAVITY = .02
 FRICTION = .9
-CHISEL_RADIUS = .0005
-DISLODGE_VELOCITY = .1
-MAX_VELOCITY = .0005
+CHISEL_RADIUS = .0006
+DISLODGE_VELOCITY = .0000001
+MAX_VELOCITY = .000001
 PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 10000
 PEBBLE_SEGMENTS = 4
@@ -37,12 +37,12 @@ def pebble_positions():
     # Taper the top a bit to look more natural
     x_length = .5
     for y in range(y, y + 10):
-        x_length *= .9
-        pebble_count = int(pebble_count * .9)
-        x_offset = (1 - x_length) / 2 + (random() - .5) / 40
+        x_length *= .95
+        pebble_count = int(pebble_count * .95)
+        new_x_offset = (1 - x_length) / 2 + (x_offset - .25)
         x_scale = x_length / pebble_count
         for x in range(pebble_count):
-            yield x_offset + x_scale * x, .001 + y_scale * y
+            yield new_x_offset + x_scale * x, .001 + y_scale * y
 
 class Pebble:
     def __init__(self, index, x, y, circles, x_dim, y_dim):
@@ -98,7 +98,10 @@ class Pebble:
 class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.size = Window.size # May want to change all Window.sizes to self.parent.size after completion
+        if self.parent:
+            self.size = self.parent.size
+        else:
+            self.size = Window.size
 
         self.circles = []
         self.pebbles = []
