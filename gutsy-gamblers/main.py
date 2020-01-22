@@ -243,12 +243,16 @@ class MainScreen(Screen):
         self.add_widget(NowMarker())
 
     def on_size(self, a, b):
-        # Redefine window_width for kv file
+        # Redefine window_width for use in kv file
         self.window_width = Window.width
 
         # Maintains a constant aspect ratio of 0.75 (4:3)
         if (Window.height / Window.width) != 0.5625:
             Window.size = Window.width, Window.width * 0.5625
+
+    def time_control_button(self):
+        time_control_popup = TimeWizard()
+        time_control_popup.open()
 
     def settings_button(self):
         SettingsScreen()
@@ -268,6 +272,12 @@ class MainScreen(Screen):
             pickle.dump(temp_latlong, f)
 
         return location.latitude, location.longitude
+
+
+# Time control panel
+class TimeWizard(Popup):
+    def __init__(self, **kwargs):
+        super(TimeWizard, self).__init__(**kwargs)
 
 
 # Settings panel #

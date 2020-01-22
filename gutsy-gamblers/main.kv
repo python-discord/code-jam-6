@@ -8,7 +8,19 @@
         font_size: root.window_width * 0.015
         pos_hint: {'center_x': 0.15, 'center_y': 0.95}
         size_hint: 0.2, 0.05
-        on_press:
+        on_press: root.time_control_button()
+
+<TimeWizard>:
+    title: 'Time Wizard'
+
+    size_hint: 0.3, 0.8
+    pos_hint: {'center_x': 0.15, 'center_y': 0.5}
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        Label:
+            text: "eat a poopie"
 
 <NowMarker>:
 	Image:
