@@ -1,3 +1,5 @@
+from typing import List, Tuple
+
 from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER
 from TLOA.entities import MirrorCannon
 from TLOA.entities import GoldenShip, BrownShip, ShipType
@@ -42,13 +44,12 @@ class Game(EventDispatcher):
 
     def spawn_ship(self, dt):
         self.total_spawned_ship += 1
-        # TODO instead of create new ship, we can use existing one, so no need allocate new memory
         if self.total_spawned_ship % 10 == 0:
             # after 9 brown ships, we add new 1 golden ship
-            Logger.info('Spawn new golden ship')
+            Logger.debug('Spawn new golden ship')
             new_ship = GoldenShip()
         else:
-            Logger.info('Spawn new brown ship')
+            Logger.debug('Spawn new brown ship')
             new_ship = BrownShip()
         ship_lane = randint(0, LANE_NUMBER - 1)
         new_ship.bind(destroyed=self.on_ship_destroyed)
@@ -59,18 +60,18 @@ class Game(EventDispatcher):
         if new_state:
             self.score += SHIP_SCORE[ship._type]
             # ship is destroyed, remove it from view
-            Logger.info('Remove ship')
+            Logger.debug('Remove ship')
             for ship_info in self.ships:
                 if ship_info[0] == ship:
                     self.ships.remove(ship_info)
 
     def on_health(self, obj, value):
-        Logger.info(f'Island health: {value}')
+        Logger.debug(f'Island health: {value}')
         if value <= 0:
             Logger.info('Game Over')
     
     def on_ship_attack(self, animation, ship):
-        Logger.info('Ship attacked')
+        Logger.debug('Ship attacked')
         # reduce health
         # TODO add more logic to calculate reduced health, like base on ship type, ship health
         self.health -= 10

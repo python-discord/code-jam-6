@@ -24,6 +24,7 @@ class GameView(Widget):
         game.bind(health=self.on_island_health_change)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
+        self.free_ships = [] # list of free ship. Use to avoid allocate new ship
 
     def show_game(self):
         Animation.cancel_all(self)
@@ -93,7 +94,7 @@ class GameView(Widget):
 
     def on_score_change(self, obj, value):
         # TODO show score
-        Logger.info(f'New score: {value}')
+        Logger.debug(f'New score: {value}')
 
     def on_island_health_change(self, obj, value):
         health = (value % 10) * 10
@@ -101,19 +102,26 @@ class GameView(Widget):
 
     def show_ship(self, ship, lane):
         with self.canvas:
-            Logger.info(f'Add ship at lane: {lane}')
-            ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))
+            Logger.debug(f'Add ship at lane: {lane}')
+            # find in free ship list
+            ship_view = None
+            img_source = ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type])
+            for f in self.free_ships:
+                if f.source == img_source:
+                    Logger.debug(f'Found free ship, not need allocate one')
+                    ship_view = f
+                    ship_view.pos = (WINDOW_WIDTH + 100, 50 * lane)
+                    self.free_ships.remove(f)
+                    break
+            if ship_view is None:
+                ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=img_source)
             lane_length = LANE_LENGTHS[lane]
             duration = lane_length / (ship.speed * 10.)
             ship_move_animation = Animation(x=WINDOW_WIDTH - lane_length, duration=duration)
             ship_move_animation.start(ship_view)
             ship_move_animation.bind(on_complete=self._game.on_ship_attack)
             ship_move_animation.bind(on_complete=self.on_ship_attack)
-
-    def show_ships(self):
-        # show ships
-        for ship in self._game.ships:
-            ship_view = Image(pos=(650, 100), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))
     
     def on_ship_attack(self, animation, ship):
-        self.remove_widget(ship)
+        ship.pos = (WINDOW_WIDTH + 100, 0)
+        self.free_ships.append(ship)
