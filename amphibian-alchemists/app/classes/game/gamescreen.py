@@ -187,15 +187,12 @@ class GameScreen(Screen):
         )
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
-        if not self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus:
-            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(
-                key.name
-            )
+        board_input = self.ids.enigma_keyboard.ids.lamp_board.ids.board_input
+
+        if not board_input.focus:
+            self.board_input.insert_text(key.name)
         App.get_running_app().machine.key_press(key.name)
-        store = JsonStore(DATA_DIR)
-        game_id = str(App.get_running_app().game_id)
-        current_output_text = store.get(game_id)["current_output_text"]
-        store_put(current_output_text=current_output_text + key.name)
+        store_put(current_output_text=board_input.text)
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id
