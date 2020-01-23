@@ -9,6 +9,8 @@ from kivy.graphics import Color, Line, Rectangle
 from kivy.lang import Builder
 from kivy.core.audio import SoundLoader
 from kivy.vector import Vector
+from PIL import Image
+import numpy as np
 
 GRAVITY = .02
 FRICTION = .9
@@ -32,27 +34,25 @@ DEFAULT_CHISEL_RADIUS = 15
 CHISEL_POWER_RANGE = (0, 100)
 DEFAULT_CHISEL_POWER = 45
 
-def pebble_positions():
-    """
-    Generate the initial positions of the pebbles.
-    """
-    pebble_count = int(PEBBLE_COUNT**.5)
-    x_scale, y_scale = .5 / pebble_count, .75 / pebble_count
-    x_offset = .25
-    for y in range(pebble_count - 10):
-        x_offset += (random() - .5) / 40
-        for x in range(pebble_count):
-            yield x_offset + x_scale * x, .001 + y_scale * y
+def pebble_setup():
+    pebbles_per_line = int(PEBBLE_COUNT**.5)
+    scale = 1 / pebbles_per_line
 
-    # Taper the top a bit to look more natural
-    x_length = .5
-    for y in range(y, y + 10):
-        x_length *= .85
-        pebble_count = int(pebble_count * .83)
-        new_x_offset = (1 - x_length) / 2 + (x_offset - .25)
-        x_scale = x_length / pebble_count
-        for x in range(pebble_count):
-            yield new_x_offset + x_scale * x, .001 + y_scale * y
+    with Image.open('boulder.png') as image:
+        w, h = image.size
+        IMAGE = np.frombuffer(image.tobytes(), dtype=np.uint8)
+        IMAGE = IMAGE.reshape((h, w, 4))
+
+    for x in range(pebbles_per_line):
+        x = scale * x
+        for y in range(pebbles_per_line):
+            y = scale * y
+            sample_loc = int(y * h), int(x * w)
+            color = IMAGE[sample_loc]
+            if not color[-1]:
+                continue
+            r, g, b, a = color
+            yield (r/255, g/255, b/255, 1), x * .75 + .125, y * .75
 
 def is_dislodged(velocity):
         """
@@ -115,15 +115,17 @@ class Chisel(Widget):
         self.setup_background()
 
         self.pebbles = {}
-        self.positions = [*pebble_positions()]
+        self.positions = []
         self.circles = []
         self.sound = SoundLoader.load('dig.wav')
         with self.canvas:
-            for index, (x, y) in enumerate(self.positions):
-                Color(*choice(PEBBLE_COLORS))
+            for color, x, y in pebble_setup():
+                Color(*color)
+                self.positions.append((x, y))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
+
         self.bind(size=self.delayed_resize, pos=self.delayed_resize)
 
         # TODO: Implement adjustable chisel radius and power
