@@ -33,20 +33,39 @@
 
 ################## STATUS ##################
 <StatusBar>:
-    orientation: 'vertical'
-    padding: (0, 150)
-    Label:
-        text: "Health"
-    Label:
-        text: "Hunger"
-    Label:
-        text: "Thirst"
-    Label:
-        text: "Sanity"
+    rows: 4
+    padding: (40, 150)
+    spacing: 10
+    StatusWidget:
+        Label:
+            text: data.game_state.main_state_1.label
+        Label:
+            text: data.game_state.main_state_1.value
+    StatusWidget:
+        Label:
+            text: data.game_state.main_state_2.label
+        Label:
+            text: data.game_state.main_state_2.value
+    StatusWidget:
+        Label:
+            text: data.game_state.main_state_2.label
+        Label:
+            text: data.game_state.main_state_2.value
+    StatusWidget:
+        Label:
+            text: data.game_state.main_state_2.label
+        Label:
+            text: data.game_state.main_state_2.value
 
 
 <StatusWidget>:
-    orientation:
+    orientation: 'vertical'
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source: data.assets_loc+ 'temp-pebble.png'
+
 
 ##################  CARD  ##################
 <CardWidget>:

@@ -8,7 +8,7 @@ class MainWidget(GridLayout):
     pass
 
 
-class StatusBar(BoxLayout):
+class StatusBar(GridLayout):
     pass
 
 
@@ -24,3 +24,7 @@ class CardBoxLayout(BoxLayout):
     """Standard box layout with a stone tablet as a background"""
 
     source = StringProperty()
+
+
+class StatusWidget(BoxLayout):
+    pass
