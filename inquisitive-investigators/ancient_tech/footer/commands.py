@@ -1,8 +1,9 @@
 from typing import Any
+from pathlib import Path
+from shutil import rmtree
 
 from kivy.properties import NumericProperty
 from kivy.uix.popup import Popup
-import pathlib
 
 
 class BasePopup(Popup):
@@ -53,7 +54,7 @@ class Mkdir(BasePopup):
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
             if self.filemanager == 1:
-                dir_ = pathlib.Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
+                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
                 new_dir = dir_ / dir_name
 
                 if not new_dir.exists():
@@ -71,7 +72,7 @@ class Mkdir(BasePopup):
                     self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
 
             elif self.filemanager == 2:
-                dir_ = pathlib.Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
+                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
                 new_dir = dir_ / dir_name
 
                 if not new_dir.exists():
@@ -116,11 +117,22 @@ class DeletePopup(BasePopup):
             self.ids.left.text = 'No File/Directory Selected'
 
     def delete(self):
-        filer_to_rem = pathlib.Path(self.filer.txt)
-        filer_to_rem.unlink()
-        filel_to_rem = pathlib.Path(self.filel.txt)
-        filel_to_rem.unlink()
+        # self._remove(self.filel)
+        # self._remove(self.filer)
+        print(self.filel.text)
         self.dismiss()
+
+    @staticmethod
+    def _remove(dir_) -> None:
+        try:
+            side = Path(dir_.text)
+        except AttributeError:
+            pass
+        else:
+            if side.is_dir():
+                rmtree(side)
+            elif side.is_file():
+                side.unlink()
 
 
 class QuitPopup(BasePopup):
