@@ -25,15 +25,19 @@ class GameView(Widget):
         Animation.cancel_all(self)
         self.canvas.clear()
         with self.canvas:
-            sky = Image(source=IMAGES_PATH.format('sky.png'))
-            sky.size = sky.texture_size
+            #sky = Image(source=IMAGES_PATH.format('sky.png'))
+            #sky.size = sky.texture_size
 
-            waves = Image(source=IMAGES_PATH.format('sea_waves.gif'))
-            waves.size = waves.texture_size
-            waves.anim_delay = 1
+            #waves = Image(source=IMAGES_PATH.format('sea_waves.gif'))
+            #waves.size = waves.texture_size
+            #waves.anim_delay = 1
 
-            island = Image(source=IMAGES_PATH.format('island.png'))
-            island.size = island.texture_size
+            #island = Image(source=IMAGES_PATH.format('island.png'))
+            #island.size = island.texture_size
+
+            background = Image(source=IMAGES_PATH.format('background.gif'))
+            background.size = background.texture_size
+            background.anim_delay = 1
 
             birds = Image(pos=(Window.width, 400), source=ATLAS_PATH.format('birds-0'))
             birds.size = birds.texture_size
@@ -45,8 +49,8 @@ class GameView(Widget):
 
             bird_animation.bind(on_complete=self.on_birds_complete)
 
-            sun = Image(pos=(650, 530), source=ATLAS_PATH.format('sun-0'))
-            sun.size = sun.texture_size
+            #sun = Image(pos=(650, 530), source=ATLAS_PATH.format('sun-0'))
+            #sun.size = sun.texture_size
 
             self._game.mirror.shape = Image(
                 pos=(150, 260),
