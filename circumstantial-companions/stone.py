@@ -17,10 +17,14 @@ FRICTION = .9
 CHISEL_RADIUS = 6e-4
 DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .1
+
 PEBBLE_IMAGE = 'boulder.png'
 PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 1.5e4
+PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_SEGMENTS = 4
+PEBBLE_IMAGE_SCALE = .75
+
 POWER_SCALE = 1e2
 MIN_POWER = 1e-5
 
@@ -33,10 +37,8 @@ def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
     """
-    pebbles_per_line = int(PEBBLE_COUNT**.5)
-    scale = 1 / pebbles_per_line
-    x_scale = y_scale = .75 # How much of the screen we use
-    x_offset, y_offset = (1 - x_scale) / 2, .01 # Lower-left corner offset of image
+    scale = 1 / PEBBLES_PER_LINE
+    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .01 # Lower-left corner offset of image
 
     with Image.open(PEBBLE_IMAGE) as image:
         w, h = image.size
@@ -44,16 +46,16 @@ def pebble_setup():
 
     image = image.reshape((h, w, 4))
 
-    for x in range(pebbles_per_line):
+    for x in range(PEBBLES_PER_LINE):
         x = scale * x
-        for y in range(pebbles_per_line):
+        for y in range(PEBBLES_PER_LINE):
             y = scale * y
             sample_loc = int(y * h), int(x * w)
             r, g, b, a = image[sample_loc]
             if not a:
                 continue
-            pebble_x = x * x_scale + x_offset
-            pebble_y = (1 - y) * y_scale + y_offset
+            pebble_x = x * PEBBLE_IMAGE_SCALE + x_offset
+            pebble_y = (1 - y) * PEBBLE_IMAGE_SCALE + y_offset
             normalized_color = r / 255, g / 255, b / 255, a / 255
             yield normalized_color, pebble_x, pebble_y
 
@@ -119,11 +121,11 @@ class Chisel(Widget):
         super().__init__(*args, **kwargs)
         self.resize_event = Clock.schedule_once(lambda dt:None, 0)
         self.setup_background()
-
+        self.sound = SoundLoader.load('dig.wav')
         self.pebbles = {}
+
         self.positions = []
         self.circles = []
-        self.sound = SoundLoader.load('dig.wav')
         with self.canvas:
             for color, x, y in pebble_setup():
                 Color(*color)
