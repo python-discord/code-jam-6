@@ -205,8 +205,6 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
-        self.clock = Clock.schedule_interval(self.redraw, 2.5)
-
     def on_angle(self, item, angle):
         if angle == 360:
             item.angle = 0
