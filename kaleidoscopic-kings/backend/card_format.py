@@ -224,14 +224,16 @@ class Card:
     card_id: str
     # Either "event" or "response". Response cards only exist to follow up on event cards.
     card_type: str
-    # Asset filename including extension
-    card_asset: str
+    # Image filename including extension
+    card_image: str
     text: str
     # List of Option objects
     options: Union[dict, List[Option]]
     # Dict of conditions for example {"player_health": 0.5} and this card would only be  valid
     # if player health is more or equal than 50% of it's total value.
     conditions: dict = None
+    # Sound file filename including extension
+    card_sound: str = None
 
     def __post_init__(self):
         """
