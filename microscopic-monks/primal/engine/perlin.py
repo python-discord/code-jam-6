@@ -24,7 +24,5 @@ def perlin_array(shape=(2500, 2500),
                                 base=seed)
     max_arr = np.max(arr)
     min_arr = np.min(arr)
-    norm_me = lambda x: (x - min_arr) / (max_arr - min_arr)
-    norm_me = np.vectorize(norm_me)
-    arr = norm_me(arr)
-    return arr
+
+    return (arr - min_arr) / (max_arr - min_arr)
