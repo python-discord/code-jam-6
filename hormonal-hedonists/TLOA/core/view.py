@@ -2,7 +2,7 @@ from random import randint
 
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, SHIP_IMAGE_MAPPING,
-                                WINDOW_WIDTH, LANE_LENGTHS)
+                                WINDOW_WIDTH, WINDOW_HEIGHT, LANE_LENGTHS)
 
 from kivy.animation import Animation
 from kivy.core.window import Window
@@ -25,6 +25,7 @@ class GameView(Widget):
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self.free_ships = [] # list of free ship. Use to avoid allocate new ship
+        self.hp_bar = None # will be init later
 
     def show_game(self):
         Animation.cancel_all(self)
@@ -59,8 +60,8 @@ class GameView(Widget):
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
-            health_bar = Image(pos=(300, 300), source=ATLAS_PATH.format('100'))
-            health_bar.size = health_bar.texture_size
+            self.hp_bar = Image(pos=(10, WINDOW_HEIGHT - 80), source=ATLAS_PATH.format('100'))
+            self.hp_bar.size = self.hp_bar.texture_size
 
 
     @staticmethod
@@ -92,8 +93,8 @@ class GameView(Widget):
         Logger.debug(f'New score: {value}')
 
     def on_island_health_change(self, obj, value):
-        health = (value % 10) * 10
-        
+        health = math.ceil(value / 10) * 10
+        self.hp_bar.source = ATLAS_PATH.format(health)
 
     def show_ship(self, ship, lane):
         with self.canvas:
