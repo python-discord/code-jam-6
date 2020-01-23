@@ -218,4 +218,5 @@ class GameScreen(Screen):
         )
 
     def change_game_title(self, btn, title):
-        store_put(game_title=title)
+        if title != "" or title is not None:
+            store_put(game_title=title)
