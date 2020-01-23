@@ -15,7 +15,9 @@
 <PaperPopup@Popup>:
     title: "Configure the machine to:"
     size_hint: 0.5, 0.7
-    on_open: paper.ids.output_paper.recycle_view_output.data = paper.output_data()
+    on_open:
+        paper.ids.input_paper.recycle_view_input.data = paper.input_data()
+        paper.ids.output_paper.recycle_view_output.data = paper.output_data()
     BoxLayout:
         orientation: "vertical"
         padding: dp(10)

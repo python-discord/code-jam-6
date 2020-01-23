@@ -11,15 +11,7 @@ DATA_DIR = os.path.join(
 
 
 class Paper(RelativeLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_interval(
-            lambda dt: setattr(
-                self.ids.input_paper.recycle_view_input, "data", self.input_data()
-            ), 1
-        )
-
-    # This only runs when the game is first opened (settings sheet)
+    # Constantly runs with schedule_interval to avoid game interference
     def input_data(self):
         store = JsonStore(DATA_DIR)
         game_id = str(App.get_running_app().game_id)
