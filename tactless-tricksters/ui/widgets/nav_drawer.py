@@ -19,10 +19,13 @@ class ContentNavigationDrawer(MDNavigationDrawer):
                                                  on_press=lambda x: self.scr_chng('decode', self.decode))
         self.message = NavigationDrawerIconButton(text="Messages", icon='message',
                                                   on_press=lambda x: self.scr_chng('message', self.message))
+        self.training = NavigationDrawerIconButton(text="Training", icon='message',
+                                                  on_press=lambda x: self.scr_chng('training', self.training))
         self.add_widget(self.home)
         self.add_widget(self.encode)
         self.add_widget(self.decode)
         self.add_widget(self.message)
+        self.add_widget(self.training)
 
 
     def scr_chng(self, screen, nav_item):

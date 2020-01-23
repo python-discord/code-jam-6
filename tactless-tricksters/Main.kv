@@ -33,7 +33,7 @@
         padding: dp(24)
         spacing: dp(24)
         orientation: 'vertical'
-        size_hint: .65, .35
+        size_hint: .65, .65
         pos_hint: {'center_x': 0.5, 'top': 0.8}
         md_bg_color: app.theme_cls.accent_color
 
@@ -48,7 +48,7 @@
         GridLayout:
             spacing: dp(24)
             cols: 5
-            pos_hint: {'center_x': 0.5}
+            pos_hint: {'center_x': 0.45}
 
             BlankLabel:
 
@@ -82,6 +82,24 @@
                 icon: 'cogs'
                 # TODO: create calibration screen
 
+            BlankLabel:
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Train'
+                icon: 'dumbbell'
+                on_press:
+                    root.manager.current = 'training'
+
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Exit'
+                icon: 'close'
+                on_press:
+                    # TODO: create exit function
+                    root.manager.current = ''
+
 <TrainingMenuScreen>
     canvas.before:
         Rectangle:
@@ -105,65 +123,71 @@
             text_color: [1, 1, 1, 1]
             size_hint: 1, .3
 
-       GridLayout:
+        MDLabel:
+            text: 'Tapping Morse Code'
+            font_style: 'H5'
+            halign: 'left'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+        GridLayout:
             spacing: dp(24)
-            cols: 5
-            pos_hint: {'center_x': 0.3}
-
-            MDLabel:
-                text: 'Writing'
-                font_style: 'H4'
-                halign: 'center'
-                theme_text_color: 'Custom'
-                text_color: [1, 1, 1, 1]
-                size_hint: 1, .3
+            cols: 3
+            pos_hint: {'center_x': 0.5}
 
             WelcomeButton:
-                text: 'Easy'
-                icon: 'database-export'
+                text: 'letters'
+                icon: 'walk'
                 on_press:
-                    root.manager.current = 'listen_easy'
+                    root.training_difficulty = "Easy"
+                    root.manager.current = 'listening'
 
             WelcomeButton:
-                text: 'Medium'
-                icon: 'database-import'
+                text: 'words'
+                icon: 'run'
                 on_press:
-                    root.manager.current = 'listen_medium'
+                    root.training_difficulty = "Medium"
+                    root.manager.current = 'listening'
 
             WelcomeButton:
-                text: 'Hard'
-                icon: 'login-variant'
+                text: 'sentences'
+                icon: 'bike'
                 on_press:
-                    root.manager.current = 'listen_hard'
+                    root.training_difficulty = "Hard"
+                    root.manager.current = 'listening'
 
-       GridLayout:
+        MDLabel:
+            text: 'Listening to Morse code'
+            font_style: 'H5'
+            halign: 'left'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+        GridLayout:
             spacing: dp(24)
-            cols: 5
-            pos_hint: {'center_x': 0.7}
-
-            MDLabel:
-                text: 'Listening'
-                font_style: 'H4'
-                halign: 'center'
-                theme_text_color: 'Custom'
-                text_color: [1, 1, 1, 1]
-                size_hint: 1, .3
+            cols: 3
+            pos_hint: {'center_x': 0.5}
 
             WelcomeButton:
-                text: 'Easy'
-                icon: 'database-export'
+                text: 'letters'
+                icon: 'walk'
                 on_press:
-                    root.manager.current = 'write_easy'
+                    root.training_difficulty = "Easy"
+                    root.manager.current = 'tapping'
 
             WelcomeButton:
-                text: 'Medium'
-                icon: 'database-import'
+                text: 'words'
+                icon: 'run'
                 on_press:
-                    root.manager.current = 'write_medium'
+                    root.training_difficulty = "Medium"
+                    root.manager.current = 'tapping'
 
             WelcomeButton:
-                text: 'Hard'
-                icon: 'login-variant'
+                text: 'sentences'
+                icon: 'bike'
                 on_press:
-                    root.manager.current = 'write_hard'
+                    root.training_difficulty = "Hard"
+                    root.manager.current = 'tapping'
 

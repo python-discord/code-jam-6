@@ -1,5 +1,6 @@
 # qpy:kivy
 # Kivy Imports
+from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
@@ -15,12 +16,14 @@ from ui.screens.encoder_screen import EncoderScreen
 from ui.screens.decoder_screen import DecoderScreen
 from ui.screens.message_screen import MessageScreen
 from ui.screens.conversation_screen import ConversationScreen
+from ui.screens.tapping_training_screen import TappingScreen
+from ui.screens.listening_training_screen import ListeningScreen
 
 from util.utility import Utility
 from ui.widgets.nav_drawer import MyNavigationLayout
 
-# import gc
-# gc.disable()
+import gc
+gc.disable()
 
 
 class MainBox(FloatLayout):
@@ -41,6 +44,8 @@ class MainBox(FloatLayout):
         self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
         self.content.add_widget(TrainingMenuScreen(name='training', util=self.util))
+        self.content.add_widget(ListeningScreen(name='listening', util=self.util))
+        self.content.add_widget(TappingScreen(name='tapping', util=self.util))
         # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
         # # Place screens here
 
