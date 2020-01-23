@@ -35,6 +35,10 @@
                 app.root.get_screen("game_screen").load_old_game()
                 root.dismiss()
         Button:
+            text: "Close"
+            on_release:
+                root.dismiss()
+        Button:
             text: "Exit"
             on_release:
                 app.root.current = "main_screen"
