@@ -10,7 +10,6 @@ DATA_DIR = os.path.join(
 
 
 class Paper(RelativeLayout):
-    # Constantly runs with schedule_interval to avoid game interference
     def input_data(self):
         store = JsonStore(DATA_DIR)
         game_id = str(App.get_running_app().game_id)
@@ -32,8 +31,6 @@ class Paper(RelativeLayout):
             if x is None:
                 continue
             rotors += x
-            if i % 2 == 0:
-                rotors += " "
 
         input_data = [
             {"text": "[b]Plugboard:[/b]"},
