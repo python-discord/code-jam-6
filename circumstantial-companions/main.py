@@ -54,7 +54,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
     def __init__(self, chisel):
         self.chisel = chisel
         self.dropdown = None
-        super().__init__(orientation="vertical", spacing="10")
+        super().__init__(orientation="vertical", spacing=10, padding=5)
         self.setup_background("assets/img/options_background.png")
 
     def build(self, locale=SYSTEM_LOCALE):
@@ -74,18 +74,18 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
             btn.bind(on_release=_make_select_function(locale_code))
             self.dropdown.add_widget(btn)
-        dropdown_btn = Button(text=_("Select language"))
+        dropdown_btn = Button(text=_("Select language"), size_hint=(1, 0.1))
         dropdown_btn.bind(on_release=self.dropdown.open)
         self.dropdown.bind(on_select=lambda instance, locale: self.build(locale))
 
-        reset_btn = Button(text=_("Reset"))
+        reset_btn = Button(text=_("Reset"), size_hint=(1, 0.1))
         reset_btn.bind(on_release=lambda btn: self.chisel.reset())
 
-        slider_layout = BoxLayout(orientation="horizontal", spacing=10)
+        slider_layout = BoxLayout(orientation="horizontal", spacing=10, size_hint=(1, 0.7))
         slider_layout.add_widget(ChiselRadiusSlider(self.chisel))
         slider_layout.add_widget(ChiselPowerSlider(self.chisel))
 
-        self.add_widget(Label(text="Options"))
+        self.add_widget(Label(text=_("Options"), size_hint=(1, 0.1)))
         self.add_widget(dropdown_btn)
         self.add_widget(reset_btn)
         self.add_widget(slider_layout)
