@@ -29,14 +29,22 @@
             on_release:
                 root.dismiss()
 
-<CheckPaperButton@AnchorLayout>:
+<CheckPaperButton@ButtonBehavior+Image>:
+    source: "misc/paper.png"
+    on_release: app.root.paper_popup.open()
+    PaperLabel:
+        text: "Paper"
+        size: self.texture_size
+        text_size: root.width, None
+        halign: "center"
+
+<CheckPaper@AnchorLayout>:
     anchor_x: "right"
     anchor_y: "bottom"
+    padding: dp(10)
     RelativeLayout:
         size_hint: 0.1, 0.1
-        Button:
-            text: "Papers"
-            on_release: app.root.paper_popup.open()
+        CheckPaperButton:
 
 <UIManager>:
     loading_popup: Factory.LoadingPopup()
