@@ -110,6 +110,7 @@ class GameView(Widget):
                     break
             if ship_view is None:
                 ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=img_source)
+                ship_view.size = ship_view.texture_size
             lane_length = LANE_LENGTHS[lane]
             duration = lane_length / (ship.speed * 10.)
             ship_move_animation = Animation(x=WINDOW_WIDTH - lane_length, duration=duration)
