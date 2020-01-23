@@ -27,14 +27,14 @@ PEBBLE_IMAGE_SCALE = .75
 
 MIN_POWER = 1e-5
 
-CHISEL_RADIUS_RANGE = (3e-4, 1.2e-3)
+CHISEL_RADIUS_RANGE = (3e-4, 5e-3)
 DEFAULT_CHISEL_RADIUS = 6e-4
-CHISEL_POWER_RANGE = (50, 200)
+CHISEL_POWER_RANGE = (50, 500)
 DEFAULT_CHISEL_POWER = 100
 
 def get_pebble_radius(width, height):
     scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .36
+    radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .37
     return radius
 
 def pebble_setup():
@@ -123,8 +123,7 @@ class Chisel(RepeatingBackground, Widget):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.resize_event = Clock.schedule_once(lambda dt:None, 0)
-        self.setup_background("assets/img/chisel_background.png", 0.1, (0.4, 0.4, 0.4, 1))
+        self.setup_background("assets/img/chisel_background.png", 0.3, (0.4, 0.4, 0.4, 1))
         self.sound = SoundLoader.load('dig.wav')
 
         self.set_radius(DEFAULT_CHISEL_RADIUS)
