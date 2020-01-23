@@ -59,13 +59,13 @@ class Game(EventDispatcher):
         Clock.schedule_interval(drain_hp, 0.75)
 
     def on_ship_destroyed(self, ship, is_destroyed):
+        Logger.debug(f'Handle ship destroyed event with value: {is_destroyed}')
         if is_destroyed:
             self.score += SHIP_SCORE[ship._type]
-            Logger.debug('Remove ship')
+            Logger.debug(f'Current score: {self.score}. Remove ship')
             for ship_info in self.ships:
                 if ship_info[0] == ship:
                     self.ships.remove(ship_info)
-            # TODO remove it from view
 
     def on_health(self, obj, value):
         Logger.debug(f'Island health: {value}')

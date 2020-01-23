@@ -10,7 +10,7 @@ HP_BAR_X_OFFSET = 75
 HP_BAR_Y_OFFSET = 100
 
 class ShipView(Widget):
-    destroyed = BooleanProperty(False)
+    core_destroyed = BooleanProperty(False)
     def __init__(self, ship, **kwargs):
         # TODO consider to add lane as a property of ShipView
         self.core = ship
@@ -23,7 +23,6 @@ class ShipView(Widget):
             # for HP bar
             health = math.ceil(ship.health / 10) * 10
             self.hp_bar = Image(pos=(self.pos[0] + HP_BAR_X_OFFSET, self.pos[1] + HP_BAR_Y_OFFSET), source=ATLAS_PATH.format(health))
-            # self.hp_bar = Image(pos=(self.pos[0], self.pos[1] + self.view.texture_size[1]), source=ATLAS_PATH.format(health))
             # TODO for burning effect
         self.core.bind(health=self.on_health_change)
         self.core.bind(destroyed=self.on_core_destroyed)
@@ -37,7 +36,7 @@ class ShipView(Widget):
         # destroy it if health is 0
 
     def on_core_destroyed(self, obj, is_destroyed):
-        self.destroyed = is_destroyed
+        self.core_destroyed = is_destroyed
         if is_destroyed:
             # TODO add some effect if need
             pass
@@ -46,3 +45,11 @@ class ShipView(Widget):
         self.view.pos = self.pos
         self.hp_bar.pos = (self.pos[0] + HP_BAR_X_OFFSET, self.pos[1] + HP_BAR_Y_OFFSET)
         # TODO for burning effect
+
+    def set_new_core(self, ship):
+        # unbind with old core
+        self.core.unbind(health=self.on_health_change)
+        self.core.unbind(destroyed=self.on_core_destroyed)
+        self.core = ship
+        self.core.bind(health=self.on_health_change)
+        self.core.bind(destroyed=self.on_core_destroyed)
