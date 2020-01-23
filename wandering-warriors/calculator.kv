@@ -6,8 +6,11 @@
         BoxLayout:
             orientation: 'horizontal'
             Ledger:
+                TopRightButton:
+                    size_hint: 20, 20
             OperationsBar:
             CuneiformDrawingInput:
+                TopRightButton:
 
 <TopMenu>:
     size_hint_y: None
@@ -43,7 +46,7 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    TopRightButton:
+
 
 <OperationsBar>:
     size_hint_x: None
@@ -56,25 +59,25 @@
             pos: self.pos
 
 <CuneiformDrawingInput>:
-    canvas:
+    canvas.before:
         Color:
             rgb: 1, 1, 1, 1
         Rectangle:
             source: 'assets/graphics/sandbox.jpg'
             size: self.size
             pos: self.pos
-    TopRightButton:
 
 <TopRightButton>:
+    size_hint: 50, 50
+    #:set offset 10
     Button:
-        size: 50, 50
+        size: self.parent.size_hint
         background_color: .5, .5, .5, 1 
-        #:set offset 10
         x: self.parent.parent.x + self.parent.parent.size[0] - self.size[0] - offset
         y: self.parent.parent.y + self.parent.parent.size[1] - self.size[1] - offset
         on_press:
             self.background_color = 0, 0, 0.055
-            self.parent.parent.on_press()
+            self.parent.parent.click()
         on_release:
             self.background_color = .5, .5, .5, 1 
         canvas.before:

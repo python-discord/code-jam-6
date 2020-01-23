@@ -77,7 +77,6 @@ class Abacus(FloatLayout):
 
             for i in range(self.N_BARS):
                 self.bar_rects.append([Rectangle(), Rectangle()])
-
                 self.top_beads.append(AbacusColumn(self.N_TOP_BEADS))
                 self.bottom_beads.append(AbacusColumn(self.N_BOTTOM_BEADS))
 
@@ -189,3 +188,9 @@ class Abacus(FloatLayout):
             for j in range(len(bottom_beads.up)):
                 bottom_beads.up[j].pos = (bead_x, div_y - bead_w / 2 * (len(bottom_beads.up) - j))
                 bottom_beads.up[j].size = (bead_w, bead_w / 2)
+
+    def click(self):
+        print('click')
+
+    def buttonImage(self):
+        return 'assets/graphics/clay.png'
