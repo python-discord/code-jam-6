@@ -14,9 +14,6 @@ from kivymd.textfields import MDTextFieldRound
 # project imports
 from ui.widgets.audio_indicator import AudioIndicator
 
-# For testing remove later
-import random
-
 
 class DecoderScreen(Screen):
     def __init__(self, **kwargs):

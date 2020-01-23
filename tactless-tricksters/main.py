@@ -9,6 +9,7 @@ from kivy.app import App
 
 
 # Project imports
+from ui.screens.training_menu_screen import TrainingMenuScreen
 from ui.screens.welcome_screen import WelcomeScreen
 from ui.screens.encoder_screen import EncoderScreen
 from ui.screens.decoder_screen import DecoderScreen
@@ -39,6 +40,7 @@ class MainBox(FloatLayout):
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
         self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
+        self.content.add_widget(TrainingMenuScreen(name='training', util=self.util))
         # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
         # # Place screens here
 

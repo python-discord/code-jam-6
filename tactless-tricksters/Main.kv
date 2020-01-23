@@ -82,4 +82,88 @@
                 icon: 'cogs'
                 # TODO: create calibration screen
 
+<TrainingMenuScreen>
+    canvas.before:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            source: 'ui/img/welcome_2.png'
+
+    MDCard:
+        padding: dp(24)
+        spacing: dp(24)
+        orientation: 'vertical'
+        size_hint: .65, .35
+        pos_hint: {'center_x': 0.5, 'top': 0.8}
+        md_bg_color: app.theme_cls.accent_color
+
+        MDLabel:
+            text: 'Training'
+            font_style: 'H4'
+            halign: 'center'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+       GridLayout:
+            spacing: dp(24)
+            cols: 5
+            pos_hint: {'center_x': 0.3}
+
+            MDLabel:
+                text: 'Writing'
+                font_style: 'H4'
+                halign: 'center'
+                theme_text_color: 'Custom'
+                text_color: [1, 1, 1, 1]
+                size_hint: 1, .3
+
+            WelcomeButton:
+                text: 'Easy'
+                icon: 'database-export'
+                on_press:
+                    root.manager.current = 'listen_easy'
+
+            WelcomeButton:
+                text: 'Medium'
+                icon: 'database-import'
+                on_press:
+                    root.manager.current = 'listen_medium'
+
+            WelcomeButton:
+                text: 'Hard'
+                icon: 'login-variant'
+                on_press:
+                    root.manager.current = 'listen_hard'
+
+       GridLayout:
+            spacing: dp(24)
+            cols: 5
+            pos_hint: {'center_x': 0.7}
+
+            MDLabel:
+                text: 'Listening'
+                font_style: 'H4'
+                halign: 'center'
+                theme_text_color: 'Custom'
+                text_color: [1, 1, 1, 1]
+                size_hint: 1, .3
+
+            WelcomeButton:
+                text: 'Easy'
+                icon: 'database-export'
+                on_press:
+                    root.manager.current = 'write_easy'
+
+            WelcomeButton:
+                text: 'Medium'
+                icon: 'database-import'
+                on_press:
+                    root.manager.current = 'write_medium'
+
+            WelcomeButton:
+                text: 'Hard'
+                icon: 'login-variant'
+                on_press:
+                    root.manager.current = 'write_hard'
 
