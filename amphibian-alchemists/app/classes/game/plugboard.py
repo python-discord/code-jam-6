@@ -83,11 +83,7 @@ class PlugboardScreen(Screen):
                                 *self.ids.plug_board.ids[item[1]].center,
                             )
 
-    def check_plugs(self):
-        """
-        This method will check if there's an unpaired plug in the board.
-        If so, then the plug will be deleted
-        """
+    def on_leave(self):
         if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
             self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
             del self.plug_reference[-1]
