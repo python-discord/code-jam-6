@@ -8,7 +8,6 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.graphics import Color, Line
-from kivy.vector import Vector
 
 
 class Sky(Widget):
@@ -35,7 +34,7 @@ class Sun(Widget):
             source=self.sprite_path + f"sun-{self.frame_id}")
 
         self.sprite.size = self.sprite.texture_size
-        self.sprite.pos = (650,530)
+        self.sprite.pos = (650, 530)
         self.add_widget(self.sprite)
 
     def update(self, dt):
@@ -62,7 +61,7 @@ class FlockOfBirds(Widget):
             source=self.sprite_path + f"bird-{self.frame_id}")
 
         self.sprite.size = self.sprite.texture_size
-        self.sprite.pos = (1200,500)
+        self.sprite.pos = (1200, 500)
         self.add_widget(self.sprite)
 
     def update(self, dt):
@@ -73,7 +72,7 @@ class FlockOfBirds(Widget):
             # Move the flock of birds ahead
             self.sprite.pos[0] -= 10
             if(self.sprite.pos[0] <= -self.sprite.size[0]):
-               self.sprite.pos[0] = random.randint(1200, 4800)
+                self.sprite.pos[0] = random.randint(1200, 4800)
 
             self.frame_id += 1
             if self.frame_id > 1:
@@ -89,7 +88,7 @@ class Island(Widget):
 
         self.sprite = Image(source="assets/images/island.png")
         self.sprite.size = self.sprite.texture_size
-        self.sprite.pos = (0,0)
+        self.sprite.pos = (0, 0)
         self.add_widget(self.sprite)
 
 
@@ -105,7 +104,7 @@ class Sea(Widget):
         self.sprite = Image(
             source=self.sprite_path + f"sea-{self.frame_id}")
         self.sprite.size = self.sprite.texture_size
-        self.sprite.pos = (0,0)
+        self.sprite.pos = (0, 0)
         self.add_widget(self.sprite)
 
     def update(self, dt):
@@ -204,7 +203,6 @@ class GameWorld(Widget):
 
         self.canvas.add(Color(1, 1, 0, 0.125))
         self.canvas.add(Line(points=[x1, y1, x2, y2, x3, y3, x1, y1], width=1.5, closed=True))
-
 
 
 class GameApp(App):
