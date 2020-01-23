@@ -122,7 +122,7 @@ def setup_new_game_settings():
     )
 
 
-class EnigmaInput(TextInput):
+class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.lower() in keys:
             s = App.get_running_app().machine.key_press(substring.upper())
@@ -158,7 +158,7 @@ class GameScreen(Screen):
         if (
             self.manager.current == "game_screen"
             and codepoint in keys
-            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
+            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus
         ):
             self.ids.enigma_keyboard.ids.keyboard.ids[
                 codepoint.upper()
@@ -174,11 +174,11 @@ class GameScreen(Screen):
         )
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
-        board_input = self.ids.enigma_keyboard.ids.lamp_board.ids.board_input
+        board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
 
-        if not board_input.focus:
-            board_input.insert_text(key.name)
-        store_put(current_output_text=board_input.text)
+        if not board_output.focus:
+            board_output.insert_text(key.name)
+        store_put(current_output_text=board_output.text)
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id
