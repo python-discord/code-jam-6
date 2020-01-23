@@ -32,21 +32,23 @@ class Paper(RelativeLayout):
             ]
         game = store.get(game_id)
         cipher_text = game["ciphered_text"]
-        current_state = game["encrypted_state"]
-        plugs = current_state["plugs"]
+        encrypted_state = game["encrypted_state"]
+        plugs = encrypted_state["plugs"]
         plug_settings = " ".join(x for x in plugs)
         rotor_settings = "I II III"
         rotors = ""
-        for x in store.get(game_id)["current_state"]["rotors"]:
+        for i, x in enumerate(encrypted_state["rotors"]):
             if x is None:
                 continue
             rotors += x
+            if i % 2 == 0:
+                rotors += " "
 
         input_data = [
             {"text": f"Plugboard:\n{plug_settings}"},
             {"text": f"Rotors:\n{rotor_settings}"},
             {"text": f"Rotor settings:\n{rotors}"},
-            {"text": f"Ciphertext:\n{cipher_text}"},
+            {"text": f"Cipher text to decrypt:\n{cipher_text}"},
         ]
         return input_data
 
