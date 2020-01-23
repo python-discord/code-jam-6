@@ -1,4 +1,4 @@
-name: Python style check
+name: Flake8 check
 
 on: [push]
 
@@ -8,8 +8,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Black Code Formatter
-        uses: lgeiger/black-action@v1.0.1
+      - uses: actions/checkout@v1
       - name: Flake8 checker
         uses: cclauss/Find-Python-syntax-errors-action@v0.2.0
