@@ -1,4 +1,3 @@
-import random
 import kivy
 kivy.require('1.11.1') # noqa
 
@@ -7,7 +6,11 @@ from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.clock import Clock
-from kivy.graphics import Color, Line
+from kivy.graphics import Color, Mesh, Rotate
+
+import math
+import random
+from typing import List
 
 
 class Sky(Widget):
@@ -61,7 +64,7 @@ class FlockOfBirds(Widget):
             source=self.sprite_path + f"bird-{self.frame_id}")
 
         self.sprite.size = self.sprite.texture_size
-        self.sprite.pos = (1200, 500)
+        self.sprite.pos = (1200, 400)
         self.add_widget(self.sprite)
 
     def update(self, dt):
@@ -124,12 +127,33 @@ class MirrorCannon(Widget):
         super(MirrorCannon, self).__init__(**kwargs)
 
         self._angle = 75
+
+        # Mirror centre position with respect to the image
+        self._mirror_center = (97, 78)
+        self.mirror_diameter = 80
+
         self.sprite_path = "atlas://assets/images/mirror_cannon/"
         self.sprite = Image(
             source=self.sprite_path + f"angle-{self._angle}")
         self.sprite.size = self.sprite.texture_size
         self.sprite.pos = (150, 260)
         self.add_widget(self.sprite)
+
+
+    # A property which returns mirror centre position w.r.t the window origin
+    @property
+    def mirror_center(self):
+        return (self.sprite.pos[0]+self._mirror_center[0],
+                self.sprite.pos[1]+self._mirror_center[1])
+
+    @property
+    def mirror_axis_line(self):
+        x1, y1 = self.mirror_center
+        x2 = x1 + round( 0.5*self.mirror_diameter*math.cos(math.radians(self._angle)))
+        y2 = y1 + round(0.5*self.mirror_diameter*math.sin(math.radians(self._angle)))
+        x3 = x1 - round( 0.5*self.mirror_diameter*math.cos(math.radians(self._angle)))
+        y3 = y1 - round(0.5*self.mirror_diameter*math.sin(math.radians(self._angle)))
+        return (x3,y3,x2,y2)
 
     @property
     def angle(self):
@@ -149,12 +173,28 @@ class MirrorCannon(Widget):
         self.sprite.source = self.sprite_path + f"angle-{self._angle}"
 
 
-def SunRays(Widget):
+class LightRays(Mesh):
 
     def __init__(self, **kwargs):
-        super(SunRays, self).__init__(**kwargs)
-        pass
+        super(LightRays, self).__init__(**kwargs)
+        self.color = Color(01.0, 0.98, 0.1, 0.65)
+        self.vertices = []
+        self.indices = []
+        self.mode = 'traingle_fan'
 
+
+    def trace(self, point_pos, reflection_surface):
+        # Compute the vertices for sunray mesh 
+        x3, y3 = point_pos
+        x1, y1, x2, y2 = reflection_surface
+
+        self.indices = [0, 1, 2]
+        self.vertices = []
+
+        # vertices for the incident sun rays
+        self.vertices.extend([x1, y1, x2, y2])
+        self.vertices.extend([x2, y2, x3, y3])
+        self.vertices.extend([x3, y3, x1, y1])
 
 class GameWorld(Widget):
 
@@ -166,12 +206,27 @@ class GameWorld(Widget):
         self.add_widget(self.sun)
         self.birds = FlockOfBirds()
         self.add_widget(self.birds)
+
         self.sea = Sea()
         self.add_widget(self.sea)
         self.add_widget(Island())
         self.mirror_cannon = MirrorCannon()
         self.add_widget(self.mirror_cannon)
+
+        # create sun_rays
+        self.sun_rays = LightRays()
+        self.canvas.add(self.sun_rays.color)
+        self.canvas.add(self.sun_rays)
+
+        # create death_rays
+        self.death_rays = LightRays()
+        self.canvas.add(self.death_rays.color)
+        self.canvas.add(self.death_rays)
+
+        # Set update rate of the game to 60 times per second
         Clock.schedule_interval(self.update, 1/60)
+
+        # Initialize the Keybaord for game input
         self.getKeyboard()
 
     def getKeyboard(self):
@@ -191,18 +246,22 @@ class GameWorld(Widget):
         if keycode[1] == 's':
             self.mirror_cannon.decrease_angle()
 
+
     def update(self, dt):
         self.mirror_cannon.update(dt)
         self.sea.update(dt)
         self.sun.update(dt)
         self.birds.update(dt)
 
-        x1, y1 = self.sun.sprite.pos[0]+100, self.sun.sprite.pos[1]+100
-        x2, y2 = self.mirror_cannon.sprite.pos[0]+97, self.mirror_cannon.sprite.pos[1]+80+80/2
-        x3, y3 = self.mirror_cannon.sprite.pos[0]+97, self.mirror_cannon.sprite.pos[1]+78-80/2
+        # Trace the light rays from the sun to the mirror
+        origin = self.sun.sprite.pos[0]+100, self.sun.sprite.pos[1]+100
+        surface = self.mirror_cannon.mirror_axis_line
+        self.sun_rays.trace(origin, surface)
 
-        self.canvas.add(Color(1, 1, 0, 0.125))
-        self.canvas.add(Line(points=[x1, y1, x2, y2, x3, y3, x1, y1], width=1.5, closed=True))
+        # Trace the death rays from the mirror and focus to a point
+        focus = (800, 150)
+        surface = self.mirror_cannon.mirror_axis_line
+        self.death_rays.trace(focus, surface)
 
 
 class GameApp(App):
