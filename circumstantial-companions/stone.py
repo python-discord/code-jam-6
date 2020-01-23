@@ -203,15 +203,11 @@ class Chisel(Widget):
                                          velocity)
 
     def on_touch_down(self, touch):
-        if not self.collide_point(*touch.pos):
-            return False
         self.poke(touch)
         self.sound.play()
         return True
 
     def on_touch_move(self, touch):
-        if not self.collide_point(*touch.pos):
-            return False
         self.poke(touch)
         return True
 
