@@ -4,6 +4,7 @@ Re-invent the wheel with this (rock)cutting-edge simulation! FASTER SWING = MORE
 """
 from kivy.app import App
 from kivy.core.image import Image as CoreImage
+from kivy.core.window import Window
 from kivy.graphics import Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -108,7 +109,7 @@ class ChiselApp(App):
         options_panel.build()
 
         root.add_widget(navdrawer)
-        root.add_widget(Cursor())
+        Window.add_widget(Cursor(), "after")
         return root
 
 
