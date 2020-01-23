@@ -145,7 +145,6 @@ class Chisel(Widget):
         with self.canvas.before:
             Color(0.4, 0.4, 0.4, 1)
             self.bg_rect = Rectangle(texture=texture)
-            self._update_bg_rect(self)
 
     def _get_uvsize(self):
         texture = self.bg_rect.texture
@@ -204,11 +203,15 @@ class Chisel(Widget):
                                          velocity)
 
     def on_touch_down(self, touch):
+        if not self.collide_point(*touch.pos):
+            return False
         self.poke(touch)
         self.sound.play()
         return True
 
     def on_touch_move(self, touch):
+        if not self.collide_point(*touch.pos):
+            return False
         self.poke(touch)
         return True
 
