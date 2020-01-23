@@ -1,7 +1,6 @@
 import os
 
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.relativelayout import RelativeLayout
 

@@ -8,6 +8,27 @@ DATA_DIR = os.path.join(
 )
 
 
+# Yes it's a duplicate but Kivy is giving me some stupid error.
+# So it's also here now.
+def on_config_change():
+    store = JsonStore(DATA_DIR)
+    game_id = str(App.get_running_app().game_id)
+    plugs = store.get(game_id)["current_state"]["plugs"]
+    plug_settings = " ".join(x for x in plugs)
+    App.get_running_app().machine.from_key_sheet(
+        rotors="I II III",
+        reflector="B",
+        ring_settings=[1, 20, 11],
+        plugboard_settings=plug_settings,
+    )
+    rotors = ""
+    for x in store.get(game_id)["current_state"]["rotors"]:
+        if x is None:
+            continue
+        rotors += x
+    App.get_running_app().machine.set_display(rotors)
+
+
 def store_put(
     game_id=None,
     game_title: str = None,
@@ -70,3 +91,13 @@ def save_plugs(unfilter_plugs: list):
     current_state = store.get(game_id)["current_state"]
     current_state["plugs"] = plugs
     store_put(current_state=current_state)
+    on_config_change()
+
+
+def save_rotors(one: str, two: str, three: str):
+    store = JsonStore(DATA_DIR)
+    game_id = str(App.get_running_app().game_id)
+    current_state = store.get(game_id)["current_state"]
+    current_state["rotors"] = [one, two, three, None, None]
+    store_put(current_state=current_state)
+    on_config_change()
