@@ -1,34 +1,12 @@
 import random
 import logging
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Union, Tuple, List, Type
 
 logger = logging.getLogger(__name__)
 
 
-class CaveManGame(ABC):
-    """
-    This class defines game states that should be easily exposed trough GameState object as
-    they are more important then the others.
-    """
-    @property
-    @abstractmethod
-    def player_health(self):
-        ...
-
-    @property
-    @abstractmethod
-    def player_water(self):
-        ...
-
-    @property
-    @abstractmethod
-    def player_food(self):
-        ...
-
-
-class GameState(CaveManGame):
+class GameState:
     """
     Class that handles state interactions.
     Currently 3 type of states are supported: int, float and bool.
