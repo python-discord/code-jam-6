@@ -3,6 +3,7 @@ from random import randint
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, SHIP_IMAGE_MAPPING,
                                 WINDOW_WIDTH, WINDOW_HEIGHT, LANE_LENGTHS)
+from .ship_view import ShipView
 
 from kivy.animation import Animation
 from kivy.core.window import Window
@@ -101,17 +102,19 @@ class GameView(Widget):
             Logger.debug(f'Add ship at lane: {lane}')
             # find in free ship list
             ship_view = None
-            img_source = ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type])
+            # img_source = ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type])
             for f in self.free_ships:
-                if f.source == img_source:
+                if f.core._type == ship._type:
                     Logger.debug(f'Found free ship, not need allocate one')
                     ship_view = f
                     ship_view.pos = (WINDOW_WIDTH + 100, 50 * lane)
+                    ship_view.core.health = 100
                     self.free_ships.remove(f)
                     break
             if ship_view is None:
-                ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=img_source)
-                ship_view.size = ship_view.texture_size
+                # ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=img_source)
+                # ship_view.size = ship_view.texture_size
+                ship_view = ShipView(ship, pos=(WINDOW_WIDTH + 100, 50 * lane))
             lane_length = LANE_LENGTHS[lane]
             duration = lane_length / (ship.speed * 10.)
             ship_move_animation = Animation(x=WINDOW_WIDTH - lane_length, duration=duration)

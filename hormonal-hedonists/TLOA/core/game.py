@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER
 from TLOA.entities import MirrorCannon
 from TLOA.entities import GoldenShip, BrownShip, ShipType
@@ -59,11 +57,11 @@ class Game(EventDispatcher):
     def on_ship_destroyed(self, ship, new_state):
         if new_state:
             self.score += SHIP_SCORE[ship._type]
-            # ship is destroyed, remove it from view
             Logger.debug('Remove ship')
             for ship_info in self.ships:
                 if ship_info[0] == ship:
                     self.ships.remove(ship_info)
+            # TODO remove it from view
 
     def on_health(self, obj, value):
         Logger.debug(f'Island health: {value}')
