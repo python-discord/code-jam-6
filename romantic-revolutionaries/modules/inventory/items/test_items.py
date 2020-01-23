@@ -37,14 +37,18 @@ class TestStackableItems(unittest.TestCase):
 
     def test_add_item(self):
         self.item + 1
+        self.assertEqual(self.item.count, 2, msg="Add one item")
 
-        self.assertEqual(self.item.count, 2)
+        self.item + 10
+        self.assertEqual(self.item.count, 12, msg="Add multiple items")
 
     def test_subtract_item(self):
-        self.item.count = 2
+        self.item.count = 4
         self.item - 1
+        self.assertEqual(self.item.count, 3, msg="Subtract 1 item")
 
-        self.assertEqual(self.item.count, 1)
+        self.item - 2
+        self.assertEqual(self.item.count, 1, msg="Subtract multiple items")
 
     def test_negative_subtract(self):
         with self.assertRaises(ValueError):

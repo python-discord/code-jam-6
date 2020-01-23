@@ -2,6 +2,14 @@ from abc import ABC, abstractmethod
 
 
 class Item(ABC):
+    def __repr__(self):
+        return f"<{self.__class__.__name__} count={self.count}>"
+
+    @property
+    @abstractmethod
+    def count(self):
+        pass
+
     @property
     @abstractmethod
     def characteristic(self):
@@ -28,13 +36,19 @@ class StackableItem(Item, ABC):
         self._count = count
 
     def __add__(self, other: int):
-        self._count += 1
+        if not isinstance(other, int):
+            raise ValueError("You can only add an int to an item")
+
+        self._count += other
 
         return self._count
 
     def __sub__(self, other: int):
-        if self._count - 1 > 0:
-            self._count -= 1
+        if not isinstance(other, int):
+            raise ValueError("You can only subtract an int to an item")
+
+        if self._count - other > 0:
+            self._count -= other
         else:
             raise ValueError("Item count can not drop below 0")
 
@@ -50,4 +64,4 @@ class NonStackableItem(Item, ABC):
         raise ValueError("Can not add to an un-stackable item")
 
     def __sub__(self, other):
-        raise ValueError("Can not subtract from an un-stackable item")
+        raise ValueError("Can not subtract to an un-stackable item")
