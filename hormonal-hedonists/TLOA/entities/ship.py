@@ -27,6 +27,10 @@ class Ship(Entity):
                                     errorhandler=lambda x: MIN_RES if x < MIN_RES else MAX_RES)
     destroyed = BooleanProperty(False)
 
+    def reset_status(self):
+        self.health = MAX_HEALTH
+        self.destroyed = False
+
     def take_damage(self, damage: int):
         # calculate health base on fire resistance. Can improve later
         health -= int(damage / self.fire_resistance)

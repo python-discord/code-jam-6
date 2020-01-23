@@ -53,9 +53,13 @@ class Game(EventDispatcher):
         new_ship.bind(destroyed=self.on_ship_destroyed)
         self.ships.append((new_ship, ship_lane))
         self.view.show_ship(new_ship, ship_lane)
+        # TODO remove this test code
+        def drain_hp(dt):
+            new_ship.health -= 10
+        Clock.schedule_interval(drain_hp, 0.75)
 
-    def on_ship_destroyed(self, ship, new_state):
-        if new_state:
+    def on_ship_destroyed(self, ship, is_destroyed):
+        if is_destroyed:
             self.score += SHIP_SCORE[ship._type]
             Logger.debug('Remove ship')
             for ship_info in self.ships:
