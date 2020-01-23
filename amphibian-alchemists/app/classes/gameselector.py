@@ -10,14 +10,10 @@ from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import Screen
 
-DATA_DIR = os.path.join(
-    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
-)
+DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
 
 
-class SelectableRecycleBoxLayout(
-    FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout
-):
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
     """ Adds selection and focus behaviour to the view. """
 
 
@@ -43,11 +39,8 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
-        self.selected = is_selected
-        if is_selected:
-            print("selection changed to {0}".format(rv.data[index]))
-        else:
-            print("selection removed for {0}".format(rv.data[index]))
+        # App.get_running_app().game_id = index
+        print(index)
 
 
 class GameSelectorScreen(Screen):
@@ -55,24 +48,17 @@ class GameSelectorScreen(Screen):
         if not os.path.exists(DATA_DIR):
             store = JsonStore(DATA_DIR)
             store.put("latest_game_id", id=None)
-        self.populate()  # FIXME: this is going to be called whenever you enter on the screen
+        self.populate()
 
     def populate(self):
         store = JsonStore(DATA_DIR)
-        latest_game_id = int(store.get("latest_game_id")["id"])
-        for x in range(latest_game_id):
-            game = store.get(str(x))
-            title = game["game_title"]
-            created = str(game["created_date"])
-            last_saved = str(game["last_saved_date"])
-            self.ids.rv.data.append({
-                "value": f"{title}\n"
-                         f"Created: {created}\n"
-                         f"Last Saved: {last_saved}"
-            })
-
-    def start_new_game(self):
-        print(1)
-
-    def load_game(self):
-        print(1)
+        latest_game_id = store.get("latest_game_id")["id"]
+        if latest_game_id is not None:
+            for x in range(int(latest_game_id)):
+                game = store.get(str(x))
+                title = game["game_title"]
+                created = str(game["created_date"])
+                last_saved = str(game["last_saved_date"])
+                self.ids.rv.data.append(
+                    {"value": f"{title}\n" f"Created: {created}\n" f"Last Saved: {last_saved}"}
+                )

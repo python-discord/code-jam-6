@@ -26,15 +26,12 @@
             spacing: dp(16)
             Button:
                 text: "Go back"
-                on_press:
-                    root.manager.transition.direction = "left"
-                    root.manager.current = "main_screen"
+                on_release: root.manager.current = "main_screen"
             Button:
                 text: "Load game"
-                on_press: root.load_game
+                on_release: root.manager.current = "game_screen"
             Button:
                 text: "New game"
-                on_press: root.start_new_game
                 on_release: root.manager.current = "game_screen"
 
     AnchorLayout:
@@ -46,7 +43,7 @@
             viewclass: "SelectableLabel"
             size_hint: 0.8, 0.5
             SelectableRecycleBoxLayout:
-                default_size: None, dp(56)
+                default_size: None, dp(70)
                 default_size_hint: 1, None
                 size_hint_y: None
                 height: self.minimum_height
