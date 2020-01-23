@@ -36,7 +36,7 @@ def pebble_setup():
     pebbles_per_line = int(PEBBLE_COUNT**.5)
     scale = 1 / pebbles_per_line
     x_scale = y_scale = .75
-    x_offset, y_offset = (1 - x_scale) / 2, .001
+    x_offset, y_offset = (1 - x_scale) / 2, .01
 
     with Image.open(PEBBLE_IMAGE) as image:
         w, h = image.size
