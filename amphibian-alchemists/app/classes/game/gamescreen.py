@@ -10,13 +10,42 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
+from kivy.uix.textinput import TextInput
 from requests import get
 
-from .save_game import store_put, on_config_change
+from .save_game import on_config_change, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
 )
+keys = {
+    "q",
+    "w",
+    "e",
+    "r",
+    "t",
+    "z",
+    "u",
+    "i",
+    "o",
+    "a",
+    "s",
+    "d",
+    "f",
+    "g",
+    "h",
+    "j",
+    "k",
+    "p",
+    "y",
+    "x",
+    "c",
+    "v",
+    "b",
+    "n",
+    "m",
+    "l",
+}
 
 
 def get_wiki_summary() -> str:
@@ -93,6 +122,15 @@ def setup_new_game_settings():
     )
 
 
+class EnigmaInput(TextInput):
+    def insert_text(self, substring, from_undo=False):
+        if substring.lower() in keys:
+            s = App.get_running_app().machine.key_press(substring.upper())
+        else:
+            s = substring
+        return super().insert_text(s, from_undo=from_undo)
+
+
 class GameScreen(Screen):
     """Do we automatically assume new game or should we save?"""
 
@@ -117,34 +155,6 @@ class GameScreen(Screen):
             on_config_change()
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
-        keys = {
-            "q",
-            "w",
-            "e",
-            "r",
-            "t",
-            "z",
-            "u",
-            "i",
-            "o",
-            "a",
-            "s",
-            "d",
-            "f",
-            "g",
-            "h",
-            "j",
-            "k",
-            "p",
-            "y",
-            "x",
-            "c",
-            "v",
-            "b",
-            "n",
-            "m",
-            "l",
-        }
         if (
             self.manager.current == "game_screen"
             and codepoint in keys
@@ -168,7 +178,6 @@ class GameScreen(Screen):
 
         if not board_input.focus:
             board_input.insert_text(key.name)
-        App.get_running_app().machine.key_press(key.name)
         store_put(current_output_text=board_input.text)
 
     def load_old_game(self):
