@@ -16,7 +16,6 @@ from mixins import RepeatingBackground
 
 GRAVITY = .02
 FRICTION = .9
-CHISEL_RADIUS = 6e-4
 DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .1
 
@@ -26,17 +25,16 @@ PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_SEGMENTS = 4
 PEBBLE_IMAGE_SCALE = .75
 
-POWER_SCALE = 1e2
 MIN_POWER = 1e-5
 
-CHISEL_RADIUS_RANGE = (0, 100)
-DEFAULT_CHISEL_RADIUS = 15
-CHISEL_POWER_RANGE = (0, 100)
-DEFAULT_CHISEL_POWER = 45
+CHISEL_RADIUS_RANGE = (3e-4, 5e-3)
+DEFAULT_CHISEL_RADIUS = 6e-4
+CHISEL_POWER_RANGE = (50, 500)
+DEFAULT_CHISEL_POWER = 100
 
 def get_pebble_radius(width, height):
     scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .36
+    radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .37
     return radius
 
 def pebble_setup():
@@ -125,11 +123,9 @@ class Chisel(RepeatingBackground, Widget):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.resize_event = Clock.schedule_once(lambda dt:None, 0)
-        self.setup_background("assets/img/chisel_background.png", 0.1, (0.4, 0.4, 0.4, 1))
+        self.setup_background("assets/img/chisel_background.png", 0.3, (0.4, 0.4, 0.4, 1))
         self.sound = SoundLoader.load('dig.wav')
 
-        # TODO: Implement adjustable chisel radius and power
         self.set_radius(DEFAULT_CHISEL_RADIUS)
         self.set_power(DEFAULT_CHISEL_POWER)
 
@@ -144,17 +140,19 @@ class Chisel(RepeatingBackground, Widget):
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
-                self.circles.append(Line(circle=(x * self.width, y * self.height,
-                                                 pebble_radius, 0, 360, PEBBLE_SEGMENTS),
-                                         width=pebble_radius))
+                scaled_x = x * self.width
+                scaled_y = y * self.height
+                circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
+                self.circles.append(Line(circle=circle, width=pebble_radius))
 
     def resize(self, instance, value):
         self.update_background(instance, value)
-        self.pebble_radius = get_pebble_radius(self.width, self.height)
+        pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
-            self.circles[i].width = self.pebble_radius
-            self.circles[i].circle = (x * self.width, y * self.height,
-                                      self.pebble_radius, 0, 360, PEBBLE_SEGMENTS)
+            self.circles[i].width = pebble_radius
+            scaled_x = x * self.width
+            scaled_y = y * self.height
+            self.circles[i].circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
 
     def poke_power(self, touch, pebble_x, pebble_y):
         """
@@ -164,13 +162,13 @@ class Chisel(RepeatingBackground, Widget):
         dx, dy = pebble_x - tx, pebble_y - ty
         distance = dx**2 + dy**2
 
-        if distance > CHISEL_RADIUS:
+        if distance > self.chisel_radius:
             return 0.0, 0.0
         if not distance:
             distance = .0001
 
         tdx, tdy = touch.dsx, touch.dsy
-        power = max(POWER_SCALE * (tdx**2 + tdy**2), MIN_POWER) / distance
+        power = max(self.chisel_power * (tdx**2 + tdy**2), MIN_POWER) / distance
         return power * dx, power * dy
 
     def poke(self, touch):
@@ -196,11 +194,9 @@ class Chisel(RepeatingBackground, Widget):
         self.setup_canvas()
 
     def set_radius(self, value):
-        print("TODO: Chisel.set_radius(self, value)")
         self.chisel_radius = value
 
     def set_power(self, value):
-        print("TODO: Chisel.set_power(self, value)")
         self.chisel_power = value
 
 
