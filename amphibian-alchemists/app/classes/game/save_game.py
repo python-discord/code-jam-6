@@ -21,6 +21,7 @@ def store_put(
     current_state=None,
     last_saved_state=None,
 ):
+    """Assumes game already started."""
     if game_id is None:
         game_id = str(App.get_running_app().game_id)
     store = JsonStore(DATA_DIR)
@@ -58,3 +59,14 @@ def store_put(
         current_state=current_state,
         last_saved_state=last_saved_state,
     )
+
+
+def save_plugs(unfilter_plugs: list):
+    plugs = []
+    for x in range(int(len(unfilter_plugs) / 2)):
+        plugs.append(unfilter_plugs[x * 2] + unfilter_plugs[x * 2 + 1])
+    store = JsonStore(DATA_DIR)
+    game_id = str(App.get_running_app().game_id)
+    current_state = store.get(game_id)["current_state"]
+    current_state["plugs"] = plugs
+    store_put(current_state=current_state)

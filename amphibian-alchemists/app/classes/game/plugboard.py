@@ -2,6 +2,8 @@ from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.uix.screenmanager import Screen
 
+from .save_game import save_plugs
+
 
 class PlugboardScreen(Screen):
     plugs_in_screen = BoundedNumericProperty(0, min=0, max=20)
@@ -48,6 +50,8 @@ class PlugboardScreen(Screen):
             else:
                 self.ids.remove_plug.disabled = True
             self.plugs_in_screen += 1
+            if len(self.all_plugged) % 2 == 0:
+                save_plugs(self.all_plugged)
 
     def handle_plug_release(self, instance):
         if instance.name not in self.all_plugged:
@@ -63,6 +67,7 @@ class PlugboardScreen(Screen):
             del self.plug_reference[-2:]
             del self.all_plugged[-2:]
             self.plugs_in_screen -= 2
+            save_plugs(self.all_plugged)
 
     def on_plughole_recenter(self, instance, value):
         if self.manager.current == "plugboard_screen" and self.all_plugged:
@@ -91,3 +96,4 @@ class PlugboardScreen(Screen):
             del self.plug_reference[-1]
             del self.all_plugged[-1]
             self.plugs_in_screen -= 1
+            save_plugs(self.all_plugged)
