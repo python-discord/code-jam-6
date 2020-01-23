@@ -5,14 +5,14 @@ from kivy.uix.widget import Widget
 
 class CursorImage(Image):
     def __init__(self):
-        super().__init__(source="MouseCursor/hammerUp.png")
+        super().__init__(source="assets/img/cursor/hammer_up.png")
         self.size = (40, 40 / self.image_ratio)
 
     def on_touch_down(self, touch):
-        self.source = "MouseCursor/hammerDown.png"
+        self.source = "assets/img/cursor/hammer_down.png"
 
     def on_touch_up(self, touch):
-        self.source = "MouseCursor/hammerUp.png"
+        self.source = "assets/img/cursor/hammer_up.png"
 
 
 

@@ -19,7 +19,7 @@ FRICTION = .9
 DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .1
 
-PEBBLE_IMAGE = 'boulder.png'
+DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
 PEBBLE_COUNT = 1.5e4
 PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_SEGMENTS = 4
@@ -44,7 +44,7 @@ def pebble_setup():
     scale = 1 / PEBBLES_PER_LINE
     x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .01 # Lower-left corner offset of image
 
-    with Image.open(PEBBLE_IMAGE) as image:
+    with Image.open(DEFAULT_PEBBLE_IMAGE) as image:
         w, h = image.size
         image = np.frombuffer(image.tobytes(), dtype=np.uint8)
 
@@ -124,7 +124,7 @@ class Chisel(RepeatingBackground, Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setup_background("assets/img/chisel_background.png", 0.3, (0.4, 0.4, 0.4, 1))
-        self.sound = SoundLoader.load('dig.wav')
+        self.sound = SoundLoader.load('assets/sounds/dig.wav')
 
         self.set_radius(DEFAULT_CHISEL_RADIUS)
         self.set_power(DEFAULT_CHISEL_POWER)
