@@ -5,6 +5,7 @@ simulation! A caveman workout routine guaranteed to give you chiseled slabs fast
 """
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.metrics import sp
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
@@ -58,30 +59,58 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         if locale in LOCALES:
             TRANSLATIONS[locale].install()
         else:
+            locale = DEFAULT_LOCALE
             TRANSLATIONS[DEFAULT_LOCALE].install()
+
+        font = LOCALES[locale]["font"]
+
+        # Title
+        title = Label(
+            text=_("Options"),
+            font_name=font,
+            font_size=sp(40),
+            size_hint=(1, 0.1),
+        )
 
         # Language selection
         self.dropdown = DropDown()
-        for locale_code, locale_name in LOCALES.items():
-            btn = Button(text=locale_name, size_hint_y=None, height=20)
+        for locale_code, locale_info in LOCALES.items():
+            btn = Button(
+                text=locale_info["name"],
+                font_name=font,
+                size_hint_y=None,
+                height=20
+            )
 
             def _make_select_function(locale_code):
                 return lambda btn: self.dropdown.select(locale_code)
 
             btn.bind(on_release=_make_select_function(locale_code))
             self.dropdown.add_widget(btn)
-        dropdown_btn = Button(text=_("Select language"), size_hint=(1, 0.1))
+        dropdown_btn = Button(
+            text=_("Select language"),
+            font_name=font,
+            font_size=sp(30),
+            size_hint=(1, 0.1),
+        )
         dropdown_btn.bind(on_release=self.dropdown.open)
         self.dropdown.bind(on_select=lambda instance, locale: self.build(locale))
 
-        reset_btn = Button(text=_("Reset"), size_hint=(1, 0.1))
+        # Reset
+        reset_btn = Button(
+            text=_("Reset"),
+            font_name=font,
+            font_size=sp(30),
+            size_hint=(1, 0.1),
+        )
         reset_btn.bind(on_release=lambda btn: self.chisel.reset())
 
+        # Sliders
         slider_layout = BoxLayout(orientation="horizontal", spacing=10, size_hint=(1, 0.7))
         slider_layout.add_widget(ChiselRadiusSlider(self.chisel))
         slider_layout.add_widget(ChiselPowerSlider(self.chisel))
 
-        self.add_widget(Label(text=_("Options"), size_hint=(1, 0.1)))
+        self.add_widget(title)
         self.add_widget(dropdown_btn)
         self.add_widget(reset_btn)
         self.add_widget(slider_layout)

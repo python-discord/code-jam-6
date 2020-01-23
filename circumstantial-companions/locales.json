@@ -1,7 +1,22 @@
 {
-    "en_US": "English (United States)",
-    "en_GB": "English (United Kingdom)",
-    "ja_JP": "Japanese",
-    "zh_CN": "Chinese (Simplified)",
-    "zh_TW": "Chinese (Traditional)"
+    "en_US": {
+        "name": "English (United States)",
+        "font": "assets/ttf/kirsty_rg.ttf"
+    },
+    "en_GB": {
+        "name": "English (United Kingdom)",
+        "font": "assets/ttf/kirsty_rg.ttf"
+    },
+    "ja_JP": {
+        "name": "Japanese",
+        "font": "assets/ttf/keifont.ttf"
+    },
+    "zh_CN": {
+        "name": "Chinese (Simplified)",
+        "font": "assets/ttf/zcool_kuaile_rg.ttf"
+    },
+    "zh_TW": {
+        "name": "Chinese (Traditional)",
+        "font": "assets/ttf/han_wang_yan_kai.ttf"
+    }
 }
