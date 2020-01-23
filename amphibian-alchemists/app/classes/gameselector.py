@@ -57,14 +57,18 @@ class GameSelectorScreen(Screen):
         self.populate()  # FIXME: this is going to be called whenever you enter on the screen
 
     def populate(self):
-        from string import ascii_lowercase
-        from random import sample
-
-        self.rv.data = [
-            {"value": "".join(sample(ascii_lowercase, 6))} for x in range(50)
-        ]
         store = JsonStore(DATA_DIR)
-        store.get("latest_game_id")["id"]
+        latest_game_id = int(store.get("latest_game_id")["id"])
+        for x in range(latest_game_id):
+            game = store.get(str(x))
+            title = game["game_title"]
+            created = str(game["created_date"])
+            last_saved = str(game["last_saved_date"])
+            self.ids.rv.data.append({
+                "value": f"{title}\n"
+                         f"Created: {created}\n"
+                         f"Last Saved: {last_saved}"
+            })
 
     def start_new_game(self):
         print(1)
