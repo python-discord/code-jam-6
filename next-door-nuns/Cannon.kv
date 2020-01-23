@@ -4,23 +4,39 @@ FloatLayout:
 
     Button:
         text: "Fire!"
-        size_hint: (0.2, 0.1)
-        pos_hint: {"x": 0.0, "y":0.5}
+        size_hint: (0.2, 0.05)
+        pos_hint: {"x": 0.0, "y":0.55}
         on_press:
             root.ids.cannon.fire_cannon()
     Label:
         text: "Enter Velocity Here:"
-        size_hint: (0.3, 0.1)
-        pos_hint: {"x":0.0, "y":0.8}
+        size_hint: (0.3, 0.05)
+        pos_hint: {"x":0.0, "y":0.9}
 
     TextInput:
         id: velocity
-        size_hint: (0.3, 0.1)
-        pos_hint: {"x": 0.0, "y":0.7}
+        size_hint: (0.3, 0.05)
+        pos_hint: {"x": 0.0, "y":0.85}
     Button:
         text: "Submit"
-        size_hint: (0.2, 0.1)
-        pos_hint: {"x": 0.0, "y":0.9}
+        size_hint: (0.2, 0.05)
+        pos_hint: {"x": 0.0, "y":0.8}
         on_press:
             root.ids.cannon.set_velocity(root.ids.velocity.text)
             root.ids.velocity.text = ""
+    Label:
+        text: "Enter Angle Here:"
+        size_hint: (0.3, 0.05)
+        pos_hint: {"x":0.0, "y":0.7}
+
+    TextInput:
+        id: angle
+        size_hint: (0.3, 0.05)
+        pos_hint: {"x": 0.0, "y":0.65}
+    Button:
+        text: "Submit"
+        size_hint: (0.2, 0.05)
+        pos_hint: {"x": 0.0, "y":0.6}
+        on_press:
+            root.ids.cannon.set_angle(root.ids.angle.text)
+            root.ids.angle.text = ""

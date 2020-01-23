@@ -9,6 +9,7 @@ class Cannon(Widget):
     def __init__(self, **kwargs):
         super(Cannon, self).__init__(**kwargs)
         self.velocity = 0
+        self.angle = 30
         with self.canvas:
             self.cannon = Rectangle(size=(50, 50))
             self.cannonball = Rectangle(pos=(1000, 1000), size=(5, 5))
@@ -18,12 +19,15 @@ class Cannon(Widget):
             if int(velocity) > 0:
                 self.velocity = int(velocity)
                 print(self.velocity)
-
+    def set_angle(self, angle):
+        if int(angle):
+            if -1 < int(angle) <= 90:
+                self.angle = int(angle)
     def fire_cannon(self):
         self.cannonball.pos = (50, 50)
         self.velocity_clock = Clock.schedule_interval(self.drop, 0.1)
-        self.velocity_y = self.velocity
-        self.velocity_x = self.velocity
+        self.velocity_y = self.velocity * (self.angle/90)
+        self.velocity_x = self.velocity - self.velocity_y
     def drop(self, dt):
 
         if self.velocity_x >= 0:
