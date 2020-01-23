@@ -1,7 +1,6 @@
 import os
 
 from kivy.app import App
-from kivy.clock import Clock
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.relativelayout import RelativeLayout
 
@@ -37,10 +36,14 @@ class Paper(RelativeLayout):
                 rotors += " "
 
         input_data = [
-            {"text": f"Plugboard:\n{plug_settings}"},
-            {"text": f"Rotors:\n{rotor_settings}"},
-            {"text": f"Rotor settings:\n{rotors}"},
-            {"text": f"Cipher text to decrypt:\n{cipher_text}"},
+            {"text": "Plugboard:"},
+            {"text": plug_settings},
+            {"text": "Rotors:"},
+            {"text": rotors},
+            {"text": "Rotor settings:"},
+            {"text": rotor_settings},
+            {"text": "Ciphertext:"},
+            {"text": cipher_text},
         ]
         return input_data
 
