@@ -48,6 +48,19 @@
         Rectangle:
             size: self.size
             pos: self.pos
+    BoxLayout:
+        orientation: 'vertical'
+        OperationButton:
+            text: '+'
+        OperationButton:
+            text: '-'
+        OperationButton:
+            text: '*'
+        OperationButton:
+            text: '/'
+        OperationButton:
+            text: 'sqrt'
+
 
 <CuneiformDrawingInput>:
     canvas.before:
@@ -83,3 +96,9 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: self.parent.size
+
+
+<OperationButton>:
+    Button:
+        size: self.parent.width, self.parent.height / 5
+        x: self.parent.x
