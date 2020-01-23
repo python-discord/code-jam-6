@@ -9,5 +9,5 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Flake8 checker
-        uses: cclauss/Find-Python-syntax-errors-action@v0.2.0
+      - name: Black Code Formatter
+        uses: lgeiger/black-action@v1.0.1
