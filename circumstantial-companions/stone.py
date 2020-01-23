@@ -21,7 +21,6 @@ DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .1
 
 PEBBLE_IMAGE = 'boulder.png'
-PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 1.5e4
 PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_SEGMENTS = 4
@@ -37,7 +36,7 @@ DEFAULT_CHISEL_POWER = 45
 
 def pebble_radius(width, height):
     scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    radius = 1.3 * max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE)
+    radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .36
     return radius
 
 def pebble_setup():
@@ -115,6 +114,7 @@ class Pebble:
         self.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
 
         scaled_x, scaled_y = self.x * self.x_dim, self.y * self.y_dim
+        self.circles[self.index].width = self.stone.radius
         self.circles[self.index].circle = (scaled_x, scaled_y,
                                            self.stone.radius, 0, 360, PEBBLE_SEGMENTS)
 
@@ -143,8 +143,8 @@ class Chisel(RepeatingBackground, Widget):
                 Color(*color)
                 self.positions.append((x, y))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
-                                                 self.radius, 0, 360, PEBBLE_SEGMENTS),
-                                         width=self.radius))
+                                                 radius, 0, 360, PEBBLE_SEGMENTS),
+                                         width=radius))
 
         # TODO: Implement adjustable chisel radius and power
         self.set_radius(DEFAULT_CHISEL_RADIUS)
@@ -152,7 +152,9 @@ class Chisel(RepeatingBackground, Widget):
 
     def resize(self, instance, value):
         self.update_background(instance, value)
+        self.radius = pebble_radius(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
+            self.circles[i].width = self.radius
             self.circles[i].circle = (x * self.width, y * self.height,
                                       self.radius, 0, 360, PEBBLE_SEGMENTS)
 
