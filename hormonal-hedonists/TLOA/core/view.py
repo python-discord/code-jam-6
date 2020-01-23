@@ -39,8 +39,9 @@ class GameView(Widget):
             background.size = background.texture_size
             background.anim_delay = 1
 
-            birds = Image(pos=(Window.width, 400), source=ATLAS_PATH.format('birds-0'))
+            birds = Image(pos=(Window.width, 400), source=IMAGES_PATH.format('flock-birds.gif'))
             birds.size = birds.texture_size
+            birds.anim_delay = 1
             up_down = (Animation(y=350, d=5, t=self._sin_transition) +
                        Animation(y=450, d=5, t=self._sin_transition))
             up_down.repeat = True
