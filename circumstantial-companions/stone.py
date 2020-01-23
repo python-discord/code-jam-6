@@ -13,7 +13,7 @@ from kivy.vector import Vector
 GRAVITY = .02
 FRICTION = .9
 CHISEL_RADIUS = 6e-4
-DISLODGE_VELOCITY = 1e-7
+DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .1
 PEBBLE_RADIUS = 1.7
 PEBBLE_COUNT = 1e4
@@ -24,7 +24,8 @@ PEBBLE_COLORS =((0.359, 0.33, 0.33),
                 (0.383, 0.352, 0.352),
                 (0.286, 0.257, 0.257),
                 (0.304, 0.278, 0.278))
-POWER_SCALE = 1e-3
+POWER_SCALE = 1e2
+MIN_POWER = 1e-5
 
 CHISEL_RADIUS_RANGE = (0, 100)
 DEFAULT_CHISEL_RADIUS = 15
@@ -164,18 +165,21 @@ class Chisel(Widget):
             self.circles[i].circle = (x * self.width, y * self.height,
                                       PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
 
-    def poke_power(self, touch_pos, pebble_x, pebble_y):
+    def poke_power(self, touch, pebble_x, pebble_y):
         """
         Returns the force vector of a poke.
         """
-        tx, ty = touch_pos
+        tx, ty = touch.spos
         dx, dy = pebble_x - tx, pebble_y - ty
         distance = dx**2 + dy**2
+
         if distance > CHISEL_RADIUS:
             return 0.0, 0.0
         if not distance:
             distance = .0001
-        power = POWER_SCALE / distance
+
+        tdx, tdy = touch.dsx, touch.dsy
+        power = max(POWER_SCALE * (tdx**2 + tdy**2), MIN_POWER) / distance
         return power * dx, power * dy
 
     def poke(self, touch):
@@ -183,7 +187,7 @@ class Chisel(Widget):
         Apply a poke to each pebble.
         """
         for i, (x, y) in enumerate(self.positions):
-            velocity = is_dislodged(self.poke_power(touch.spos, x, y))
+            velocity = is_dislodged(self.poke_power(touch, x, y))
             if velocity: # Attach an object to the circle to move it.
                 self.pebbles[i] = Pebble(i, self.circles,
                                          self.positions, x, y,
