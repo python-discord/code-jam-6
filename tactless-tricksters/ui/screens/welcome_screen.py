@@ -19,7 +19,6 @@ class WelcomeScreen(Screen):
         super(WelcomeScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
         self.app = App.get_running_app()
-
         self.ui_layout()
 
     def ui_layout(self):
