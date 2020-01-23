@@ -23,13 +23,11 @@ from stone import Chisel, CHISEL_RADIUS_RANGE, CHISEL_POWER_RANGE
 class ChiselRadiusSlider(Slider):
     def __init__(self, chisel):
         self.chisel = chisel
-        super().__init__(
-            orientation="vertical",
-            range=CHISEL_RADIUS_RANGE,
-            value=chisel.radius,
-            value_track=True,
-            value_track_color=[1, 0, 1, 1],
-        )
+        super().__init__(orientation="vertical",
+                         range=CHISEL_RADIUS_RANGE,
+                         value=chisel.radius,
+                         value_track=True,
+                         value_track_color=[1, 0, 1, 1])
 
     def on_value(self, instance, value):
         self.chisel.set_radius(value)
@@ -38,13 +36,11 @@ class ChiselRadiusSlider(Slider):
 class ChiselPowerSlider(Slider):
     def __init__(self, chisel):
         self.chisel = chisel
-        super().__init__(
-            orientation="vertical",
-            range=CHISEL_POWER_RANGE,
-            value=chisel.power,
-            value_track=True,
-            value_track_color=[1, 0, 1, 1],
-        )
+        super().__init__(orientation="vertical",
+                         range=CHISEL_POWER_RANGE,
+                         value=chisel.power,
+                         value_track=True,
+                         value_track_color=[1, 0, 1, 1])
 
     def on_value(self, instance, value):
         self.chisel.set_power(value)
