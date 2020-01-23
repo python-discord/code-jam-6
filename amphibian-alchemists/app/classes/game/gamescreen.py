@@ -190,7 +190,7 @@ class GameScreen(Screen):
         board_input = self.ids.enigma_keyboard.ids.lamp_board.ids.board_input
 
         if not board_input.focus:
-            self.board_input.insert_text(key.name)
+            board_input.insert_text(key.name)
         App.get_running_app().machine.key_press(key.name)
         store_put(current_output_text=board_input.text)
 
