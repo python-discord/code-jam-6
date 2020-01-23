@@ -55,4 +55,4 @@ class Paper(RelativeLayout):
             return [{"text": "[b]Output:[/b]"}]
         game = store.get(game_id)
         current_output_text = game["current_output_text"]
-        return [{"text": "[b]Output:[/b]"}, {"text": current_output_text"}]
+        return [{"text": "[b]Output:[/b]"}, {"text": current_output_text}]
