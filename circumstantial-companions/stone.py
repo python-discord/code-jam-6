@@ -35,6 +35,9 @@ CHISEL_POWER_RANGE = (0, 100)
 DEFAULT_CHISEL_POWER = 45
 
 def pebble_setup():
+    """
+    Determines initial pebble color and placement from an image's non-transparent pixels.
+    """
     pebbles_per_line = int(PEBBLE_COUNT**.5)
     scale = 1 / pebbles_per_line
 
