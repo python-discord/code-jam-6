@@ -1,3 +1,6 @@
+import datetime
+from dataclasses import dataclass
+
 from kivy.event import EventDispatcher
 
 from backend.card_format import Card
@@ -10,11 +13,25 @@ from kivy.config import Config
 from kivy.lang import global_idmap
 
 
+@dataclass
+class MainState:
+    label: str
+    value: str
+
+
+@dataclass
+class GameState:
+    main_state_1: MainState
+    main_state_2: MainState
+    main_state_3: MainState
+    main_state_4: MainState
+
+
 class DataController(EventDispatcher):
     """Manages global state for the app"""
 
     active_card: Card = ObjectProperty(rebind=True)
-    active_text = StringProperty()
+    game_state = ObjectProperty(rebind=True)
     game: Game = ObjectProperty()
     assets_loc = StringProperty("assets/")
 
@@ -23,19 +40,28 @@ class DataController(EventDispatcher):
         if choice == "1" or len(self.active_card.options) == 1:
             outcome = self.active_card.options[0].get_outcome()
             self.active_card = self.game.take_turn(outcome)
-            self.active_text = self.active_card.card_id
         else:
             outcome = self.active_card.options[0].get_outcome()
             self.active_card = self.game.take_turn(outcome)
-            self.active_text = self.active_card.card_id
 
-    def get_active_card(self):
-        return self.active_card
+        self.set_game_state()
+
+    def set_game_state(self):
+        """
+        Sets teh states for the 4 main player states. Currently uses dud values til the
+        backend version is done
+        """
+        self.game_state = self.game_state = GameState(
+            *[
+                MainState(str(datetime.datetime.now()), "a"),
+                MainState(str(datetime.datetime.now()), "b"),
+                MainState(str(datetime.datetime.now()), "c"),
+                MainState(str(datetime.datetime.now()), "d"),
+            ]
+        )
 
 
 class CardGameApp(App):
-    active_card = ObjectProperty()
-
     def build(self):
         Config.set("graphics", "width", "900")
         Config.set("graphics", "height", "900")
@@ -44,6 +70,7 @@ class CardGameApp(App):
 
         ctl.game = game = load_game()
         ctl.active_card = game.start_game()
+        ctl.set_game_state()
         return MainWidget()
 
 
