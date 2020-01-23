@@ -197,11 +197,11 @@ class Chisel(RepeatingBackground, Widget):
 
     def set_radius(self, value):
         print("TODO: Chisel.set_radius(self, value)")
-        self.radius = value
+        self.chisel_radius = value
 
     def set_power(self, value):
         print("TODO: Chisel.set_power(self, value)")
-        self.power = value
+        self.chisel_power = value
 
 
 if __name__ == '__main__':
