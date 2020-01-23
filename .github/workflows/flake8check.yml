@@ -1,0 +1,13 @@
+name: Flake8 check
+
+on: [push]
+
+jobs:
+  flake8-check:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Flake8 checker
+        uses: cclauss/Find-Python-syntax-errors-action@v0.2.0
