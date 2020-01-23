@@ -75,17 +75,12 @@ class GameState:
         game_states.update(self._main_game_states.convert_to_game_state_dict())
         return game_states
 
-    def get_main_state_1(self):
-        return self._main_game_states.four_main_states[0]
-
-    def get_main_state_2(self):
-        return self._main_game_states.four_main_states[1]
-
-    def get_main_state_3(self):
-        return self._main_game_states.four_main_states[2]
-
-    def get_main_state_4(self):
-        return self._main_game_states.four_main_states[3]
+    def get_main_state(self, state_index: int) -> MainState:
+        """
+        :param state_index: int 0,1,2 or 3 depending on which MainState you want.
+        :return: MainState
+        """
+        return self._main_game_states.four_main_states[state_index]
 
     @property
     def game_turn(self):
