@@ -1,13 +1,15 @@
 from random import randint
 
 from TLOA.core.game import Game
-from TLOA.core.constants import ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, SHIP_IMAGE_MAPPING
+from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, SHIP_IMAGE_MAPPING,
+                                WINDOW_WIDTH, LANE_LENGTHS)
 
 from kivy.animation import Animation
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.clock import Clock
+from kivy import Logger
 
 import math
 
@@ -18,6 +20,7 @@ class GameView(Widget):
         self._game = game
 
         game.mirror.bind(state=self.on_mirror_state_change)
+        game.bind(score=self.on_score_change)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
@@ -79,13 +82,25 @@ class GameView(Widget):
 
         return self._game.process_action(action)
 
-    def show_ship(self, ship):
+    def on_score_change(self, obj, value):
+        # TODO show score
+        Logger.info(f'New score: {value}')
+
+    def show_ship(self, ship, lane):
         with self.canvas:
-            ship_view = Image(pos=(1200, 100), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))
-            ship_move_animation = Animation(x=0, duration=10.)
+            Logger.info(f'Add ship at lane: {lane}')
+            ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))
+            lane_length = LANE_LENGTHS[lane]
+            duration = lane_length / (ship.speed * 10.)
+            ship_move_animation = Animation(x=WINDOW_WIDTH - lane_length, duration=duration)
             ship_move_animation.start(ship_view)
+            ship_move_animation.bind(on_complete=self._game.on_ship_attack)
+            ship_move_animation.bind(on_complete=self.on_ship_attack)
 
     def show_ships(self):
         # show ships
         for ship in self._game.ships:
             ship_view = Image(pos=(650, 100), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))
+    
+    def on_ship_attack(self, animation, ship):
+        self.remove_widget(ship)
