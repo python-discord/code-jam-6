@@ -16,10 +16,10 @@ class Paper(RelativeLayout):
         game_id = str(App.get_running_app().game_id)
         if game_id == "None":
             return [
-                {"text": "Plugboard: "},
-                {"text": "Rotors: "},
-                {"text": "Rotor settings: "},
-                {"text": "Ciphertext: "},
+                {"text": "[b]Plugboard:[/b]"},
+                {"text": "[b]Rotors:[/b]"},
+                {"text": "[b]Rotor settings:[/b]"},
+                {"text": "[b]Ciphertext:[/b]"},
             ]
         game = store.get(game_id)
         cipher_text = game["ciphered_text"]
@@ -36,13 +36,13 @@ class Paper(RelativeLayout):
                 rotors += " "
 
         input_data = [
-            {"text": "Plugboard:"},
-            {"text": plug_settings},
-            {"text": "Rotors:"},
-            {"text": rotors},
-            {"text": "Rotor settings:"},
-            {"text": rotor_settings},
-            {"text": "Ciphertext:"},
+            {"text": "[b]Plugboard:[/b]"},
+            {"text": plug_settings + "\n"},
+            {"text": "[b]Rotors:[/b]"},
+            {"text": rotors + "\n"},
+            {"text": "[b]Rotor settings:[/b]"},
+            {"text": rotor_settings + "\n"},
+            {"text": "[b]Ciphertext:[/b]"},
             {"text": cipher_text},
         ]
         return input_data
@@ -52,7 +52,7 @@ class Paper(RelativeLayout):
         store = JsonStore(DATA_DIR)
         game_id = str(App.get_running_app().game_id)
         if game_id == "None":
-            return [{"text": "Output:"}]
+            return [{"text": "[b]Output:[/b]"}]
         game = store.get(game_id)
         current_output_text = game["current_output_text"]
-        return [{"text": f"Output:\n{current_output_text}"}]
+        return [{"text": "[b]Output:[/b]"}, {"text": current_output_text"}]
