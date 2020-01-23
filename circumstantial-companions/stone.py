@@ -54,7 +54,7 @@ def pebble_setup():
                 continue
             pebble_x = x * x_scale + x_offset
             pebble_y = (1 - y) * y_scale + y_offset
-            normalized_color = r / 255, g / 255, b / 255, 1
+            normalized_color = r / 255, g / 255, b / 255, a / 255
             yield normalized_color, pebble_x, pebble_y
 
 def is_dislodged(velocity):
