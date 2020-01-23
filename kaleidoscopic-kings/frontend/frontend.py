@@ -38,6 +38,7 @@ class DataController(EventDispatcher):
     active_card: Card = ObjectProperty(rebind=True)
     active_text = StringProperty()
     game: Game = ObjectProperty()
+    assets_loc = StringProperty("../assets/")
 
     def choice_handler(self, choice):
         """Used to update state for the app when the user makes a choice"""
