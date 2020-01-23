@@ -1,6 +1,7 @@
 """
-SMASH ROCK!  This app is a pre-historically accurate representation of Paleolithic technology!
-Re-invent the wheel with this (rock)cutting-edge simulation! FASTER SWING = MORE ROCK SMASHED!
+SMASH ROCK!  FASTER SWING = MORE ROCK SMASHED! This app is a pre-historically accurate
+representation of Paleolithic technology!  Re-invent the wheel with this (rock)cutting-edge
+simulation! A caveman workout routine guaranteed to give you chiseled slabs fast!
 """
 from kivy.app import App
 from kivy.core.image import Image as CoreImage
