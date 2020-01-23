@@ -161,8 +161,8 @@ class DialWidget(FloatLayout):
         self.test_date = 0
 
         # Duration is how long it takes to perform the overall animation
-        anim = Animation(angle=360, duration=day_length)
-        anim += Animation(angle=360, duration=day_length)
+        anim = Animation(angle=359, duration=day_length)
+        anim += Animation(angle=359, duration=day_length)
         anim.repeat = True
         anim.start(self)
 
@@ -178,10 +178,10 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
-        self.clock = Clock.schedule_interval(self.redraw, 2.5)
+        self.clock = Clock.schedule_interval(self.redraw, 30)
 
     def redraw(self, a):
-        self.date_iterate += 10
+        self.date_iterate += 15
 
         self.remove_widget(self.dial_shading)
         self.remove_widget(self.sun_rise_marker)
@@ -206,7 +206,7 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_set_marker)
 
     def on_angle(self, item, angle):
-        if angle == 360:
+        if angle == 359:
             item.angle = 0
 
 
@@ -230,7 +230,6 @@ class DialEffectWidget(EffectWidget):
 
         self.shade_size = Window.height * 0.8, Window.height * 0.8
         self.add_widget(SunShading(angles))
-        # self.effects = [HorizontalBlurEffect(size=50.0), VerticalBlurEffect(size=50.0)]
         self.effects = [DoubleVision(size=50.0)]
         self.opacity = 0.25
 
@@ -303,7 +302,7 @@ class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        self.add_widget(DialWidget(86400, (0.8, 0.8)))
+        self.add_widget(DialWidget(1, (0.8, 0.8)))
         self.add_widget(NowMarker())
 
     def on_size(self, a, b):
