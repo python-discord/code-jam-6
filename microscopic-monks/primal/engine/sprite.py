@@ -9,6 +9,8 @@ from kivy.properties import (
 from kivy.uix.widget import Widget
 from kivy.core.window import WindowBase
 import math
+from random import randint
+from engine.perlin import sample
 
 class Sprite(Widget):
     vel_x = NumericProperty(0)
@@ -67,11 +69,10 @@ class Terrain(Sprite):
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
 
-    def __init__(self, perlin, pos: tuple = (0, 0), **kwargs) -> None:
-        self.perlin = perlin
-        self.m = int(perlin.shape[0] / 2 - 2 + pos[0] / 1000)
-        self.n = int(perlin.shape[1] / 2 - 2 + pos[1] / 1000)
-        a = perlin[self.m][self.n]
+    def __init__(self, seed, pos: tuple = (0, 0), **kwargs) -> None:
+        self.m = int(pos[0] / 10000)
+        self.n = int(pos[1] / 10000)
+        a = sample(self.m, self.n, seed=seed)
         if a > 0.75:
             image = 'i.png'
             self.type = 3
@@ -89,17 +90,17 @@ class Terrain(Sprite):
     def update(self):
         if self.pos[0] < -2000:
             self.pos[0] = 6000
-            self.m += 8
+            self.m += 0.8
         if self.pos[0] > 6000:
             self.pos[0] = -2000
-            self.m -= 8
+            self.m -= 0.8
         if self.pos[1] < -2000:
             self.pos[1] = 5000
-            self.n += 7
+            self.n += 0.7
         if self.pos[1] > 5000:
             self.pos[1] = -2000
-            self.n += 7
-        a = self.perlin[self.m][self.n]
+            self.n += 0.7
+        a = sample(self.m, self.n)
         if a > 0.75:
             image = 'i.png'
             self.type = 3
