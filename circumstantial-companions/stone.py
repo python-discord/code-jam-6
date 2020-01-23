@@ -17,15 +17,10 @@ FRICTION = .9
 CHISEL_RADIUS = 6e-4
 DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .1
+PEBBLE_IMAGE = 'boulder.png'
 PEBBLE_RADIUS = 1.7
-PEBBLE_COUNT = 1e4
+PEBBLE_COUNT = 2e4
 PEBBLE_SEGMENTS = 4
-PEBBLE_COLORS =((0.359, 0.33, 0.33),
-                (0.383, 0.365, 0.352),
-                (0.426, 0.377, 0.377),
-                (0.383, 0.352, 0.352),
-                (0.286, 0.257, 0.257),
-                (0.304, 0.278, 0.278))
 POWER_SCALE = 1e2
 MIN_POWER = 1e-5
 
@@ -40,22 +35,27 @@ def pebble_setup():
     """
     pebbles_per_line = int(PEBBLE_COUNT**.5)
     scale = 1 / pebbles_per_line
+    x_scale = y_scale = .75
+    x_offset, y_offset = (1 - x_scale) / 2, .001
 
-    with Image.open('boulder.png') as image:
+    with Image.open(PEBBLE_IMAGE) as image:
         w, h = image.size
-        IMAGE = np.frombuffer(image.tobytes(), dtype=np.uint8)
-        IMAGE = IMAGE.reshape((h, w, 4))
+        image = np.frombuffer(image.tobytes(), dtype=np.uint8)
+
+    image = image.reshape((h, w, 4))
 
     for x in range(pebbles_per_line):
         x = scale * x
         for y in range(pebbles_per_line):
             y = scale * y
             sample_loc = int(y * h), int(x * w)
-            color = IMAGE[sample_loc]
-            if not color[-1]:
+            r, g, b, a = image[sample_loc]
+            if not a:
                 continue
-            r, g, b, a = color
-            yield (r/255, g/255, b/255, 1), x * .75 + .125, y * .75
+            pebble_x = x * x_scale + x_offset
+            pebble_y = (1 - y) * y_scale + y_offset
+            normalized_color = r / 255, g / 255, b / 255, 1
+            yield normalized_color, pebble_x, pebble_y
 
 def is_dislodged(velocity):
         """
