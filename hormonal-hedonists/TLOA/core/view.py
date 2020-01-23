@@ -36,7 +36,7 @@ class GameView(Widget):
 
             birds = Image(pos=(Window.width, 400), source=ATLAS_PATH.format('birds-0'))
             birds.size = birds.texture_size
-            up_down = (Animation(y=350, d=5, t=self.sin_transition) +
+            up_down = (Animation(y=350, d=5, t=self._sin_transition) +
                        Animation(y=450, d=5, t=self._sin_transition))
             up_down.repeat = True
             bird_animation = Animation(x=-birds.width, d=30) & up_down
@@ -69,8 +69,8 @@ class GameView(Widget):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
 
-    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        action = KEY_MAPPING.get(keycode[1])
+    def _on_keyboard_down(self, keyboard, key_code, text, modifiers):
+        action = KEY_MAPPING.get(key_code[1])
         if action is None:
             return True
 
