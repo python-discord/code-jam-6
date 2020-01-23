@@ -1,55 +1,44 @@
-<PaperScreen>
-    name: "paper_screen"
-    on_enter: output_paper.recycle_view.data = root.output_data()
-    BoxLayout:
-        InputPaper:
-            id: input_paper
-        OutputPaper:
-            id: output_paper
-    AnchorLayout:
-        anchor_x: 'left'
-        anchor_y: 'top'
-        # Game crashes when going back
-        Button:
-            size_hint: 0.1, 0.1
-            text: "Go Back"
-            on_release:
-                root.manager.current = "game_screen"
+<PaperLabel@Label>:
+    color: 0, 0, 0, 1
+<PaperBackground@Image>:
+    source: "misc/paper.png"
 
 <InputPaper@AnchorLayout>:
     size_hint: 0.5, 1
-    recycle_view: recycle_view_input_paper
-    Image:
-        source: "misc/paper.png"
-        allow_stretch: True
-        keep_ratio: False
+    recycle_view_input: recycle_view_input
+    PaperBackground:
     RecycleView:
-        id: recycle_view_input_paper
+        id: recycle_view_input
         size_hint: 0.6, 0.9
-        viewclass: 'Label'
-        data: app.root.get_screen("paper_screen").output_data() if app.root else []
-        RecycleBoxLayout:
-            default_size: None, dp(25)
-            default_size_hint: 1, None
-            size_hint_y: None
-            height: self.minimum_height
-            orientation: 'vertical'
-
-<OutputPaper@AnchorLayout>:
-    size_hint: 0.5, 1
-    recycle_view: recycle_view_output_paper
-    Image:
-        source: "misc/paper.png"
-        allow_stretch: True
-        keep_ratio: False
-    RecycleView:
-        id: recycle_view_output_paper
-        size_hint: 0.6, 0.9
-        viewclass: 'Label'
+        viewclass: "PaperLabel"
         data: []
         RecycleBoxLayout:
             default_size: None, dp(25)
             default_size_hint: 1, None
             size_hint_y: None
             height: self.minimum_height
-            orientation: 'vertical'
+            orientation: "vertical"
+
+<OutputPaper@AnchorLayout>:
+    size_hint: 0.5, 1
+    recycle_view_output: recycle_view_output
+    PaperBackground:
+    RecycleView:
+        id: recycle_view_output
+        size_hint: 0.6, 0.9
+        viewclass: "PaperLabel"
+        data: []
+        RecycleBoxLayout:
+            default_size: None, dp(25)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: "vertical"
+
+<Paper>:
+    name: "paper_screen"
+    BoxLayout:
+        InputPaper:
+            id: input_paper
+        OutputPaper:
+            id: output_paper

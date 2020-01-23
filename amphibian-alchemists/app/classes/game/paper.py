@@ -1,13 +1,13 @@
 from kivy.clock import Clock
-from kivy.uix.screenmanager import Screen
+from kivy.uix.relativelayout import RelativeLayout
 
 
-class PaperScreen(Screen):
+class Paper(RelativeLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Clock.schedule_once(
             lambda dt: setattr(
-                self.ids.input_paper.recycle_view, "data", self.input_data()
+                self.ids.input_paper.recycle_view_input, "data", self.input_data()
             )
         )
 
@@ -23,4 +23,4 @@ class PaperScreen(Screen):
 
     # This paper's data is changed everytime the user comes back
     def output_data(self):
-        return [{"text": "What the user has typed: "}]
+        return [{"text": "Output: "}]

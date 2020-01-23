@@ -12,8 +12,35 @@
         Label:
             text: "Loading..."
 
+<PaperPopup@Popup>:
+    title: "Configure the machine to:"
+    size_hint: 0.5, 0.7
+    on_open: paper.ids.output_paper.recycle_view_output.data = paper.output_data()
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(20)
+        Paper:
+            id: paper
+        Button:
+            size_hint: 0.1, 0.1
+            text: "Close"
+            pos_hint: {"center_x": 0.5}
+            on_release:
+                root.dismiss()
+
+<CheckPaperButton@AnchorLayout>:
+    anchor_x: "right"
+    anchor_y: "bottom"
+    RelativeLayout:
+        size_hint: 0.1, 0.1
+        Button:
+            text: "Papers"
+            on_release: app.root.paper_popup.open()
+
 <UIManager>:
     loading_popup: Factory.LoadingPopup()
+    paper_popup: Factory.PaperPopup()
     canvas:
         Color:
             rgba: 111 / 255, 175 / 255 , 150 / 255, 1
@@ -23,4 +50,3 @@
     MainScreen:
     GameScreen:
     SettingsScreen:
-    PaperScreen:
