@@ -1,16 +1,12 @@
 from backend.card_format import Card
-from backend.main import Game, load_game
-from kivy.app import App
-from kivy.event import EventDispatcher
-from kivy.lang import global_idmap
-from kivy.properties import StringProperty, ObjectProperty
-from kivy.uix.boxlayout import BoxLayout
-from kivy.config import Config
-from kivy.uix.gridlayout import GridLayout
+from backend.main import Game
 
-import os
-import sys
-sys.path.append(os.getcwd())
+from kivy.properties import ObjectProperty
+from kivy.event import EventDispatcher
+from kivy.properties import StringProperty
+
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
 
 
 class MainWidget(GridLayout):
@@ -41,7 +37,7 @@ class DataController(EventDispatcher):
     active_card: Card = ObjectProperty(rebind=True)
     active_text = StringProperty()
     game: Game = ObjectProperty()
-    assets_loc = StringProperty("../assets/")
+    assets_loc = StringProperty("assets/")
 
     def choice_handler(self, choice):
         """Used to update state for the app when the user makes a choice"""
@@ -56,21 +52,3 @@ class DataController(EventDispatcher):
 
     def get_active_card(self):
         return self.active_card
-
-
-class CardGameApp(App):
-    active_card = ObjectProperty()
-
-    def build(self):
-        Config.set("graphics", "width", "900")
-        Config.set("graphics", "height", "900")
-
-        global_idmap["data"] = ctl = DataController()
-
-        ctl.game = game = load_game()
-        ctl.active_card = game.start_game()
-        return MainWidget()
-
-
-if __name__ == "__main__":
-    CardGameApp().run()

@@ -1,3 +1,4 @@
+#:kivy 1.11.1
 # Uncomment out this to have a border drawn around everything
 
 #:import random random.random
@@ -11,10 +12,6 @@
 
 
 # Add this to MainWidget for the background
-
-
-
-
 
 ################## LAYOUT ##################
 <MainWidget>:
@@ -53,7 +50,16 @@
 
 ##################  CARD  ##################
 <CardWidget>:
+    # SwipeCard:
+    #     size_hint: None,None
+    #     do_rotation: False
+    #     do_scale: False
+    #     do_translation: False
+    #     rotation: 0
+    #     scale: 2
+
     BoxLayout:
+        # size_hint: None,None
         orientation: 'vertical'
         padding: (5, 5)
         CardBoxLayout:
