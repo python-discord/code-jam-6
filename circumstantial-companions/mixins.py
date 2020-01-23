@@ -35,15 +35,14 @@ class RepeatingBackground:
 
     def _get_uvsize(self):
         texture = self.bg_rect.texture
-        return (
-            math.ceil(self.width / texture.width),
-            math.ceil(self.height / texture.height)
-        )
+        scaled_w = math.ceil(self.width / texture.width)
+        scaled_h = math.ceil(self.height / texture.height)
+        return scaled_w, scaled_h
 
     def _get_background_size(self):
         texture = self.bg_rect.texture
         uv_width, uv_height = texture.uvsize
-        return (uv_width * texture.width, uv_height * texture.height)
+        return uv_width * texture.width, uv_height * texture.height
 
     def update_background(self, instance, value):
         """Update background size.
