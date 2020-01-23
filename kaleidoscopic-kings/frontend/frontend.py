@@ -1,3 +1,5 @@
+from backend.card_format import Card
+from backend.main import Game, load_game
 from kivy.app import App
 from kivy.event import EventDispatcher
 from kivy.lang import global_idmap
@@ -6,8 +8,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.config import Config
 from kivy.uix.gridlayout import GridLayout
 
-from backend.card_format import Card
-from backend.main import Game, load_game
+import os
+import sys
+sys.path.append(os.getcwd())
 
 
 class MainWidget(GridLayout):
