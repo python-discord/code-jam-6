@@ -38,6 +38,10 @@ class TopRightButton(Widget):
     pass
 
 
+class OperationButton(Widget):
+    pass
+
+
 class Screen:
     def __init__(self):
         self.sm = ScreenManager()
