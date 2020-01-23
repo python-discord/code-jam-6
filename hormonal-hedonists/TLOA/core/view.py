@@ -113,7 +113,7 @@ class GameView(Widget):
                     Logger.debug(f'Found free ship, not need allocate one')
                     ship_view = f
                     ship_view.pos = (WINDOW_WIDTH + 100, 50 * lane)
-                    ship_view.core.health = 100
+                    ship_view.core.reset_status()
                     self.free_ships.remove(f)
                     break
             if ship_view is None:
@@ -126,7 +126,15 @@ class GameView(Widget):
             ship_move_animation.start(ship_view)
             ship_move_animation.bind(on_complete=self._game.on_ship_attack)
             ship_move_animation.bind(on_complete=self.on_ship_attack)
+            ship_view.bind(destroyed=self.on_ship_destroyed)
     
-    def on_ship_attack(self, animation, ship):
-        ship.pos = (WINDOW_WIDTH + 100, 0)
-        self.free_ships.append(ship)
+    def on_ship_attack(self, animation, ship_view):
+        ship_view.pos = (WINDOW_WIDTH + 100, 0)
+        self.free_ships.append(ship_view)
+
+    def on_ship_destroyed(self, ship_view, is_destroyed):
+        if is_destroyed:
+            Logger.debug('Ship is destroyed')
+            Animation.cancel_all(ship_view)
+            ship_view.pos = (WINDOW_WIDTH + 100, 0)
+            self.free_ships.append(ship_view)
