@@ -7,6 +7,7 @@ from kivy.animation import Animation
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.metrics import Metrics
 from kivy.properties import NumericProperty
 from kivy.uix.effectwidget import EffectWidget, HorizontalBlurEffect, VerticalBlurEffect
 from kivy.uix.floatlayout import FloatLayout
@@ -139,8 +140,15 @@ class MainScreen(Screen):
 
     def on_size(self, a, b):
         # Maintains a constant aspect ratio of 0.5625 (16:9)
-        if (Window.height / Window.width) != 0.5625 and Window.fullscreen is False:
-            Window.size = Window.width, Window.width * 0.5625
+        width, height = Window.size
+
+        if not Window.fullscreen and (height / width) != 0.5625:
+            height = width * 0.5625
+
+        width /= Metrics.density
+        height /= Metrics.density
+
+        Window.size = (width, height)
 
     def settings_button(self):
         SettingsScreen()
