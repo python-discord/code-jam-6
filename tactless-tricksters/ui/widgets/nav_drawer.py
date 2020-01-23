@@ -41,11 +41,11 @@ class MyNavigationLayout(NavigationLayout):
 
         self.add_widget(self.content_nav_drawer)
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        toolbar = MDToolbar(title='Enigma')
-        toolbar.anchor_title = 'center'
-        toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
-        toolbar.left_action_items = [['menu', lambda x: self.toggle_nav_drawer()]]
-        toolbar_anchor.add_widget(toolbar)
+        self.toolbar = MDToolbar(title='Enigma')
+        self.toolbar.anchor_title = 'center'
+        self.toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
+        self.toolbar.left_action_items = [['menu', lambda x: self.toggle_nav_drawer()]]
+        toolbar_anchor.add_widget(self.toolbar)
         self.add_widget(toolbar_anchor)
 
     def toggle_nav_drawer(self):

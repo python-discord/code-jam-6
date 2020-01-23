@@ -22,6 +22,8 @@ class AddContactScreen(Screen):
     def __init__(self, **kwargs):
         super(AddContactScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
+        self.nav_bar = kwargs.get('nav_bar')
+        self.add_widget(self.nav_bar)
         self.ui_layout()
 
     def ui_layout(self):

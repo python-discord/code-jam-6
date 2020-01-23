@@ -4,15 +4,12 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
-from kivy.app import App
 from kivy.metrics import dp
-from kivy.clock import Clock
+from kivy.app import App
 
 # kivymd imports
-from kivymd.button import MDFloatingActionButton
-from kivymd.cards import MDCard
 from kivymd.label import MDLabel
-from kivymd.textfields import MDTextFieldRound
+from kivymd.button import MDFloatingActionButton
 
 # project imports
 from ui.widgets.message_card import MessageCard
@@ -39,14 +36,30 @@ class MessageScreen(Screen):
         for key in self.util.message_dict:
             temp_dict = self.util.message_dict[key]
             print(temp_dict['messages'][-1:])
-            message_card = MessageCard(util=self.util,
+            message_card = MessageCard(text_post=temp_dict['messages'][-1:][0]['text'],
                                        name=key,
-                                       last_text=temp_dict['messages'][-1:][0]['text'],
-                                       date=temp_dict['messages'][-1:][0]['date'],
-                                       img_source=temp_dict['img_source']
-                                       )
+                                       name_data=(key + '\n' + temp_dict['messages'][-1:][0]['date']),
+                                       swipe=True,
+                                       source=temp_dict['img_source'],)
             scroll_box.add_widget(message_card)
 
         scroll.add_widget(scroll_box)
         layout.add_widget(scroll)
+
         self.add_widget(layout)
+
+        # Add floating action button to write messages
+        create_message_anchor = AnchorLayout(anchor_x='right', anchor_y='bottom',
+                                            padding=[dp(25), dp(25), dp(25), dp(25)])
+        create_message_btn = MDFloatingActionButton(icon='message', size=[dp(56), dp(56)])
+        create_message_btn.md_bg_color = App.get_running_app().theme_cls.primary_color
+        create_message_btn.theme_text_color = "Custom"
+        create_message_btn.text_color = [1, 1, 1, 1]
+        create_message_btn.bind(on_press=lambda x: self.switch_screens())
+        create_message_anchor.add_widget(create_message_btn)
+        self.add_widget(create_message_anchor)
+
+    def switch_screens(self):
+        print("Switch Screens to create message")
+
+
