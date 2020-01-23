@@ -15,11 +15,11 @@ class ContentNavigationDrawer(MDNavigationDrawer):
                                                on_press=lambda x: self.scr_chng('welcome', self.home))
         self.encode = NavigationDrawerIconButton(text="Encode", icon='database-import',
                                                  on_press=lambda x: self.scr_chng('encode', self.encode))
-        self.decode = NavigationDrawerIconButton(text="Decode", icon='database-export',
+        self.decode = NavigationDrawerIconButton(text="Decode", icon='chat-processing-outline',
                                                  on_press=lambda x: self.scr_chng('decode', self.decode))
         self.message = NavigationDrawerIconButton(text="Messages", icon='message',
                                                   on_press=lambda x: self.scr_chng('message', self.message))
-        self.training = NavigationDrawerIconButton(text="Training", icon='message',
+        self.training = NavigationDrawerIconButton(text="Training", icon='dumbbell',
                                                   on_press=lambda x: self.scr_chng('training', self.training))
         self.add_widget(self.home)
         self.add_widget(self.encode)
