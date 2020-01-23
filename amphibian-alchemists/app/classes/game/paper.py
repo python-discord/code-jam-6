@@ -13,10 +13,10 @@ DATA_DIR = os.path.join(
 class Paper(RelativeLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        Clock.schedule_once(
+        Clock.schedule_interval(
             lambda dt: setattr(
                 self.ids.input_paper.recycle_view_input, "data", self.input_data()
-            )
+            ), 1
         )
 
     # This only runs when the game is first opened (settings sheet)
@@ -26,8 +26,8 @@ class Paper(RelativeLayout):
         if game_id == "None":
             return [
                 {"text": "Plugboard: "},
-                {"text": "Rotors:"},
-                {"text": "Rotor settings:"},
+                {"text": "Rotors: "},
+                {"text": "Rotor settings: "},
                 {"text": "Ciphertext: "},
             ]
         game = store.get(game_id)
@@ -57,5 +57,5 @@ class Paper(RelativeLayout):
         if game_id == "None":
             return [{"text": "Output:"}]
         game = store.get(game_id)
-        unciphered_text = game["unciphered_text"]
-        return [{"text": f"Output:\n{unciphered_text}"}]
+        current_output_text = game["current_output_text"]
+        return [{"text": f"Output:\n{current_output_text}"}]
