@@ -35,6 +35,11 @@ DEFAULT_CHISEL_RADIUS = 15
 CHISEL_POWER_RANGE = (0, 100)
 DEFAULT_CHISEL_POWER = 45
 
+def pebble_radius(width, height):
+    scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
+    radius = 1.3 * max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE)
+    return radius
+
 def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
@@ -79,13 +84,17 @@ class Pebble:
     """
     This handles physics for dislodged pebbles. Deletes itself after pebbles reach the floor.
     """
-    def __init__(self, index, circles, positions, x, y, pebbles, x_dim, y_dim, velocity):
-        self.stopped = False
+    def __init__(self, index, stone, x, y, velocity):
         self.index = index
-        self.circles, self.positions = circles, positions
+
+        self.stone = stone
+        self.circles = stone.circles
+        self.positions = stone.positions
+        self.pebbles = stone.pebbles
+        self.x_dim = stone.width
+        self.y_dim = stone.height
+
         self.x, self.y = x, y
-        self.pebbles = pebbles
-        self.x_dim, self.y_dim = x_dim, y_dim
         self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
 
@@ -107,7 +116,7 @@ class Pebble:
 
         scaled_x, scaled_y = self.x * self.x_dim, self.y * self.y_dim
         self.circles[self.index].circle = (scaled_x, scaled_y,
-                                           PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
+                                           self.stone.radius, 0, 360, PEBBLE_SEGMENTS)
 
         if not self.y:
             self.update.cancel()
@@ -128,13 +137,14 @@ class Chisel(RepeatingBackground, Widget):
 
         self.positions = []
         self.circles = []
+        radius = self.radius = pebble_radius(self.width, self.height)
         with self.canvas:
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
-                                                 PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
-                                         width=PEBBLE_RADIUS))
+                                                 self.radius, 0, 360, PEBBLE_SEGMENTS),
+                                         width=self.radius))
 
         # TODO: Implement adjustable chisel radius and power
         self.set_radius(DEFAULT_CHISEL_RADIUS)
@@ -144,7 +154,7 @@ class Chisel(RepeatingBackground, Widget):
         self.update_background(instance, value)
         for i, (x, y) in enumerate(self.positions):
             self.circles[i].circle = (x * self.width, y * self.height,
-                                      PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
+                                      self.radius, 0, 360, PEBBLE_SEGMENTS)
 
     def poke_power(self, touch, pebble_x, pebble_y):
         """
@@ -170,11 +180,7 @@ class Chisel(RepeatingBackground, Widget):
         for i, (x, y) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(touch, x, y))
             if velocity: # Attach an object to the circle to move it.
-                self.pebbles[i] = Pebble(i, self.circles,
-                                         self.positions, x, y,
-                                         self.pebbles,
-                                         self.width, self.height,
-                                         velocity)
+                self.pebbles[i] = Pebble(i, self, x, y, velocity)
 
     def on_touch_down(self, touch):
         self.poke(touch)
