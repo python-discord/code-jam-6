@@ -85,14 +85,7 @@ class Pebble:
     """
     def __init__(self, index, stone, x, y, velocity):
         self.index = index
-
         self.stone = stone
-        self.circles = stone.circles
-        self.positions = stone.positions
-        self.pebbles = stone.pebbles
-        self.x_dim = stone.width
-        self.y_dim = stone.height
-
         self.x, self.y = x, y
         self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
@@ -111,18 +104,20 @@ class Pebble:
         if y > 1:
             vy *= -1
 
-        self.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
+        stone = self.stone
+        stone.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
 
-        scaled_x, scaled_y = self.x * self.x_dim, self.y * self.y_dim
-        self.circles[self.index].width = self.stone.radius
-        self.circles[self.index].circle = (scaled_x, scaled_y,
-                                           self.stone.radius, 0, 360, PEBBLE_SEGMENTS)
+        scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
+        stone.circles[self.index].width = stone.radius
+        stone.circles[self.index].circle = (scaled_x, scaled_y,
+                                            stone.radius, 0, 360, PEBBLE_SEGMENTS)
 
         if not self.y:
             self.update.cancel()
-            del self.pebbles[self.index] # Remove reference // kill this object
+            del stone.pebbles[self.index] # Remove reference // kill this object
         else:
             self.velocity = vx, vy
+
 
 class Chisel(RepeatingBackground, Widget):
     """
@@ -133,8 +128,15 @@ class Chisel(RepeatingBackground, Widget):
         self.resize_event = Clock.schedule_once(lambda dt:None, 0)
         self.setup_background("assets/img/chisel_background.png", 0.1, (0.4, 0.4, 0.4, 1))
         self.sound = SoundLoader.load('dig.wav')
-        self.pebbles = {}
 
+        # TODO: Implement adjustable chisel radius and power
+        self.set_radius(DEFAULT_CHISEL_RADIUS)
+        self.set_power(DEFAULT_CHISEL_POWER)
+
+        self.setup_canvas()
+
+    def setup_canvas(self):
+        self.pebbles = {}
         self.positions = []
         self.circles = []
         radius = self.radius = pebble_radius(self.width, self.height)
@@ -145,10 +147,6 @@ class Chisel(RepeatingBackground, Widget):
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
                                                  radius, 0, 360, PEBBLE_SEGMENTS),
                                          width=radius))
-
-        # TODO: Implement adjustable chisel radius and power
-        self.set_radius(DEFAULT_CHISEL_RADIUS)
-        self.set_power(DEFAULT_CHISEL_POWER)
 
     def resize(self, instance, value):
         self.update_background(instance, value)
@@ -186,7 +184,7 @@ class Chisel(RepeatingBackground, Widget):
 
     def on_touch_down(self, touch):
         self.poke(touch)
-        #self.sound.play()
+        self.sound.play()
         return True
 
     def on_touch_move(self, touch):
@@ -194,7 +192,8 @@ class Chisel(RepeatingBackground, Widget):
         return True
 
     def reset(self):
-        print("TODO: Chisel.reset(self)")
+        self.canvas.clear()
+        self.setup_canvas()
 
     def set_radius(self, value):
         print("TODO: Chisel.set_radius(self, value)")
