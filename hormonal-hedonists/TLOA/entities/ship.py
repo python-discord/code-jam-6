@@ -1,4 +1,4 @@
-from TLOA.entities.entity import Entity
+from TLOA.entities import Entity
 
 
 class Ship(Entity):

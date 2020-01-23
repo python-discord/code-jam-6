@@ -1,0 +1,22 @@
+{
+  "images/sun.png": {
+    "sun-0": [2, 0, 300, 300],
+    "sun-1": [304, 0, 300, 300]
+  },
+  "images/mirror_cannon.png": {
+    "mirror_cannon-0": [0, 750, 150, 145],
+    "mirror_cannon-1": [0, 600, 150, 145],
+    "mirror_cannon-2": [0, 450, 150, 145],
+    "mirror_cannon-3": [0, 300, 150, 145],
+    "mirror_cannon-4": [0, 150, 150, 145],
+    "mirror_cannon-5": [0, 0, 150, 145]
+  },
+  "images/sea_waves.png": {
+    "sea_waves-0": [2, 0, 1200, 800],
+    "sea_waves-1": [1204, 0, 1200, 800]
+  },
+  "images/birds.png": {
+    "birds-0": [2, 200, 200, 200],
+    "birds-1": [204, 200, 200, 200]
+  }
+}

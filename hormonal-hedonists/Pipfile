@@ -19,4 +19,4 @@ python_version = "3.7"
 
 [scripts]
 lint = "python -m flake8"
-start = "python -m project"
+start = "python -m TLOA"

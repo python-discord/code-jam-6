@@ -1,7 +1,13 @@
 from enum import Enum, unique
 
 
-ATLAS_PATH = "atlas://assets/{}"
+TITLE = "The Legend of Archimedes"
+WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 800
+WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT
+
+ATLAS_PATH = "atlas://assets/world/{}"
+IMAGES_PATH = 'assets/images/{}'
 
 
 @unique

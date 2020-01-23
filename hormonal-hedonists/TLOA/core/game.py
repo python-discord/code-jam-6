@@ -1,10 +1,14 @@
 from TLOA.core.constants import Actions
-from TLOA.entities.mirror import Mirror
+from TLOA.entities import MirrorCannon
 
 
 class Game:
-    def __init__(self):
-        self.mirror = Mirror()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.mirror = MirrorCannon()
+
+    def start(self):
+        pass
 
     def process_action(self, action: Actions):
         if action == Actions.MOVE_LEFT:
@@ -17,6 +21,4 @@ class Game:
             print('Moving Up')
         elif action == Actions.MOVE_DOWN:
             print('Moving Down')
-        elif action == Actions.JUMP:
-            print('Jumping')
         return True
