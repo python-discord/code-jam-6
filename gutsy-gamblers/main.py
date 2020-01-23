@@ -10,7 +10,7 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import Metrics
 from kivy.properties import NumericProperty
-from kivy.uix.effectwidget import EffectWidget, HorizontalBlurEffect, VerticalBlurEffect
+from kivy.uix.effectwidget import EffectWidget, HorizontalBlurEffect, VerticalBlurEffect, EffectBase
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -20,6 +20,52 @@ from suntime import Sun, SunTimeException
 
 
 kivy.require('1.11.1')
+
+
+hv_blur = """
+vec4 effect(vec4 color, sampler2D texture, vec2 tex_coords, vec2 coords)
+{{
+    float dt = ({} / 4.0) * 1.0 / resolution.x;
+    vec4 sum = vec4(0.0);
+    sum += texture2D(texture, vec2(tex_coords.x - 4.0*dt, tex_coords.y))
+                     * 0.05;
+    sum += texture2D(texture, vec2(tex_coords.x - 3.0*dt, tex_coords.y))
+                     * 0.09;
+    sum += texture2D(texture, vec2(tex_coords.x - 2.0*dt, tex_coords.y))
+                     * 0.12;
+    sum += texture2D(texture, vec2(tex_coords.x - dt, tex_coords.y))
+                     * 0.15;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y))
+                     * 0.16;
+    sum += texture2D(texture, vec2(tex_coords.x + dt, tex_coords.y))
+                     * 0.15;
+    sum += texture2D(texture, vec2(tex_coords.x + 2.0*dt, tex_coords.y))
+                     * 0.12;
+    sum += texture2D(texture, vec2(tex_coords.x + 3.0*dt, tex_coords.y))
+                     * 0.09;
+    sum += texture2D(texture, vec2(tex_coords.x + 4.0*dt, tex_coords.y))
+                     * 0.05;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y - 4.0*dt))
+                     * 0.05;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y - 3.0*dt))
+                     * 0.09;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y - 2.0*dt))
+                     * 0.12;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y - dt))
+                     * 0.15;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y))
+                     * 0.16;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y + dt))
+                     * 0.15;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y + 2.0*dt))
+                     * 0.12;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y + 3.0*dt))
+                     * 0.09;
+    sum += texture2D(texture, vec2(tex_coords.x, tex_coords.y + 4.0*dt))
+                     * 0.05;
+    return vec4(sum.xyz, color.w);
+}}
+"""
 
 
 class TimeController:
@@ -121,14 +167,14 @@ class DialWidget(FloatLayout):
         anim.start(self)
 
         # Shading widget
-        self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
+        self.dial_shading = DialEffectWidget((self.sunrise, self.sunset))
 
         # Add icons that can be arbitrarily rotated on canvas.
         self.sun_rise_marker = SunRiseMarker(self.sunrise)
         self.sun_set_marker = SunSetMarker(self.sunset)
 
         # Add widgets
-        self.add_widget(self.dial_widget)
+        self.add_widget(self.dial_shading)
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
@@ -137,7 +183,7 @@ class DialWidget(FloatLayout):
     def redraw(self, a):
         self.date_iterate += 10
 
-        self.remove_widget(self.dial_widget)
+        self.remove_widget(self.dial_shading)
         self.remove_widget(self.sun_rise_marker)
         self.remove_widget(self.sun_set_marker)
 
@@ -148,14 +194,14 @@ class DialWidget(FloatLayout):
         self.sunset = sun_angles[1]
 
         # Shading widget
-        self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
+        self.dial_shading = DialEffectWidget((self.sunrise, self.sunset))
 
         # Add icons that can be arbitrarily rotated on canvas.
         self.sun_rise_marker = SunRiseMarker(self.sunrise)
         self.sun_set_marker = SunSetMarker(self.sunset)
 
         # Add widgets
-        self.add_widget(self.dial_widget)
+        self.add_widget(self.dial_shading)
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
@@ -166,13 +212,28 @@ class DialWidget(FloatLayout):
             item.angle = 0
 
 
+class DoubleVision(EffectBase):
+    size = NumericProperty(4.0)
+
+    def __init__(self, *args, **kwargs):
+        super(DoubleVision, self).__init__(*args, **kwargs)
+        self.do_glsl()
+
+    def on_size(self, *args):
+        self.do_glsl()
+
+    def do_glsl(self):
+        self.glsl = hv_blur.format(float(self.size))
+
+
 class DialEffectWidget(EffectWidget):
     def __init__(self, angles, **kwargs):
         super(DialEffectWidget, self).__init__(**kwargs)
 
         self.shade_size = Window.height * 0.8, Window.height * 0.8
         self.add_widget(SunShading(angles))
-        self.effects = [HorizontalBlurEffect(size=50.0), VerticalBlurEffect(size=50.0)]
+        # self.effects = [HorizontalBlurEffect(size=50.0), VerticalBlurEffect(size=50.0)]
+        self.effects = [DoubleVision(size=50.0)]
         self.opacity = 0.25
 
     def _pos_check(self):
