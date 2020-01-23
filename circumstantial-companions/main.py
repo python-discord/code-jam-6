@@ -25,7 +25,7 @@ class ChiselRadiusSlider(Slider):
         self.chisel = chisel
         super().__init__(orientation="vertical",
                          range=CHISEL_RADIUS_RANGE,
-                         value=chisel.radius,
+                         value=chisel.chisel_radius,
                          value_track=True,
                          value_track_color=[1, 0, 1, 1])
 
@@ -38,7 +38,7 @@ class ChiselPowerSlider(Slider):
         self.chisel = chisel
         super().__init__(orientation="vertical",
                          range=CHISEL_POWER_RANGE,
-                         value=chisel.power,
+                         value=chisel.chisel_power,
                          value_track=True,
                          value_track_color=[1, 0, 1, 1])
 
