@@ -112,7 +112,7 @@ class EncoderScreen(Screen):
         #     print("Google Cloud: Another Exception occurred. Trying with Sphinx.")
 
         #If google cloud fails, try with Sphinx
-        if recognizedSpeech = "":
+        if recognizedSpeech == "":
             try:
                 recognizedSpeech = r.recognize_sphinx(audio)
                 print("Sphinx:",recognizedSpeech)
