@@ -9,6 +9,8 @@ from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.clock import Clock
 
+import math
+
 
 class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
@@ -34,7 +36,10 @@ class GameView(Widget):
 
             birds = Image(pos=(Window.width, 400), source=ATLAS_PATH.format('birds-0'))
             birds.size = birds.texture_size
-            bird_animation = Animation(x=-birds.width, d=10)
+            up_down = (Animation(y=350, d=5, t=self.sin_transition) +
+                       Animation(y=450, d=5, t=self._sin_transition))
+            up_down.repeat = True
+            bird_animation = Animation(x=-birds.width, d=30) & up_down
             bird_animation.start(birds)
 
             bird_animation.bind(on_complete=self.on_birds_complete)
@@ -48,9 +53,14 @@ class GameView(Widget):
             )
 
     @staticmethod
+    def _sin_transition(progress):
+        return math.sin(progress * math.pi)
+
+    @staticmethod
     def on_birds_complete(animation, birds):
         birds.pos = (Window.width, 500)
-        Clock.schedule_interval(lambda dt: animation.start(birds), randint(10, 30))
+        delay = randint(10, 30)
+        Clock.schedule_interval(lambda dt: animation.start(birds), delay)
 
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
