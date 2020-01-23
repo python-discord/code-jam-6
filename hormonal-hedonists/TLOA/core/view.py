@@ -11,6 +11,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy import Logger
+from kivy.uix.label import Label
 
 import math
 
@@ -27,6 +28,7 @@ class GameView(Widget):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self.free_ships = [] # list of free ship. Use to avoid allocate new ship
         self.hp_bar = None # will be init later
+        self.score = None # will be init later
 
     def show_game(self):
         Animation.cancel_all(self)
@@ -64,6 +66,8 @@ class GameView(Widget):
             self.hp_bar = Image(pos=(10, WINDOW_HEIGHT - 80), source=ATLAS_PATH.format('100'))
             self.hp_bar.size = self.hp_bar.texture_size
 
+            self.score = Label(pos=(990, 700), text=f'Score:   0', font_size=75)
+
 
     @staticmethod
     def _sin_transition(progress):
@@ -90,8 +94,8 @@ class GameView(Widget):
         return self._game.process_action(action)
 
     def on_score_change(self, obj, value):
-        # TODO show score
         Logger.debug(f'New score: {value}')
+        self.score.text = f'Score: {value:3}'
 
     def on_island_health_change(self, obj, value):
         health = math.ceil(value / 10) * 10
@@ -102,18 +106,16 @@ class GameView(Widget):
             Logger.debug(f'Add ship at lane: {lane}')
             # find in free ship list
             ship_view = None
-            # img_source = ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type])
-            for f in self.free_ships:
-                if f.core._type == ship._type:
-                    Logger.debug(f'Found free ship, not need allocate one')
-                    ship_view = f
-                    ship_view.pos = (WINDOW_WIDTH + 100, 50 * lane)
-                    ship_view.core.reset_status()
-                    self.free_ships.remove(f)
-                    break
+            # for f in self.free_ships:
+            #     if f.core._type == ship._type:
+            #         Logger.debug(f'Found free ship, not need allocate one')
+            #         ship_view = f
+            #         ship_view.pos = (WINDOW_WIDTH + 100, 50 * lane)
+            #         ship_view.set_new_core(ship)
+            #         ship_view.core.reset_status()
+            #         self.free_ships.remove(f)
+            #         break
             if ship_view is None:
-                # ship_view = Image(pos=(WINDOW_WIDTH + 100, 50 * lane), source=img_source)
-                # ship_view.size = ship_view.texture_size
                 ship_view = ShipView(ship, pos=(WINDOW_WIDTH + 100, 50 * lane))
             lane_length = LANE_LENGTHS[lane]
             duration = lane_length / (ship.speed * 10.)
@@ -121,7 +123,7 @@ class GameView(Widget):
             ship_move_animation.start(ship_view)
             ship_move_animation.bind(on_complete=self._game.on_ship_attack)
             ship_move_animation.bind(on_complete=self.on_ship_attack)
-            ship_view.bind(destroyed=self.on_ship_destroyed)
+            ship_view.bind(core_destroyed=self.on_ship_destroyed)
     
     def on_ship_attack(self, animation, ship_view):
         ship_view.pos = (WINDOW_WIDTH + 100, 0)
