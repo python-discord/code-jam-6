@@ -1,14 +1,14 @@
 from datetime import datetime, timedelta, date
 import pickle
 
-from geopy.geocoders import Nominatim
-
 import kivy
 import requests
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.metrics import Metrics
 from kivy.properties import NumericProperty
 from kivy.uix.effectwidget import EffectWidget, HorizontalBlurEffect, VerticalBlurEffect
 from kivy.uix.floatlayout import FloatLayout
@@ -18,98 +18,33 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 
 from suntime import Sun, SunTimeException
 
-from config import GEOLOCATION_KEY
 
 kivy.require('1.11.1')
 
 
-# Widget element things #
-class DialWidget(FloatLayout):
-    """
-    Speed will become a fixed value of 86400 once completed.
-    Image should, i suppose, be a fixed image?
-    At some point we'll need to add a tuple(?) for sunrise / sunset times.
-    """
-    angle = NumericProperty(0)
+class TimeController:
+    clock_multiplier = 5000
+    date_iterate = 0
 
-    def __init__(self, day_length, dial_size, **kwargs):
-        super(DialWidget, self).__init__(**kwargs)
+    def __init__(self):
+        pass
 
-        self.dial_size = dial_size
-
-        # Split suntime tuple into named variables
-        self.sun_angles = self.suntimes()
-        self.sunrise = self.sun_angles[0]
-        self.sunset = self.sun_angles[1]
-
-        self.test_date = 0
-
-        # Duration is how long it takes to perform the overall animation
-        anim = Animation(angle=360, duration=day_length)
-        anim += Animation(angle=360, duration=day_length)
-        anim.repeat = True
-        anim.start(self)
-
-        # Shading widget
-        self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
-
-        # Add icons that can be arbitrarily rotated on canvas.
-        self.sun_rise_marker = SunRiseMarker(self.sunrise)
-        self.sun_set_marker = SunSetMarker(self.sunset)
-
-        # Add widgets
-        self.add_widget(self.dial_widget)
-        self.add_widget(self.sun_rise_marker)
-        self.add_widget(self.sun_set_marker)
-
-    def on_angle(self, item, angle):
-        if angle == 360:
-            item.angle = 0
-
-            self.remove_widget(self.dial_widget)
-            self.remove_widget(self.sun_rise_marker)
-            self.remove_widget(self.sun_set_marker)
-
-            self.test_date += 30
-            sun_angles = self.suntimes(self.test_date)
-
-            # Split suntime tuple into named variables
-            self.sunrise = sun_angles[0]
-            self.sunset = sun_angles[1]
-
-            # Shading widget
-            self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
-
-            # Add icons that can be arbitrarily rotated on canvas.
-            self.sun_rise_marker = SunRiseMarker(self.sunrise)
-            self.sun_set_marker = SunSetMarker(self.sunset)
-
-            # Add widgets
-            self.add_widget(self.dial_widget)
-            self.add_widget(self.sun_rise_marker)
-            self.add_widget(self.sun_set_marker)
-
-    def suntimes(self, test_date=0):
-        # lat_long = self.ipgeolocate()
-
-        # pickled object for testing purposes
+    def sun_angles(self, date_iterate):
         with open('latlong.tmp', 'rb') as f:
             lat_long = pickle.load(f)
 
-        sun_time = Sun(lat_long[0], lat_long[1])
-        current_date = datetime.now()
+        print(date_iterate)
 
-        # For testing date roll over
-        date_testing = datetime.now() + timedelta(days=test_date)
-        print(f"New Date: {date_testing}")
+        sun_time = Sun(lat_long[0], lat_long[1])
+        current_date = datetime.now() + timedelta(days=date_iterate)
 
         try:
-            today_sunrise = sun_time.get_sunrise_time(date_testing)
+            today_sunrise = sun_time.get_sunrise_time(current_date)
         except SunTimeException:
             raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
 
         try:
-            today_sunset = sun_time.get_sunset_time(date_testing)
+            today_sunset = sun_time.get_sunset_time(current_date)
         except SunTimeException:
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
@@ -155,6 +90,80 @@ class DialWidget(FloatLayout):
             today_sunset = 360 - (today_sunset * 0.25)
 
         return today_sunrise, today_sunset
+
+
+# Widget element things #
+class DialWidget(FloatLayout):
+    """
+    Speed will become a fixed value of 86400 once completed.
+    Image should, i suppose, be a fixed image?
+    At some point we'll need to add a tuple(?) for sunrise / sunset times.
+    """
+    angle = NumericProperty(0)
+
+    def __init__(self, day_length, dial_size, **kwargs):
+        super(DialWidget, self).__init__(**kwargs)
+
+        self.date_iterate = 0
+        self.dial_size = dial_size
+
+        # Split suntime tuple into named variables
+        self.sun_angles = TimeController().sun_angles(self.date_iterate)
+        self.sunrise = self.sun_angles[0]
+        self.sunset = self.sun_angles[1]
+
+        self.test_date = 0
+
+        # Duration is how long it takes to perform the overall animation
+        anim = Animation(angle=360, duration=day_length)
+        anim += Animation(angle=360, duration=day_length)
+        anim.repeat = True
+        anim.start(self)
+
+        # Shading widget
+        self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
+
+        # Add icons that can be arbitrarily rotated on canvas.
+        self.sun_rise_marker = SunRiseMarker(self.sunrise)
+        self.sun_set_marker = SunSetMarker(self.sunset)
+
+        # Add widgets
+        self.add_widget(self.dial_widget)
+        self.add_widget(self.sun_rise_marker)
+        self.add_widget(self.sun_set_marker)
+
+        self.clock = Clock.schedule_interval(self.redraw, 2.5)
+
+    def redraw(self, a):
+        self.date_iterate += 10
+
+        self.remove_widget(self.dial_widget)
+        self.remove_widget(self.sun_rise_marker)
+        self.remove_widget(self.sun_set_marker)
+
+        sun_angles = TimeController().sun_angles(self.date_iterate)
+
+        # Split suntime tuple into named variables
+        self.sunrise = sun_angles[0]
+        self.sunset = sun_angles[1]
+
+        # Shading widget
+        self.dial_widget = DialEffectWidget((self.sunrise, self.sunset))
+
+        # Add icons that can be arbitrarily rotated on canvas.
+        self.sun_rise_marker = SunRiseMarker(self.sunrise)
+        self.sun_set_marker = SunSetMarker(self.sunset)
+
+        # Add widgets
+        self.add_widget(self.dial_widget)
+        self.add_widget(self.sun_rise_marker)
+        self.add_widget(self.sun_set_marker)
+
+        self.clock = Clock.schedule_interval(self.redraw, 2.5)
+
+    def on_angle(self, item, angle):
+        if angle == 360:
+            item.angle = 0
 
 
 class DialEffectWidget(EffectWidget):
@@ -211,10 +220,7 @@ class SunShading(FloatLayout):
         self.shade_size = Window.height * 0.8, Window.height * 0.8
 
     def _size_check(self):
-        if Window.width > Window.height:
-            self.shade_size = Window.height * 0.8, Window.height * 0.8
-        else:
-            self.shade_size = Window.width * 0.8, Window.width * 0.8
+        self.shade_size = Window.height * 0.8, Window.height * 0.8
 
 
 class SunRiseMarker(FloatLayout):
@@ -237,18 +243,21 @@ class NowMarker(FloatLayout):
 class MainScreen(Screen):
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
-        self.window_width = Window.width
 
-        self.add_widget(DialWidget(60, (0.8, 0.8)))
+        self.add_widget(DialWidget(86400, (0.8, 0.8)))
         self.add_widget(NowMarker())
 
     def on_size(self, a, b):
-        # Redefine window_width for use in kv file
-        self.window_width = Window.width
+        # Maintains a constant aspect ratio of 0.5625 (16:9)
+        width, height = Window.size
 
-        # Maintains a constant aspect ratio of 0.75 (4:3)
-        if (Window.height / Window.width) != 0.5625 and Window.fullscreen is False:
-            Window.size = Window.width, Window.width * 0.5625
+        if not Window.fullscreen and (height / width) != 0.5625:
+            height = width * 0.5625
+
+        width /= Metrics.density
+        height /= Metrics.density
+
+        Window.size = (width, height)
 
     def time_control_button(self):
         time_control_popup = TimeWizard()
@@ -258,20 +267,14 @@ class MainScreen(Screen):
         SettingsScreen()
 
     def ipgeolocate(self):
-        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
-        resp = r.json()
-        city = resp['city']
-        state_prov = resp['state_prov']
-
-        geolocate = Nominatim(user_agent="Code Jam 6: SunClock")
-        location = geolocate.geocode(f"{city} {state_prov}")
+        resp = requests.get('http://ip-api.com/json/').json()
 
         # pickle the object for testing purposes
-        temp_latlong = [location.latitude, location.longitude]
+        temp_latlong = [resp['lat'], resp['lon']]
         with open('latlong.tmp', 'wb') as f:
             pickle.dump(temp_latlong, f)
 
-        return location.latitude, location.longitude
+        return resp['lat'], resp['lon']
 
 
 # Time control panel
@@ -285,16 +288,14 @@ class SettingsScreen(Popup):
     def __init__(self, **kwargs):
         super(SettingsScreen, self).__init__(**kwargs)
 
-        r = requests.get(f'https://api.ipgeolocation.io/ipgeo?apiKey={GEOLOCATION_KEY}')
-        resp = r.json()
+        resp = requests.get('http://ip-api.com/json/').json()
         city = resp['city']
-        state_prov = resp['state_prov']
-        country = resp['country_name']
-        zipcode = resp['zipcode']
+        region = resp['regionName']
+        country = resp['country']
 
         settings_popup = Popup(title="Settings",
                                content=Label(
-                                   text=f'Currently in {city}, {state_prov}, {country} {zipcode}'
+                                   text=f'Currently in {city}, {region}, {country}'
                                ),
                                size_hint=(None, None), size=(500, 200))
         settings_popup.open()
