@@ -214,7 +214,7 @@ class GameScreen(Screen):
         store_put(
             last_saved_date=datetime.now().isoformat(),
             last_saved_state=game["current_state"],
-            last_saved_output_text=game["current_outpust_text"],
+            last_saved_output_text=game["current_output_text"],
         )
 
     def change_game_title(self, btn, title):
