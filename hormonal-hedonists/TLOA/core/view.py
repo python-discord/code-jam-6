@@ -28,8 +28,9 @@ class GameView(Widget):
             sky = Image(source=IMAGES_PATH.format('sky.png'))
             sky.size = sky.texture_size
 
-            waves = Image(source=ATLAS_PATH.format('sea_waves-0'))
+            waves = Image(source=IMAGES_PATH.format('sea_waves.gif'))
             waves.size = waves.texture_size
+            waves.anim_delay = 1
 
             island = Image(source=IMAGES_PATH.format('island.png'))
             island.size = island.texture_size
@@ -51,6 +52,7 @@ class GameView(Widget):
                 pos=(150, 260),
                 source=ATLAS_PATH.format(f'{self._game.mirror.id}-{self._game.mirror.state}')
             )
+            self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
     @staticmethod
     def _sin_transition(progress):
