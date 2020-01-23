@@ -4,14 +4,11 @@ representation of Paleolithic technology!  Re-invent the wheel with this (rock)c
 simulation! A caveman workout routine guaranteed to give you chiseled slabs fast!
 """
 from kivy.app import App
-from kivy.core.image import Image as CoreImage
 from kivy.core.window import Window
-from kivy.graphics import Rectangle
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.slider import Slider
@@ -19,6 +16,7 @@ from kivy.garden.navigationdrawer import NavigationDrawer
 
 from cursor import Cursor
 from i18n import DEFAULT_LOCALE, SYSTEM_LOCALE, LOCALES, TRANSLATIONS
+from mixins import RepeatingBackground
 from stone import Chisel, CHISEL_RADIUS_RANGE, CHISEL_POWER_RANGE
 
 
@@ -52,11 +50,12 @@ class ChiselPowerSlider(Slider):
         self.chisel.set_power(value)
 
 
-class OptionsPanel(BoxLayout):
+class OptionsPanel(RepeatingBackground, BoxLayout):
     def __init__(self, chisel):
         self.chisel = chisel
         self.dropdown = None
         super().__init__(orientation="vertical", spacing="10")
+        self.setup_background("assets/img/options_background.png")
 
     def build(self, locale=SYSTEM_LOCALE):
         self.clear_widgets()

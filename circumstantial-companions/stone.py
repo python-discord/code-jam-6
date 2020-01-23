@@ -12,6 +12,8 @@ from kivy.vector import Vector
 from PIL import Image
 import numpy as np
 
+from mixins import RepeatingBackground
+
 GRAVITY = .02
 FRICTION = .9
 CHISEL_RADIUS = 6e-4
@@ -111,14 +113,14 @@ class Pebble:
         else:
             self.velocity = vx, vy
 
-class Chisel(Widget):
+class Chisel(RepeatingBackground, Widget):
     """
     Handles collision detection between pebbles and the hammer.  Creates Pebbles on collision.
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.resize_event = Clock.schedule_once(lambda dt:None, 0)
-        self.setup_background()
+        self.setup_background("assets/img/chisel_background.png", 0.1, (0.4, 0.4, 0.4, 1))
 
         self.pebbles = {}
         self.positions = []
@@ -132,42 +134,12 @@ class Chisel(Widget):
                                                  PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS),
                                          width=PEBBLE_RADIUS))
 
-        self.bind(size=self.delayed_resize, pos=self.delayed_resize)
-
         # TODO: Implement adjustable chisel radius and power
         self.set_radius(DEFAULT_CHISEL_RADIUS)
         self.set_power(DEFAULT_CHISEL_POWER)
 
-    def setup_background(self):
-        texture = CoreImage("assets/img/chisel_background.png").texture
-        texture.wrap = "repeat"
-
-        with self.canvas.before:
-            Color(0.4, 0.4, 0.4, 1)
-            self.bg_rect = Rectangle(texture=texture)
-
-    def _get_uvsize(self):
-        texture = self.bg_rect.texture
-        return (math.ceil(self.width / texture.width),
-                math.ceil(self.height / texture.height))
-
-    def _get_background_size(self):
-        texture = self.bg_rect.texture
-        uv_width, uv_height = texture.uvsize
-        return uv_width * texture.width, uv_height * texture.height
-
-    def _update_bg_rect(self, instance, value=None):
-        self.bg_rect.texture.uvsize = self._get_uvsize()
-        self.bg_rect.texture = self.bg_rect.texture  # required to trigger update
-        self.bg_rect.pos = instance.pos
-        self.bg_rect.size = self._get_background_size()
-
-    def delayed_resize(self, *args):
-        self.resize_event.cancel()
-        self.resize_event = Clock.schedule_once(lambda dt: self.resize(*args), .3)
-
-    def resize(self, *args):
-        self._update_bg_rect(*args)
+    def resize(self, instance, value):
+        self.update_background(instance, value)
         for i, (x, y) in enumerate(self.positions):
             self.circles[i].circle = (x * self.width, y * self.height,
                                       PEBBLE_RADIUS, 0, 360, PEBBLE_SEGMENTS)
