@@ -1,9 +1,28 @@
 import random
 import logging
 from dataclasses import dataclass
-from typing import Union, Tuple, List, Type
+from typing import Union, Tuple, List, Type, Dict
 
 logger = logging.getLogger(__name__)
+
+
+@dataclass
+class MainState:
+    value: str
+    display_name: str
+    icon_asset: str
+
+
+class MainStatesHandler:
+    def __init__(self, main_four_states: Dict[dict]):
+        if len(main_four_states) != 4:
+            raise Exception("4 main states are required.")
+
+        self.four_main_states: Tuple[MainState] = tuple(
+            MainState(**state) for state in main_four_states)
+
+    def convert_to_game_state_dict(self) -> dict:
+        return {key: value for key, value in self.four_main_states}
 
 
 class GameState:
@@ -37,7 +56,7 @@ class GameState:
     _INTEGER_RANGE_INCLUDING = (0, 1000)
     _FLOAT_RANGE_INCLUDING = (0.0, 1.0)
 
-    def __init__(self, game_states: dict):
+    def __init__(self, game_states: dict, main_game_states: Dict[dict]):
         """
         :param game_states: dict of all possible game states with their default state. Example:
                             {
@@ -45,11 +64,28 @@ class GameState:
                              "world_encountered_dinosaur": false
                             }
         """
-        self._game_states = game_states
+        self._main_game_states = MainStatesHandler(main_game_states)
+        self._game_states = self._merge_states(game_states)
         self._game_turn = 0
 
     def __repr__(self):
         return str(self._game_states)
+
+    def _merge_states(self, game_states: dict):
+        game_states.update(self._main_game_states.convert_to_game_state_dict())
+        return game_states
+
+    def get_main_state_1(self):
+        return self._main_game_states.four_main_states[0]
+
+    def get_main_state_2(self):
+        return self._main_game_states.four_main_states[1]
+
+    def get_main_state_3(self):
+        return self._main_game_states.four_main_states[2]
+
+    def get_main_state_4(self):
+        return self._main_game_states.four_main_states[3]
 
     @property
     def game_turn(self):
@@ -57,18 +93,6 @@ class GameState:
 
     def increase_turn(self):
         self._game_turn += 1
-
-    @property
-    def player_health(self):
-        return self._game_states["player_health"]
-
-    @property
-    def player_water(self):
-        return self._game_states["player_water"]
-
-    @property
-    def player_food(self):
-        return self._game_states["player_food"]
 
     def update_state(self, effects: dict):
         """
