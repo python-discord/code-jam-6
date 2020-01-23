@@ -46,12 +46,10 @@ class DataController(EventDispatcher):
             outcome = self.active_card.options[0].get_outcome()
             self.active_card = self.game.take_turn(outcome)
             self.active_text = self.active_card.card_id
-            print(f"User is making choice {choice} on card {self.active_card}")
         else:
             outcome = self.active_card.options[0].get_outcome()
             self.active_card = self.game.take_turn(outcome)
             self.active_text = self.active_card.card_id
-            print(f"User is making choice {choice} on card {self.active_card}")
 
     def get_active_card(self):
         return self.active_card
