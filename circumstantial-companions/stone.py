@@ -144,17 +144,19 @@ class Chisel(RepeatingBackground, Widget):
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
-                self.circles.append(Line(circle=(x * self.width, y * self.height,
-                                                 pebble_radius, 0, 360, PEBBLE_SEGMENTS),
-                                         width=pebble_radius))
+                scaled_x = x * self.width
+                scaled_y = y * self.height
+                circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
+                self.circles.append(Line(circle=circle, width=pebble_radius))
 
     def resize(self, instance, value):
         self.update_background(instance, value)
-        self.pebble_radius = get_pebble_radius(self.width, self.height)
+        pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
-            self.circles[i].width = self.pebble_radius
-            self.circles[i].circle = (x * self.width, y * self.height,
-                                      self.pebble_radius, 0, 360, PEBBLE_SEGMENTS)
+            self.circles[i].width = pebble_radius
+            scaled_x = x * self.width
+            scaled_y = y * self.height
+            self.circles[i].circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
 
     def poke_power(self, touch, pebble_x, pebble_y):
         """
