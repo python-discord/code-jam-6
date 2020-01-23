@@ -85,14 +85,7 @@ class Pebble:
     """
     def __init__(self, index, stone, x, y, velocity):
         self.index = index
-
         self.stone = stone
-        self.circles = stone.circles
-        self.positions = stone.positions
-        self.pebbles = stone.pebbles
-        self.x_dim = stone.width
-        self.y_dim = stone.height
-
         self.x, self.y = x, y
         self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
@@ -111,16 +104,17 @@ class Pebble:
         if y > 1:
             vy *= -1
 
-        self.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
+        stone = self.stone
+        stone.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
 
-        scaled_x, scaled_y = self.x * self.x_dim, self.y * self.y_dim
-        self.circles[self.index].width = self.stone.radius
-        self.circles[self.index].circle = (scaled_x, scaled_y,
-                                           self.stone.radius, 0, 360, PEBBLE_SEGMENTS)
+        scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
+        stone.circles[self.index].width = stone.radius
+        stone.circles[self.index].circle = (scaled_x, scaled_y,
+                                            stone.radius, 0, 360, PEBBLE_SEGMENTS)
 
         if not self.y:
             self.update.cancel()
-            del self.pebbles[self.index] # Remove reference // kill this object
+            del stone.pebbles[self.index] # Remove reference // kill this object
         else:
             self.velocity = vx, vy
 
