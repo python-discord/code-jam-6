@@ -12,34 +12,11 @@ from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from requests import get
 
-from .save_game import store_put
+from .save_game import store_put, on_config_change
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
 )
-
-
-def on_config_change():
-    """
-    After you change the JSON data w/ JSONStore, call this function
-    This should only be called for rotor or plug changes
-    """
-    store = JsonStore(DATA_DIR)
-    game_id = str(App.get_running_app().game_id)
-    plugs = store.get(game_id)["current_state"]["plugs"]
-    plug_settings = " ".join(x for x in plugs)
-    App.get_running_app().machine.from_key_sheet(
-        rotors="I II III",
-        reflector="B",
-        ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings,
-    )
-    rotors = ""
-    for x in store.get(game_id)["current_state"]["rotors"]:
-        if x is None:
-            continue
-        rotors += x
-    App.get_running_app().machine.set_display(rotors)
 
 
 def get_wiki_summary() -> str:

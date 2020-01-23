@@ -8,9 +8,11 @@ DATA_DIR = os.path.join(
 )
 
 
-# Yes it's a duplicate but Kivy is giving me some stupid error.
-# So it's also here now.
 def on_config_change():
+    """
+    After you change the JSON data w/ JSONStore, call this function
+    This should only be called for rotor or plug changes
+    """
     store = JsonStore(DATA_DIR)
     game_id = str(App.get_running_app().game_id)
     plugs = store.get(game_id)["current_state"]["plugs"]
