@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v1
-      - name: Python style check
-        uses: bulv1ne/python-style-check@v0.3
+      - uses: actions/checkout@v2
+      - name: Black Code Formatter
+        uses: lgeiger/black-action@v1.0.1
+      - name: Flake8 checker
+        uses: cclauss/Find-Python-syntax-errors-action@v0.2.0
