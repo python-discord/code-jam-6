@@ -35,8 +35,8 @@ def pebble_setup():
     """
     pebbles_per_line = int(PEBBLE_COUNT**.5)
     scale = 1 / pebbles_per_line
-    x_scale = y_scale = .75
-    x_offset, y_offset = (1 - x_scale) / 2, .01
+    x_scale = y_scale = .75 # How much of the screen we use
+    x_offset, y_offset = (1 - x_scale) / 2, .01 # Lower-left corner offset of image
 
     with Image.open(PEBBLE_IMAGE) as image:
         w, h = image.size
@@ -112,6 +112,9 @@ class Pebble:
             self.velocity = vx, vy
 
 class Chisel(Widget):
+    """
+    Handles collision detection between pebbles and the hammer.  Creates Pebbles on collision.
+    """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.resize_event = Clock.schedule_once(lambda dt:None, 0)
