@@ -22,6 +22,7 @@ class DecoderScreen(Screen):
     def __init__(self, **kwargs):
         super(DecoderScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
+        self.amr = self.util.auto_morse_recognizer
         self.ui_layout()
 
     def ui_layout(self):
@@ -39,7 +40,7 @@ class DecoderScreen(Screen):
         # Moves widget out of the field of view
         self.decode_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
         # This binds the right icon to record the input
-        self.decode_input.icon_right = 'logout'
+        self.decode_input.icon_right = 'database-export'
         self.decode_input.children[2].children[0].bind(on_press=lambda x: self.clear_text())
 
         decode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
@@ -54,10 +55,9 @@ class DecoderScreen(Screen):
                                            font_style='Body1', halign='center', size_hint=(1, 0.5))
         self.decode_output_label.theme_text_color = 'Custom'
         self.decode_output_label.text_color = [1, 1, 1, 1]
-
-        self.audio_indicator = AudioIndicator()
+        print(self.amr.bits_per_frame)
+        self.audio_indicator = AudioIndicator(stack_width=self.amr.bits_per_frame)
         self.audio_indicator.size_hint = (1, 2)
-        Clock.schedule_interval(self.update_audio_indicator, 0.1)
 
         decode_card.add_widget(self.audio_indicator)
         decode_card.add_widget(self.decode_output_label)
@@ -70,9 +70,9 @@ class DecoderScreen(Screen):
 
     def update_audio_indicator(self, dt):
         if hasattr(self.audio_indicator, 'stack_width'):
-            level_array = []
-            for columns in range(self.audio_indicator.stack_width):
-                level_array.append(random.randrange(0, self.audio_indicator.stack_height))
+            level_array = [self.audio_indicator.stack_height + 1 if bit == 0 else 0 for bit in dt[-self.audio_indicator.stack_width:]]
+            # for columns in range(self.audio_indicator.stack_width):
+            #     level_array.append(random.randrange(0, self.audio_indicator.stack_height))
             self.audio_indicator.set_levels(level_array)
 
     def clear_text(self):
@@ -83,10 +83,25 @@ class DecoderScreen(Screen):
             self.record_button.md_bg_color = App.get_running_app().theme_cls.error_color
             self.decode_output_label.text = 'Recording Started'
             print("Start audio recording thread")
+            self.amr.start()
+            Clock.schedule_interval(self.update_amr, self.amr.frame_rate)
+
         else:
             self.decode_output_label.text = 'Recording Stopped'
             print("Stopped audio recording thread")
             self.record_button.md_bg_color = App.get_running_app().theme_cls.primary_color
+            Clock.unschedule(self.update_amr)
+            self.amr.stop()
+            self.clear_text()
+
+    def update_amr(self, kargs):
+        print(kargs)
+        morse_code, bit_signal = self.amr.update()
+        self.update_audio_indicator(bit_signal)
+        self.update_text(morse_code)
+
+    def update_text(self, morse_code):
+        self.decode_input.text = self.decode_input.text + ''.join(morse_code)
 
     def return_home(self):
         self.manager.current = 'welcome'

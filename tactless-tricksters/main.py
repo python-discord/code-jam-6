@@ -18,6 +18,9 @@ from ui.screens.conversation_screen import ConversationScreen
 from util.utility import Utility
 from ui.widgets.nav_drawer import MyNavigationLayout
 
+# import gc
+# gc.disable()
+
 
 class MainBox(FloatLayout):
     def __init__(self, **kwargs):
@@ -36,7 +39,8 @@ class MainBox(FloatLayout):
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
         self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
-        # Place screens here
+        # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
+        # # Place screens here
 
         self.screens.add_widget(self.content)
 

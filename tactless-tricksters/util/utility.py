@@ -1,4 +1,5 @@
 from third_party.py_morse_code.morse import Morse, DotDash
+from auto_morse_recognizer.auto_morse_recognizer import AutoMorseRecognizer
 from threading import Thread
 
 message_dict ={'Bob': {
@@ -64,6 +65,7 @@ message_dict ={'Bob': {
                                 }
                             }
 
+
 class Utility(object):
     def __init__(self):
         self.user_name = 'user_name'
@@ -71,6 +73,8 @@ class Utility(object):
         # Temp debug data
         self.message_dict = message_dict
         self.morse = Morse()
+        self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=9)
+
 
     def morse_transmit_thread(self):
         morse_thread = Thread(target=self.morse.transmit)
@@ -85,4 +89,3 @@ class Utility(object):
     def load_messages(self):
         # TODO
         pass
-
