@@ -175,18 +175,34 @@ class MirrorCannon(Widget):
 
 class LightRays(Mesh):
 
-    def __init__(self, **kwargs):
+    def __init__(self, point, mirror, **kwargs):
         super(LightRays, self).__init__(**kwargs)
         self.color = Color(01.0, 0.98, 0.1, 0.65)
         self.vertices = []
         self.indices = []
         self.mode = 'traingle_fan'
+        self.point = point
+        self.mirror = mirror
 
+    def increase_height(self):
+        x, y = self.point
+        y += 50
+        if(y > 300):
+           y = 300
+        self.point = (x,y)
 
-    def trace(self, point_pos, reflection_surface):
+    def decrease_height(self):
+        x, y = self.point
+        y -=50
+        if(y < 50):
+           y = 50
+        self.point = (x,y)
+
+    def trace(self, mirror):
         # Compute the vertices for sunray mesh 
-        x3, y3 = point_pos
-        x1, y1, x2, y2 = reflection_surface
+        x3, y3 = self.point
+        self.mirror = mirror
+        x1, y1, x2, y2 = self.mirror
 
         self.indices = [0, 1, 2]
         self.vertices = []
@@ -214,12 +230,17 @@ class GameWorld(Widget):
         self.add_widget(self.mirror_cannon)
 
         # create sun_rays
-        self.sun_rays = LightRays()
+        self.sun_rays = LightRays(
+            point=(
+                self.sun.sprite.pos[0]+100, self.sun.sprite.pos[1]+100),
+            mirror=self.mirror_cannon.mirror_axis_line)
         self.canvas.add(self.sun_rays.color)
         self.canvas.add(self.sun_rays)
 
         # create death_rays
-        self.death_rays = LightRays()
+        self.death_rays = LightRays(
+            point=(900, 50),
+            mirror=self.mirror_cannon.mirror_axis_line)
         self.canvas.add(self.death_rays.color)
         self.canvas.add(self.death_rays)
 
@@ -242,9 +263,10 @@ class GameWorld(Widget):
     def _on_keyboard_down(self, keybaord, keycode, text, modifiers):
         if keycode[1] == 'w':
             self.mirror_cannon.increase_angle()
-
+            self.death_rays.increase_height()
         if keycode[1] == 's':
             self.mirror_cannon.decrease_angle()
+            self.death_rays.decrease_height()
 
 
     def update(self, dt):
@@ -254,14 +276,10 @@ class GameWorld(Widget):
         self.birds.update(dt)
 
         # Trace the light rays from the sun to the mirror
-        origin = self.sun.sprite.pos[0]+100, self.sun.sprite.pos[1]+100
-        surface = self.mirror_cannon.mirror_axis_line
-        self.sun_rays.trace(origin, surface)
+        self.sun_rays.trace(mirror=self.mirror_cannon.mirror_axis_line)
 
         # Trace the death rays from the mirror and focus to a point
-        focus = (800, 150)
-        surface = self.mirror_cannon.mirror_axis_line
-        self.death_rays.trace(focus, surface)
+        self.death_rays.trace(mirror=self.mirror_cannon.mirror_axis_line)
 
 
 class GameApp(App):
