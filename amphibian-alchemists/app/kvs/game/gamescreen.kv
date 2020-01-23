@@ -35,7 +35,9 @@
                 root.dismiss()
         Button:
             text: "Exit"
-            on_release: root.manager.current = "main_screen"
+            on_release:
+                app.root.current = "main_screen"
+                root.dismiss()
 
 <GameScreen>:
     name: "game_screen"
