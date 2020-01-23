@@ -3,7 +3,6 @@ repos:
     rev: v2.3.0
     hooks:
     -   id: end-of-file-fixer
-    -   id: trailing-whitespace
     -   id: flake8
 default_stages:
   - commit
