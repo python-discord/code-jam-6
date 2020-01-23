@@ -26,7 +26,7 @@ class ContentNavigationDrawer(MDNavigationDrawer):
 
 
     def scr_chng(self, screen, nav_item):
-        self.nav_layout.toggle_nav_drawer()
+        #self.nav_layout.toggle_nav_drawer()
         # I have to manually reset the color back to white
         # because it's not doing it on its own
         nav_item._active_color = [1, 1, 1, 1]
@@ -37,7 +37,6 @@ class MyNavigationLayout(NavigationLayout):
     def __init__(self):
         super(MyNavigationLayout, self).__init__()
         self.content_nav_drawer = ContentNavigationDrawer(self)
-        self.drawer_open = False
 
         self.add_widget(self.content_nav_drawer)
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
@@ -47,10 +46,3 @@ class MyNavigationLayout(NavigationLayout):
         toolbar.left_action_items = [['menu', lambda x: self.toggle_nav_drawer()]]
         toolbar_anchor.add_widget(toolbar)
         self.add_widget(toolbar_anchor)
-
-    def toggle_nav_drawer(self):
-        self.drawer_open = not self.drawer_open
-        current_screen = App.get_running_app().root.content.current_screen
-        current_screen.disabled = self.drawer_open
-        super().toggle_nav_drawer()
-
