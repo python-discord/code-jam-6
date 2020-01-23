@@ -10,10 +10,14 @@ from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import Screen
 
-DATA_DIR = os.path.join(App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json"))
+DATA_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
 
 
-class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
+class SelectableRecycleBoxLayout(
+    FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout
+):
     """ Adds selection and focus behaviour to the view. """
 
 
@@ -60,5 +64,9 @@ class GameSelectorScreen(Screen):
                 created = str(game["created_date"])
                 last_saved = str(game["last_saved_date"])
                 self.ids.rv.data.append(
-                    {"value": f"{title}\n" f"Created: {created}\n" f"Last Saved: {last_saved}"}
+                    {
+                        "value": f"{title}\n"
+                        f"Created: {created}\n"
+                        f"Last Saved: {last_saved}"
+                    }
                 )
