@@ -37,3 +37,11 @@ SHIP_IMAGE_MAPPING = {
     ShipType.BROWN: 'brown_ship',
     ShipType.GOLDEN: 'golden_ship'
 }
+
+SHIP_SCORE = {
+    ShipType.BROWN: 1,
+    ShipType.GOLDEN: 2
+}
+
+LANE_NUMBER = 6
+LANE_LENGTHS = [WINDOW_WIDTH, WINDOW_WIDTH, WINDOW_WIDTH, 1000, 900, 900]
