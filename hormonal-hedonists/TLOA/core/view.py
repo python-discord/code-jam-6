@@ -21,6 +21,7 @@ class GameView(Widget):
 
         game.mirror.bind(state=self.on_mirror_state_change)
         game.bind(score=self.on_score_change)
+        game.bind(health=self.on_island_health_change)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
@@ -57,6 +58,9 @@ class GameView(Widget):
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
+            health_bar = Image(pos=(300, 300), source=ATLAS_PATH.format('100'))
+            health_bar.size = health_bar.texture_size
+
 
     @staticmethod
     def _sin_transition(progress):
@@ -85,6 +89,10 @@ class GameView(Widget):
     def on_score_change(self, obj, value):
         # TODO show score
         Logger.info(f'New score: {value}')
+
+    def on_island_health_change(self, obj, value):
+        health = (value % 10) * 10
+        
 
     def show_ship(self, ship, lane):
         with self.canvas:
