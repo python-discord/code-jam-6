@@ -49,30 +49,20 @@
             Button:
                 size_hint_y: 0.2
                 text: "Rotors"
-                on_release: root.manager.current = "rotor"
+                on_release: root.manager.current = "rotor_screen"
             EnigmaKeyboard:
                 id: enigma_keyboard
     AnchorLayout:
+        anchor_y : "top"
         anchor_x : "left"
-        BoxLayout:
-            orientation: "vertical"
-            Button:
-                text: "Menu"
-                size_hint: 0.1, 0.1
-                on_release: Factory.GameMenuPopup().open()
-            Button:
-                text: "paper"
-                size_hint: 0.1, 1
-                on_release: root.manager.current = "paper"
-    AnchorLayout:
-        anchor_x : "right"
         Button:
-            text: "Output paper"
-            size_hint: 0.1, 1
-            on_release: root.manager.current = "paper"
+            text: "Menu"
+            size_hint: 0.1, 0.1
+            on_release: Factory.GameMenuPopup().open()
     AnchorLayout:
         anchor_y: "bottom"
         Button:
             text: "plugboard"
             size_hint: 0.75, 0.15
-            on_release: root.manager.current = "plugboard"
+            on_release: root.manager.current = "plugboard_screen"
+    CheckPaper:

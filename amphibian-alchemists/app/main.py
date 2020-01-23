@@ -18,14 +18,14 @@ Builder.load_file("kvs/game/gamescreen.kv")
 Factory.register("SettingsScreen", module="classes.settingsscreen")
 Builder.load_file("kvs/settingsscreen.kv")
 
-Factory.register("PaperScreen", module="classes.game.paper")
-Builder.load_file("kvs/game/paper.kv")
-
 Factory.register("PlugboardScreen", module="classes.game.plugboard")
 Builder.load_file("kvs/game/plugboard.kv")
 
 Factory.register("RotorScreen", module="classes.game.rotor")
 Builder.load_file("kvs/game/rotor.kv")
+
+Factory.register("Paper", module="classes.game.paper")
+Builder.load_file("kvs/game/paper.kv")
 
 
 class UIManager(ScreenManager):
