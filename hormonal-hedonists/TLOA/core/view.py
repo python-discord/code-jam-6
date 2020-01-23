@@ -1,7 +1,7 @@
 from random import randint
 
 from TLOA.core.game import Game
-from TLOA.core.constants import ATLAS_PATH, IMAGES_PATH, KEY_MAPPING
+from TLOA.core.constants import ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, SHIP_IMAGE_MAPPING
 
 from kivy.animation import Animation
 from kivy.core.window import Window
@@ -59,6 +59,7 @@ class GameView(Widget):
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
+
     @staticmethod
     def _sin_transition(progress):
         return math.sin(progress * math.pi)
@@ -82,3 +83,14 @@ class GameView(Widget):
             return True
 
         return self._game.process_action(action)
+
+    def show_ship(self, ship):
+        with self.canvas:
+            ship_view = Image(pos=(1200, 100), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))
+            ship_move_animation = Animation(x=0, duration=10.)
+            ship_move_animation.start(ship_view)
+
+    def show_ships(self):
+        # show ships
+        for ship in self._game.ships:
+            ship_view = Image(pos=(650, 100), source=ATLAS_PATH.format(SHIP_IMAGE_MAPPING[ship._type]))

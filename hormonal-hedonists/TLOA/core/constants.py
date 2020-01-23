@@ -1,5 +1,7 @@
 from enum import Enum, unique
 
+from TLOA.entities import ShipType
+
 
 TITLE = "The Legend of Archimedes"
 WINDOW_WIDTH = 1200
@@ -29,4 +31,9 @@ KEY_MAPPING = {
     'd': Actions.MOVE_RIGHT,
     'right': Actions.MOVE_RIGHT,
     'space': Actions.JUMP,
+}
+
+SHIP_IMAGE_MAPPING = {
+    ShipType.BROWN: 'brown_ship',
+    ShipType.GOLDEN: 'golden_ship'
 }

@@ -15,7 +15,7 @@ class HormonalHedonistsApp(App):
         self._view = GameView(self._game)
 
     def on_start(self):
-        self._game.start()
+        self._game.start(self._view)
         self._view.show_game()
 
     def build(self):
