@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class MainState:
-    value: str
+    value: Union[int, float, bool]
     display_name: str
     icon_asset: str
 
