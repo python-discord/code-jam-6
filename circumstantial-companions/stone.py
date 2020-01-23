@@ -204,7 +204,7 @@ class Chisel(Widget):
 
     def on_touch_down(self, touch):
         self.poke(touch)
-        self.sound.play()
+        #self.sound.play()
         return True
 
     def on_touch_move(self, touch):
