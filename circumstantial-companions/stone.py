@@ -34,7 +34,7 @@ DEFAULT_CHISEL_RADIUS = 15
 CHISEL_POWER_RANGE = (0, 100)
 DEFAULT_CHISEL_POWER = 45
 
-def pebble_radius(width, height):
+def get_pebble_radius(width, height):
     scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
     radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .36
     return radius
@@ -108,9 +108,9 @@ class Pebble:
         stone.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
 
         scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
-        stone.circles[self.index].width = stone.radius
+        stone.circles[self.index].width = stone.pebble_radius
         stone.circles[self.index].circle = (scaled_x, scaled_y,
-                                            stone.radius, 0, 360, PEBBLE_SEGMENTS)
+                                            stone.pebble_radius, 0, 360, PEBBLE_SEGMENTS)
 
         if not self.y:
             self.update.cancel()
@@ -139,22 +139,22 @@ class Chisel(RepeatingBackground, Widget):
         self.pebbles = {}
         self.positions = []
         self.circles = []
-        radius = self.radius = pebble_radius(self.width, self.height)
+        pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         with self.canvas:
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
                 self.circles.append(Line(circle=(x * self.width, y * self.height,
-                                                 radius, 0, 360, PEBBLE_SEGMENTS),
-                                         width=radius))
+                                                 pebble_radius, 0, 360, PEBBLE_SEGMENTS),
+                                         width=pebble_radius))
 
     def resize(self, instance, value):
         self.update_background(instance, value)
-        self.radius = pebble_radius(self.width, self.height)
+        self.pebble_radius = get_pebble_radius(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
-            self.circles[i].width = self.radius
+            self.circles[i].width = self.pebble_radius
             self.circles[i].circle = (x * self.width, y * self.height,
-                                      self.radius, 0, 360, PEBBLE_SEGMENTS)
+                                      self.pebble_radius, 0, 360, PEBBLE_SEGMENTS)
 
     def poke_power(self, touch, pebble_x, pebble_y):
         """
