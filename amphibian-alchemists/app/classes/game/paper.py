@@ -32,7 +32,7 @@ class Paper(RelativeLayout):
             ]
         game = store.get(game_id)
         cipher_text = game["ciphered_text"]
-        current_state = game["current_state"]
+        current_state = game["encrypted_state"]
         plugs = current_state["plugs"]
         plug_settings = " ".join(x for x in plugs)
         rotor_settings = "I II III"
