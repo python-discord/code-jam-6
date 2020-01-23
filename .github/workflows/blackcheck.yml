@@ -3,7 +3,7 @@ name: Black check
 on: [push]
 
 jobs:
-  code-style:
+  black-check:
 
     runs-on: ubuntu-latest
 

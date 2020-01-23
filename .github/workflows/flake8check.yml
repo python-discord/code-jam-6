@@ -3,7 +3,7 @@ name: Flake8 check
 on: [push]
 
 jobs:
-  code-style:
+  flake8-check:
 
     runs-on: ubuntu-latest
 
