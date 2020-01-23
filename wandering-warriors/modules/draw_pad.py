@@ -25,6 +25,7 @@ class DrawPad(FloatLayout):
         self.in_pad = False
 
     def on_touch_down(self, touch):
+        super().on_touch_down(touch)
         ud = touch.ud
         if (touch.pos[0] > self.pos[0]
            and touch.pos[0] < self.pos[0] + self.size[0]
@@ -34,16 +35,17 @@ class DrawPad(FloatLayout):
             ud['group'] = g = str(touch.uid)
             pointsize = 1
             ud['color'] = 0
-            with self.canvas:
+            with self.canvas.before:
                 Color(0, 0, 0)
                 ud['lines'] = [
-                    Point(points=(touch.x, touch.y), source='particle.png',
+                    Point(points=(touch.x, touch.y),
                           pointsize=pointsize, group=g)]
             return True
         else:
             ud['lines'] = []
 
     def on_touch_move(self, touch):
+        super().on_touch_move(touch)
         if(self.in_pad and touch.pos[0] > self.pos[0]
            and touch.pos[0] < self.pos[0] + self.size[0]
            and touch.pos[1] > self.pos[1]
@@ -62,7 +64,14 @@ class DrawPad(FloatLayout):
                     pass
 
     def on_touch_up(self, touch):
-        ud = touch.ud
+        super().on_touch_up(touch)
+        # ud = touch.ud
         if self.in_pad:
             self.in_pad = False
-            return (self.canvas.get_group(ud['group'])[1].points)
+            # return (self.canvas.get_group(ud['group'])[1].points)
+
+    def click(self):
+        print('click')
+
+    def buttonImage(self):
+        return 'assets/graphics/clear1.png'

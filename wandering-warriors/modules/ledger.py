@@ -29,3 +29,9 @@ class LedgerLayout(BoxLayout):
 
         super(LedgerLayout, self).add_widget(widget, *args, **kwargs)
         self.child_widgets.append(widget)
+
+    def click(self):
+        print('click')
+
+    def buttonImage(self):
+        return 'assets/graphics/clay.png'

@@ -6,8 +6,11 @@
         BoxLayout:
             orientation: 'horizontal'
             Ledger:
+                TopRightButton:
+                    size_hint: 20, 20
             OperationsBar:
             CuneiformDrawingInput:
+                TopRightButton:
 
 <TopMenu>:
     size_hint_y: None
@@ -44,6 +47,7 @@
             size: self.size
             pos: self.pos
 
+
 <OperationsBar>:
     size_hint_x: None
     width: 48
@@ -57,15 +61,34 @@
 <CuneiformDrawingInput>:
     canvas.before:
         Color:
-            rgba: 0, 0, 0
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    canvas:
-        Color:
             rgb: 1, 1, 1, 1
         Rectangle:
-            source: 'assets/graphics/sandTexture.jpg'
+            source: 'assets/graphics/sandbox.jpg'
             size: self.size
             pos: self.pos
-    
+
+<TopRightButton>:
+    size_hint: 50, 50
+    #:set offset 10
+    Button:
+        size: self.parent.size_hint
+        background_color: .5, .5, .5, 1 
+        x: self.parent.parent.x + self.parent.parent.size[0] - self.size[0] - offset
+        y: self.parent.parent.y + self.parent.parent.size[1] - self.size[1] - offset
+        on_press:
+            self.background_color = 0, 0, 0.055
+            self.parent.parent.click()
+        on_release:
+            self.background_color = .5, .5, .5, 1 
+        canvas.before:
+            Color:
+                rgba: self.background_color
+            Line:
+                width: 2
+                rectangle: self.x, self.y, self.width, self.height
+        Image:
+            source: self.parent.parent.parent.buttonImage()
+            center_x: self.parent.center_x
+            center_y: self.parent.center_y
+            allow_stretch: True
+            size: self.parent.size

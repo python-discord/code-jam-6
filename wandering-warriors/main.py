@@ -34,6 +34,10 @@ class CuneiformDrawingInput(DrawPad):
     pass
 
 
+class TopRightButton(Widget):
+    pass
+
+
 class Screen:
     def __init__(self):
         self.sm = ScreenManager()
