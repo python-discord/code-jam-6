@@ -12,4 +12,4 @@ jobs:
       - name: Flake8 checker
         uses: cclauss/GitHub-Action-for-Flake8@v0.5.0
         with:
-          args: flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          args: flake8 . --show-source
