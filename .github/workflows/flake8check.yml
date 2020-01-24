@@ -10,4 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Flake8 checker
-        uses: cclauss/Find-Python-syntax-errors-action@v0.2.0
+        uses: cclauss/GitHub-Action-for-Flake8@v0.5.0
+        with:
+          args: flake8 . --show-source
