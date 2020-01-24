@@ -1,11 +1,11 @@
 from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER
 from TLOA.entities import MirrorCannon
-from TLOA.entities import GoldenShip, BrownShip, ShipType
+from TLOA.entities import GoldenShip, BrownShip
 
 from kivy import Logger
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
-from kivy.properties import ListProperty, NumericProperty, BoundedNumericProperty
+from kivy.properties import NumericProperty, BoundedNumericProperty
 from random import randint
 
 
@@ -13,6 +13,7 @@ class Game(EventDispatcher):
     score = NumericProperty(0)
     health = BoundedNumericProperty(100, min=0, max=100,
                                     errorhandler=lambda x: 0 if x < 0 else 100)
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.mirror = MirrorCannon()
@@ -24,7 +25,6 @@ class Game(EventDispatcher):
         Logger.info('Start game')
         self.view = view
         Clock.schedule_interval(self.spawn_ship, 5)
-
 
     def process_action(self, action: Actions):
         if action == Actions.MOVE_LEFT:
@@ -38,7 +38,6 @@ class Game(EventDispatcher):
         elif action == Actions.MOVE_DOWN:
             print('Moving Down')
         return True
-
 
     def spawn_ship(self, dt):
         self.total_spawned_ship += 1
@@ -54,8 +53,10 @@ class Game(EventDispatcher):
         self.ships.append((new_ship, ship_lane))
         self.view.show_ship(new_ship, ship_lane)
         # TODO remove this test code
+
         def drain_hp(dt):
             new_ship.health -= 10
+
         Clock.schedule_interval(drain_hp, 0.75)
 
     def on_ship_destroyed(self, ship, is_destroyed):
@@ -71,7 +72,7 @@ class Game(EventDispatcher):
         Logger.debug(f'Island health: {value}')
         if value <= 0:
             Logger.info('Game Over')
-    
+
     def on_ship_attack(self, animation, ship):
         Logger.debug('Ship attacked')
         # reduce health

@@ -1,8 +1,8 @@
 from random import randint
 
 from TLOA.core.game import Game
-from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, SHIP_IMAGE_MAPPING,
-                                WINDOW_WIDTH, WINDOW_HEIGHT, LANE_LENGTHS)
+from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING,
+                                 WINDOW_WIDTH, WINDOW_HEIGHT, LANE_LENGTHS)
 from .ship_view import ShipView
 
 from kivy.animation import Animation
@@ -26,9 +26,9 @@ class GameView(Widget):
         game.bind(health=self.on_island_health_change)
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self.free_ships = [] # list of free ship. Use to avoid allocate new ship
-        self.hp_bar = None # will be init later
-        self.score = None # will be init later
+        self.free_ships = []  # list of free ship. Use to avoid allocate new ship
+        self.hp_bar = None  # will be init later
+        self.score = None  # will be init later
 
     def show_game(self):
         Animation.cancel_all(self)
@@ -72,7 +72,6 @@ class GameView(Widget):
             self.hp_bar.size = self.hp_bar.texture_size
 
             self.score = Label(pos=(990, 700), text=f'Score:   0', font_size=75)
-
 
     @staticmethod
     def _sin_transition(progress):
@@ -130,7 +129,7 @@ class GameView(Widget):
             ship_move_animation.start(ship_view)
             ship_move_animation.bind(on_complete=self._game.on_ship_attack)
             ship_move_animation.bind(on_complete=self.on_ship_attack)
-    
+
     def on_ship_attack(self, animation, ship_view):
         ship_view.pos = (WINDOW_WIDTH + 100, 0)
         self.free_ships.append(ship_view)
