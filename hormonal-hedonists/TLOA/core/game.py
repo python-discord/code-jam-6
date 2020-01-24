@@ -74,13 +74,13 @@ class Game(EventDispatcher):
 
         # Track the closest ship in the active lane
         if self.closestShip:
-            death_rays_focus_x = self.closestShip.shape.x + 20
+            death_rays_focus_x = self.closestShip.shape.x + 100
         else:
             death_rays_focus_x = 600
 
         # Trace Death rays into the closest ship in the active lane.
         self.death_rays.trace(
-            point=Vector(death_rays_focus_x, LANE_BOUNDS[self.mirror.state][1]),
+            point=Vector(death_rays_focus_x, 100+LANE_BOUNDS[self.mirror.state][1]),
             surface=self.mirror.mirror_axis)
 
     # This property returns the closest ship in the active lane.
