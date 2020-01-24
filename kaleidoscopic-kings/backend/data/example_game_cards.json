@@ -2,7 +2,7 @@
   {
     "card_id": "dino_kick",
     "card_type": "event",
-    "card_asset": "test.jpg",
+    "card_image": "test.jpg",
     "text": "Uh, this is a test card. There's a dinosaur, do you kick it?",
     "options": [
       {
@@ -34,7 +34,8 @@
   {
     "card_id": "dino_kick_friendly",
     "card_type": "response",
-    "card_asset": "test.jpg",
+    "card_image": "test.jpg",
+    "card_sound": "kick.mp3",
     "text": "Turns out the dinosaur wasn't so scary after all. She ran away and left you some lovely eggs for breakfast",
     "options": [
       {
@@ -52,7 +53,7 @@
   {
     "card_id": "natural_smell",
     "card_type": "event",
-    "card_asset": "test.jpg",
+    "card_image": "test.jpg",
     "conditions": {"world_encountered_dinosaur": false},
     "text": "You stretch your arms and almost faint from your smell.",
     "options": [
@@ -85,7 +86,7 @@
   {
     "card_id": "river_dino_encounter",
     "card_type": "response",
-    "card_asset": "test.jpg",
+    "card_image": "test.jpg",
     "text": "Halfway trough your trip you see a T-Rex.",
     "options": [
       {
