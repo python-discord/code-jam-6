@@ -182,15 +182,20 @@ class ChiselApp(App):
         navdrawer = NavigationDrawer()
         navdrawer.toggle_state()
         navdrawer.anim_type = "slide_above_anim"
-        chisel = Chisel()
-        options_panel = OptionsPanel(chisel)
 
+        self.chisel = chisel = Chisel()
+        self.chisel_on_touch_down = chisel.on_touch_down
+        self.chisel_on_touch_move = chisel.on_touch_move
+
+        options_panel = OptionsPanel(chisel)
         navdrawer.add_widget(options_panel)
+
         rel_layout = RelativeLayout()
         rel_layout.add_widget(chisel)  # to push it when side panel is opened
         navdrawer.add_widget(rel_layout)
         options_panel.build()
         navdrawer.bind(_anim_progress=self._set_side_panel_opacity)
+        navdrawer.bind(_anim_progress=self.disable_chisel)
 
         root.add_widget(navdrawer)
         Window.add_widget(Cursor(), "after")
@@ -198,6 +203,13 @@ class ChiselApp(App):
 
     def _set_side_panel_opacity(self, instance, value):
         instance.side_panel.opacity = math.ceil(instance._anim_progress)
+
+    def disable_chisel(self, instance, value):
+        if instance._anim_progress > 0:
+            self.chisel.on_touch_down = self.chisel.on_touch_move = lambda *args: None
+        else:
+            self.chisel.on_touch_down = self.chisel_on_touch_down
+            self.chisel.on_touch_move = self.chisel_on_touch_move
 
 
 if __name__ == "__main__":
