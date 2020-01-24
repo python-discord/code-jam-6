@@ -34,7 +34,6 @@ class LedgerLayout(FloatLayout):
 
     def add_middle(self, w):
         if self.m_pos == '':
-            w.allow_stretch = True
             w.size_hint = (.3, .3)
             self.mid(w)
             self.top(w)
@@ -68,29 +67,24 @@ class LedgerLayout(FloatLayout):
             child.y -= child.size[1] - .2 * child.size[1]
 
     def _keydown(self, *args):
-        print(args[1])
         if(args[1] >= 257 and args[1] <= 265):
             if not self.add_left_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png')):
                 self.add_right_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png'))
         if(args[1] == 267):
             l = Label(text="[color=000000]/[/color]", markup=True)
             l.font_size = '58dp'
-            l.color = 0, 0, 0, 0
             self.add_middle(l)
         if(args[1] == 268):
             l = Label(text="[color=000000]*[/color]", markup=True)
             l.font_size = '58dp'
-            l.color = 0, 0, 0, 0
             self.add_middle(l)
         if(args[1] == 269):
             l = Label(text="[color=000000]-[/color]", markup=True)
             l.font_size = '58dp'
-            l.color = 0, 0, 0, 0
             self.add_middle(l)
         if(args[1] == 270):
             l = Label(text="[color=000000]+[/color]", markup=True)
             l.font_size = '58dp'
-            l.color = 0, 0, 0, 0
             self.add_middle(l)
         if(args[1] == 271):
             self.l_pos = ''
