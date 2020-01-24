@@ -10,8 +10,6 @@
 #            rectangle: [self.x, self.y, self.width, self.height]
 
 
-
-
 ################## LAYOUT ##################
 <MainWidget@GridLayout>:
     canvas.before:
@@ -30,12 +28,9 @@
         size_hint_x: 0.7
 
 
-
-
 ################## STATUS ##################
 <StatusBar@GridLayout>:
     rows: 4
-#    padding: (40, 150)
     padding: (40, 180, 40, 75)
     StatusWidget:
         Label:
@@ -75,6 +70,7 @@
         padding: (5, 5)
         CardBoxLayout:
             id: card
+
             BoxLayout:
                 size_hint_y: .2
                 Widget:
@@ -118,8 +114,6 @@
                 text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
 
 
-
-
 <ChoiceButton@Button>:
     font_size: 26
     background_normal: assets_file + 'button_bg_left.png'
@@ -128,6 +122,7 @@
     halign: 'center'
     text_size: self.size
     on_press: data.choice_handler('1')
+
 
 <CardBoxLayout@BoxLayout>:
     id: card
