@@ -121,6 +121,6 @@ def short_path(path: str) -> str:
             p = str(Path(*parts[idx:]))
 
             if len(p) <= MAX_PATH_LENGTH:
-                return p
+                return f'<< {p}'
 
     return path

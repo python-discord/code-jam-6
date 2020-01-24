@@ -25,7 +25,8 @@ class Footer(BoxLayout):
             '5': self.up,
             '6': self.mkdir,
             '7': self.delete,
-            '8': self.quit
+            '8': self.create,
+            '9': self.quit
         }
 
     def on_touch_up(self, touch):
@@ -63,6 +64,11 @@ class Footer(BoxLayout):
 
     def mkdir(self) -> None:
         popup = Mkdir(self, size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
+        popup.open()
+        return True
+
+    def create(self) -> None:
+        popup = CreatePopup(self, size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
         popup.open()
         return True
 
