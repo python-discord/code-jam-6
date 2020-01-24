@@ -12,13 +12,13 @@ class LightRays(Mesh):
         self.vertices = []
         self.indices = []
         self.mode = 'traingle_fan'
-        self.point = Vector(0,0)
+        self.point = Vector(0, 0)
         self.mirror = []
 
         self.trace(point=point, surface=surface)
 
     def trace(self, point: Vector, surface: List[Vector]):
-        # Compute the vertices for sunray mesh 
+        # Compute the vertices for sunray mesh
         self.mirror = surface
         self.point = point
 
