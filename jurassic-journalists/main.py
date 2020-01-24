@@ -27,7 +27,7 @@ SCREEN_HEIGHT = 1280
 STARTING_X = 50 # PAPER_WIDTH - 240
 STARTING_Y = 50 # PAPER_HEIGHT + 100
 PAPER_WIDTH = SCREEN_WIDTH * .7 - STARTING_X
-PAPER_HEIGHT = SCREEN_HEIGHT
+PAPER_HEIGHT = 720 # SCREEN_HEIGHT
 
 class MainScreen(ScreenManager):
     ''' ScreenManager '''
@@ -42,9 +42,7 @@ class PhoneScreen(Screen):
 
 
 class TypeWriterButton(Button):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.sound = SoundLoader.load('click.wav')
+    sound = SoundLoader.load('click.wav')
     def on_release(self):
         self.parent.typw.text += self.txt
         if abs(self.anim_y - self.default_y) >= .01:
@@ -69,9 +67,8 @@ class TextPaper(Image):
         # Creating Blank Paper image to type on.
         # self.img = Im.open("paper.png")
         # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
-        self.img = Im.new('RGBA', (int(SCREEN_WIDTH *.75), SCREEN_HEIGHT), (200,200,200,255))
-        self.default_pos = 225,  -SCREEN_HEIGHT//2 + 200
-
+        self.img = Im.new('RGBA', (int(SCREEN_WIDTH *.75), PAPER_HEIGHT), (200,200,200,255))
+        self.default_pos = 225,  - (SCREEN_HEIGHT - PAPER_HEIGHT)//2 + STARTING_Y + 10
         # Type writer does not type from the top rather type from the bottom.
         self.txt = self.img.copy()
         self.head = {'x': STARTING_X, 'y': STARTING_Y}
