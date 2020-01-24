@@ -9,7 +9,7 @@ class RotorScreen(Screen):
         save_rotors(
             rotor_section.first_rotor.ids.rotor_value.text,
             rotor_section.second_rotor.ids.rotor_value.text,
-            rotor_section.third_rotor.ids.rotor_value.text
+            rotor_section.third_rotor.ids.rotor_value.text,
         )
 
     keys = [
