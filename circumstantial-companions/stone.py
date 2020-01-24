@@ -17,7 +17,6 @@ MAX_VELOCITY = .2
 
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
 PEBBLE_COUNT = 7.5e3
-PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_IMAGE_SCALE = .75
 
 MIN_POWER = 1e-5
@@ -30,29 +29,39 @@ DEFAULT_CHISEL_POWER = 100
 BACKGROUND = 'assets/img/background.png'
 SOUND = 'assets/sounds/dig.wav'
 
+def get_image_and_aspect():
+    with Image.open(DEFAULT_PEBBLE_IMAGE) as image:
+        w, h = image.size
+        image = np.frombuffer(image.tobytes(), dtype=np.uint8)
+    image = image.reshape((h, w, 4))
+
+    pebbles_per_x = (PEBBLE_COUNT * w / h)**.5
+    pebbles_per_y = pebbles_per_x * h / w
+    pebbles_per_x = int(pebbles_per_x)
+    pebbles_per_y = int(pebbles_per_y)
+
+    return image, pebbles_per_x, pebbles_per_y
+
+PEBBLE_IMAGE, PEBBLES_PER_X, PEBBLES_PER_Y = get_image_and_aspect()
+
 def get_pebble_size(width, height):
     scaled_w, scaled_h =  2 * PEBBLE_IMAGE_SCALE * width, 2 * PEBBLE_IMAGE_SCALE * height
-    return scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE
+    return scaled_w / PEBBLES_PER_X, scaled_h / PEBBLES_PER_Y
 
 def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
     """
-    scale = 1 / PEBBLES_PER_LINE
+    x_scale, y_scale = 1 / PEBBLES_PER_X, 1 / PEBBLES_PER_Y
     x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image
+    h, w, _ = PEBBLE_IMAGE.shape
 
-    with Image.open(DEFAULT_PEBBLE_IMAGE) as image:
-        w, h = image.size
-        image = np.frombuffer(image.tobytes(), dtype=np.uint8)
-
-    image = image.reshape((h, w, 4))
-
-    for x in range(PEBBLES_PER_LINE):
-        x = scale * x
-        for y in range(PEBBLES_PER_LINE):
-            y = scale * y
+    for x in range(PEBBLES_PER_X):
+        x = x_scale * x
+        for y in range(PEBBLES_PER_Y):
+            y = y_scale * y
             sample_loc = int(y * h), int(x * w)
-            r, g, b, a = image[sample_loc]
+            r, g, b, a = PEBBLE_IMAGE[sample_loc]
             if not a:
                 continue
             pebble_x = x * PEBBLE_IMAGE_SCALE + x_offset
