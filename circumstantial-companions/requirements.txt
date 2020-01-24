@@ -6,3 +6,4 @@ kivy_deps.glew; sys_platform == "win32"
 kivy
 Babel
 numpy
+simpleaudio
