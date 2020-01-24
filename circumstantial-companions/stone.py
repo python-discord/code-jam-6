@@ -128,9 +128,6 @@ class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sound = sa.WaveObject.from_wave_file(SOUND)
-        self.looped_sound = Clock.schedule_interval(self.play_sound, 1)
-        self.looped_sound.cancel()
-        self.play = None
 
         self.set_radius(DEFAULT_CHISEL_RADIUS)
         self.set_power(DEFAULT_CHISEL_POWER)
@@ -148,11 +145,11 @@ class Chisel(Widget):
         with self.canvas:
             Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            for factor, depth in ((.5, 1), (1, 0)):
+            for depth, color_scale in enumerate((.4, .6, 1)):
                 for (r, g, b, a), x, y in pebble_setup():
                     scaled_x = x * self.width
                     scaled_y = y * self.height
-                    Color(factor * r, factor * g, factor * b, a)
+                    Color(color_scale * r, color_scale * g, color_scale * b, a)
                     self.positions.append((x, y, depth))
                     self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
         self.background.texture.mag_filter = 'nearest'
@@ -196,28 +193,20 @@ class Chisel(Widget):
         dislodged = {}
         for i, (x, y, z) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(touch, x, y))
-            if velocity and ((x, y) not in dislodged or dislodged[x, y]['z'] > z):
+            if velocity and ((x, y) not in dislodged or dislodged[x, y]['z'] < z):
                     dislodged[x, y] = dict(i=i, z=z, velocity=velocity)
         for (x, y), info in dislodged.items():
                 i, z, velocity = info.values()
                 self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
 
-    def play_sound(self, dt=0):
-        if self.play is None or not self.play.is_playing():
-            self.play = self.sound.play()
-
     def on_touch_down(self, touch):
         self.poke(touch)
-        self.play_sound()
+        self.sound.play()
         return True
 
     def on_touch_move(self, touch):
         self.poke(touch)
-        self.looped_sound()
         return True
-
-    def on_touch_up(self, touch):
-        self.looped_sound.cancel()
 
     def reset(self):
         self.canvas.clear()
