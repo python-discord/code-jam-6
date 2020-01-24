@@ -32,7 +32,6 @@ class SwipeCard(Scatter):
         self.dir = 0
 
     def on_touch_move(self, touch):
-
         if self.dir == 0:
             self.anim = None
 

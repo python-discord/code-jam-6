@@ -50,18 +50,24 @@
 
 ##################  CARD  ##################
 <CardWidget>:
-    # SwipeCard:
-    #     size_hint: None,None
-    #     do_rotation: False
-    #     do_scale: False
-    #     do_translation: False
-    #     rotation: 0
-    #     scale: 2
+        # size_hint: None,None
+        # size: 800, 800
+        # pos: -200, -800
+        # set_center: 0.5, 0.5
+        # do_rotation: False
+        # do_scale: False
+        # do_translation: False
+        # rotation: 0
+        # scale: 10
 
     BoxLayout:
         # size_hint: None,None
         orientation: 'vertical'
         padding: (5, 5)
+
+        # SwipeCard:
+        #     size: 5000, 5000
+        
         CardBoxLayout:
             id: card
             BoxLayout:
