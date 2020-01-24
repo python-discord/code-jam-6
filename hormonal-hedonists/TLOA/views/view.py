@@ -5,7 +5,6 @@ from random import randint
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH,
                                  WINDOW_HEIGHT, LANE_BOUNDS)
-from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.views import ShipView
 
 from kivy import Logger
@@ -110,6 +109,7 @@ class GameView(Widget):
             for ship in lane:
                 self.add_widget(ship.shape)
 
+
     @staticmethod
     def _sin_transition(progress):
         return math.sin(progress * math.pi)
@@ -122,10 +122,6 @@ class GameView(Widget):
 
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
-        self._game.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self._game.mirror.mirror_axis)
-        self._game.death_rays.trace(
-            point=Vector(600, LANE_BOUNDS[self._game.mirror.state][1]),
-            surface=self._game.mirror.mirror_axis)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)

@@ -51,6 +51,7 @@ class Game(EventDispatcher):
             return False
 
         # Deal damage with mirror
+
         # Simulating damage
         if random.random() < 0.5:
             lane = self.ship_lanes[random.randrange(6)]
@@ -67,6 +68,34 @@ class Game(EventDispatcher):
                     continue
 
                 ship.step(dt, self)
+
+        # Trace Sun rays onto the mirror
+        self.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self.mirror.mirror_axis)
+
+        # Track the closest ship in the active lane
+        if self.closestShip:
+            death_rays_focus_x = self.closestShip.shape.x + 20
+        else:
+            death_rays_focus_x = 600
+
+        # Trace Death rays into the closest ship in the active lane.
+        self.death_rays.trace(
+            point=Vector(death_rays_focus_x, LANE_BOUNDS[self.mirror.state][1]),
+            surface=self.mirror.mirror_axis)
+
+    # This property returns the closest ship in the active lane.
+    @property
+    def closestShip(self):
+        active_lane = self.mirror.state
+        closest_ship = None
+        for ship in self.ship_lanes[active_lane]:
+            if (ship.shape.x < 900):
+                if closest_ship:
+                    if (closest_ship.shape.x > ship.shape.x):
+                        closest_ship = ship
+                else:
+                    closest_ship = ship
+        return closest_ship
 
     def spawn_ship(self, override=False):
         if not self.running:
