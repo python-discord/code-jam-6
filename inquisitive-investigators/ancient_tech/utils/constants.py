@@ -38,4 +38,4 @@ UNITS: List[str] = [
     'YB'
 ]
 
-MAX_PATH_LENGTH: int = 50
+MAX_PATH_LENGTH: int = 42

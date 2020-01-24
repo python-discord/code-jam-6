@@ -12,18 +12,20 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.properties import ObjectProperty
 
 from .file import NewFile
-from ..utils.utils import file_info
+from ..utils.utils import file_info, short_path
 
 Builder.load_file('./ancient_tech/manager/filemanager.kv')
 
 
 class FileHeader(FloatLayout):
     current_dir = StringProperty()
+    dir_name = StringProperty()
     directory = ObjectProperty()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        self.current_dir = str(Path().home())
+        self.current_dir = str(Path.home())
+        self.dir_name = short_path(str(Path.home()))
 
 
 class RV(RecycleView):

@@ -1,20 +1,9 @@
 import sys
+from pathlib import Path
 from .core.main import AncientTechApp
 
 if __name__ == "__main__":
-    try:
-        sys.exit(AncientTechApp().run())
+    AncientTechApp().run()
     
-    finally:
-        # An attempt to supress empty
-        # thread exceptions
-
-        try:
-            sys.stdout.close()
-        except:
-            pass
-
-        try:
-            sys.stderr.close()
-        except:
-            pass
+    with open(Path('ancient_tech') / 'errors.log', 'w') as f:
+        sys.stderr = sys.stdout = f

@@ -55,7 +55,7 @@ class Mkdir(BasePopup):
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
             if self.filemanager == 1:
-                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.text)
+                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.current_dir)
                 new_dir = dir_ / dir_name
 
                 if not new_dir.exists():
@@ -73,7 +73,7 @@ class Mkdir(BasePopup):
                     self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
 
             elif self.filemanager == 2:
-                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.text)
+                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.current_dir)
                 new_dir = dir_ / dir_name
 
                 if not new_dir.exists():
@@ -127,7 +127,6 @@ class DeletePopup(BasePopup):
         self.dismiss()
 
     def _remove(self, dir_) -> None:
-        print(f'DIR NAME: {dir_.name} TEXT: {dir_.txt}')
         path = Path(dir_.txt)
 
         if dir_.type != 'DIR':
