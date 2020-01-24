@@ -19,6 +19,7 @@ Builder.load_file('./ancient_tech/manager/filemanager.kv')
 
 class FileHeader(FloatLayout):
     current_dir = StringProperty()
+    directory = ObjectProperty()
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -92,7 +93,7 @@ class Files(RecycleBoxLayout):
 
 class FileBrowser(FloatLayout):
     recycle_view = ObjectProperty()
-    pass
+    header = ObjectProperty()
 
 
 class Column(Widget):

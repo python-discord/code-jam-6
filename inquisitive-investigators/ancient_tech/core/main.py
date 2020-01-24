@@ -13,6 +13,7 @@ from kivy.uix.screenmanager import (
     Screen
 )
 
+from .core import BrowserScreen
 from ..footer.footer import Footer
 from ..terminal.terminal import Terminal
 from ..manager.browser import FileBrowser
@@ -21,19 +22,15 @@ from ..editor.editor import TextEditor
 Builder.load_file('./ancient_tech/core/core.kv')
 
 
-class Main(Screen, FloatLayout):
-    pass
-
-
 class Manager(ScreenManager):
 
     def __init__(self, *args, **kwargs):
         super(Manager, self).__init__(*args, **kwargs)
+        self.add_widget(BrowserScreen(name='browser'))
         self.add_widget(TextEditor(name='text_editor'))
-        self.add_widget(Main(name='browser'))
 
 
 class AncientTechApp(App):
 
     def build(self):
-        return Main()
+        return Manager()

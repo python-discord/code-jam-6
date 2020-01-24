@@ -7,11 +7,14 @@ from kivy.properties import (
     StringProperty,
     NumericProperty)
 
+from ..utils.utils import short_path
+
 
 class NewFile(Label):
     ctx = ObjectProperty()
     txt = StringProperty()
     alpha = NumericProperty()
+    browser = ObjectProperty()
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
@@ -49,6 +52,8 @@ class NewFile(Label):
                     current_path += part
 
             self.parent.parent.parent.ids.header.current_dir = current_path[:-1]
+            self.parent.parent.parent.ids.header.current_dir = short_path(str(path))
+
         else:
             Logger.info('FileBrowser: Not a directory!')
 
