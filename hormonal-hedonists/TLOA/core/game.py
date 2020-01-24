@@ -34,8 +34,10 @@ class Game(EventDispatcher):
             print('Moving Right')
             self.mirror.state += 1
         elif action == Actions.MOVE_UP:
+            self.mirror.state += 1
             print('Moving Up')
         elif action == Actions.MOVE_DOWN:
+            self.mirror.state -= 1
             print('Moving Down')
         return True
 
