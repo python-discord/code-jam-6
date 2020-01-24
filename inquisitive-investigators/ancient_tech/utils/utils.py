@@ -114,13 +114,13 @@ def file_info(
 
 
 def short_path(path: str) -> str:
-    if len(path) > 50:
+    if len(path) > 40:
         parts = Path(path).parts
 
         for idx in range(len(parts)):
             p = str(Path(*parts[idx:]))
 
-            if len(p) <= 50:
+            if len(p) <= 40:
                 return p
 
     return path

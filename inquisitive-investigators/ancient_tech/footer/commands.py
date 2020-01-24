@@ -158,8 +158,25 @@ class DeletePopup(BasePopup):
                 state = 1
             else:
                 state = 2
-            
+
             self.ctx.parent.ids.right.ids.rv.update(state=state, file=data)
+
+
+class CreatePopup(BasePopup):
+    left = NumericProperty()
+    right = NumericProperty()
+
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
+        super().__init__(ctx, *args, **kwargs)
+        self.filemanager = 0
+
+    def buttonselect(self, manager):
+        self.left, self.right = 0, 0
+        self.filemanager = manager
+        if manager == 1:
+            self.left = .2
+        else:
+            self.right = .2
 
 
 class QuitPopup(BasePopup):
