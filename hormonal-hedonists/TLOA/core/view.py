@@ -2,7 +2,7 @@ from random import randint
 
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING,
-                                 WINDOW_WIDTH, WINDOW_HEIGHT, LANE_LENGTHS)
+                                 WINDOW_WIDTH, WINDOW_HEIGHT, LANE_LENGTHS, LANE_WIDTH)
 from .ship_view import ShipView
 
 from kivy.animation import Animation
@@ -13,6 +13,7 @@ from kivy.clock import Clock
 from kivy import Logger
 from kivy.uix.label import Label
 from kivy.graphics import Color
+from kivy.vector import Vector
 import math
 
 from TLOA.entities.mirror_cannon import (MIRROR_CANNON_POS, LIGHT_SOURCE_POS, LIGHT_FOCUS_POS)
@@ -95,7 +96,7 @@ class GameView(Widget):
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
         self._game.sun_rays.trace(point = LIGHT_SOURCE_POS, surface = self._game.mirror.mirror_axis)
-        self._game.death_rays.trace(point = LIGHT_FOCUS_POS, surface = self._game.mirror.mirror_axis)
+        self._game.death_rays.trace(point = Vector(600, self._game.mirror.state*LANE_WIDTH), surface = self._game.mirror.mirror_axis)
         print(self._game.sun_rays.vertices)
 
     def _keyboard_closed(self):

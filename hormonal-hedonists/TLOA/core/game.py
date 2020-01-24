@@ -1,4 +1,4 @@
-from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER
+from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER, LANE_WIDTH
 from TLOA.entities import MirrorCannon, LightRays
 from TLOA.entities import GoldenShip, BrownShip
 from TLOA.entities.mirror_cannon import(LIGHT_SOURCE_POS, LIGHT_FOCUS_POS)
@@ -6,6 +6,7 @@ from kivy import Logger
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty, BoundedNumericProperty
+from kivy.vector import Vector
 from random import randint
 
 
@@ -18,7 +19,9 @@ class Game(EventDispatcher):
         super().__init__(**kwargs)
         self.mirror = MirrorCannon()
         self.sun_rays = LightRays(point=LIGHT_SOURCE_POS, surface=self.mirror.mirror_axis)
-        self.death_rays = LightRays(point=LIGHT_FOCUS_POS, surface=self.mirror.mirror_axis)
+        self.death_rays = LightRays(
+            point=Vector(600, self.mirror.state*LANE_WIDTH),
+            surface=self.mirror.mirror_axis)
         self.ships = []
         self.total_spawned_ship = 0
         self.view = None
