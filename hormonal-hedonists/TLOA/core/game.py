@@ -6,7 +6,6 @@ from kivy import Logger
 from kivy.clock import Clock
 from kivy.event import EventDispatcher
 from kivy.properties import NumericProperty, BoundedNumericProperty
-from kivy.vector import Vector
 from random import randint
 
 
