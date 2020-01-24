@@ -15,8 +15,6 @@ class Footer(BoxLayout):
 
     def __init__(self, **kwargs: Any) -> None:
         super(Footer, self).__init__(**kwargs)
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self._open = False
 
         self.actions = {
