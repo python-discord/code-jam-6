@@ -13,7 +13,7 @@ import numpy as np
 GRAVITY = .02
 FRICTION = .9
 DISLODGE_VELOCITY = 1e-3
-MAX_VELOCITY = .1
+MAX_VELOCITY = .2
 
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
 PEBBLE_COUNT = 1.5e4
@@ -125,7 +125,7 @@ class Chisel(Widget):
         self.set_power(DEFAULT_CHISEL_POWER)
 
         self.setup_canvas()
-        self.background.texture.mag_filter = 'nearest'
+
 
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
@@ -144,6 +144,7 @@ class Chisel(Widget):
                 scaled_x = x * self.width
                 scaled_y = y * self.height
                 self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
+        self.background.texture.mag_filter = 'nearest'
 
     def _delayed_resize(self, *args):
         self.resize_event.cancel()
