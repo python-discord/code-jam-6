@@ -9,6 +9,7 @@ from kivy.properties import ObjectProperty
 from .controller import Controller
 from .exceptions import InvalidBrowser
 
+
 class BrowserScreen(Screen):
     pass
 
@@ -23,9 +24,9 @@ class Browser(FloatLayout, Controller):
         super(Browser, self).__init__(*args, **kwargs)
 
     def on_update(
-        self, browser_side: str, 
-        state: int, files: List[str]
-        ) -> None:
+            self, browser_side: str,
+            state: int, files: List[str]
+    ) -> None:
         if browser == 'left':
             browser = self.left_browser
 

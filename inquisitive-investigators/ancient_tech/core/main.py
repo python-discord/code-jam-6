@@ -1,5 +1,7 @@
 from kivy import Config
 
+Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
+Config.set('kivy', 'exit_on_escape', '0')
 Config.set('graphics', 'minimum_width', '1300')
 Config.set('graphics', 'minimum_height', '650')
 Config.set('graphics', 'width', '1300')
