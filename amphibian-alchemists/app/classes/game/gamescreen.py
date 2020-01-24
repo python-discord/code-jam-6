@@ -117,7 +117,6 @@ class GameScreen(Screen):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
 
-
     def key_click(self):
         SoundLoader.load("misc/keyboard_click.wav").play()
 
