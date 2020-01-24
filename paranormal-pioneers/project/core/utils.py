@@ -56,10 +56,12 @@ class FS:
     @resolve_path()
     def check_env(self, path: PathLike) -> bool:
         try:
-            path.relative_to(ROOT)
+            return bool(path.relative_to(ROOT))
         except ValueError:
             if CANNOT_EXIT_ENV:
                 raise OSException('error: attempt to exit the environment')
+            else:
+                return False
 
     def change_dir(self, before: PathLike, after: PathLike) -> PathLike:
         new_dir: PathLike = self.find_dir(before, after)
