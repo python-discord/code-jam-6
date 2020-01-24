@@ -3,19 +3,22 @@
 # from kivy.uix.image import Image
 # from kivy.uix.boxlayout import BoxLayout
 # from kivy.uix.image import AsyncImage
-from kivy.core.window import Window
+# from kivy.core.window import Window
+# from kivy.uix.widget import Widget
 from kivy.animation import Animation
 from kivy.uix.scatter import Scatter
+from kivy.uix.floatlayout import FloatLayout
 import frontend.animation_controller as ac
 
 
-class SwipeCard(Scatter):
+class Rotater(Scatter):
     def __init__(self, **kwargs):
-        super(SwipeCard, self).__init__(**kwargs)
+        super(Rotater, self).__init__(**kwargs)
+        self.size = (800, 800)
+        self.rotation = 0
+
         self.init_x = self.x
         self.init_y = self.y
-        self.keyboard = Window.request_keyboard(None, self)
-        self.keyboard.bind(on_key_down=self.on_keyboard_down)
         self.trans = ac.Trans.trans
 
         self.saxis = 0
@@ -32,7 +35,6 @@ class SwipeCard(Scatter):
         self.dir = 0
 
     def on_touch_move(self, touch):
-
         if self.dir == 0:
             self.anim = None
 
@@ -43,15 +45,13 @@ class SwipeCard(Scatter):
         if self.anim is None:
             if self.dir == -1:
                 self.anim = Animation(x=self.init_x-1500,
-                                      # scale=self.scale + 1,
-                                      # rotation=90,
+                                      rotation=25,
                                       transition=self.trans,
                                       duration=1000)
                 self.anim.start(self)
             if self.dir == 1:
                 self.anim = Animation(x=self.init_y+1500,
-                                      # scale=self.scale + 1,
-                                      # rotation=-90,
+                                      rotation=-25,
                                       transition=self.trans,
                                       duration=1000)
                 self.anim.start(self)
@@ -66,21 +66,29 @@ class SwipeCard(Scatter):
         self.saxis = 0
         self.axis = 0
         self.dir = 0
+        if self.anim:
+            self.anim.stop(self)
 
-    def on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        """Moves the image around."""
 
-        anim = None
-        if keycode[1] == 'left':
-            anim = Animation(x=self.x-50,
-                             transition=self.trans, duration=1000)
-        elif keycode[1] == 'right':
-            ac.KEYFRAME += 0.1
-            # anim = Animation(x=self.x+50)
-        elif keycode[1] == 'up':
-            anim = Animation(y=self.y+50)
-        elif keycode[1] == 'down':
-            anim = Animation(y=self.y-50)
-        if anim:
-            anim.start(self)
-        return True
+class SwipeCard(FloatLayout):
+    def __init__(self, **kwargs):
+        super(SwipeCard, self).__init__(**kwargs)
+        self.size = (800, 800)
+
+    # def on_keyboard_down(self, keyboard, keycode, text, modifiers):
+    #     """Moves the image around."""
+
+    #     anim = None
+    #     if keycode[1] == 'left':
+    #         anim = Animation(x=self.x-50,
+    #                          transition=self.trans, duration=1000)
+    #     elif keycode[1] == 'right':
+    #         ac.KEYFRAME += 0.1
+    #         # anim = Animation(x=self.x+50)
+    #     elif keycode[1] == 'up':
+    #         anim = Animation(y=self.y+50)
+    #     elif keycode[1] == 'down':
+    #         anim = Animation(y=self.y-50)
+    #     if anim:
+    #         anim.start(self)
+    #     return True
