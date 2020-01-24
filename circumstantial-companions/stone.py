@@ -45,7 +45,7 @@ def get_image_and_aspect():
 PEBBLE_IMAGE, PEBBLES_PER_X, PEBBLES_PER_Y = get_image_and_aspect()
 
 def get_pebble_size(width, height):
-    scaled_w, scaled_h =  2 * PEBBLE_IMAGE_SCALE * width, 2 * PEBBLE_IMAGE_SCALE * height
+    scaled_w, scaled_h =  PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
     return scaled_w / PEBBLES_PER_X, scaled_h / PEBBLES_PER_Y
 
 def pebble_setup():
