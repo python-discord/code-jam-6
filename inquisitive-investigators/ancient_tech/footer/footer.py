@@ -76,6 +76,7 @@ class Footer(BoxLayout):
         RVR = self.parent.ids.right.ids.rv
         if 1.0 >= RVL.scroll_y >= 0.1:
             RVL.scroll_y -= .1
+        if 1.0 >= RVR.scroll_y >= 0.1:
             RVR.scroll_y -= .1
 
     def up(self):
@@ -83,6 +84,7 @@ class Footer(BoxLayout):
         RVR = self.parent.ids.right.ids.rv
         if 0.9 >= RVL.scroll_y >= 0.0:
             RVL.scroll_y += .1
+        if 0.9 >= RVR.scroll_y >= 0.0:
             RVR.scroll_y += .1
 
     def delete(self) -> None:
