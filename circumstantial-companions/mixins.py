@@ -2,7 +2,9 @@ import math
 
 from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
-from kivy.graphics import Color, Rectangle
+from kivy.graphics import BorderImage, Color, Rectangle
+
+BORDER_IMAGE = "assets/img/sign-border-transparent.png"
 
 
 class RepeatingBackground:
@@ -65,3 +67,30 @@ class RepeatingBackground:
     def resize(self, instance, value):
         """Overide this method if needed."""
         self.update_background(instance, value)
+
+
+class SignBorder:
+    """Inherit this mixin to add a sign border to the widget."""
+
+    def setup_border(self):
+        self.size_offset = 32
+        with self.canvas.after:
+            self.border_img = BorderImage(
+                source=BORDER_IMAGE,
+                size=(self.width + self.size_offset, self.height + self.size_offset),
+                pos=(self.x - self.size_offset / 2, self.y - self.size_offset / 2),
+                autoscale="both",
+                border=(30, 30, 30, 30),
+            )
+
+        self.bind(size=self._readjust_border, pos=self._readjust_border)
+
+    def _readjust_border(self, instance, value):
+        self.border_img.size = (
+            self.width + self.size_offset,
+            self.height + self.size_offset,
+        )
+        self.border_img.pos = (
+            self.x - self.size_offset / 2,
+            self.y - self.size_offset / 2,
+        )

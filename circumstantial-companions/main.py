@@ -8,8 +8,8 @@ import math
 
 from kivy.app import App
 from kivy.core.window import Window
-from kivy.graphics import BorderImage, Color
 from kivy.metrics import dp, sp
+from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button as KivyButton
 from kivy.uix.dropdown import DropDown
@@ -17,40 +17,60 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.slider import Slider
 from kivy.garden.navigationdrawer import NavigationDrawer
 
 from cursor import Cursor
 from i18n import DEFAULT_LOCALE, SYSTEM_LOCALE, LOCALES, TRANSLATIONS
-from mixins import RepeatingBackground
+from mixins import RepeatingBackground, SignBorder
 from stone import Chisel, CHISEL_RADIUS_RANGE, CHISEL_POWER_RANGE
 
 font = contextvars.ContextVar("font")
 
 OPTIONS_BACKGROUND = "assets/img/options_background.png"
-BORDER_IMAGE = "assets/img/sign-border-blank.png"
 HAMMER_ICON = "assets/img/cursor/hammer_up_pixelized.png"
 
-class Button(KivyButton):
+
+class Button(SignBorder, KivyButton):
     def __init__(self, text, **kwargs):
         super().__init__(
-            text=text, font_name=font.get(), border=(0, 0, 0, 0), **kwargs,
+            text=text, font_name=font.get(), **kwargs,
         )
-        self.n = 32
-        with self.canvas.before:
-            self.border_img = BorderImage(
-                source=BORDER_IMAGE,
-                size=(self.width + self.n, self.height + self.n),
-                pos=(self.x - self.n / 2, self.y - self.n / 2),
-                autoscale="both",
-            )
+        self.setup_border()
 
-        self.bind(size=self.resize_and_reposition, pos=self.resize_and_reposition)
 
-    def resize_and_reposition(self, instance, value):
-        self.border_img.size = (self.width + self.n, self.height + self.n)
-        self.border_img.pos = (self.x - self.n / 2, self.y - self.n / 2)
+class SelectLanguagePopup(SignBorder, Popup):
+    choice = StringProperty()
+
+    def __init__(self):
+        layout = BoxLayout(
+            orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15))
+        )
+        for locale_code, locale_info in LOCALES.items():
+            btn = Button(locale_info["name"], font_size=sp(16))
+
+            def _make_select_function(locale_code):
+                def _select(btn):
+                    self.dismiss()
+                    self.choice = locale_code
+
+                return _select
+
+            btn.bind(on_release=_make_select_function(locale_code))
+            layout.add_widget(btn)
+
+        super().__init__(
+            title=_("Select language"),
+            title_font=font.get(),
+            title_size=sp(20),
+            title_align="center",
+            content=layout,
+            separator_color=(0, 0, 0, 0),
+            size_hint=(0.5, 0.8),
+        )
+        self.setup_border()
 
 
 class ChiselRadiusSlider(Slider):
@@ -88,11 +108,11 @@ class ChiselPowerSlider(Slider):
 class OptionsPanel(RepeatingBackground, BoxLayout):
     def __init__(self, chisel):
         self.chisel = chisel
-        self.dropdown = None
+        self.popup = None
         super().__init__(
             orientation="vertical",
-            spacing=10,
-            padding=5,
+            spacing=dp(34),
+            padding=(dp(20), dp(15)),
             opacity=0,  # opacity is set when side panel is opened
         )
         self.setup_background(OPTIONS_BACKGROUND)
@@ -111,44 +131,40 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         title = Label(
             text=_("Options"),
             font_name=font.get(),
-            font_size=sp(40),
-            size_hint=(1, 0.1),
+            font_size=sp(30),
+            size_hint=(1, 0.05),
         )
 
         # Language selection
-        self.dropdown = DropDown()
-        for locale_code, locale_info in LOCALES.items():
-            btn = Button(locale_info["name"], size_hint_y=None, height=30)
-
-            def _make_select_function(locale_code):
-                return lambda btn: self.dropdown.select(locale_code)
-
-            btn.bind(on_release=_make_select_function(locale_code))
-            self.dropdown.add_widget(btn)
-        dropdown_btn = Button(
-            _("Select language"), font_size=sp(30), size_hint=(1, 0.1), width=100
+        self.popup = SelectLanguagePopup()
+        popup_btn = Button(
+            _("Select language"), font_size=sp(18), size_hint=(1, None), height=dp(42)
         )
-        dropdown_btn.bind(on_release=self.dropdown.open)
-        self.dropdown.bind(on_select=lambda instance, locale: self.build(locale))
+        popup_btn.bind(on_release=self.popup.open)
+        self.popup.bind(choice=lambda instance, choice: self.build(choice))
 
         # Reset
-        reset_btn = Button(_("Reset"), font_size=sp(30), size_hint=(1, 0.1), width=100)
+        reset_btn = Button(
+            _("Reset"), font_size=sp(18), size_hint=(1, None), height=dp(42)
+        )
         reset_btn.bind(on_release=lambda btn: self.chisel.reset())
+
+        # Source code
+        src_btn = Button(
+            _("Source code"), font_size=sp(18), size_hint=(1, None), height=dp(42)
+        )
 
         # Sliders
         slider_layout = GridLayout(cols=2, spacing=10, size_hint=(1, 0.7))
         slider_layout.add_widget(ChiselRadiusSlider(self.chisel, size_hint=(0.5, 0.9)))
         slider_layout.add_widget(ChiselPowerSlider(self.chisel, size_hint=(0.5, 0.9)))
-        slider_layout.add_widget(
-            Image(source=HAMMER_ICON, size_hint=(0.5, 0.1))
-        )
-        slider_layout.add_widget(
-            Image(source=HAMMER_ICON, size_hint=(0.5, 0.1))
-        )
+        slider_layout.add_widget(Image(source=HAMMER_ICON, size_hint=(0.5, 0.1)))
+        slider_layout.add_widget(Image(source=HAMMER_ICON, size_hint=(0.5, 0.1)))
 
         self.add_widget(title)
-        self.add_widget(dropdown_btn)
+        self.add_widget(popup_btn)
         self.add_widget(reset_btn)
+        self.add_widget(src_btn)
         self.add_widget(slider_layout)
 
     def update_background(self, instance, value):
@@ -164,6 +180,7 @@ class ChiselApp(App):
     def build(self):
         root = FloatLayout()
         navdrawer = NavigationDrawer()
+        navdrawer.toggle_state()
         navdrawer.anim_type = "slide_above_anim"
         chisel = Chisel()
         options_panel = OptionsPanel(chisel)
