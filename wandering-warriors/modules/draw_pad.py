@@ -23,26 +23,27 @@ class DrawPad(FloatLayout):
     def __init__(self, ** kwargs):
         super(DrawPad, self).__init__(** kwargs)
         self.in_pad = False
+        self.lines = []
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
-        ud = touch.ud
+        self.ud = touch.ud
         if (touch.pos[0] > self.pos[0]
            and touch.pos[0] < self.pos[0] + self.size[0]
            and touch.pos[1] > self.pos[1]
            and touch.pos[1] < self.pos[1] + self.size[1]):
             self.in_pad = True
-            ud['group'] = g = str(touch.uid)
+            self.ud['group'] = g = str(touch.uid)
             pointsize = 1
-            ud['color'] = 0
+            self.ud['color'] = 0
             with self.canvas.before:
                 Color(0, 0, 0)
-                ud['lines'] = [
+                self.ud['lines'] = [
                     Point(points=(touch.x, touch.y),
                           pointsize=pointsize, group=g)]
             return True
         else:
-            ud['lines'] = []
+            self.ud['lines'] = []
 
     def on_touch_move(self, touch):
         super().on_touch_move(touch)
@@ -50,14 +51,14 @@ class DrawPad(FloatLayout):
            and touch.pos[0] < self.pos[0] + self.size[0]
            and touch.pos[1] > self.pos[1]
            and touch.pos[1] < self.pos[1] + self.size[1]):
-            ud = touch.ud
+            self.ud = touch.ud
 
-            points = ud['lines'][-1].points
+            points = self.ud['lines'][-1].points
             oldx, oldy = points[-2], points[-1]
             points = calculate_points(oldx, oldy, touch.x, touch.y)
             if points:
                 try:
-                    lp = ud['lines'][-1].add_point
+                    lp = self.ud['lines'][-1].add_point
                     for idx in range(0, len(points), 2):
                         lp(points[idx], points[idx + 1])
                 except GraphicException:
@@ -67,11 +68,13 @@ class DrawPad(FloatLayout):
         super().on_touch_up(touch)
         # ud = touch.ud
         if self.in_pad:
+            self.lines.append(self.ud['lines'])
             self.in_pad = False
             # return (self.canvas.get_group(ud['group'])[1].points)
 
     def click(self):
-        print('click')
+        for l in self.lines:
+            l[0].points = []
 
     def buttonImage(self):
         return 'assets/graphics/clear1.png'
