@@ -49,7 +49,6 @@ class NewFile(Label):
                     current_path += part
 
             self.parent.parent.parent.ids.header.current_dir = current_path[:-1]
-
         else:
             Logger.info('FileBrowser: Not a directory!')
 

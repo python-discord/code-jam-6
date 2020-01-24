@@ -21,6 +21,8 @@ class Footer(BoxLayout):
         self.actions = {
             '1': self.about,
             '2': self.view,
+            '4': self.down,
+            '5': self.up,
             '6': self.mkdir,
             '7': self.delete,
             '8': self.quit
@@ -68,6 +70,20 @@ class Footer(BoxLayout):
         # not working
         self.parent.manager.current = 'text_editor'
         return True
+
+    def down(self):
+        RVL = self.parent.ids.left.ids.rv
+        RVR = self.parent.ids.right.ids.rv
+        if 1.0 >= RVL.scroll_y >= 0.1:
+            RVL.scroll_y -= .1
+            RVR.scroll_y -= .1
+
+    def up(self):
+        RVL = self.parent.ids.left.ids.rv
+        RVR = self.parent.ids.right.ids.rv
+        if 0.9 >= RVL.scroll_y >= 0.0:
+            RVL.scroll_y += .1
+            RVR.scroll_y += .1
 
     def delete(self) -> None:
         popup = DeletePopup(self, size_hint=(.7, .6), pos_hint={'center_x': .5, 'center_y': .5})
