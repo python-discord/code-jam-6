@@ -151,6 +151,14 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         self.add_widget(reset_btn)
         self.add_widget(slider_layout)
 
+    def update_background(self, instance, value):
+        # Overriden to snap to the right position
+        self.bg_rect.texture.uvsize = self._get_uvsize()
+        self.bg_rect.texture = self.bg_rect.texture  # required to trigger update
+        bg_width, bg_height = self._get_background_size()
+        self.bg_rect.pos = (self.right - bg_width, self.y)
+        self.bg_rect.size = (bg_width, bg_height)
+
 
 class ChiselApp(App):
     def build(self):
