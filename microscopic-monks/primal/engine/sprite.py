@@ -11,7 +11,7 @@ from primal.engine.perlin import sample
 
 
 class Sprite:
-    resource_dir = (Path('.') / 'primal' / 'resources').absolute()
+    resource_dir = (Path('.') / 'resources').absolute()
 
     def __init__(self, image: str, pos: Tuple[float, float] = (0, 0),
                  size: Tuple[float, float] = (50, 50), **kwargs) -> None:
@@ -76,34 +76,26 @@ class Terrain(Sprite):
             self.type = 0
         super().__init__(image, pos, (1000, 1000), **kwargs)
 
-    def update(self):
-        if self.pos[0] < -2000:
-            self.pos[0] = 6000
-            self.m += 0.8
-        if self.pos[0] > 6000:
-            self.pos[0] = -2000
-            self.m -= 0.8
-        if self.pos[1] < -2000:
-            self.pos[1] = 5000
-            self.n += 0.7
-        if self.pos[1] > 5000:
-            self.pos[1] = -2000
-            self.n += 0.7
-        a = sample(self.m, self.n)
-        if a > 0.75:
-            image = 'i.png'
-            self.type = 3
-        elif a > 0.5:
-            image = 'l.png'
-            self.type = 2
-        elif a > 0.25:
-            image = 's.png'
-            self.type = 1
-        else:
-            image = 'w.png'
-            self.type = 0
-        self.bg_rect.source = (self.resource_dir / image).as_posix()
-        self.pos = (self.pos[0] + self.vel_x, self.pos[1] + self.vel_y)
-        # dampen the velocity to come to a stop
-        self.vel_x *= 0
-        self.vel_y *= 0
+class Tree(Sprite):
+    def __init__(self, pos: tuple = (0, 0), size: tuple = (50, 50), orientation: int = 0, **kwargs):
+        super().__init__("topOfTree.png", pos, size, **kwargs)
+        self.rotate = Rotate(angle=orientation, origin=(pos[0] + size[0] / 2, pos[1] + size[1] / 2))
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
+
+
+
+class Rock(Sprite):
+    def __init__(self, pos: tuple = (0, 0), size: tuple = (50, 50), orientation: int = 0, **kwargs):
+        super().__init__("r.png", pos, size, **kwargs)
+        self.rotate = Rotate(angle=orientation, origin=(pos[0] + size[0] / 2, pos[1] + size[1] / 2))
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
