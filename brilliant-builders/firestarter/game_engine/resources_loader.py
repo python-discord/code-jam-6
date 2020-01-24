@@ -28,14 +28,14 @@ def load_sprite(folder_path: Path, sp: str) -> Optional[SpriteConfig]:
     texture.mag_filter = 'nearest'
 
     with open(config_file) as f:
-        config_dict = toml.load(f)['animation']
+        config_dict = toml.load(f)
 
     config = SpriteConfig(
         sp_path,
         texture,
         config_dict['size'],
-        config_dict['modes'],
-        config_dict['frame_count']
+        len(config_dict['animation']),
+        [an['length'] for an in config_dict['animation']]
     )
     return config
 
@@ -49,6 +49,7 @@ def load_resources() -> List[Dict[str, Any]]:
         resource_dir_path = RESOURCE_DIR / rtype
 
         for resource in os.listdir(resource_dir_path):
+            Logger.debug(f"Engine: Loading {resource_dir_path / resource}")
             loaded = LOADER_MAPPING[rtype](resource_dir_path, resource)
             if loaded:
                 loaded_resources[resource.rsplit('.', 1)[0]] = loaded

@@ -1,4 +1,4 @@
-[animation]
 size = [8,8]
-modes = 1
-frame_count = [6]
+
+[[animation]]
+length = 6

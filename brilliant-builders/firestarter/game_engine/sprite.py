@@ -15,10 +15,10 @@ from kivy.uix.widget import Widget
 class SpriteConfig:
     file_path: Path
     texture: Texture
-    size: Tuple[int, int] = (64, 64)
+    size: List[int, int] = (64, 64)
     animation_modes: int = 1
-    frame_count: Tuple[int, ...] = (1,)
-    size_hint: Tuple[int, int] = (64, 64)
+    frame_count: List[int, ...] = (1,)
+    size_hint: List[int, int] = (64, 64)
 
 
 class Sprite(Widget):
