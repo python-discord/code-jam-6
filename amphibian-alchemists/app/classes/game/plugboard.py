@@ -2,6 +2,8 @@ from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.uix.screenmanager import Screen
 
+from .save_game import save_plugs
+
 
 class PlugboardScreen(Screen):
     plugs_in_screen = BoundedNumericProperty(0, min=0, max=20)
@@ -81,13 +83,10 @@ class PlugboardScreen(Screen):
                                 *self.ids.plug_board.ids[item[1]].center,
                             )
 
-    def check_plugs(self):
-        """
-        This method will check if there's an unpaired plug in the board.
-        If so, then the plug will be deleted
-        """
+    def on_leave(self):
         if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
             self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
             del self.plug_reference[-1]
             del self.all_plugged[-1]
             self.plugs_in_screen -= 1
+        save_plugs(self.all_plugged)

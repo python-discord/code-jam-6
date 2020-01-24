@@ -43,11 +43,40 @@ class AncientTechApp(App):
             rotors="I II III",
             reflector="B",
             ring_settings=[1, 20, 11],
-            plugboard_settings="AV BS CG DL FU HZ IN KM OW RX",
-        )
-        self.machine.set_display("ABC")
+            plugboard_settings="",
+        )  # Begin instantiation. Change onload
+        self.machine.set_display("AAA")
         self.game_id = None
         self.APP_DIR = os.path.dirname(os.path.abspath(__file__))
+
+        self.keys = [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z",
+        ]
 
     def build(self):
         self.title = "ENG"
