@@ -331,7 +331,7 @@ class MainScreen(Screen):
         return resp['lat'], resp['lon']
 
 
-# Time control panel
+# Time control panel #
 class TimeWizard(Popup):
     def __init__(self, caller, **kwargs):
         self.caller = caller
@@ -344,7 +344,6 @@ class TimeWizard(Popup):
         self.caller.day_length = time
         self.caller.date_increase = days
         self.caller.redraw()
-
 
 
 # Settings panel #
