@@ -1,3 +1,4 @@
+import inspect
 import textwrap
 
 from kivy._event import partial
@@ -15,6 +16,9 @@ from kivy.uix.scrollview import ScrollView
 from kivy.uix.textinput import TextInput
 
 from modules.navigation import navcont
+from modules.map import MapControl
+from modules import CommandHandler
+
 
 class InputEvents(EventDispatcher):
     __events__ = ('on_input',)
@@ -34,8 +38,8 @@ class MainContainer(BoxLayout, InputEvents):
         super().__init__(**kwargs)
         self.app = App.get_running_app()
 
-    def add_text(self, text, *args):
-        Clock.schedule_once(partial(self.text_display_label.add_text, text))
+    def add_text(self, text, on_newline, *args):
+        Clock.schedule_once(partial(self.text_display_label.add_text, text, on_newline))
 
     def on_input(self, _input):
         display_text = f'[color=00FF00]> {_input}[/color]\n'
@@ -89,7 +93,7 @@ class CompassContainer(RelativeLayout):
             points = v[0].points
             x, y = self.to_local(touch.pos[0], touch.pos[1])
             if self.point_inside_polygon(x, y, points):
-                self.app.navcontrol.go(k)
+                self.app.nav_control.go(k)
 
         return super(CompassContainer, self).on_touch_down(touch)
 
@@ -102,10 +106,13 @@ class TextDisplayLabel(Label):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def add_text(self, text, *args):
+    def add_text(self, text, on_newline, *args):
         if self.parent.scroll_y > 0:
             self.parent.scroll_to(self)
-        self.text += textwrap.dedent(text)
+        text = inspect.cleandoc(text)
+        if on_newline:
+            text = '\n' + text
+        self.text += text
 
 
 class CommandInput(TextInput):
@@ -130,6 +137,9 @@ class CommandInput(TextInput):
         if keycode[0] == 13:
             self.validate_cursor_pos()
             text = self.text[self._cursor_pos:]
+            if text.strip() == '':
+                self.prompt()
+                return
             Clock.schedule_once(partial(self._run_cmd, text))
             self.cmd_history.append(text)
 
@@ -166,7 +176,7 @@ class CommandInput(TextInput):
 
     def prompt(self, prompt_text='>'):
         self._cursor_pos = self.cursor_index() + len(prompt_text)
-        self.text += prompt_text
+        self.text = prompt_text
 
     def auto_focus(self, instance, focused):
         if not focused:
@@ -188,15 +198,15 @@ class GUIApp(App):
 
     def start_game(self):
         self.add_text('Welcome to the [color=00FF00]game[/color]!')
-        self.navcontrol = navcont.NavControl()
+        self.nav_control = navcont.NavControl()
+        self.map_control = MapControl.DungeonMap()
+        self.command_control = CommandHandler.CommandHandler(self, self.nav_control)
 
     def add_text(self, text, on_newline=True):
-        if on_newline:
-            text += '\n'
-        self.gui.add_text(text)
+        self.gui.add_text(text, on_newline)
 
     def pass_command(self, cmd):
-        pass
+        self.command_control.parse_command(cmd)
 
 
 if __name__ == '__main__':
