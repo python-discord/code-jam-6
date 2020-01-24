@@ -1,5 +1,5 @@
-from .entity import Entity
+from .entity import Entity, MovingEntity
 from .mirror_cannon import MirrorCannon
-from .ship import GoldenShip, BrownShip, ShipType
+from .ship import BrownShip, GoldenShip
 
-__all__ = ['Entity', 'MirrorCannon', 'GoldenShip', 'BrownShip', 'ShipType']
+__all__ = ['Entity', 'MirrorCannon', 'MovingEntity', 'BrownShip', 'GoldenShip']
