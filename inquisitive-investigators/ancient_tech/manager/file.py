@@ -12,6 +12,7 @@ class NewFile(Label):
     ctx = ObjectProperty()
     txt = StringProperty()
     alpha = NumericProperty()
+    browser = ObjectProperty()
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
