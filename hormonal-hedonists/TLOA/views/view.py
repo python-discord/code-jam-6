@@ -85,7 +85,7 @@ class GameView(Widget):
         self.add_widget(self._score)
 
     def on_island_health_change(self, game, value):
-        health = math.ceil(value / 10) * 10
+        health = math.ceil(value/10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
 
     def on_add_ship(self, game, ship):
@@ -122,8 +122,10 @@ class GameView(Widget):
 
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
-        self._game.sun_rays.trace(point = LIGHT_SOURCE_POS, surface = self._game.mirror.mirror_axis)
-        self._game.death_rays.trace(point = Vector(600, LANE_BOUNDS[self._game.mirror.state][1]), surface = self._game.mirror.mirror_axis)
+        self._game.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self._game.mirror.mirror_axis)
+        self._game.death_rays.trace(
+            point=Vector(600, LANE_BOUNDS[self._game.mirror.state][1]),
+            surface = self._game.mirror.mirror_axis)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
