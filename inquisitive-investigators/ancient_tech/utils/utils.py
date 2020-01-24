@@ -1,3 +1,5 @@
+import os
+import sys
 from pathlib import Path
 from threading import Thread
 from datetime import datetime
@@ -105,3 +107,16 @@ def file_info(
         'date': date,
         'alpha': 0
     }
+
+
+def short_path(path: str) -> str:
+    if len(path) > 50:
+        parts = Path(path).parts
+
+        for idx in range(len(parts)):
+            p = str(Path(*parts[idx:]))
+            
+            if len(p) <= 50:
+                return p
+
+    return path
