@@ -66,8 +66,9 @@ class Deck:
 class Game:
     """Handles interaction with the saved states and deck."""
 
-    def __init__(self, all_cards: List[Card], game_states: dict):
-        self._game_state = GameState(game_states)
+    # TODO check typehint
+    def __init__(self, all_cards: List[Card], game_states: dict, main_game_state):
+        self._game_state = GameState(game_states, main_game_state)
         self._deck = Deck(all_cards)
 
     @property
@@ -96,10 +97,13 @@ class Game:
 
 
 def load_game(game_cards_filename: str = "example_game_cards.json",
-              game_stats_filename: str = "example_game_states.json") -> Game:
+              game_stats_filename: str = "example_game_states.json",
+              main_game_stats_filename: str = "example_game_globals.json") -> Game:
     """Loads the backend and returns a game object"""
     with open(BASE_DIR.joinpath(DATA_DIR, game_cards_filename)) as f:
         _cards = [Card(**card_dict) for card_dict in json.load(f)]
     with open(BASE_DIR.joinpath(DATA_DIR, game_stats_filename)) as f:
         _game_states = json.load(f)
-    return Game(_cards, _game_states)
+    with open(BASE_DIR.joinpath(DATA_DIR, main_game_stats_filename)) as f:
+        _game_globals = json.load(f)
+    return Game(_cards, _game_states, _game_globals["basic_4_states"])

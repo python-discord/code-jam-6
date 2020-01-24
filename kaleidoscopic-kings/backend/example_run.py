@@ -23,4 +23,4 @@ if __name__ == "__main__":
         outcome = selected_option.get_outcome()
         root_logger.debug(f"Outcome of option: {outcome}")
         card = game.take_turn(outcome)
-        root_logger.debug(f"Player health: {game.game_state.player_health}")
+        root_logger.debug(game.game_state.get_main_state(0))
