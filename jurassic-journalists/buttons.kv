@@ -1,0 +1,23 @@
+#:import Animation kivy.animation.Animation
+<TypeWriterButton@Button>:
+	width: self.parent.width * 1/17
+	height: self.parent.height * 1/23
+    size_hint: None, None
+	txt: ''
+	background_normal: f'atlas://typewriter/{self.txt}' if self.txt else ''
+	background_down: self.background_normal
+	border: 0,0,0,0
+	on_press: Animation(y = self.y - 5, size=self.size, t='in_bounce').start(self) 
+    on_release: self.parent.typw.text += self.txt; Animation(y = self.y + 5, d=5, t='in_bounce').start(self)
+	# canvas.before:
+	#    Color:
+	#	    rgba: (0,0,0,0) if self.state == 'normal' else (0,.7,.7,.1)
+    #    RoundedRectangle:
+    #        pos: self.pos
+    #        size: self.size
+    #        radius: 5,
+
+<PhoneButtons@Label>
+    width: self.parent.width * 1/5
+	height: self.parent.height * 1/10
+    size_hint: None, None

@@ -1,29 +1,29 @@
 '''Jurassic Journalists'''
+from io import BytesIO
 from kivy.app import App
 from kivy.core.image import Image as CoreImage
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.image import Image
-from kivy.uix.widget import Widget
+from kivy.lang import Builder
+from kivy.properties import ListProperty, ObjectProperty, NumericProperty # noqa
+from kivy.core.window import Window
 from PIL import ImageDraw
 from PIL import Image as Im
-from io import BytesIO
-from kivy.properties import ListProperty, ObjectProperty, NumericProperty
-from math import sin, cos, pi
-from kivy.core.window import Window
 
-# Global Variable so there is no magic number.
+
+# Global Variables
+
+# Screen Dimensions
 SCREEN_WIDTH = 720
 SCREEN_HEIGHT = 720
-PAPER_COLOR = (200, 200, 200, 0)
-STARTING_Y = SCREEN_HEIGHT - 150
 
+# Paper Dimensions
+PAPER_WIDTH = SCREEN_WIDTH * .7 - 50
+PAPER_HEIGHT = SCREEN_HEIGHT
 
-class JurassicJournalistApp(App):
-    ''' App Class '''
-    def build(self):
-#        Window.borderless = True
-        return MainScreen()
+STARTING_X = 50 # PAPER_WIDTH - 240
+STARTING_Y = 50 # PAPER_HEIGHT + 100
 
 
 class MainScreen(ScreenManager):
@@ -40,24 +40,29 @@ class PhoneScreen(Screen):
 
 class TextPaper(Image):
     """
-    mesh_points = ListProperty([])
-    mesh_texture = ObjectProperty(None)
-    radius = NumericProperty(200)
-    offset_x = NumericProperty(.5)
-    offset_y = NumericProperty(.5)
-    sin_wobble = NumericProperty(0)
-    sin_wobble_speed = NumericProperty(0)
+    TypeWriter Paper
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
+        '''
+        # actual screen size will be different, may need to adjust
+        SCREEN_WIDTH, SCREEN_HEIGHT = Window.size
+        PAPER_WIDTH = SCREEN_WIDTH * .7 - 50
+        PAPER_HEIGHT = SCREEN_HEIGHT
+        '''
         # Creating Blank Paper image to type on.
-        self.img = Im.new("RGBA", (SCREEN_WIDTH, SCREEN_HEIGHT), PAPER_COLOR)
+        # self.img = Im.open("paper.jpg")
+        self.img = Im.new('RGBA', (int(SCREEN_WIDTH *.75), SCREEN_HEIGHT), (200,200,200,255))
+        self.default_pos = 225, - SCREEN_HEIGHT//2 + 150
 
         # Type writer does not type from the top rather type from the bottom.
         self.txt = self.img.copy()
-        self.head = {'x': 0, 'y': STARTING_Y}
+        self.head = {'x': STARTING_X, 'y': STARTING_Y}
+        self.pos = self.default_pos
+        self.size = [PAPER_WIDTH, PAPER_HEIGHT]
 
+        self.first_letter = True
+        self.font_size = None
         """
         self.mesh_texture = CoreImage('paper.png').texture
         Clock.schedule_interval(self.update_points, 0)
@@ -81,24 +86,43 @@ class TextPaper(Image):
         """ Type on the paper """
         # Drawing on the image
         ImageDraw.Draw(self.txt).text((self.head["x"], self.head["y"]),
-                                      key.char, font=key.font, fill=key.color)
+                                      key.char, font=key.font, fill=128)
         # Scrolling up
+
+        # Shoudln't move paper if it is the first letter of the line
+        if self.first_letter:
+            self.first_letter = False
+        else:
+            self.pos[0] -= (self.char_size)
+
         self.font_size = key.font.getsize("l")[1]
         self.char_size = key.get_kerning()[0]
         self.head["x"] += self.char_size
 
-        if self.head["x"] + self.char_size >= SCREEN_WIDTH:
-            self.head["x"] = 0
-            self.head["y"] -= self.font_size
+        if (self.head["x"] - STARTING_X) + self.char_size >= PAPER_WIDTH:
+            self.head["x"] = STARTING_X
+            self.head["y"] += self.font_size
+            self.y += self.font_size
+            #self.x = self.default_pos[0]
+
+            # 10 is to adjust the height. If you guys can investigate why it is not
+            # matching the height and width of letter defined in kv file that would be great.
+            line_height = self.head["y"] - STARTING_Y - 10
+            self.pos = [self.default_pos[0], self.default_pos[1]+line_height]
+            self.first_letter = True
 
     def escaped(self):
         if not self.font_size:
             return
         if self.text[-2:] == '_b':
             self.head["x"] -= self.char_size
+            self.x += self.char_size
         elif self.text[-2:] == '_n':
-            self.head['y'] -= self.font_size
-            self.head['x'] = 0
+            self.head['y'] += self.font_size
+            self.head['x'] = STARTING_X
+            self.y += self.font_size
+            self.x = self.default_pos[0]
+
 
 class PhoneButtons(Label):
     ''' Phone Button/Label '''
@@ -123,4 +147,15 @@ class PhoneButtons(Label):
         return True
 
 
-JurassicJournalistApp().run()
+class JurassicJournalistApp(App):
+    ''' App Class '''
+    def build(self):
+        Window.size = SCREEN_WIDTH, SCREEN_HEIGHT
+        Builder.load_file('buttons.kv')
+        Builder.load_file('objects.kv')
+#        Window.borderless = True
+        return MainScreen()
+
+
+if __name__ == '__main__':
+    JurassicJournalistApp().run()

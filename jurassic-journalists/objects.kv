@@ -1,0 +1,198 @@
+<TextPaper@GestureSurface>
+
+<TypeWriter@Popup>
+    canvas.before:
+        Color:
+            rgba: 0,0,0,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    canvas.after:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'atlas://typewriter/typewriter_base'
+    title: ''
+    separator_color: 0,0,0,0
+	FloatLayout:
+		typw: typw
+		TextPaper:
+		    canvas:
+			    Color:
+				    rgba: 0,0,0,0
+			    Rectangle:
+				    pos: 0, 0
+					size: self.width, self.height //2 + 125
+			id: typw
+			source: 'blank.png'
+			#pos_hint: {'x': 0.2, 'y':.5}
+            pos: self.pos
+            size: self.size
+			#size_hint: .7, .5
+			#allow_stretch: True
+			letters: []
+			text: ''
+			on_text: 
+			    self.letters.append(Letter(self.text[-1], 32, '1942.ttf')) if '_' not in self.text[-2:] else self.escaped()
+			on_letters: self.update()
+		GestureSurface:
+            size: self.size
+            pos: self.pos
+			#on_gesture_complete: typw.text += '_b'
+		TypeWriterButton:
+			txt: 'q'
+			pos_hint: {'x': .16, 'y':.175}
+		TypeWriterButton:
+			txt: 'w'
+			pos_hint: {'x': .235, 'y':.175}
+		TypeWriterButton:
+			txt: 'e'
+			pos_hint: {'x': .31, 'y':.175}
+		TypeWriterButton:
+			txt: 'r'
+			pos_hint: {'x': .383, 'y':.175}
+		TypeWriterButton:
+			txt: 't'
+			pos_hint: {'x': .458, 'y':.175}
+		TypeWriterButton:
+			txt: 'y'
+			pos_hint: {'x': .533, 'y':.175}
+		TypeWriterButton:
+			txt: 'u'
+			pos_hint: {'x': .608, 'y':.175}
+		TypeWriterButton:
+			txt: 'i'
+			pos_hint: {'x': .683, 'y':.175}
+		TypeWriterButton:
+			txt: 'o'
+			pos_hint: {'x': .758, 'y':.175}
+		TypeWriterButton:
+			txt: 'p'
+			pos_hint: {'x': .832, 'y':.175}
+		TypeWriterButton:
+			txt: 'a'
+			pos_hint: {'x': .191, 'y':.13}
+		TypeWriterButton:
+			txt: 's'
+			pos_hint: {'x': .265, 'y':.13}
+		TypeWriterButton:
+			txt: 'd'
+			pos_hint: {'x': .34, 'y':.13}
+		TypeWriterButton
+			txt: 'f'
+			pos_hint: {'x': .416, 'y':.13}
+		TypeWriterButton
+			txt: 'g'
+			pos_hint: {'x': .489, 'y':.13}
+		TypeWriterButton:
+			txt: 'h'
+			pos_hint: {'x': .566, 'y':.13}
+		TypeWriterButton:
+			txt: 'j'
+			pos_hint: {'x': .641, 'y':.13}
+		TypeWriterButton:
+			txt: 'k'
+			pos_hint: {'x': .715, 'y':.13}
+		TypeWriterButton:
+			txt: 'l'
+			pos_hint: {'x': .791, 'y':.13}
+		TypeWriterButton:
+			txt: 'z'
+			pos_hint: {'x': .198, 'y':.08}
+		TypeWriterButton:
+			txt: 'x'
+			pos_hint: {'x': .272, 'y':.08}
+		TypeWriterButton:
+			txt: 'c'
+			pos_hint: {'x': .348, 'y':.08}
+		TypeWriterButton:
+			txt: 'v'
+			pos_hint: {'x': .422, 'y':.08}
+		TypeWriterButton:
+			txt: 'b'
+			pos_hint: {'x': .498, 'y':.08}
+		TypeWriterButton:
+			txt: 'n'
+			pos_hint: {'x': .571, 'y':.08}
+		TypeWriterButton:
+			txt: 'm'
+			pos_hint: {'x': .648, 'y':.08}
+		TypeWriterButton:
+			txt: ';'
+			pos_hint: {'x': .723, 'y':.08}
+		TypeWriterButton:
+			txt: ':'
+			pos_hint: {'x': .797, 'y':.08}
+		TypeWriterButton:
+			pos_hint: {'x': .2, 'y':0.025}
+			size_hint: .65, None
+	    	height: self.parent.height * 1/20
+			txt: ' '
+		TypeWriterButton:
+		    pos_hint: {'x': 0, 'y': .44}
+			size_hint: .10, .10
+			txt: '_n'
+		TypeWriterButton:
+		    pos_hint: {'x': 0.832, 'y': .285}
+			size_hint: .08, .1
+			txt: '_b'
+
+<PhoneScreen>:
+    name: 'PhoneScreen'
+	typw2: typw2
+	Button:
+		pos_hint : {'x': 0, 'y': 0}
+		size_hint: None, None
+		background_color: 0,0,0,.2
+		on_release: root.manager.current = 'RoomScreen'
+	TextInput: #CodeInput
+		id: typw2
+		background_color: .95,.93,.8,.8 # 0,0,0,0
+		padding: 12,12,12,12
+		font_name: '1942.ttf'
+		pos_hint: {'x': 0.2, 'y':.5}
+		size_hint: .6, .5
+		readonly: True
+		cursor_blink: False
+		cursor_color: 0,0,0,1
+		cursor_width: 10
+		text: ''
+	PhoneButtons:
+		text: ''
+		pos_hint: {'x': .2, 'y':.3}
+		disabled: True
+	PhoneButtons:
+		text: 'abc'
+		pos_hint: {'x': .4, 'y':.3}
+	PhoneButtons:
+		text: 'def'
+		pos_hint: {'x': .6, 'y':.3}
+	PhoneButtons:
+		text: 'ghi'
+		pos_hint: {'x': .2, 'y':.2}
+	PhoneButtons:
+		text: 'jkl'
+		pos_hint: {'x': .4, 'y':.2}
+	PhoneButtons:
+		text: 'mno'
+		pos_hint: {'x': .6, 'y':.2}
+	PhoneButtons:
+		text: 'pqrs'
+		pos_hint: {'x': .2, 'y':.1}
+	PhoneButtons:
+		text: 'tuv'
+		pos_hint: {'x': .4, 'y':.1}
+	PhoneButtons:
+		text: 'wxyz'
+		pos_hint: {'x': .6, 'y':.1}
+	PhoneButtons:
+		text: ''
+		pos_hint: {'x': .2, 'y':0}
+		disabled: True
+	PhoneButtons:
+		text: '+'
+		pos_hint: {'x': .4, 'y':0}
+	PhoneButtons:
+		text: ''
+		pos_hint: {'x': .6, 'y':0}
+	    disabled: True
