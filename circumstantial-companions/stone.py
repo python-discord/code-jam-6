@@ -37,10 +37,8 @@ def get_image_and_aspect():
 
     pebbles_per_x = (PEBBLE_COUNT * w / h)**.5
     pebbles_per_y = pebbles_per_x * h / w
-    pebbles_per_x = int(pebbles_per_x)
-    pebbles_per_y = int(pebbles_per_y)
 
-    return image, pebbles_per_x, pebbles_per_y
+    return image, int(pebbles_per_x), int(pebbles_per_y)
 
 PEBBLE_IMAGE, PEBBLES_PER_X, PEBBLES_PER_Y = get_image_and_aspect()
 
