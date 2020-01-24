@@ -32,7 +32,6 @@
 
 <Rotor@BoxLayout>:
     orientation: "vertical"
-    screen: root.parent.parent.parent.parent
     rotor_number: 0
     rotor_value: rotor_value
     canvas:
@@ -48,7 +47,7 @@
             text: "+"
             pos_hint: {"center_x": 0.5, "top": 0.62}
             on_release:
-                setattr(rotor_value, "text", root.screen.keys[root.screen.keys.index(rotor_value.text) + 1])
+                setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) + 1])
     RelativeLayout:
         RotorLabel:
             id: rotor_value
@@ -64,7 +63,7 @@
             disabled: True
             pos_hint: {"center_x": 0.5, "top": 0.575}
             on_release:
-                setattr(rotor_value, "text", root.screen.keys[root.screen.keys.index(rotor_value.text) - 1])
+                setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) - 1])
 
 <Rotors@BoxLayout>:
     size_hint_y: 0.7

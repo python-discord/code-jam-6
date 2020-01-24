@@ -3,8 +3,6 @@ from datetime import datetime
 from random import sample
 from string import ascii_uppercase
 
-from requests import get
-
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
@@ -13,40 +11,13 @@ from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
+from requests import get
 
 from .save_game import on_config_change, save_rotors, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
 )
-keys = {
-    "q",
-    "w",
-    "e",
-    "r",
-    "t",
-    "z",
-    "u",
-    "i",
-    "o",
-    "a",
-    "s",
-    "d",
-    "f",
-    "g",
-    "h",
-    "j",
-    "k",
-    "p",
-    "y",
-    "x",
-    "c",
-    "v",
-    "b",
-    "n",
-    "m",
-    "l",
-}
 
 
 def get_wiki_summary() -> str:
@@ -129,7 +100,7 @@ def setup_new_game_settings():
 
 class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
-        if substring.lower() in keys:
+        if substring.upper() in App.get_running_app().keys:
             s = App.get_running_app().machine.key_press(substring.upper())
         else:
             s = substring
@@ -162,7 +133,7 @@ class GameScreen(Screen):
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
             self.manager.current == "game_screen"
-            and codepoint in keys
+            and codepoint.upper() in App.get_running_app().keys
             and self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus
         ):
             self.ids.enigma_keyboard.ids.keyboard.ids[

@@ -49,6 +49,35 @@ class AncientTechApp(App):
         self.game_id = None
         self.APP_DIR = os.path.dirname(os.path.abspath(__file__))
 
+        self.keys = [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I",
+            "J",
+            "K",
+            "L",
+            "M",
+            "N",
+            "O",
+            "P",
+            "Q",
+            "R",
+            "S",
+            "T",
+            "U",
+            "V",
+            "W",
+            "X",
+            "Y",
+            "Z",
+        ]
+
     def build(self):
         self.title = "ENG"
         self.icon = "misc/logo.png"
