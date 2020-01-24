@@ -76,3 +76,26 @@ class Terrain(Sprite):
             self.type = 0
         super().__init__(image, pos, (1000, 1000), **kwargs)
 
+class Tree(Sprite):
+    def __init__(self, pos: tuple = (0, 0), size: tuple = (50, 50), orientation: int = 0, **kwargs):
+        super().__init__("topOfTree.png", pos, size, **kwargs)
+        self.rotate = Rotate(angle=orientation, origin=(pos[0] + size[0] / 2, pos[1] + size[1] / 2))
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
+
+
+
+class Rock(Sprite):
+    def __init__(self, pos: tuple = (0, 0), size: tuple = (50, 50), orientation: int = 0, **kwargs):
+        super().__init__("r.png", pos, size, **kwargs)
+        self.rotate = Rotate(angle=orientation, origin=(pos[0] + size[0] / 2, pos[1] + size[1] / 2))
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
