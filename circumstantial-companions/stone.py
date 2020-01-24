@@ -15,7 +15,7 @@ DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .2
 
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
-PEBBLE_COUNT = 7.5e3
+PEBBLE_COUNT = 7.5e3 # per layer.
 PEBBLE_IMAGE_SCALE = .75
 
 MIN_POWER = 1e-5
@@ -38,29 +38,29 @@ def get_image_and_aspect():
         image = np.frombuffer(image.tobytes(), dtype=np.uint8)
     image = image.reshape((h, w, 4))
 
-    pebbles_per_x = (PEBBLE_COUNT * w / h)**.5
-    pebbles_per_y = pebbles_per_x * h / w
+    pebbles_per_row = (PEBBLE_COUNT * w / h)**.5
+    pebbles_per_column = pebbles_per_row * h / w
 
-    return image, int(pebbles_per_x), int(pebbles_per_y)
+    return image, int(pebbles_per_row), int(pebbles_per_column)
 
-PEBBLE_IMAGE, PEBBLES_PER_X, PEBBLES_PER_Y = get_image_and_aspect()
+PEBBLE_IMAGE, PEBBLES_PER_ROW, PEBBLES_PER_COLUMN = get_image_and_aspect()
 
 def get_pebble_size(width, height):
     """Calculate the correct pebble size so we have no gaps in our stone."""
     scaled_w, scaled_h =  PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    return scaled_w / PEBBLES_PER_X, scaled_h / PEBBLES_PER_Y
+    return scaled_w / PEBBLES_PER_ROW, scaled_h / PEBBLES_PER_COLUMN
 
 def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
     """
-    x_scale, y_scale = 1 / PEBBLES_PER_X, 1 / PEBBLES_PER_Y
+    x_scale, y_scale = 1 / PEBBLES_PER_ROW, 1 / PEBBLES_PER_COLUMN
     x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image
     h, w, _ = PEBBLE_IMAGE.shape
 
-    for x in range(PEBBLES_PER_X):
+    for x in range(PEBBLES_PER_ROW):
         x = x_scale * x
-        for y in range(PEBBLES_PER_Y):
+        for y in range(PEBBLES_PER_COLUMN):
             y = y_scale * y
             sample_loc = int(y * h), int(x * w)
             r, g, b, a = PEBBLE_IMAGE[sample_loc]
