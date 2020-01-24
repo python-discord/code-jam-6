@@ -1,5 +1,5 @@
 from argparse import Namespace
-from pathlib import Path
+from pathlib import PurePath
 import os
 
 from project.core import command
@@ -8,25 +8,25 @@ from project.core.terminal import Terminal
 from project.core.utils import PathLike, FS
 
 
-class RM(command.Command):
-    """Remove (unlink) the FILE(s)."""
+class Mkdir(command.Command):
+    """Create the DIRECTORY(ies), if they do not already exist."""
     def __init__(self) -> None:
-        super().__init__(name='rm')
+        super().__init__(name='mkdir')
 
     def _resolve_path(self, cwd: PathLike, path: PathLike, filesystem: FS):
         """Make user provided path relative with current working directory."""
-        path = filesystem.find_dir(cwd, path)
+        path = PurePath(cwd) / path
         filesystem.check_env(path)
         return path
 
-    @command.option('file', nargs='+')
-    def handle_file(self, ns: Namespace, term: Terminal) -> None:
-        self.files = [self._resolve_path(term.path, file, term.fs) for file in ns.file]
+    @command.option('dir', nargs='+')
+    def handle_dir(self, ns: Namespace, term: Terminal) -> None:
+        self.dirs = [self._resolve_path(term.path, dir, term.fs) for dir in ns.dir]
 
     def main(self, ns: Namespace, term: Terminal) -> str:
-        for f in self.files:
-            os.remove(f)
+        for d in self.dirs:
+            os.mkdir(d)
 
 
 def setup(parser: Parser) -> None:
-    parser.add_command(RM())
+    parser.add_command(Mkdir())
