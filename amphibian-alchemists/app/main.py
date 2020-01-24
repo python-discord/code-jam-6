@@ -43,9 +43,9 @@ class AncientTechApp(App):
             rotors="I II III",
             reflector="B",
             ring_settings=[1, 20, 11],
-            plugboard_settings="AV BS CG DL FU HZ IN KM OW RX",
+            plugboard_settings="",
         )
-        self.machine.set_display("ABC")
+        self.machine.set_display("AAA")
         self.game_id = None
         self.APP_DIR = os.path.dirname(os.path.abspath(__file__))
 

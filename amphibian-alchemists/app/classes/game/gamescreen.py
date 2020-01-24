@@ -65,7 +65,7 @@ def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> st
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings,
+        plugboard_settings=None,
     )
     machine.set_display(rotor_settings)
     return machine.process_text(text)
@@ -73,51 +73,93 @@ def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> st
 
 def setup_new_game_settings():
     store = JsonStore(DATA_DIR)
-    currrent_game_id = store.get("latest_game_id")["id"]
-    if currrent_game_id is None:
+    current_game_id = store.get("latest_game_id")["id"]
+    if current_game_id is None:
         store.put("latest_game_id", id=0)
     else:
-        store.put("latest_game_id", id=int(currrent_game_id) + 1)
+        store.put("latest_game_id", id=int(current_game_id) + 1)
+    # Setting up data
     game_id = store.get("latest_game_id")["id"]
     App.get_running_app().game_id = game_id
     plug_array = sample(ascii_uppercase, 20)
     plugs = []
     for i in range(10):
-        plugs.append("".join(plug_array[i * 2 : i * 2 + 2]))  # noqa
+        plugs.append("".join(plug_array[i * 2: i * 2 + 2]))  # noqa
     plug_settings = " ".join(x for x in plugs)
     rotors = sample(ascii_uppercase, 3)
     rotor_setting = "".join(rotors)
-    App.get_running_app().machine.from_key_sheet(
+
+    """
+    The problem is that the machine is not reset. We're essentially calling: 
+    App.get_running_app().machine.from_key_sheet().from_key_sheet()
+    Notice we called it twice. We're looking into how to fix that.
+    The other issue is that the plugs can't actually be changed.
+    That means
+    """
+
+    # Setting defaults for the singleton machine
+    # App.get_running_app().machine = EnigmaMachine.from_key_sheet()
+    App.get_running_app().machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings,
+        # plugboard_settings=plug_settings,
+        plugboard_settings=None
     )
-    App.get_running_app().machine.set_display(rotor_setting)
-
-    """Storing data"""
+    # print("Rotor settings:", rotor_setting)
+    # App.get_running_app().machine.set_display("AAA")
+    # App.get_running_app().machine.set_display(rotor_setting)
+    # Storing data
     rotors.append(None)
     rotors.append(None)
     text = get_wiki_summary()
+    # ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
+    ciphered_text = get_encrypted_text(text, "AAA", "")
+    print("Ciphered text:", ciphered_text)
+    print("Unciphered text:", get_encrypted_text(ciphered_text, "AAA", ""))
+    print("Test ciphered text:")
+    for x in ciphered_text:
+        print(x, end="")
+    print("", end="\n")
+    print("Test unciphered text:")
+    for x in ciphered_text:
+        print(App.get_running_app().machine.key_press(x), end="")
+    # print(id(App.get_running_app().machine))
+    # print(App.get_running_app().machine.key_press(ciphered_text[0]))#, end="")
+    print("New rotor settings", App.get_running_app().machine.get_display())
+    machine = App.get_running_app().machine
+    print(type(machine))
+    print(dir(machine))
+    # print(id(machine))  # IDs are the same
+
+
+
+
     store.put(
         game_id,
         game_title="Game {}".format(game_id),
-        ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
-        unciphered_text=text,
+        ciphered_text=ciphered_text,
+        # unciphered_text=get_encrypted_text(ciphered_text, rotor_setting, plug_settings),
+        unciphered_text=get_encrypted_text(ciphered_text, rotor_setting, ""),
         current_output_text="",
         last_saved_output_text="",
         created_date=datetime.now().isoformat(),
         last_saved_date=datetime.now().isoformat(),
-        encrypted_state={"reflector": "B", "rotors": rotors, "plugs": plugs},
+        encrypted_state={
+            "reflector": "B",
+            "rotors": rotor_setting,
+            # "plugs": plugs
+            "plugs": []
+        },
         current_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
-            "plugs": ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"],
+            "plugs": [],
         },
         last_saved_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
-            "plugs": ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"],
+            "plugs": [],
         },
     )
 
@@ -175,14 +217,12 @@ class GameScreen(Screen):
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
-
         if not board_output.focus:
             board_output.insert_text(key.name)
         store_put(current_output_text=board_output.text)
         # Updating rotors
         new_rotors = App.get_running_app().machine.get_display()
         save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
-        # on_config_change() Not necessary since machine auto configured
         rotor_screen = self.manager.get_screen("rotor_screen")
         rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
         rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]

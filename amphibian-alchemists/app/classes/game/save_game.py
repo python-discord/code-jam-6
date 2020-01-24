@@ -1,5 +1,6 @@
 import os
 
+from enigma.machine import EnigmaMachine
 from kivy.app import App
 from kivy.storage.jsonstore import JsonStore
 
@@ -17,7 +18,7 @@ def on_config_change():
     game_id = str(App.get_running_app().game_id)
     plugs = store.get(game_id)["current_state"]["plugs"]
     plug_settings = " ".join(x for x in plugs)
-    App.get_running_app().machine.from_key_sheet(
+    App.get_running_app().machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
@@ -61,8 +62,8 @@ def store_put(
         last_saved_output_text = game["last_saved_output_text"]
     if created_date is None:
         created_date = game["created_date"]
-    if last_saved_state is None:
-        last_saved_state = game["last_saved_date"]
+    if last_saved_date is None:
+        last_saved_date = game["last_saved_date"]
     if encrypted_state is None:
         encrypted_state = game["encrypted_state"]
     if current_state is None:
