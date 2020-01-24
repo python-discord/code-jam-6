@@ -8,11 +8,22 @@ Biography: >
   I spend most of my free time sleeping. I also like building stuff, and help out with construction
   of living spaces during territory expansion campaigns. I like my eggs fried with extra oil.
 Interests: ['architecture', 'painting', 'collecting rocks']
-right_delta:
-    a1: 1
-    a2: 1
-    a3: 1
-left_delta:
-    a1: 1
-    a2: -2
-    a3: 0
+Choices:
+    right: >
+      Protest Baka for destroying ecosystems. Mind it Baka might take this seriously
+    left: >
+      Join his company. Nice career. You can live comfortably.
+Results:
+    right: >
+      Not making the same mistake as humans!
+    left: >
+      Welcome to Baka and Co.
+Deltas:
+    right:
+        Knowledge: 1
+        Welfare: -3
+        Energy: -3
+    left:
+        Knowledge: 3
+        Respect: -1
+        Energy: 1

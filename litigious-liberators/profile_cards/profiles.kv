@@ -12,6 +12,29 @@
         id: profile_list
         size_hint_y: 0.9
 
+<ScrollableLabel>:
+    Label:
+        size_hint_y: None
+        height: self.texture_size[1]
+        text_size: self.width, None
+        text: root.text
+
+<BioPopup>:
+    id:pop
+    size_hint: .4, .4
+    auto_dismiss: False
+    title: 'XXX!!'
+    BoxLayout:
+        id: box
+        orientation:'vertical'
+        BoxLayout:
+            orientation:'horizontal'
+            ScrollableLabel:
+                id: bio
+            Button:
+                text: 'Close'
+                on_release: pop.dismiss()
+
 <ProfileCard>:
     canvas:
         Color:
@@ -20,7 +43,7 @@
             size: (self.size[0], self.size[1]  - 100)
     BoxLayout:
         orientation: 'vertical'
-        Image:
+        ImageButton:
             id: picture
             size_hint_y: None
             height: 200
@@ -30,44 +53,16 @@
             size_hint_y: None
             font_size: sp(30)
         Label:
-            id: about
+            id: right_choice
             color: 0, 0, 0, 1
+            text: "Right: "
             font_size: sp(20)
         Label:
-            id: job
+            id: left_choice
+            text: "Left: "
             color: 0, 0, 0, 1
-            text: 'Job: '
             font_size: sp(20)
-        Label:
-            id: r_a1
-            color: 0, 0, 0, 1
-            text: 'r_a1: '
-            font_size: sp(20)
-        Label:
-            id: r_a2
-            color: 0, 0, 0, 1
-            text: 'r_a2: '
-            font_size: sp(20)
-        Label:
-            id: r_a3
-            color: 0, 0, 0, 1
-            text: 'r_a3: '
-            font_size: sp(20)
-        Label:
-            id: l_a1
-            color: 0, 0, 0, 1
-            text: 'l_a1: '
-            font_size: sp(20)
-        Label:
-            id: l_a2
-            color: 0, 0, 0, 1
-            text: 'l_a2: '
-            font_size: sp(20)
-        Label:
-            id: l_a3
-            color: 0, 0, 0, 1
-            text: 'l_a3: '
-            font_size: sp(20)
+
 
 
 <LossScreen>:
