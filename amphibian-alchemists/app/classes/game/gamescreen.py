@@ -77,7 +77,7 @@ def setup_new_game_settings():
     plug_array = sample(ascii_uppercase, 20)
     plugs = []
     for i in range(10):
-        plugs.append("".join(plug_array[i * 2 : i * 2 + 2]))  # noqa
+        plugs.append("".join(plug_array[i * 2: i * 2 + 2]))  # noqa
     plug_settings = " ".join(x for x in plugs)
     rotors = sample(ascii_uppercase, 3)
     rotor_setting = "".join(rotors)
@@ -169,9 +169,9 @@ class GameScreen(Screen):
             "l",
         }
         if (
-            self.manager.current == "game_screen"
-            and codepoint in keys
-            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
+                self.manager.current == "game_screen"
+                and codepoint in keys
+                and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
         ):
             self.ids.enigma_keyboard.ids.keyboard.ids[
                 codepoint.upper()

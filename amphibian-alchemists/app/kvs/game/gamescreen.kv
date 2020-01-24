@@ -49,13 +49,18 @@
     AnchorLayout:
         BoxLayout:
             orientation: "vertical"
-            size_hint: 0.75, 0.7
-            Button:
-                size_hint_y: 0.2
-                text: "Rotors"
-                on_release: root.manager.current = "rotor_screen"
+            size_hint: 0.75, 1
+            AnchorLayout:
+                RotorDisplay:
+                Button:
+                    background_color: 0, 0, 0, 0
+                    on_release: root.manager.current = "rotor_screen"
             EnigmaKeyboard:
                 id: enigma_keyboard
+            Button:
+                text: "plugboard"
+                size_hint: 1, 0.1
+                on_release: root.manager.current = "plugboard_screen"
     AnchorLayout:
         anchor_y : "top"
         anchor_x : "left"
@@ -63,10 +68,4 @@
             text: "Menu"
             size_hint: 0.1, 0.1
             on_release: Factory.GameMenuPopup().open()
-    AnchorLayout:
-        anchor_y: "bottom"
-        Button:
-            text: "plugboard"
-            size_hint: 0.75, 0.15
-            on_release: root.manager.current = "plugboard_screen"
     CheckPaper:
