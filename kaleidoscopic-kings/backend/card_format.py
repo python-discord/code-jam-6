@@ -44,6 +44,28 @@ class GameVariable:
                     self.value == other_state.value)
         return False
 
+    def __repr__(self):
+        return str(self.value)
+
+    def update(self, value: Union[int, float, bool]):
+        if type(value) is int:
+            self.value += value
+            self._make_sure_in_range(self.INTEGER_RANGE_INCLUDING)
+        elif type(value) is float:
+            self.value += value
+            self._make_sure_in_range(self.FLOAT_RANGE_INCLUDING)
+        elif type(value) is bool:
+            self.value = value
+        else:
+            logger.critical(f"Can't update state, unknown state type for {value}.")
+
+    def _make_sure_in_range(self, value_range: Union[Tuple[int, int], Tuple[float, float]]):
+        min_including, max_including = value_range
+        if self.value < min_including:
+            self.value = min_including
+        elif self.value > max_including:
+            self.value = max_including
+
     def as_dict(self) -> dict:
         """
         Get's the format that is used for saving state/condition/effect in json.
@@ -62,6 +84,9 @@ class MainState(GameVariable):
         Get's the format that is used for saving main state to json.
         """
         return {self.state_name_key: {self.value, self.label, self.icon_asset}}
+
+    def __repr__(self):
+        return str(self.value)
 
 
 @dataclass
@@ -194,17 +219,8 @@ class GameState:
             return
 
         for effect in effects:
-            print(effect)
-            print(self._game_states[effect.state_name_key])
-            print(type(self._game_states[effect.state_name_key]))
             self._make_sure_same_type(effect.value, self._game_states[effect.state_name_key].value)
-
-            if type(effect.value) in (int, float):
-                self._game_states[effect.state_name_key].value += effect.value
-            elif type(effect.value) is bool:
-                self._game_states[effect.state_name_key].value = effect.value
-            else:
-                logger.critical(f"Can't update state, unknown state type for {effect}.")
+            self._game_states[effect.state_name_key].update(effect.value)
 
     @classmethod
     def _make_sure_same_type(cls, variable_1, variable_2):
