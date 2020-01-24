@@ -31,6 +31,12 @@ class GameView(Widget):
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
+        self._background = Image(
+            source=IMAGES_PATH.format('background.zip'),
+            anim_delay=1
+        )
+        self._background.size = self._background.texture_size
+
         self._hp_bar = Image(pos=(10, WINDOW_HEIGHT - 80), source=ATLAS_PATH.format('100'))
         self._hp_bar.size = self._hp_bar.texture_size
 
@@ -43,13 +49,9 @@ class GameView(Widget):
         if not running:
             return
 
-        with self.canvas:
-            background = Image(
-                source=IMAGES_PATH.format('background.zip'),
-                anim_delay=1
-            )
-            background.size = background.texture_size
+        self.add_widget(self._background)
 
+        with self.canvas:
             birds = Image(
                 source=IMAGES_PATH.format('birds.zip'),
                 pos=(Window.width, 400),

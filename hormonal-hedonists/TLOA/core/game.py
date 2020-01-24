@@ -44,7 +44,7 @@ class Game(EventDispatcher):
         if random.random() < 0.5:
             lane = self.ship_lanes[random.randrange(6)]
             if lane:
-                lane[random.randrange(len(lane))].health -= 0
+                lane[random.randrange(len(lane))].health -= 2
 
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
@@ -57,11 +57,11 @@ class Game(EventDispatcher):
 
                 ship.step(dt, self)
 
-    def spawn_ship(self):
+    def spawn_ship(self, override=False):
         if not self.running:
             return False
 
-        if random.random() < SHIP_SPAWN_CHANCE:
+        if override or random.random() < SHIP_SPAWN_CHANCE:
             lane = random.randrange(NUMBER_OF_LANES)
             ship_class = random.choices([BrownShip, GoldenShip],
                                         weights=[1 - GOLD_SHIP_CHANCE, GOLD_SHIP_CHANCE])[0]
