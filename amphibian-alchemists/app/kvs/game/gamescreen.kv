@@ -47,21 +47,25 @@
 <GameScreen>:
     name: "game_screen"
     AnchorLayout:
+        anchor_y: "top"
         BoxLayout:
             orientation: "vertical"
-            size_hint: 0.75, 1
+            size_hint: 0.75, 1.5
             AnchorLayout:
-                size_hint: 1, 0.6
+                size_hint: 1, 0.575
                 RotorDisplay:
                 Button:
                     background_color: 0, 0, 0, 0
                     on_release: root.manager.current = "rotor_screen"
-            EnigmaKeyboard:
-                id: enigma_keyboard
-            Button:
-                text: "plugboard"
-                size_hint: 1, 0.1
-                on_release: root.manager.current = "plugboard_screen"
+            BoxLayout
+                size_hint: 1, 0.9
+                EnigmaKeyboard:
+                    id: enigma_keyboard
+            AnchorLayout:
+                Button:
+                    background_color: 0, 0, 0, 0
+                    on_release: root.manager.current = "plugboard_screen"
+                PlugBoardModified:
     AnchorLayout:
         anchor_y : "top"
         anchor_x : "left"
