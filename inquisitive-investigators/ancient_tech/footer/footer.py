@@ -24,8 +24,8 @@ class Footer(BoxLayout):
             '4': self.down,
             '5': self.up,
             '6': self.mkdir,
-            '7': self.delete,
-            '8': self.create,
+            '7': self.create,
+            '8': self.delete,
             '9': self.quit
         }
 
