@@ -28,7 +28,7 @@ from stone import Chisel, CHISEL_RADIUS_RANGE, CHISEL_POWER_RANGE
 
 font = contextvars.ContextVar("font")
 
-OPTIONS BACKGROUND = "assets/img/options_background.png"
+OPTIONS_BACKGROUND = "assets/img/options_background.png"
 BORDER_IMAGE = "assets/img/sign-border-blank.png"
 HAMMER_ICON = "assets/img/cursor/hammer_up_pixelized.png"
 
