@@ -126,7 +126,6 @@ class Chisel(Widget):
 
         self.setup_canvas()
 
-
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
 
