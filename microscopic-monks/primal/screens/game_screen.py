@@ -20,7 +20,7 @@ class GameScreen(Screen):
                 temp_terrain.draw(self.canvas)
                 self.terrain.append(temp_terrain)
 
-        self.player = Player('testimg.png', (200, 200), (100, 100))
+        self.player = Player('testimg.png', (0, 0), (100, 100))
         self.player.draw(self.canvas)
         self.camera.end_region()
 
@@ -73,5 +73,5 @@ class GameScreen(Screen):
         self.player.set_position((pos_x, pos_y))
         self.player.set_rotation(self.get_mouse_position())
 
-        self.camera.set_position(pos_x, pos_y)  # Updates the position
+        self.camera.set_position(pos_x + 50, pos_y + 50)  # Updates the position
         self.camera.update()
