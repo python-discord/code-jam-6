@@ -139,11 +139,19 @@ class DeletePopup(BasePopup):
         data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in
                 self.ctx.parent.ids.left.ids.rv.dirs]
 
-        if len(path.parent.parts) > 1:
-            self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
-        else:
-            self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
+        if self.ctx.parent.ids.left.ids.rv.selected is not None:
 
+            if len(path.parent.parts) > 1:
+                self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
+            else:
+                self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
+
+        if self.ctx.parent.ids.right.ids.rv.selected is not None:
+
+            if len(path.parent.parts) > 1:
+                self.ctx.parent.ids.right.ids.rv.update(state=1, file=data)
+            else:
+                self.ctx.parent.ids.right.ids.rv.update(state=2, file=data)
 
 class QuitPopup(BasePopup):
     pass
