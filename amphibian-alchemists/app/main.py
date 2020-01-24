@@ -44,7 +44,7 @@ class AncientTechApp(App):
             reflector="B",
             ring_settings=[1, 20, 11],
             plugboard_settings="",
-        )
+        )  # Begin instantiation. Change onload
         self.machine.set_display("AAA")
         self.game_id = None
         self.APP_DIR = os.path.dirname(os.path.abspath(__file__))

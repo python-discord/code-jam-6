@@ -65,7 +65,7 @@ def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> st
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        plugboard_settings=None,
+        plugboard_settings=plug_settings,
     )
     machine.set_display(rotor_settings)
     return machine.process_text(text)
@@ -89,58 +89,25 @@ def setup_new_game_settings():
     rotors = sample(ascii_uppercase, 3)
     rotor_setting = "".join(rotors)
 
-    """
-    The problem is that the machine is not reset. We're essentially calling: 
-    App.get_running_app().machine.from_key_sheet().from_key_sheet()
-    Notice we called it twice. We're looking into how to fix that.
-    The other issue is that the plugs can't actually be changed.
-    That means
-    """
-
     # Setting defaults for the singleton machine
-    # App.get_running_app().machine = EnigmaMachine.from_key_sheet()
+    # Need to re-instantiate the machine
     App.get_running_app().machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
-        # plugboard_settings=plug_settings,
-        plugboard_settings=None
+        plugboard_settings=plug_settings,
     )
-    # print("Rotor settings:", rotor_setting)
-    # App.get_running_app().machine.set_display("AAA")
-    # App.get_running_app().machine.set_display(rotor_setting)
+    App.get_running_app().machine.set_display(rotor_setting)
     # Storing data
     rotors.append(None)
     rotors.append(None)
     text = get_wiki_summary()
-    # ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
-    ciphered_text = get_encrypted_text(text, "AAA", "")
-    print("Ciphered text:", ciphered_text)
-    print("Unciphered text:", get_encrypted_text(ciphered_text, "AAA", ""))
-    print("Test ciphered text:")
-    for x in ciphered_text:
-        print(x, end="")
-    print("", end="\n")
-    print("Test unciphered text:")
-    for x in ciphered_text:
-        print(App.get_running_app().machine.key_press(x), end="")
-    # print(id(App.get_running_app().machine))
-    # print(App.get_running_app().machine.key_press(ciphered_text[0]))#, end="")
-    print("New rotor settings", App.get_running_app().machine.get_display())
-    machine = App.get_running_app().machine
-    print(type(machine))
-    print(dir(machine))
-    # print(id(machine))  # IDs are the same
-
-
-
-
+    ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
     store.put(
         game_id,
         game_title="Game {}".format(game_id),
         ciphered_text=ciphered_text,
-        # unciphered_text=get_encrypted_text(ciphered_text, rotor_setting, plug_settings),
-        unciphered_text=get_encrypted_text(ciphered_text, rotor_setting, ""),
+        unciphered_text=get_encrypted_text(ciphered_text, rotor_setting, plug_settings),
         current_output_text="",
         last_saved_output_text="",
         created_date=datetime.now().isoformat(),
@@ -148,8 +115,7 @@ def setup_new_game_settings():
         encrypted_state={
             "reflector": "B",
             "rotors": rotor_setting,
-            # "plugs": plugs
-            "plugs": []
+            "plugs": plugs
         },
         current_state={
             "reflector": "B",
