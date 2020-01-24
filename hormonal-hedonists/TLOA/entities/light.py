@@ -21,7 +21,7 @@ class LightRays(Mesh):
         self.mirror = surface
         self.point = point
 
-        vertex1, vetrex2 = self.mirror[1:]
+        vertex1, vertex2 = self.mirror[1:]
         self.indices = [0, 1, 2]
         self.vertices = []
         for edge in combinations([self.point, vertex1, vertex2], 2):
