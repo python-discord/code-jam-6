@@ -125,7 +125,7 @@ class GameView(Widget):
         self._game.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self._game.mirror.mirror_axis)
         self._game.death_rays.trace(
             point=Vector(600, LANE_BOUNDS[self._game.mirror.state][1]),
-            surface = self._game.mirror.mirror_axis)
+            surface=self._game.mirror.mirror_axis)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
