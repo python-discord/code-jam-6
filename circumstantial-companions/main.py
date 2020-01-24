@@ -28,6 +28,9 @@ from stone import Chisel, CHISEL_RADIUS_RANGE, CHISEL_POWER_RANGE
 
 font = contextvars.ContextVar("font")
 
+OPTIONS BACKGROUND = "assets/img/options_background.png"
+BORDER_IMAGE = "assets/img/sign-border-blank.png"
+HAMMER_ICON = "assets/img/cursor/hammer_up_pixelized.png"
 
 class Button(KivyButton):
     def __init__(self, text, **kwargs):
@@ -37,7 +40,7 @@ class Button(KivyButton):
         self.n = 32
         with self.canvas.before:
             self.border_img = BorderImage(
-                source="assets/img/sign-border-blank.png",
+                source=BORDER_IMAGE,
                 size=(self.width + self.n, self.height + self.n),
                 pos=(self.x - self.n / 2, self.y - self.n / 2),
                 autoscale="both",
@@ -92,7 +95,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
             padding=5,
             opacity=0,  # opacity is set when side panel is opened
         )
-        self.setup_background("assets/img/options_background.png")
+        self.setup_background(OPTIONS_BACKGROUND)
 
     def build(self, locale=SYSTEM_LOCALE):
         self.clear_widgets()
@@ -137,10 +140,10 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         slider_layout.add_widget(ChiselRadiusSlider(self.chisel, size_hint=(0.5, 0.9)))
         slider_layout.add_widget(ChiselPowerSlider(self.chisel, size_hint=(0.5, 0.9)))
         slider_layout.add_widget(
-            Image(source="assets/img/cursor/hammer_up_pixelized.png", size_hint=(0.5, 0.1))
+            Image(source=HAMMER_ICON, size_hint=(0.5, 0.1))
         )
         slider_layout.add_widget(
-            Image(source="assets/img/cursor/hammer_up_pixelized.png", size_hint=(0.5, 0.1))
+            Image(source=HAMMER_ICON, size_hint=(0.5, 0.1))
         )
 
         self.add_widget(title)
