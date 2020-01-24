@@ -37,3 +37,5 @@ UNITS: List[str] = [
     'ZB',
     'YB'
 ]
+
+MAX_PATH_LENGTH: int = 50

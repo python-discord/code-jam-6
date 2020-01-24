@@ -10,7 +10,11 @@ from typing import (
     Union
 )
 
-from .constants import BASE_SIZE, UNITS
+from .constants import (
+    BASE_SIZE, 
+    UNITS, 
+    MAX_PATH_LENGTH
+)
 
 
 def bytes_conversion(
@@ -115,7 +119,7 @@ def short_path(path: str) -> str:
 
         for idx in range(len(parts)):
             p = str(Path(*parts[idx:]))
-            
+
             if len(p) <= 50:
                 return p
 

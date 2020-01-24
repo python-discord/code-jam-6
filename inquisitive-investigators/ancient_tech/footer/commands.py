@@ -4,6 +4,7 @@ from shutil import rmtree
 
 from kivy.properties import NumericProperty
 from kivy.uix.popup import Popup
+from kivy.logger import Logger
 
 
 class BasePopup(Popup):
@@ -60,7 +61,7 @@ class Mkdir(BasePopup):
                 if not new_dir.exists():
                     new_dir.mkdir()
                 else:
-                    print('File Named already named the same')
+                    Logger.info('MkDir: Directory already exists')
 
                 self.ctx.parent.ids.left.ids.rv.dirs = dir_.iterdir()
                 data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in
@@ -78,7 +79,7 @@ class Mkdir(BasePopup):
                 if not new_dir.exists():
                     new_dir.mkdir()
                 else:
-                    print('File Named already named the same')
+                    Logger.info('MkDir: Directory already exists')
 
                 self.ctx.parent.ids.right.ids.rv.dirs = dir_.iterdir()
                 data = [self.ctx.parent.ids.right.ids.rv.generate(file_name) for file_name in
@@ -90,7 +91,7 @@ class Mkdir(BasePopup):
                     self.ctx.parent.ids.right.ids.rv.update(state=2, file=data)
             self.dismiss()
         else:
-            print('Please Enter a File Manager or Directory Name')
+            Logger.info('MkDir: Enter a directory name / Choose a browser side')
 
 
 class DeletePopup(BasePopup):
@@ -119,8 +120,9 @@ class DeletePopup(BasePopup):
     def delete(self):
         if self.filel is not None:
             self._remove(self.filel)
-        elif self.filer is not None:
-            self._remove(self.filel)
+
+        if self.filer is not None:
+            self._remove(self.filer)
 
         self.dismiss()
 
@@ -130,28 +132,34 @@ class DeletePopup(BasePopup):
 
         if dir_.type != 'DIR':
             path.unlink()
-            print('FILE')
+            Logger.info(f'Delete: Removed file {dir_.name}')
         else:
             rmtree(path)
-            print('DIR')
+            Logger.info(f'Delete: Removed directory {dir_.name}')
 
         self.ctx.parent.ids.left.ids.rv.dirs = path.parent.iterdir()
-        data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in
-                self.ctx.parent.ids.left.ids.rv.dirs]
+
+        gen = self.ctx.parent.ids.left.ids.rv.generate
+        dirs = self.ctx.parent.ids.left.ids.rv.dirs
+        data = [gen(file_name) for file_name in dirs]
 
         if self.ctx.parent.ids.left.ids.rv.selected is not None:
 
             if len(path.parent.parts) > 1:
-                self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
+                state = 1
             else:
-                self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
+                state = 2
+
+            self.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
 
         if self.ctx.parent.ids.right.ids.rv.selected is not None:
 
             if len(path.parent.parts) > 1:
-                self.ctx.parent.ids.right.ids.rv.update(state=1, file=data)
+                state = 1
             else:
-                self.ctx.parent.ids.right.ids.rv.update(state=2, file=data)
+                state = 2
+            
+            self.ctx.parent.ids.right.ids.rv.update(state=state, file=data)
 
 
 class QuitPopup(BasePopup):
