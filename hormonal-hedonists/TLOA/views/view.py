@@ -5,6 +5,7 @@ from random import randint
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH,
                                  WINDOW_HEIGHT, LANE_BOUNDS)
+from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.views import ShipView
 
 from kivy import Logger
@@ -14,6 +15,7 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
+from kivy.vector import Vector
 
 
 class GameView(Widget):
@@ -40,7 +42,7 @@ class GameView(Widget):
         self._hp_bar = Image(pos=(10, WINDOW_HEIGHT - 80), source=ATLAS_PATH.format('100'))
         self._hp_bar.size = self._hp_bar.texture_size
 
-        self._score = Label(pos=(990, 700), text=f'Score:   0', font_size=75)
+        self._score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
 
     def show_game(self, running):
         Animation.cancel_all(self)
@@ -72,6 +74,12 @@ class GameView(Widget):
                 source=ATLAS_PATH.format(f'{self._game.mirror.id}-{self._game.mirror.state}')
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
+
+            self.canvas.add(self._game.sun_rays.color)
+            self.canvas.add(self._game.sun_rays)
+
+            self.canvas.add(self._game.death_rays.color)
+            self.canvas.add(self._game.death_rays)
 
         self.add_widget(self._hp_bar)
         self.add_widget(self._score)
@@ -114,6 +122,8 @@ class GameView(Widget):
 
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
+        self._game.sun_rays.trace(point = LIGHT_SOURCE_POS, surface = self._game.mirror.mirror_axis)
+        self._game.death_rays.trace(point = Vector(600, LANE_BOUNDS[self._game.mirror.state][1]), surface = self._game.mirror.mirror_axis)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
