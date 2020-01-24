@@ -21,10 +21,10 @@ class Footer(BoxLayout):
 
         self.actions = {
             '1': self.about,
-            '3': self.view,
-            '8': self.mkdir,
-            '9': self.delete,
-            '0': self.quit
+            '2': self.view,
+            '6': self.mkdir,
+            '7': self.delete,
+            '8': self.quit
         }
 
     def _match(
