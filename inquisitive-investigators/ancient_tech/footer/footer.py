@@ -5,6 +5,7 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObservableList
 from kivy.core.window import Window, Keyboard
+from kivy.uix.textinput import TextInput
 
 from .commands import *
 
@@ -15,10 +16,8 @@ class Footer(BoxLayout):
 
     def __init__(self, **kwargs: Any) -> None:
         super(Footer, self).__init__(**kwargs)
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self._open = False
-
+        self.config_keyboard()
         self.actions = {
             '1': self.about,
             '2': self.view,
@@ -27,15 +26,23 @@ class Footer(BoxLayout):
             '8': self.quit
         }
 
+    def on_touch_up(self, touch):
+        if self._keyboard is None:
+            self.config_keyboard()
+
+    def config_keyboard(self):
+        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
     def _match(
             self, key: str, *args: Any, **kwargs: Any
     ) -> Union[bool, None]:
         func = self.actions.get(key)
         return func(*args, **kwargs) if func else None
-
-    def _keyboard_closed(self) -> None:
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
-        self._keyboard = None
 
     def _on_keyboard_down(
             self,
