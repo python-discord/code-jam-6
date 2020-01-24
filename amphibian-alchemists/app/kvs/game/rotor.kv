@@ -46,6 +46,8 @@
             id: up
             text: "+"
             pos_hint: {"center_x": 0.5, "top": 0.62}
+            on_press:
+                app.root.get_screen("game_screen").rotor_turn()
             on_release:
                 setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) + 1])
     RelativeLayout:
@@ -62,6 +64,8 @@
             text: "-"
             disabled: True
             pos_hint: {"center_x": 0.5, "top": 0.575}
+            on_press:
+                app.root.get_screen("game_screen").rotor_turn()
             on_release:
                 setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) - 1])
 

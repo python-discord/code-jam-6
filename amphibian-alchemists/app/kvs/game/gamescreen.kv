@@ -9,11 +9,13 @@
             size_hint_x: 0.7
         Button:
             text: "Save game title"
+            on_press: app.root.get_screen("game_screen").button_press_positive()
             on_release:
                 app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
                 root.dismiss()
         Button:
             text: "Cancel"
+            on_press: app.root.get_screen("game_screen").button_press_negative()
             on_release: root.dismiss()
 
 <GameMenuPopup@Popup>:
@@ -23,23 +25,28 @@
         orientation: "vertical"
         Button:
             text: "Give this current game a title"
+            on_press: app.root.get_screen("game_screen").button_press_positive()
             on_release: Factory.GameTitlePopup().open()
         Button:
             text: "Save a copy of current progress"
+            on_press: app.root.get_screen("game_screen").button_press_positive()
             on_release:
                 app.root.get_screen("game_screen").save_game()
                 root.dismiss()
         Button:
             text: "Load old copy (WARNING: Overrides current progress!)"
+            on_press: app.root.get_screen("game_screen").button_press_positive()
             on_release:
                 app.root.get_screen("game_screen").load_old_game()
                 root.dismiss()
         Button:
             text: "Close"
+            on_press: app.root.get_screen("game_screen").button_press_negative()
             on_release:
                 root.dismiss()
         Button:
             text: "Exit"
+            on_press: app.root.get_screen("game_screen").button_press_negative()
             on_release:
                 app.root.current = "main_screen"
                 root.dismiss()
@@ -72,5 +79,6 @@
         Button:
             text: "Menu"
             size_hint: 0.1, 0.1
+            on_press: app.root.get_screen("game_screen").button_press_positive()
             on_release: Factory.GameMenuPopup().open()
     CheckPaper:

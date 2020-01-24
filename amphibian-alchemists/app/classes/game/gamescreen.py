@@ -116,8 +116,21 @@ class GameScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
-        self.key_click = SoundLoader.load("misc/keyboard_click.wav")
-        self.paper_wrinkle = SoundLoader.load("misc/paper.wav")
+
+    def key_click(self):
+        SoundLoader.load("misc/keyboard_click.wav").play()
+
+    def paper_wrinkle(self):
+        SoundLoader.load("misc/paper.wav").play()
+
+    def button_press_positive(self):
+        SoundLoader.load("misc/button_1.wav").play()
+
+    def button_press_negative(self):
+        SoundLoader.load("misc/button_2.wav").play()
+
+    def rotor_turn(self):
+        SoundLoader.load("misc/rotor.wav").play()
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
@@ -148,7 +161,7 @@ class GameScreen(Screen):
         Here goes what we're gonna do whenever a key in the machine is pressed
         """
 
-        self.key_click.play()
+        self.key_click()
 
         anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
             _color=[1, 1, 1], duration=0.2
