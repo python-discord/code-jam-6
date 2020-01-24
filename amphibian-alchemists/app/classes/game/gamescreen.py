@@ -13,7 +13,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
 from requests import get
 
-from .save_game import on_config_change, store_put
+from .save_game import on_config_change, save_rotors, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
@@ -179,6 +179,10 @@ class GameScreen(Screen):
         if not board_output.focus:
             board_output.insert_text(key.name)
         store_put(current_output_text=board_output.text)
+        # Updating rotors
+        new_rotors = App.get_running_app().machine.get_display()
+        save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
+        # on_config_change() Not necessary since machine auto configured
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id
