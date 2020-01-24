@@ -1,3 +1,5 @@
+from collections import deque
+
 from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
 
@@ -126,6 +128,8 @@ class Abacus(FloatLayout):
 
                 self.top_beads.append(AbacusColumn(self.N_TOP_BEADS))
                 self.bottom_beads.append(AbacusColumn(self.N_BOTTOM_BEADS))
+
+        self.anim_queue = deque([])
 
         self.bind(pos=self.update, size=self.update)
         self.update()
@@ -287,6 +291,21 @@ class Abacus(FloatLayout):
             self.update()
 
         return f
+
+    def enqueue_anim(self, anim):
+        self.anim_queue.append(anim)
+
+    def play_anims_from_queue(self):
+        def f():
+            while len(self.anim_queue) > 0:
+                ta = Thread(target=self.anim_queue.popleft()())
+                ta.start()
+                ta.join()
+
+                sleep(1)
+
+        t = Thread(target=f)
+        t.start()
 
     # animations
 
