@@ -31,7 +31,7 @@ class SelectableButton(RecycleDataViewBehavior, ToggleButton):
 
 class GameSelectorScreen(Screen):
     last_selected = ObjectProperty(None, allownone=True)
-    no_saved_games = "No saved games selected."
+    no_saved_games = "No saved games found"
 
     def on_enter(self, *args):
         if not os.path.exists(DATA_DIR):
