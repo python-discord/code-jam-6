@@ -11,15 +11,16 @@
 
 
 
-# Add this to MainWidget for the background
 
 ################## LAYOUT ##################
-<MainWidget>:
-#    canvas.before:
-#        Rectangle:
-#            pos: self.pos
-#            size: self.size
-#            source: '../assets/cave_background.jpg'
+<MainWidget@GridLayout>:
+    canvas.before:
+#        Color:
+#            rgba: 0.0, 0.01, 0.01, -.5    # Blue
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: assets_file+'bg.png'
     id: main_layout
     orientation: 'vertical'
     cols: 2
@@ -32,10 +33,10 @@
 
 
 ################## STATUS ##################
-<StatusBar>:
+<StatusBar@GridLayout>:
     rows: 4
-    padding: (40, 150)
-    spacing: 10
+#    padding: (40, 150)
+    padding: (40, 180, 40, 75)
     StatusWidget:
         Label:
             text: data.game_state.main_state_1.label
@@ -58,27 +59,18 @@
             text: data.game_state.main_state_2.value
 
 
-<StatusWidget>:
+<StatusWidget@BoxLayout>:
     orientation: 'vertical'
     canvas.before:
         Rectangle:
             pos:self.pos
             size:self.size
-            source: data.assets_loc+ 'temp-pebble.png'
+            source: assets_file+ 'temp-pebble.png'
 
 
 ##################  CARD  ##################
-<CardWidget>:
-    # SwipeCard:
-    #     size_hint: None,None
-    #     do_rotation: False
-    #     do_scale: False
-    #     do_translation: False
-    #     rotation: 0
-    #     scale: 2
-
+<CardWidget@BoxLayout>:
     BoxLayout:
-        # size_hint: None,None
         orientation: 'vertical'
         padding: (5, 5)
         CardBoxLayout:
@@ -103,37 +95,40 @@
                         Rectangle:
                             pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
                             size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
-                            source: data.assets_loc  + 'stone_tablet.png'
+                            source: assets_file  + 'stone_tablet_2.png'
                     #         L    T    R     B
                     padding: (100, 20, 100, 10)
                     BoxLayout:
                         padding: (30, 90, 30, 110)
                         Image:
-                            source: data.assets_loc +data.active_card.card_asset
+                            source: assets_file +data.active_card.card_asset
 
         BoxLayout:
             size_hint:(1, .3)
             id: choices
             orientation: 'horizontal'
-            Button:
+            padding: (50, 0)
+            ChoiceButton:
+                background_normal: assets_file + 'button_bg_left.png'
+
                 text: data.active_card.options[0].text
-                font_size: 26
-                center: root.center
-                valign: 'center'
-                halign: 'center'
-                text_size: self.size
-                on_press: data.choice_handler('1')
-            Button:
+            ChoiceButton:
+                background_normal: assets_file + 'button_bg_right.png'
+
                 text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
-                font_size: 26
-                center: root.center
-                valign: 'center'
-                halign: 'center'
-                text_size: self.size
-                on_press: data.choice_handler('1')
 
 
 
-<CardBoxLayout>:
+
+<ChoiceButton@Button>:
+    font_size: 26
+    background_normal: assets_file + 'button_bg_left.png'
+    center: root.center
+    valign: 'center'
+    halign: 'center'
+    text_size: self.size
+    on_press: data.choice_handler('1')
+
+<CardBoxLayout@BoxLayout>:
     id: card
     orientation: 'vertical'
