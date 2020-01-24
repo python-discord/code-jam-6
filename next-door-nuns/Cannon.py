@@ -5,15 +5,17 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Rectangle
 from kivy.graphics import Rotate
 from kivy.uix.image import Image
+from kivy.properties import NumericProperty
 from math import sin,cos,radians
 
 
 class Cannon(Widget):
+    angle_int_deg = NumericProperty(0)
     def __init__(self, **kwargs):
         super(Cannon, self).__init__(**kwargs)
         self.velocity = 0
         with self.canvas:
-            self.cannon = Rectangle(size=(50, 50))
+            # self.cannon = Rectangle(size=(50, 50))
             self.cannonball = Rectangle(pos=(1000, 1000), size=(5, 5))
 
     def set_velocity(self, velocity):
@@ -24,9 +26,9 @@ class Cannon(Widget):
 
     def set_angle(self,angle):
         print(angle)
-        angle_int_deg = int(angle)
-        self.angle_y = sin(radians(angle_int_deg))
-        self.angle_x = cos(radians(angle_int_deg))
+        self.angle_int_deg = int(angle)
+        self.angle_y = sin(radians(self.angle_int_deg))
+        self.angle_x = cos(radians(self.angle_int_deg))
 
     def fire_cannon(self):
         self.cannonball.pos = (50, 50)
