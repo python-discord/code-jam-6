@@ -1,6 +1,6 @@
 from TLOA.core.constants import TITLE
 from TLOA.core.game import Game
-from TLOA.core.view import GameView
+from TLOA.views import GameView
 
 from kivy.app import App
 
@@ -15,8 +15,7 @@ class HormonalHedonistsApp(App):
         self._view = GameView(self._game)
 
     def on_start(self):
-        self._game.start(self._view)
-        self._view.show_game()
+        self._game.start()
 
     def build(self):
         return self._view
