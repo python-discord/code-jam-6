@@ -16,6 +16,8 @@ from kivy.uix.label import Label
 import math
 
 
+from TLOA.entities.mirror_cannon import MIRROR_CANNON_POS
+
 class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
         super().__init__(**kwargs)
@@ -63,7 +65,7 @@ class GameView(Widget):
             # sun.size = sun.texture_size
 
             self._game.mirror.shape = Image(
-                pos=(150, 260),
+                pos=MIRROR_CANNON_POS,
                 source=ATLAS_PATH.format(f'{self._game.mirror.id}-{self._game.mirror.state}')
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
