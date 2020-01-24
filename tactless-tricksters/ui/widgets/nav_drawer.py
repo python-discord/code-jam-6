@@ -15,7 +15,7 @@ class ContentNavigationDrawer(MDNavigationDrawer):
                                                on_press=lambda x: self.scr_chng('welcome', self.home))
         self.encode = NavigationDrawerIconButton(text="Encode", icon='database-import',
                                                  on_press=lambda x: self.scr_chng('encode', self.encode))
-        self.decode = NavigationDrawerIconButton(text="Decode", icon='chat-processing-outline',
+        self.decode = NavigationDrawerIconButton(text="Decode", icon='database-export',
                                                  on_press=lambda x: self.scr_chng('decode', self.decode))
         self.message = NavigationDrawerIconButton(text="Messages", icon='message',
                                                   on_press=lambda x: self.scr_chng('message', self.message))

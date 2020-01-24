@@ -54,7 +54,7 @@
 
             WelcomeButton:
                 text: 'Decode'
-                icon: 'chat-sleep-outline'
+                icon: 'database-export'
                 on_press:
                     root.manager.current = 'decode'
 
@@ -62,7 +62,7 @@
 
             WelcomeButton:
                 text: 'Encode'
-                icon: 'chat-processing-outline'
+                icon: 'database-import'
                 on_press:
                     root.manager.current = 'encode'
 
@@ -191,3 +191,4 @@
                     root.training_difficulty = "Hard"
                     root.manager.current = 'tapping'
 
+<TappingScreen>
