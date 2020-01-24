@@ -6,8 +6,6 @@
         BoxLayout:
             orientation: 'horizontal'
             Ledger:
-                TopRightButton:
-                    size_hint: 20, 20
             OperationsBar:
             CuneiformDrawingInput:
                 TopRightButton:
@@ -40,13 +38,6 @@
             pos: map(lambda a: a + 7, self.pos)
             size: map(lambda a: a - 14, self.size)
             source: 'assets/graphics/sandstone.jpg'  # TODO: make this platform independent?
-    canvas.before:
-        Color:
-            rgba: 0, 0, 0, 0.7
-        Rectangle:
-            size: self.size
-            pos: self.pos
-
 
 <OperationsBar>:
     size_hint_x: None

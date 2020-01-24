@@ -1,37 +1,93 @@
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
-import functools
+from kivy.core.window import Window
+from kivy.uix.image import Image
+from kivy.uix.label import Label
 
-BLANK_ROW = functools.partial(Widget)
-ROWS_IN_LEDGER = 10  # TODO: make this dependent on height
 
-
-class LedgerLayout(BoxLayout):
+class LedgerLayout(FloatLayout):
     child_widgets: list
 
     def __init__(self, *args, **kwargs):
-        super(LedgerLayout, self).__init__(
-                *args,
-                orientation='vertical',
-                **kwargs
-        )
+        super(LedgerLayout, self).__init__()
+        Window.bind(on_key_down=self._keydown)
+        self.l_pos = ''
+        self.m_pos = ''
+        self.r_pos = ''
 
-        self.child_widgets = []
+    def left(self, widget):
+        widget.x = super().x
 
-        # initialize with blank rows
-        for _ in range(ROWS_IN_LEDGER):
-            self.add_widget(BLANK_ROW())
+    def right(self, widget):
+        widget.x = super().x + super().size[0] - 1.5 * widget.size[0]
 
-    def add_widget(self, widget, *args, **kwargs):
-        if ROWS_IN_LEDGER == len(self.child_widgets):
-            super(LedgerLayout, self).remove_widget(self.child_widgets[0])
-            self.child_widgets = self.child_widgets[1:]
+    def mid(self, widget):
+        widget.x = super().x + super().size[0] / 2 - .6 * widget.size[0]
 
-        super(LedgerLayout, self).add_widget(widget, *args, **kwargs)
-        self.child_widgets.append(widget)
+    def top(self, widget):
+        widget.y = super().y + super().size[1]-widget.size[1]
 
-    def click(self):
-        print('click')
+    def add_operator(self, widget):
+        self.left(widget)
+        self.top(widget)
+        super().add_widget(widget)
 
-    def buttonImage(self):
-        return 'assets/graphics/clay.png'
+    def add_middle(self, w):
+        if self.m_pos == '':
+            w.size_hint = (.3, .3)
+            self.mid(w)
+            self.top(w)
+            self.m_pos = w
+            super().add_widget(w)
+
+    def add_left_digit(self, w):
+        if self.l_pos == '':
+            w.allow_stretch = True
+            w.size_hint = (.3, .3)
+            self.left(w)
+            self.top(w)
+            self.l_pos = w
+            super().add_widget(w)
+            return True
+        return False
+
+    def add_right_digit(self, w): 
+        if self.r_pos == '':
+            w.allow_stretch = True 
+            w.size_hint = (.3, .3)
+            self.right(w)
+            self.top(w)
+            self.r_pos = w
+            super().add_widget(w)
+            return True
+        return False
+
+    def next_line(self):
+        for child in super(LedgerLayout, self).children:
+            child.y -= child.size[1] - .2 * child.size[1]
+
+    def _keydown(self, *args):
+        if(args[1] >= 257 and args[1] <= 265):
+            if not self.add_left_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png')):
+                self.add_right_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png'))
+        if(args[1] == 267):
+            l = Label(text="[color=000000]/[/color]", markup=True)
+            l.font_size = '58dp'
+            self.add_middle(l)
+        if(args[1] == 268):
+            l = Label(text="[color=000000]*[/color]", markup=True)
+            l.font_size = '58dp'
+            self.add_middle(l)
+        if(args[1] == 269):
+            l = Label(text="[color=000000]-[/color]", markup=True)
+            l.font_size = '58dp'
+            self.add_middle(l)
+        if(args[1] == 270):
+            l = Label(text="[color=000000]+[/color]", markup=True)
+            l.font_size = '58dp'
+            self.add_middle(l)
+        if(args[1] == 271):
+            self.l_pos = ''
+            self.m_pos = ''
+            self.r_pos = ''
+            self.next_line()
