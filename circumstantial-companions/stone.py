@@ -7,8 +7,7 @@ from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
 from PIL import Image
 import numpy as np
-import simpleaudio as sa
-
+import simpleaudio as sa # sdl2_mixer non-functional for me so I resorted to this --salt-die
 
 GRAVITY = .02
 FRICTION = .9
@@ -30,6 +29,10 @@ BACKGROUND = 'assets/img/background.png'
 SOUND = 'assets/sounds/dig.wav'
 
 def get_image_and_aspect():
+    """
+    Returns image and the correct ratio of pebbles per row and column from PEBBLE_COUNT and
+    image height and width.
+    """
     with Image.open(DEFAULT_PEBBLE_IMAGE) as image:
         w, h = image.size
         image = np.frombuffer(image.tobytes(), dtype=np.uint8)
@@ -43,6 +46,7 @@ def get_image_and_aspect():
 PEBBLE_IMAGE, PEBBLES_PER_X, PEBBLES_PER_Y = get_image_and_aspect()
 
 def get_pebble_size(width, height):
+    """Calculate the correct pebble size so we have no gaps in our stone."""
     scaled_w, scaled_h =  PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
     return scaled_w / PEBBLES_PER_X, scaled_h / PEBBLES_PER_Y
 
