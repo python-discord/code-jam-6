@@ -137,8 +137,8 @@ class Chisel(Widget):
         self.circles = []
         pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         with self.canvas:
-            self.bg = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            self.bg.texture.mag_filter = 'nearest'
+            self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
+            self.background.texture.mag_filter = 'nearest'
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
@@ -152,8 +152,8 @@ class Chisel(Widget):
         self.resize_event = Clock.schedule_once(lambda dt: self.resize(*args), .3)
 
     def resize(self, *args):
-        self.bg.pos = self.pos
-        self.bg.size = self.size
+        self.background.pos = self.pos
+        self.background.size = self.size
         pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
             self.circles[i].width = pebble_radius
