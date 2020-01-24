@@ -43,8 +43,7 @@ class SelectableLabel(RecycleDataViewBehavior, Label):
 
     def apply_selection(self, rv, index, is_selected):
         """ Respond to the selection of items in the view. """
-        # App.get_running_app().game_id = index
-        print(index)
+        pass
 
 
 class GameSelectorScreen(Screen):
