@@ -18,7 +18,6 @@ LIGHT_FOCUS_POS = Vector(600, 50)
 
 
 class MirrorCannon(Entity):
-
     id = 'mirror_cannon'
     state = BoundedNumericProperty(4, min=0, max=5,
                                    errorhandler=lambda x: 0 if x < 0 else 5)

@@ -1,52 +1,33 @@
-from TLOA.entities import Entity
-from kivy.properties import BoundedNumericProperty, BooleanProperty
-
-from enum import Enum
-
-MIN_RES = 1
-MAX_RES = 10
-
-MAX_HEALTH = 100
-
-MIN_SPEED = 5
-MAX_SPEED = 10
+from TLOA.core.constants import LANE_BOUNDS
+from TLOA.entities import MovingEntity
 
 
-class ShipType(Enum):
-    BROWN = 0
-    GOLDEN = 1
+class BrownShip(MovingEntity):
+    id = 'brown_ship'
+
+    def __init__(self, lane_id, health=100, velocity=(-1, 0), **kwargs):
+        super().__init__(health=health, velocity=velocity, **kwargs)
+        self.lane_id = lane_id
+        self.is_anchored = False
+
+    def step(self, dt, game):
+        if self.is_anchored:
+            game.health -= 10
+            self.health -= 100
+        else:
+            x_stop = LANE_BOUNDS[self.lane_id][0]
+            if self.shape.x > x_stop:
+                super().step(dt, game)
+            if self.shape.x <= x_stop:
+                self.shape.x = x_stop
+                self.is_anchored = True
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}(lane_id={self.lane_id})'
 
 
-class Ship(Entity):
-    _type = None
-    health = BoundedNumericProperty(MAX_HEALTH, min=0, max=MAX_HEALTH,
-                                    errorhandler=lambda x: 0 if x < 0 else MAX_HEALTH)
-    fire_res = BoundedNumericProperty(MIN_RES, min=MIN_RES, max=MAX_RES,
-                                      errorhandler=lambda x: MIN_RES if x < MIN_RES else MAX_RES)
-    speed = BoundedNumericProperty(MIN_SPEED, min=MIN_SPEED, max=MAX_SPEED,
-                                   errorhandler=lambda x: MIN_RES if x < MIN_RES else MAX_RES)
-    destroyed = BooleanProperty(False)
+class GoldenShip(BrownShip):
+    id = 'golden_ship'
 
-    def reset_status(self):
-        self.health = MAX_HEALTH
-        self.destroyed = False
-
-    def take_damage(self, damage: int):
-        # calculate health base on fire resistance. Can improve later
-        self.health -= int(damage / self.fire_res)
-
-    def on_health(self, instance, value):
-        if self.health == 0:
-            self.destroyed = True
-
-
-class GoldenShip(Ship):
-    _type = ShipType.GOLDEN
-    fire_res = MAX_RES
-    speed = MIN_SPEED
-
-
-class BrownShip(Ship):
-    _type = ShipType.BROWN
-    fire_res = MIN_RES
-    speed = MAX_SPEED
+    def __init__(self, lane_id, velocity=(-0.5, 0), **kwargs):
+        super().__init__(lane_id, velocity=velocity, **kwargs)

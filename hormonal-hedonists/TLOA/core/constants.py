@@ -1,7 +1,5 @@
 from enum import Enum, unique
 
-from TLOA.entities import ShipType
-
 
 TITLE = "The Legend of Archimedes"
 WINDOW_WIDTH = 1200
@@ -10,6 +8,18 @@ WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT
 
 ATLAS_PATH = "atlas://assets/world/{}"
 IMAGES_PATH = 'assets/images/{}'
+
+TICK = 1 / 30  # 30 FPS
+
+NUMBER_OF_LANES = 6
+LANE_BOUNDS = [
+    (300, 2), (300, 52), (300, 102), (300, 152), (300, 202), (300, 252)
+]
+
+SHIP_SPAWN_RATE = 1
+SHIP_SPAWN_CHANCE = 1 / 5
+MAX_SHIP_HEALTH = 100
+GOLD_SHIP_CHANCE = 1 / 10
 
 
 @unique
@@ -32,6 +42,7 @@ KEY_MAPPING = {
     'right': Actions.MOVE_RIGHT,
     'space': Actions.JUMP,
 }
+<<<<<<< HEAD
 
 SHIP_IMAGE_MAPPING = {
     ShipType.BROWN: 'brown_ship',
@@ -46,3 +57,5 @@ SHIP_SCORE = {
 LANE_WIDTH = 50
 LANE_NUMBER = 6
 LANE_LENGTHS = [WINDOW_WIDTH, WINDOW_WIDTH, WINDOW_WIDTH, 1000, 900, 900]
+=======
+>>>>>>> master
