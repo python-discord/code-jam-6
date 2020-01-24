@@ -9,10 +9,12 @@ import math
 MIRROR_ANGLES = [
     75, 90, 105, 120, 135, 150
 ]
+
 MIRROR_DIAMETER = 80
 MIRROR_CANNON_POS = Vector(150, 260)
 MIRROR_OFFSET = Vector(97, 78)
-
+LIGHT_SOURCE_POS = Vector(700, 620)
+LIGHT_FOCUS_POS = Vector(600, 50)
 
 
 class MirrorCannon(Entity):

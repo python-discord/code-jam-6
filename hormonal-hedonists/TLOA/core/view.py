@@ -12,11 +12,13 @@ from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy import Logger
 from kivy.uix.label import Label
-
+from kivy.uix.button import Button
+from kivy.vector import Vector
+from kivy.graphics import Color, Mesh
 import math
 
+from TLOA.entities.mirror_cannon import (MIRROR_CANNON_POS, LIGHT_SOURCE_POS, LIGHT_FOCUS_POS)
 
-from TLOA.entities.mirror_cannon import MIRROR_CANNON_POS
 
 class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
@@ -32,9 +34,11 @@ class GameView(Widget):
         self.hp_bar = None  # will be init later
         self.score = None  # will be init later
 
+
     def show_game(self):
         Animation.cancel_all(self)
         self.canvas.clear()
+
         with self.canvas:
             # sky = Image(source=IMAGES_PATH.format('sky.png'))
             # sky.size = sky.texture_size
@@ -54,7 +58,7 @@ class GameView(Widget):
             birds.size = birds.texture_size
             birds.anim_delay = 1
             up_down = (Animation(y=350, d=5, t=self._sin_transition) +
-                       Animation(y=450, d=5, t=self._sin_transition))
+                        Animation(y=450, d=5, t=self._sin_transition))
             up_down.repeat = True
             bird_animation = Animation(x=-birds.width, d=30) & up_down
             bird_animation.start(birds)
@@ -75,6 +79,13 @@ class GameView(Widget):
 
             self.score = Label(pos=(990, 700), text=f'Score:   0', font_size=75)
 
+            self.canvas.add(self._game.sun_rays.color)
+            self.canvas.add(self._game.sun_rays)
+
+            self.canvas.add(self._game.death_rays.color)
+            self.canvas.add(self._game.death_rays)
+
+
     @staticmethod
     def _sin_transition(progress):
         return math.sin(progress * math.pi)
@@ -87,6 +98,9 @@ class GameView(Widget):
 
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
+        self._game.sun_rays.trace(point = LIGHT_SOURCE_POS, surface = self._game.mirror.mirror_axis)
+        self._game.death_rays.trace(point = LIGHT_FOCUS_POS, surface = self._game.mirror.mirror_axis)
+        print(self._game.sun_rays.vertices)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
