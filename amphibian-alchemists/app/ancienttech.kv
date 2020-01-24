@@ -35,8 +35,8 @@
 
 <CheckPaperButton@ButtonBehavior+Image>:
     source: "misc/paper.png"
+    on_press: app.root.get_screen("game_screen").paper_wrinkle()
     on_release:
-        app.root.get_screen("game_screen").paper_wrinkle()
         app.root.paper_popup.open()
     PaperLabel:
         text: "Paper"
