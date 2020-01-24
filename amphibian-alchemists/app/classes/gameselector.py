@@ -1,7 +1,7 @@
 import os
 
 from kivy.app import App
-from kivy.properties import StringProperty
+from kivy.properties import ObjectProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.screenmanager import Screen
@@ -13,18 +13,25 @@ DATA_DIR = os.path.join(
 
 
 class SelectableButton(RecycleDataViewBehavior, ToggleButton):
+    index = None
+
+    def refresh_view_attrs(self, rv, index, data):
+        self.index = index
+        return super().refresh_view_attrs(rv, index, data)
+
     def on_state(self, widget, value):
         game_selector_screen = App.get_running_app().root.get_screen(
             "game_selector_screen"
         )
-        if value == "down":
-            game_selector_screen.last_selected = widget.text
+        if value == "down" and widget.text != game_selector_screen.no_saved_games:
+            game_selector_screen.last_selected = widget
         else:
-            game_selector_screen.last_selected = ""
+            game_selector_screen.last_selected = None
 
 
 class GameSelectorScreen(Screen):
-    last_selected = StringProperty("")
+    last_selected = ObjectProperty(None, allownone=True)
+    no_saved_games = "No saved games selected."
 
     def on_enter(self, *args):
         if not os.path.exists(DATA_DIR):
@@ -49,7 +56,7 @@ class GameSelectorScreen(Screen):
                     }
                 )
         else:
-            self.rv.data = [{"text": "No saved games detected."}]
+            self.rv.data = [{"text": self.no_saved_games}]
 
     def load_game(self, game):
         self.manager.current = "game_screen"
