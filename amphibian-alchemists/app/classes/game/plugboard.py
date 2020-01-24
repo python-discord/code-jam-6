@@ -1,8 +1,16 @@
+import os
+
+from kivy.app import App
 from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.uix.screenmanager import Screen
+from kivy.storage.jsonstore import JsonStore
 
 from .save_game import save_plugs
+
+DATA_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
 
 
 class PlugboardScreen(Screen):

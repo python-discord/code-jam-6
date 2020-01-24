@@ -122,8 +122,6 @@ class GameScreen(Screen):
 
     def on_enter(self, *args):
         store = JsonStore(DATA_DIR)
-        # TODO Add load game screen and select a game id by
-        #  running App.get_running_app().game_id = 0
         game_id = App.get_running_app().game_id
         if game_id is None or store.exists(str(App.get_running_app().game_id)) is False:
             setup_new_game_settings()
@@ -171,6 +169,7 @@ class GameScreen(Screen):
             current_state=game["last_saved_state"],
             current_output_text=game["last_saved_output_text"],
         )
+        on_config_change()
 
     def save_game(self):
         game_id = App.get_running_app().game_id

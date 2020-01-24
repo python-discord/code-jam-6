@@ -37,6 +37,7 @@ class GameSelectorScreen(Screen):
         if not os.path.exists(DATA_DIR):
             store = JsonStore(DATA_DIR)
             store.put("latest_game_id", id=None)
+        App.get_running_app().game_id = None
         self.rv.data = []
         self.populate()
 
