@@ -12,9 +12,7 @@ from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy import Logger
 from kivy.uix.label import Label
-from kivy.uix.button import Button
-from kivy.vector import Vector
-from kivy.graphics import Color, Mesh
+from kivy.graphics import Color
 import math
 
 from TLOA.entities.mirror_cannon import (MIRROR_CANNON_POS, LIGHT_SOURCE_POS, LIGHT_FOCUS_POS)
@@ -33,7 +31,6 @@ class GameView(Widget):
         self.free_ships = []  # list of free ship. Use to avoid allocate new ship
         self.hp_bar = None  # will be init later
         self.score = None  # will be init later
-
 
     def show_game(self):
         Animation.cancel_all(self)
@@ -58,7 +55,7 @@ class GameView(Widget):
             birds.size = birds.texture_size
             birds.anim_delay = 1
             up_down = (Animation(y=350, d=5, t=self._sin_transition) +
-                        Animation(y=450, d=5, t=self._sin_transition))
+                Animation(y=450, d=5, t=self._sin_transition))
             up_down.repeat = True
             bird_animation = Animation(x=-birds.width, d=30) & up_down
             bird_animation.start(birds)
@@ -84,7 +81,6 @@ class GameView(Widget):
 
             self.canvas.add(self._game.death_rays.color)
             self.canvas.add(self._game.death_rays)
-
 
     @staticmethod
     def _sin_transition(progress):
@@ -118,7 +114,7 @@ class GameView(Widget):
         self.score.text = f'Score: {value:3}'
 
     def on_island_health_change(self, obj, value):
-        health = math.ceil(value / 10) * 10
+        health = math.ceil(value/10) * 10
         self.hp_bar.source = ATLAS_PATH.format(health)
 
     def show_ship(self, ship, lane):
@@ -140,7 +136,7 @@ class GameView(Widget):
                 ship_view = ShipView(ship, pos=(WINDOW_WIDTH + 100, 50 * lane))
                 ship_view.bind(core_destroyed=self.on_ship_destroyed)
             lane_length = LANE_LENGTHS[lane]
-            duration = lane_length / (ship.speed * 10.)
+            duration = lane_length/(ship.speed * 10.)
             ship_move_animation = Animation(x=WINDOW_WIDTH - lane_length, duration=duration)
             ship_move_animation.start(ship_view)
             ship_move_animation.bind(on_complete=self._game.on_ship_attack)
