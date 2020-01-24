@@ -1,5 +1,5 @@
 from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER
-from TLOA.entities import MirrorCannon
+from TLOA.entities import MirrorCannon, LightRays
 from TLOA.entities import GoldenShip, BrownShip
 
 from kivy import Logger
