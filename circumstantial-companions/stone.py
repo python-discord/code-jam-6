@@ -4,7 +4,7 @@ from random import choice, random
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
-from kivy.graphics import Color, Line, Rectangle
+from kivy.graphics import Color, Rectangle
 from kivy.core.audio import SoundLoader
 from PIL import Image
 import numpy as np
@@ -18,7 +18,6 @@ MAX_VELOCITY = .1
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
 PEBBLE_COUNT = 1.5e4
 PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
-PEBBLE_SEGMENTS = 4
 PEBBLE_IMAGE_SCALE = .75
 
 MIN_POWER = 1e-5
@@ -31,17 +30,16 @@ DEFAULT_CHISEL_POWER = 100
 BACKGROUND = 'assets/img/background.png'
 SOUND = 'assets/sounds/dig.wav'
 
-def get_pebble_radius(width, height):
-    scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    radius = max(scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE) * .38
-    return radius
+def get_pebble_size(width, height):
+    scaled_w, scaled_h =  2 * PEBBLE_IMAGE_SCALE * width, 2 * PEBBLE_IMAGE_SCALE * height
+    return scaled_w / PEBBLES_PER_LINE, scaled_h / PEBBLES_PER_LINE
 
 def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
     """
     scale = 1 / PEBBLES_PER_LINE
-    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .01 # Lower-left corner offset of image
+    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image
 
     with Image.open(DEFAULT_PEBBLE_IMAGE) as image:
         w, h = image.size
@@ -105,9 +103,8 @@ class Pebble:
         stone.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
 
         scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
-        stone.circles[self.index].width = stone.pebble_radius
-        stone.circles[self.index].circle = (scaled_x, scaled_y,
-                                            stone.pebble_radius, 0, 360, PEBBLE_SEGMENTS)
+        stone.pixels[self.index].size = stone.pebble_size
+        stone.pixels[self.index].pos = scaled_x, scaled_y
 
         if not self.y:
             self.update.cancel()
@@ -136,8 +133,8 @@ class Chisel(Widget):
     def setup_canvas(self):
         self.pebbles = {}
         self.positions = []
-        self.circles = []
-        pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
+        self.pixels = []
+        self.pebble_size = get_pebble_size(self.width, self.height)
         with self.canvas:
             Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
@@ -146,8 +143,7 @@ class Chisel(Widget):
                 self.positions.append((x, y))
                 scaled_x = x * self.width
                 scaled_y = y * self.height
-                circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
-                self.circles.append(Line(circle=circle, width=pebble_radius))
+                self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
 
     def _delayed_resize(self, *args):
         self.resize_event.cancel()
@@ -156,12 +152,12 @@ class Chisel(Widget):
     def resize(self, *args):
         self.background.pos = self.pos
         self.background.size = self.size
-        pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
+        self.pebble_size = get_pebble_size(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
-            self.circles[i].width = pebble_radius
             scaled_x = x * self.width
             scaled_y = y * self.height
-            self.circles[i].circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
+            self.pixels[i].pos = (scaled_x, scaled_y)
+            self.pixels[i].size = self.pebble_size
 
     def poke_power(self, touch, pebble_x, pebble_y):
         """
