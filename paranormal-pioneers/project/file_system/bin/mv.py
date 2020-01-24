@@ -1,6 +1,5 @@
 from argparse import Namespace
-from pathlib import PurePath
-import os
+from pathlib import Path, PurePath
 
 from project.core import command
 from project.core.parser import Parser
@@ -8,10 +7,10 @@ from project.core.terminal import Terminal
 from project.core.utils import PathLike, FS
 
 
-class Mkdir(command.Command):
-    """Create the DIRECTORY(ies), if they do not already exist."""
+class MV(command.Command):
+    """Move (rename) files."""
     def __init__(self) -> None:
-        super().__init__(name='mkdir')
+        super().__init__(name='mv')
 
     def _resolve_path(self, cwd: PathLike, path: PathLike, filesystem: FS) -> PurePath:
         """Make user provided path relative with current working directory."""
@@ -19,14 +18,17 @@ class Mkdir(command.Command):
         filesystem.check_env(path)
         return path
 
-    @command.option('dir', nargs='+')
-    def handle_dir(self, ns: Namespace, term: Terminal) -> None:
-        self.dirs = [self._resolve_path(term.path, dir, term.fs) for dir in ns.dir]
+    @command.option('source')
+    def handle_1source(self, ns: Namespace, term: Terminal) -> None:
+        self.source = Path(self._resolve_path(term.path, Path(ns.source), term.fs))
+
+    @command.option('destination')
+    def handle_2dest(self, ns: Namespace, term: Terminal) -> None:
+        self.dest = self._resolve_path(term.path, ns.destination, term.fs)
 
     def main(self, ns: Namespace, term: Terminal) -> None:
-        for d in self.dirs:
-            os.mkdir(d)
+        self.source.rename(self.dest)
 
 
 def setup(parser: Parser) -> None:
-    parser.add_command(Mkdir())
+    parser.add_command(MV())

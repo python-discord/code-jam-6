@@ -1,4 +1,5 @@
 from argparse import Namespace
+from pathlib import Path
 import os
 
 from project.core import command
@@ -12,7 +13,7 @@ class Rmdir(command.Command):
     def __init__(self) -> None:
         super().__init__(name='rmdir')
 
-    def _resolve_path(self, cwd: PathLike, path: PathLike, filesystem: FS):
+    def _resolve_path(self, cwd: PathLike, path: PathLike, filesystem: FS) -> Path:
         """Make user provided path relative with current working directory."""
         path = filesystem.find_dir(cwd, path)
         filesystem.check_env(path)
