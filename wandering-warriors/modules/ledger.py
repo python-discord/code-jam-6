@@ -1,37 +1,64 @@
-from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
-import functools
-
-BLANK_ROW = functools.partial(Widget)
-ROWS_IN_LEDGER = 10  # TODO: make this dependent on height
+from kivy.core.window import Window
+from kivy.uix.image import Image
 
 
-class LedgerLayout(BoxLayout):
+class LedgerLayout(FloatLayout):
     child_widgets: list
 
     def __init__(self, *args, **kwargs):
-        super(LedgerLayout, self).__init__(
-                *args,
-                orientation='vertical',
-                **kwargs
-        )
+        super(LedgerLayout, self).__init__()
+        Window.bind(on_key_down=self._keydown)
+        self.l_pos = ''
+        self.m_pos = ''
+        self.r_pos = ''
 
-        self.child_widgets = []
+    def left(self, widget):
+        widget.x = super().x
 
-        # initialize with blank rows
-        for _ in range(ROWS_IN_LEDGER):
-            self.add_widget(BLANK_ROW())
+    def right(self, widget):
+        widget.x = super().x + super().size[0] - 1.5 * widget.size[0]
 
-    def add_widget(self, widget, *args, **kwargs):
-        if ROWS_IN_LEDGER == len(self.child_widgets):
-            super(LedgerLayout, self).remove_widget(self.child_widgets[0])
-            self.child_widgets = self.child_widgets[1:]
+    def top(self, widget):
+        widget.y = super().y + super().size[1]-widget.size[1]
 
-        super(LedgerLayout, self).add_widget(widget, *args, **kwargs)
-        self.child_widgets.append(widget)
+    def add_operator(self, widget):
+        self.left(widget)
+        self.top(widget)
+        super().add_widget(widget)
 
-    def click(self):
-        print('click')
+    def add_left_digit(self, w):
+        if self.l_pos == '':
+            w.allow_stretch = True
+            w.size_hint = (.3, .3)
+            self.left(w)
+            self.top(w)
+            self.l_pos = w
+            super().add_widget(w)
 
-    def buttonImage(self):
-        return 'assets/graphics/clay.png'
+    def add_right_digit(self, w): 
+        if self.r_pos == '':
+            w.allow_stretch = True 
+            w.size_hint = (.3, .3)
+            self.right(w)
+            self.top(w)
+            self.r_pos = w
+            super().add_widget(w)
+
+    def _keydown(self, *args):
+        print(args[1])
+        if args[1] == 49:
+            d = args[1] - 48
+            l = Image(source=f'assets/graphics/cuneiform/c{d}.png')
+            self.add_left_digit(l)
+        if args[1] == 50:
+            d = args[1] - 48
+            l = Image(source=f'assets/graphics/cuneiform/c{d}.png')
+            self.add_left_digit(l)
+
+        if args[1] == 275:
+            l = Image(source='assets/graphics/cuneiform/c1.png')
+            self.add_left_digit(l)
+            r = Image(source='assets/graphics/cuneiform/c1.png')
+            self.add_right_digit(r)
