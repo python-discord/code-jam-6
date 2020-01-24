@@ -3,6 +3,7 @@ import math
 from kivy.uix.widget import Widget
 from kivy.uix.image import Image
 from kivy.properties import BooleanProperty
+from kivy.logger import Logger
 
 from TLOA.core.constants import SHIP_IMAGE_MAPPING, ATLAS_PATH
 
@@ -36,6 +37,7 @@ class ShipView(Widget):
         # destroy it if health is 0
 
     def on_core_destroyed(self, obj, is_destroyed):
+        Logger.debug(f'Ship view: handle core destroyed event')
         self.core_destroyed = is_destroyed
         if is_destroyed:
             # TODO add some effect if need
