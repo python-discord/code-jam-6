@@ -64,9 +64,10 @@ class DataController(EventDispatcher):
 class CardGameApp(App):
     def build(self):
         Config.set("graphics", "width", "900")
-        Config.set("graphics", "height", "900")
+        Config.set("graphics", "height", "1000")
 
         global_idmap["data"] = ctl = DataController()
+        global_idmap["assets_file"] = "./assets/"
 
         ctl.game = game = load_game()
         ctl.active_card = game.start_game()
