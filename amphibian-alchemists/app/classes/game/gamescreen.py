@@ -149,6 +149,7 @@ class GameScreen(Screen):
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
             self.manager.current == "game_screen"
+            and isinstance(codepoint, str)
             and codepoint.upper() in App.get_running_app().keys
             and self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus
         ):
