@@ -29,6 +29,7 @@ CHISEL_POWER_RANGE = (50, 500)
 DEFAULT_CHISEL_POWER = 100
 
 BACKGROUND = 'assets/img/background.png'
+SOUND = 'assets/sounds/dig.wav'
 
 def get_pebble_radius(width, height):
     scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
@@ -121,7 +122,7 @@ class Chisel(Widget):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.sound = SoundLoader.load('assets/sounds/dig.wav')
+        self.sound = SoundLoader.load(SOUND)
 
         self.set_radius(DEFAULT_CHISEL_RADIUS)
         self.set_power(DEFAULT_CHISEL_POWER)
