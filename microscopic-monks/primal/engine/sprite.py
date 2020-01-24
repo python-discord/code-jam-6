@@ -99,3 +99,12 @@ class Rock(Sprite):
         canvas.add(self.rotate)
         canvas.add(self.bg_rect)
         canvas.add(PopMatrix())
+
+class Inventory(Sprite):
+    def __init__(self, image: str, pos: tuple = (300, 0), size: tuple = (400, 400), orientation: int = 0, **kwargs)):
+       super().__init__(image, pos, size, **kwargs)
+        '''
+        Weapon Base is the actual backround that the weapons will be displayed on
+        To Do: Make actual image, find actual image location
+        '''
+        
