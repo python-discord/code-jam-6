@@ -150,9 +150,6 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
 
 class ChiselApp(App):
-    def __init__(self):
-        super().__init__()
-
     def build(self):
         root = FloatLayout()
         navdrawer = NavigationDrawer()
