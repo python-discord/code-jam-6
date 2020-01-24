@@ -1,13 +1,18 @@
 '''Jurassic Journalists'''
 from io import BytesIO
+from kivy.config import Config
+Config.set('graphics', 'resizable', False) # noqa
 from kivy.app import App
 from kivy.core.image import Image as CoreImage
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.lang import Builder
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty # noqa
 from kivy.core.window import Window
+from kivy.animation import Animation
+from kivy.core.audio import SoundLoader
 from PIL import ImageDraw
 from PIL import Image as Im
 
@@ -16,15 +21,13 @@ from PIL import Image as Im
 
 # Screen Dimensions
 SCREEN_WIDTH = 720
-SCREEN_HEIGHT = 720
+SCREEN_HEIGHT = 1280
 
 # Paper Dimensions
-PAPER_WIDTH = SCREEN_WIDTH * .7 - 50
-PAPER_HEIGHT = SCREEN_HEIGHT
-
 STARTING_X = 50 # PAPER_WIDTH - 240
 STARTING_Y = 50 # PAPER_HEIGHT + 100
-
+PAPER_WIDTH = SCREEN_WIDTH * .7 - STARTING_X
+PAPER_HEIGHT = SCREEN_HEIGHT
 
 class MainScreen(ScreenManager):
     ''' ScreenManager '''
@@ -36,6 +39,19 @@ class RoomScreen(Screen):
 
 class PhoneScreen(Screen):
     ''' Screen Two '''
+
+
+class TypeWriterButton(Button):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.sound = SoundLoader.load('click.wav')
+    def on_release(self):
+        self.parent.typw.text += self.txt
+        if abs(self.anim_y - self.default_y) >= .01:
+            Animation(anim_y = self.default_y, d=.025, t='out_bounce').start(self)
+        else:
+            Animation(anim_y = self.anim_y + .005, d=.025, t='out_bounce').start(self)
+       
 
 
 class TextPaper(Image):
@@ -51,9 +67,10 @@ class TextPaper(Image):
         PAPER_HEIGHT = SCREEN_HEIGHT
         '''
         # Creating Blank Paper image to type on.
-        # self.img = Im.open("paper.jpg")
+        # self.img = Im.open("paper.png")
+        # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
         self.img = Im.new('RGBA', (int(SCREEN_WIDTH *.75), SCREEN_HEIGHT), (200,200,200,255))
-        self.default_pos = 225, - SCREEN_HEIGHT//2 + 150
+        self.default_pos = 225,  -SCREEN_HEIGHT//2 + 200
 
         # Type writer does not type from the top rather type from the bottom.
         self.txt = self.img.copy()
@@ -151,9 +168,10 @@ class JurassicJournalistApp(App):
     ''' App Class '''
     def build(self):
         Window.size = SCREEN_WIDTH, SCREEN_HEIGHT
+        print(Window.size)
         Builder.load_file('buttons.kv')
         Builder.load_file('objects.kv')
-#        Window.borderless = True
+        Window.borderless = True
         return MainScreen()
 
 

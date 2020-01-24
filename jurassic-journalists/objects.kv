@@ -17,12 +17,17 @@
 	FloatLayout:
 		typw: typw
 		TextPaper:
-		    canvas:
-			    Color:
-				    rgba: 0,0,0,0
-			    Rectangle:
-				    pos: 0, 0
-					size: self.width, self.height //2 + 125
+		    #canvas.after:
+			 #   Color:
+			#	    rgba: (0,0,0,0)
+			 #   Rectangle:
+			#	    pos: self.pos
+			#		size: self.size #self.width, self.height //2 + 125
+			#    Color:
+			#	    rgba: (0,0,0,1)
+			 #   Rectangle:
+			#	    pos: self.parent.width, self.parent.height//2
+			#		size: self.width, self.height //2 + 125
 			id: typw
 			source: 'blank.png'
 			#pos_hint: {'x': 0.2, 'y':.5}
@@ -39,102 +44,108 @@
             size: self.size
             pos: self.pos
 			#on_gesture_complete: typw.text += '_b'
-		TypeWriterButton:
+		Row1:
 			txt: 'q'
-			pos_hint: {'x': .16, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .16, 'y': self.anim_y}
+		Row1:
 			txt: 'w'
-			pos_hint: {'x': .235, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .235, 'y': self.anim_y}
+		Row1:
 			txt: 'e'
-			pos_hint: {'x': .31, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .31, 'y': self.anim_y}
+		Row1:
 			txt: 'r'
-			pos_hint: {'x': .383, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .383, 'y': self.anim_y}
+		Row1:
 			txt: 't'
-			pos_hint: {'x': .458, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .458, 'y': self.anim_y}
+		Row1:
 			txt: 'y'
-			pos_hint: {'x': .533, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .533, 'y': self.anim_y}
+		Row1:
 			txt: 'u'
-			pos_hint: {'x': .608, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .608, 'y': self.anim_y}
+		Row1:
 			txt: 'i'
-			pos_hint: {'x': .683, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .683, 'y': self.anim_y}
+		Row1:
 			txt: 'o'
-			pos_hint: {'x': .758, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .758, 'y': self.anim_y}
+		Row1:
 			txt: 'p'
-			pos_hint: {'x': .832, 'y':.175}
-		TypeWriterButton:
+			pos_hint: {'x': .832, 'y': self.anim_y}
+		Row2:
 			txt: 'a'
-			pos_hint: {'x': .191, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .191, 'y':self.anim_y}
+		Row2:
 			txt: 's'
-			pos_hint: {'x': .265, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .265, 'y':self.anim_y}
+		Row2:
 			txt: 'd'
-			pos_hint: {'x': .34, 'y':.13}
-		TypeWriterButton
+			pos_hint: {'x': .34, 'y': self.anim_y}
+		Row2:
 			txt: 'f'
-			pos_hint: {'x': .416, 'y':.13}
-		TypeWriterButton
+			pos_hint: {'x': .416, 'y': self.anim_y}
+		Row2:
 			txt: 'g'
-			pos_hint: {'x': .489, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .489, 'y': self.anim_y}
+		Row2:
 			txt: 'h'
-			pos_hint: {'x': .566, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .566, 'y': self.anim_y}
+		Row2:
 			txt: 'j'
-			pos_hint: {'x': .641, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .641, 'y': self.anim_y}
+		Row2:
 			txt: 'k'
-			pos_hint: {'x': .715, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .715, 'y': self.anim_y}
+		Row2:
 			txt: 'l'
-			pos_hint: {'x': .791, 'y':.13}
-		TypeWriterButton:
+			pos_hint: {'x': .791, 'y': self.anim_y}
+		Row3:
 			txt: 'z'
-			pos_hint: {'x': .198, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .198, 'y': self.anim_y}
+		Row3:
 			txt: 'x'
-			pos_hint: {'x': .272, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .272, 'y': self.anim_y}
+		Row3:
 			txt: 'c'
-			pos_hint: {'x': .348, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .348, 'y': self.anim_y}
+		Row3:
 			txt: 'v'
-			pos_hint: {'x': .422, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .422, 'y': self.anim_y}
+		Row3:
 			txt: 'b'
-			pos_hint: {'x': .498, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .498, 'y': self.anim_y}
+		Row3:
 			txt: 'n'
-			pos_hint: {'x': .571, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .571, 'y': self.anim_y}
+		Row3:
 			txt: 'm'
-			pos_hint: {'x': .648, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .648, 'y': self.anim_y}
+		Row3:
 			txt: ';'
-			pos_hint: {'x': .723, 'y':.08}
-		TypeWriterButton:
+			pos_hint: {'x': .723, 'y': self.anim_y}
+		Row3:
 			txt: ':'
-			pos_hint: {'x': .797, 'y':.08}
+			pos_hint: {'x': .797, 'y': self.anim_y}
 		TypeWriterButton:
-			pos_hint: {'x': .2, 'y':0.025}
-			size_hint: .65, None
+		    anim_y: .025
+		    default_y: .025
+			pos_hint: {'x': .2, 'y': self.anim_y}
+			size_hint: .66, None
 	    	height: self.parent.height * 1/20
 			txt: ' '
 		TypeWriterButton:
-		    pos_hint: {'x': 0, 'y': .44}
+		    anim_y: .435
+		    default_y: .435
+		    pos_hint: {'x': 0, 'y': self.anim_y}
 			size_hint: .10, .10
 			txt: '_n'
 		TypeWriterButton:
-		    pos_hint: {'x': 0.832, 'y': .285}
-			size_hint: .08, .1
+		    anim_y: .285
+		    default_y: .285
+		    pos_hint: {'x': 0.832, 'y': self.anim_y}
+			size_hint: .08, .105
 			txt: '_b'
 
 <PhoneScreen>:
