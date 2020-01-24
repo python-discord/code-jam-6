@@ -50,15 +50,17 @@
             pos: self.pos
     BoxLayout:
         orientation: 'vertical'
-        OperationButton:
+        pos: self.parent.pos
+        size: self.parent.size
+        Button:
             text: '+'
-        OperationButton:
+        Button:
             text: '-'
-        OperationButton:
+        Button:
             text: '*'
-        OperationButton:
+        Button:
             text: '/'
-        OperationButton:
+        Button:
             text: 'sqrt'
 
 
@@ -96,9 +98,3 @@
             center_y: self.parent.center_y
             allow_stretch: True
             size: self.parent.size
-
-
-<OperationButton>:
-    Button:
-        size: self.parent.width, self.parent.height / 5
-        x: self.parent.x
