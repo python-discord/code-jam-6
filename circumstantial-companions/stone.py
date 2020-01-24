@@ -16,7 +16,7 @@ DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .2
 
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
-PEBBLE_COUNT = .75e4
+PEBBLE_COUNT = 7.5e3
 PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_IMAGE_SCALE = .75
 
@@ -100,7 +100,8 @@ class Pebble:
             vy *= -1
 
         stone = self.stone
-        stone.positions[self.index] = self.x, self.y, self.z = x + vx, max(0, y + vy), self.z
+        self.x, self.y = x + vx, max(0, y + vy)
+        stone.positions[self.index] = self.x, self.y, self.z
 
         scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
         stone.pixels[self.index].size = stone.pebble_size
@@ -169,12 +170,13 @@ class Chisel(Widget):
         distance = dx**2 + dy**2
 
         if distance > self.chisel_radius:
-            return 0.0, 0.0
+            return 0, 0
         if not distance:
-            distance = .0001
+            distance = 1e-4
 
         tdx, tdy = touch.dsx, touch.dsy
-        power = max(self.chisel_power * (tdx**2 + tdy**2), MIN_POWER) / distance
+        touch_velocity = tdx**2 + tdy**2
+        power = max(self.chisel_power * touch_velocity, MIN_POWER) / distance
         return power * dx, power * dy
 
     def poke(self, touch):
