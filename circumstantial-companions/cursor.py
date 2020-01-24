@@ -3,17 +3,19 @@ from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
 
+UP = "assets/img/cursor/hammer_up_pixelized.png"
+DOWN = "assets/img/cursor/hammer_down_pixelized.png"
+
 class CursorImage(Image):
     def __init__(self):
-        super().__init__(source="assets/img/cursor/hammer_up.png")
+        super().__init__(source=UP)
         self.size = (40, 40 / self.image_ratio)
 
     def on_touch_down(self, touch):
-        self.source = "assets/img/cursor/hammer_down.png"
+        self.source = DOWN
 
     def on_touch_up(self, touch):
-        self.source = "assets/img/cursor/hammer_up.png"
-
+        self.source = UP
 
 
 class Cursor(Widget):

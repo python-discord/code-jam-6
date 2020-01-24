@@ -137,10 +137,10 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         slider_layout.add_widget(ChiselRadiusSlider(self.chisel, size_hint=(0.5, 0.9)))
         slider_layout.add_widget(ChiselPowerSlider(self.chisel, size_hint=(0.5, 0.9)))
         slider_layout.add_widget(
-            Image(source="assets/img/cursor/hammer_up.png", size_hint=(0.5, 0.1))
+            Image(source="assets/img/cursor/hammer_up_pixelized.png", size_hint=(0.5, 0.1))
         )
         slider_layout.add_widget(
-            Image(source="assets/img/cursor/hammer_up.png", size_hint=(0.5, 0.1))
+            Image(source="assets/img/cursor/hammer_up_pixelized.png", size_hint=(0.5, 0.1))
         )
 
         self.add_widget(title)
