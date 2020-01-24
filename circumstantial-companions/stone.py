@@ -16,7 +16,7 @@ DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .2
 
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
-PEBBLE_COUNT = 1.5e4
+PEBBLE_COUNT = .75e4
 PEBBLES_PER_LINE = int(PEBBLE_COUNT**.5)
 PEBBLE_IMAGE_SCALE = .75
 
@@ -78,10 +78,10 @@ class Pebble:
     """
     This handles physics for dislodged pebbles. Deletes itself after pebbles reach the floor.
     """
-    def __init__(self, index, stone, x, y, velocity):
+    def __init__(self, index, stone, x, y, z, velocity):
         self.index = index
         self.stone = stone
-        self.x, self.y = x, y
+        self.x, self.y, self.z = x, y, z
         self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
 
@@ -100,7 +100,7 @@ class Pebble:
             vy *= -1
 
         stone = self.stone
-        stone.positions[self.index] = self.x, self.y = x + vx, max(0, y + vy)
+        stone.positions[self.index] = self.x, self.y, self.z = x + vx, max(0, y + vy), self.z
 
         scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
         stone.pixels[self.index].size = stone.pebble_size
@@ -137,12 +137,13 @@ class Chisel(Widget):
         with self.canvas:
             Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            for color, x, y in pebble_setup():
-                Color(*color)
-                self.positions.append((x, y))
+            for (r, g, b, a), x, y in pebble_setup():
                 scaled_x = x * self.width
                 scaled_y = y * self.height
-                self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
+                for factor, depth in ((.5, 1), (1,0)):
+                    Color(factor * r, factor * g, factor * b, a)
+                    self.positions.append((x, y, depth))
+                    self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
         self.background.texture.mag_filter = 'nearest'
 
     def _delayed_resize(self, *args):
@@ -153,7 +154,7 @@ class Chisel(Widget):
         self.background.pos = self.pos
         self.background.size = self.size
         self.pebble_size = get_pebble_size(self.width, self.height)
-        for i, (x, y) in enumerate(self.positions):
+        for i, (x, y, z) in enumerate(self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
             self.pixels[i].pos = (scaled_x, scaled_y)
@@ -180,10 +181,14 @@ class Chisel(Widget):
         """
         Apply a poke to each pebble.
         """
-        for i, (x, y) in enumerate(self.positions):
+        dislodged = {}
+        for i, (x, y, z) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(touch, x, y))
-            if velocity: # Attach an object to the circle to move it.
-                self.pebbles[i] = Pebble(i, self, x, y, velocity)
+            if velocity and ((x, y) not in dislodged or dislodged[x, y]['z'] > z):
+                    dislodged[x, y] = dict(i=i, z=z, velocity=velocity)
+        for (x, y), info in dislodged.items():
+                i, z, velocity = info.values()
+                self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
 
     def on_touch_down(self, touch):
         self.poke(touch)
