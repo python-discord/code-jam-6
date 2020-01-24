@@ -1,20 +1,24 @@
 <GameTitlePopup@Popup>:
     title: "There is already a default"
-    size_hint: 0.5, 0.5
+    size_hint: 0.5, 0.2
     BoxLayout:
+        spacing: dp(5)
         orientation: "vertical"
         TextInput:
             id: game_title_input
+            size_hint_y: None
+            height: self.minimum_height
+            multiline: False
             hint_text: "Best game ever..."
-            size_hint_x: 0.7
-        Button:
-            text: "Save game title"
-            on_release:
-                app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
-                root.dismiss()
-        Button:
-            text: "Cancel"
-            on_release: root.dismiss()
+        BoxLayout:
+            Button:
+                text: "Save game title"
+                on_release:
+                    app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
+                    root.dismiss()
+            Button:
+                text: "Cancel"
+                on_release: root.dismiss()
 
 <GameMenuPopup@Popup>:
     title: "Select..."
@@ -39,7 +43,7 @@
             on_release:
                 root.dismiss()
         Button:
-            text: "Exit"
+            text: "Exit to Main Menu"
             on_release:
                 app.root.current = "main_screen"
                 root.dismiss()
