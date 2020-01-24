@@ -1,11 +1,5 @@
-<SelectableLabel>:
-    color: 0,0,0,1
-    canvas.before:
-        Color:
-            rgba: (0, 0.6, 1, 1) if self.selected else (1, 1, 1, 1)
-        Rectangle:
-            pos: self.pos
-            size: self.size
+<SelectableButton>:
+    group: "saves"
 
 <GameSelectorScreen>:
     name: "game_selector_screen"
@@ -18,10 +12,8 @@
     rv: rv
     AnchorLayout:
         anchor_y: "top"
-        GridLayout:
-            cols: 3
-            rows: 1
-            size_hint_y: 0.2
+        BoxLayout:
+            size_hint_y: 0.1
             padding: dp(8)
             spacing: dp(16)
             Button:
@@ -29,7 +21,8 @@
                 on_release: root.manager.current = "main_screen"
             Button:
                 text: "Load game"
-                on_release: root.manager.current = "game_screen"
+                on_release: if root.last_selected: root.load_game(root.last_selected)
+                disabled: not root.last_selected
             Button:
                 text: "New game"
                 on_release: root.manager.current = "game_screen"
@@ -37,15 +30,15 @@
     AnchorLayout:
         RecycleView:
             id: rv
+            size_hint: 0.8, 0.5
             scroll_type: ['bars', 'content']
             scroll_wheel_distance: dp(114)
             bar_width: dp(12)
-            viewclass: "SelectableLabel"
-            size_hint: 0.8, 0.5
-            SelectableRecycleBoxLayout:
+            viewclass: "SelectableButton"
+            RecycleBoxLayout:
+                orientation: "vertical"
                 default_size: None, dp(70)
                 default_size_hint: 1, None
                 size_hint_y: None
                 height: self.minimum_height
-                orientation: "vertical"
                 spacing: dp(2)
