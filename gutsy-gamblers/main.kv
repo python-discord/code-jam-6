@@ -1,11 +1,9 @@
 #:kivy 1.11.1
 
 <MainScreen>:
-    window_width: 0
-
     Button:
         text: "Time Control"
-        font_size: root.window_width * 0.015
+        font_size: 12
         pos_hint: {'center_x': 0.15, 'center_y': 0.95}
         size_hint: 0.2, 0.05
         on_press: root.time_control_button()
@@ -40,12 +38,18 @@
                 id: time_slider
                 orientation: 'vertical'
                 min: 1
-                max: 100000
+                max: 1000000
                 value: 1
+                on_touch_up: root.time_lapse(self.value)
 
             Label:
                 text: str(round(time_slider.value)) + 'x'
                 size_hint: None, 0.05
+                pos_hint: {'center_x': 0.5, 'center_y': 0}
+            Label:
+            	text: "The x means nothing"
+            	font_size: 6
+                size_hint: None, 0.03
                 pos_hint: {'center_x': 0.5, 'center_y': 0}
 
 <NowMarker>:
