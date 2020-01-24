@@ -23,7 +23,6 @@ class MirrorCannon(Entity):
     state = BoundedNumericProperty(4, min=0, max=5,
                                    errorhandler=lambda x: 0 if x < 0 else 5)
 
-
     def turn(self, direction: int):
         self.state += direction
 
