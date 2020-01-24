@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from random import sample
 from string import ascii_uppercase
 
@@ -10,6 +11,8 @@ from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from requests import get
+
+from .save_game import store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
@@ -35,7 +38,7 @@ def on_config_change():
     for x in store.get(game_id)["current_state"]["rotors"]:
         if x is None:
             continue
-        rotors = rotors.join(x)
+        rotors += x
     App.get_running_app().machine.set_display(rotors)
 
 
@@ -92,9 +95,13 @@ def setup_new_game_settings():
     text = get_wiki_summary()
     store.put(
         game_id,
+        game_title="Game {}".format(game_id),
         ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
         unciphered_text=text,
         current_output_text="",
+        last_saved_output_text="",
+        created_date=datetime.now().isoformat(),
+        last_saved_date=datetime.now().isoformat(),
         encrypted_state={"reflector": "B", "rotors": rotors, "plugs": plugs},
         current_state={
             "reflector": "B",
@@ -187,19 +194,29 @@ class GameScreen(Screen):
         App.get_running_app().machine.key_press(key.name)
         store = JsonStore(DATA_DIR)
         game_id = str(App.get_running_app().game_id)
-        game = store.get(game_id)
-        ciphered_text = game["ciphered_text"]
-        unciphered_text = game["unciphered_text"]
-        current_output_text = game["current_output_text"]
-        encrypted_state = game["encrypted_state"]
-        current_state = game["current_state"]
-        last_saved_state = game["last_saved_state"]
-        store.put(
-            game_id,
-            ciphered_text=ciphered_text,
-            unciphered_text=unciphered_text,
-            current_output_text=current_output_text + key.name,
-            encrypted_state=encrypted_state,
-            current_state=current_state,
-            last_saved_state=last_saved_state,
+        current_output_text = store.get(game_id)["current_output_text"]
+        store_put(current_output_text=current_output_text + key.name)
+
+    def load_old_game(self):
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        game = store.get(str(game_id))
+        store_put(
+            last_saved_date=datetime.now().isoformat(),
+            current_state=game["last_saved_state"],
+            current_output_text=game["last_saved_output_text"],
         )
+
+    def save_game(self):
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        game = store.get(str(game_id))
+        store_put(
+            last_saved_date=datetime.now().isoformat(),
+            last_saved_state=game["current_state"],
+            last_saved_output_text=game["current_output_text"],
+        )
+
+    def change_game_title(self, btn, title):
+        if title != "" or title is not None:
+            store_put(game_title=title)
