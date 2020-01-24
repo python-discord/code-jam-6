@@ -117,22 +117,32 @@ class DeletePopup(BasePopup):
             self.ids.left.text = 'No File/Directory Selected'
 
     def delete(self):
-        # self._remove(self.filel)
-        # self._remove(self.filer)
-        print(self.filel.text)
+        if self.filel is not None:
+            self._remove(self.filel)
+        elif self.filer is not None:
+            self._remove(self.filel)
+        
         self.dismiss()
 
-    @staticmethod
-    def _remove(dir_) -> None:
-        try:
-            side = Path(dir_.text)
-        except AttributeError:
-            pass
+    def _remove(self, dir_) -> None:
+        print(f'DIR NAME: {dir_.name} TEXT: {dir_.txt}')
+        path = Path(dir_.txt)
+
+        if dir_.type != 'DIR':
+            path.unlink()
+            print('FILE')
         else:
-            if side.is_dir():
-                rmtree(side)
-            elif side.is_file():
-                side.unlink()
+            rmtree(path)
+            print('DIR')
+
+        self.ctx.parent.ids.left.ids.rv.dirs = path.parent.iterdir()
+        data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in
+                self.ctx.parent.ids.left.ids.rv.dirs]
+
+        if len(path.parent.parts) > 1:
+            self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
+        else:
+            self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
 
 
 class QuitPopup(BasePopup):
