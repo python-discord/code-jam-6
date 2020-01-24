@@ -44,14 +44,14 @@
             text: data.game_state.main_state_2.value
     StatusWidget:
         Label:
-            text: data.game_state.main_state_2.label
+            text: data.game_state.main_state_3.label
         Label:
-            text: data.game_state.main_state_2.value
+            text: data.game_state.main_state_3.value
     StatusWidget:
         Label:
-            text: data.game_state.main_state_2.label
+            text: data.game_state.main_state_4.label
         Label:
-            text: data.game_state.main_state_2.value
+            text: data.game_state.main_state_4.value
 
 
 <StatusWidget@BoxLayout>:
@@ -97,7 +97,7 @@
                     BoxLayout:
                         padding: (30, 90, 30, 110)
                         Image:
-                            source: assets_file +data.active_card.card_asset
+                            source: assets_file +data.active_card.card_image
 
         BoxLayout:
             size_hint:(1, .3)

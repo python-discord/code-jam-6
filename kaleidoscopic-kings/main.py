@@ -1,4 +1,3 @@
-import datetime
 from dataclasses import dataclass
 
 from kivy.event import EventDispatcher
@@ -51,13 +50,10 @@ class DataController(EventDispatcher):
         Sets teh states for the 4 main player states. Currently uses dud values til the
         backend version is done
         """
+        states = [self.game.game_state.get_main_state(i) for i in range(4)]
+        print(states)
         self.game_state = self.game_state = GameState(
-            *[
-                MainState(str(datetime.datetime.now()), "a"),
-                MainState(str(datetime.datetime.now()), "b"),
-                MainState(str(datetime.datetime.now()), "c"),
-                MainState(str(datetime.datetime.now()), "d"),
-            ]
+            *[MainState(s.label, str(s.value)) for s in states]
         )
 
 
