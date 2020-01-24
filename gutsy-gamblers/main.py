@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 import pickle
 
 import kivy
@@ -91,12 +91,6 @@ class DialWidget(FloatLayout):
         self.sunrise = self.sun_angles[0]
         self.sunset = self.sun_angles[1]
 
-        # Duration is how long it takes to perform the overall animation
-        anim = Animation(angle=359, duration=self.day_length)
-        anim += Animation(angle=359, duration=self.day_length)
-        anim.repeat = True
-        anim.start(self)
-
         # Shading widget
         self.dial_shading = DialEffectWidget((self.sunrise, self.sunset))
 
@@ -109,7 +103,14 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
+        self.animate_dial()
         self.clock = Clock.schedule_interval(self.redraw, self.day_length)
+
+    def animate_dial(self, restart=False):
+        anim = Animation(angle=359, duration=self.day_length)
+        anim += Animation(angle=359, duration=self.day_length)
+        anim.repeat = True
+        anim.start(self)
 
     def redraw(self, a=None):
         # Split suntime tuple into named variables
@@ -337,12 +338,13 @@ class TimeWizard(Popup):
         self.caller = caller
         super(TimeWizard, self).__init__(**kwargs)
 
-    def time_lapse(self, value):
-        time = 86400 / value
-        days = 1 * (value / 10000)
+    def time_lapse(self, day):
+        self.caller.day_length = 86400 / day
+        self.caller.redraw()
+        self.caller.animate_dial(True)
 
-        self.caller.day_length = time
-        self.caller.date_increase = days
+    def date_lapse(self, date):
+        self.caller.date_interval = date
         self.caller.redraw()
 
 

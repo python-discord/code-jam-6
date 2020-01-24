@@ -27,39 +27,29 @@
                 pos_hint: {'center_x': 0.5, 'center_y': 0}
 
             Slider:
-                id: time_slider
+                id: day_slider
                 orientation: 'vertical'
                 min: 1
                 max: 100
                 value: 1
-                on_touch_up: root.time_lapse(self.value)
-
-            Label:
-                text: str(time_slider.value) + 'x'
-                size_hint: None, 0.05
-                pos_hint: {'center_x': 0.5, 'center_y': 0}
+                on_touch_up: root.time_lapse(round(self.value))
 
         BoxLayout:
             orientation: 'vertical'
 
             Label:
-            	text: "Date Interval"
+            	text: str(root.caller.date)
             	font_size: 12
                 size_hint: None, 0.03
                 pos_hint: {'center_x': 0.5, 'center_y': 0}
 
             Slider:
-                id: time_slider
+                id: date_slider
                 orientation: 'vertical'
                 min: 1
                 max: 30
                 value: 1
-                on_touch_up: root.time_lapse(self.value)
-
-            Label:
-                text: str(round(time_slider.value)) + 'x'
-                size_hint: None, 0.05
-                pos_hint: {'center_x': 0.5, 'center_y': 0}
+                on_touch_up: root.date_lapse(round(self.value))
 
 <NowMarker>:
 	Image:
