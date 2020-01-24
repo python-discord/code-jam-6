@@ -42,26 +42,19 @@
 <OperationsBar>:
     size_hint_x: None
     width: 48
-    canvas:
-        Color:
-            rgb: 1, 1, 0
-        Rectangle:
-            size: self.size
-            pos: self.pos
-    BoxLayout:
-        orientation: 'vertical'
+    FloatLayout:
         pos: self.parent.pos
         size: self.parent.size
         Button:
-            text: '+'
+            pos_hint: {'x': 0, 'top': 1}
         Button:
-            text: '-'
+            pos_hint:  {'x': 0, 'top':4/5}
         Button:
-            text: '*'
+            pos_hint: {'x': 0, 'top': 3/5}
         Button:
-            text: '/'
+            pos_hint: {'x': 0, 'top': 2/5}
         Button:
-            text: 'sqrt'
+            pos_hint: {'x': 0, 'top': 1/5}
 
 
 <CuneiformDrawingInput>:
