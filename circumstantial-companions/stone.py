@@ -128,6 +128,7 @@ class Chisel(Widget):
         self.set_power(DEFAULT_CHISEL_POWER)
 
         self.setup_canvas()
+        self.background.texture.mag_filter = 'nearest'
 
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
@@ -138,8 +139,8 @@ class Chisel(Widget):
         self.circles = []
         pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         with self.canvas:
+            Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            self.background.texture.mag_filter = 'nearest'
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
