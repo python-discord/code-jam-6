@@ -77,7 +77,7 @@ class GameView(Widget):
             self.hp_bar = Image(pos=(10, WINDOW_HEIGHT - 80), source=ATLAS_PATH.format('100'))
             self.hp_bar.size = self.hp_bar.texture_size
 
-            self.score = Label(pos=(990, 700), text=f'Score:   0', font_size=75)
+            self.score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
 
             self.canvas.add(self._game.sun_rays.color)
             self.canvas.add(self._game.sun_rays)
