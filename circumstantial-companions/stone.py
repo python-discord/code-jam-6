@@ -5,9 +5,9 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
-from kivy.core.audio import SoundLoader
 from PIL import Image
 import numpy as np
+import simpleaudio as sa
 
 
 GRAVITY = .02
@@ -127,7 +127,10 @@ class Chisel(Widget):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.sound = SoundLoader.load(SOUND)
+        self.sound = sa.WaveObject.from_wave_file(SOUND)
+        self.looped_sound = Clock.schedule_interval(self.play_sound, 1)
+        self.looped_sound.cancel()
+        self.play = None
 
         self.set_radius(DEFAULT_CHISEL_RADIUS)
         self.set_power(DEFAULT_CHISEL_POWER)
@@ -199,14 +202,22 @@ class Chisel(Widget):
                 i, z, velocity = info.values()
                 self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
 
+    def play_sound(self, dt=0):
+        if self.play is None or not self.play.is_playing():
+            self.play = self.sound.play()
+
     def on_touch_down(self, touch):
         self.poke(touch)
-        self.sound.play()
+        self.play_sound()
         return True
 
     def on_touch_move(self, touch):
         self.poke(touch)
+        self.looped_sound()
         return True
+
+    def on_touch_up(self, touch):
+        self.looped_sound.cancel()
 
     def reset(self):
         self.canvas.clear()
