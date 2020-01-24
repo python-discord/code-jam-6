@@ -10,36 +10,14 @@ from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
+from kivy.uix.textinput import TextInput
 from requests import get
 
-from .save_game import store_put
+from .save_game import on_config_change, save_rotors, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
 )
-
-
-def on_config_change():
-    """
-    After you change the JSON data w/ JSONStore, call this function
-    This should only be called for rotor or plug changes
-    """
-    store = JsonStore(DATA_DIR)
-    game_id = str(App.get_running_app().game_id)
-    plugs = store.get(game_id)["current_state"]["plugs"]
-    plug_settings = " ".join(x for x in plugs)
-    App.get_running_app().machine.from_key_sheet(
-        rotors="I II III",
-        reflector="B",
-        ring_settings=[1, 20, 11],
-        plugboard_settings=plug_settings,
-    )
-    rotors = ""
-    for x in store.get(game_id)["current_state"]["rotors"]:
-        if x is None:
-            continue
-        rotors += x
-    App.get_running_app().machine.set_display(rotors)
 
 
 def get_wiki_summary() -> str:
@@ -67,11 +45,12 @@ def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> st
 
 def setup_new_game_settings():
     store = JsonStore(DATA_DIR)
-    currrent_game_id = store.get("latest_game_id")["id"]
-    if currrent_game_id is None:
+    current_game_id = store.get("latest_game_id")["id"]
+    if current_game_id is None:
         store.put("latest_game_id", id=0)
     else:
-        store.put("latest_game_id", id=int(currrent_game_id) + 1)
+        store.put("latest_game_id", id=int(current_game_id) + 1)
+    # Setting up data
     game_id = store.get("latest_game_id")["id"]
     App.get_running_app().game_id = game_id
     plug_array = sample(ascii_uppercase, 20)
@@ -81,39 +60,51 @@ def setup_new_game_settings():
     plug_settings = " ".join(x for x in plugs)
     rotors = sample(ascii_uppercase, 3)
     rotor_setting = "".join(rotors)
-    App.get_running_app().machine.from_key_sheet(
+
+    # Setting defaults for the singleton machine
+    # Need to re-instantiate the machine
+    App.get_running_app().machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
         ring_settings=[1, 20, 11],
         plugboard_settings=plug_settings,
     )
     App.get_running_app().machine.set_display(rotor_setting)
-
-    """Storing data"""
+    # Storing data
     rotors.append(None)
     rotors.append(None)
     text = get_wiki_summary()
+    ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
     store.put(
         game_id,
         game_title="Game {}".format(game_id),
-        ciphered_text=get_encrypted_text(text, rotor_setting, plug_settings),
-        unciphered_text=text,
+        ciphered_text=ciphered_text,
+        unciphered_text=get_encrypted_text(ciphered_text, rotor_setting, plug_settings),
         current_output_text="",
         last_saved_output_text="",
         created_date=datetime.now().isoformat(),
         last_saved_date=datetime.now().isoformat(),
-        encrypted_state={"reflector": "B", "rotors": rotors, "plugs": plugs},
+        encrypted_state={"reflector": "B", "rotors": rotor_setting, "plugs": plugs},
         current_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
-            "plugs": ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"],
+            "plugs": [],
         },
         last_saved_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
-            "plugs": ["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR", "ST"],
+            "plugs": [],
         },
     )
+
+
+class EnigmaOutput(TextInput):
+    def insert_text(self, substring, from_undo=False):
+        if substring.upper() in App.get_running_app().keys:
+            s = App.get_running_app().machine.key_press(substring.upper())
+        else:
+            s = substring
+        return super().insert_text(s, from_undo=from_undo)
 
 
 class GameScreen(Screen):
@@ -140,38 +131,10 @@ class GameScreen(Screen):
             on_config_change()
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
-        keys = {
-            "q",
-            "w",
-            "e",
-            "r",
-            "t",
-            "z",
-            "u",
-            "i",
-            "o",
-            "a",
-            "s",
-            "d",
-            "f",
-            "g",
-            "h",
-            "j",
-            "k",
-            "p",
-            "y",
-            "x",
-            "c",
-            "v",
-            "b",
-            "n",
-            "m",
-            "l",
-        }
         if (
             self.manager.current == "game_screen"
-            and codepoint in keys
-            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus
+            and codepoint.upper() in App.get_running_app().keys
+            and self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus
         ):
             self.ids.enigma_keyboard.ids.keyboard.ids[
                 codepoint.upper()
@@ -187,15 +150,17 @@ class GameScreen(Screen):
         )
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
-        if not self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.focus:
-            self.ids.enigma_keyboard.ids.lamp_board.ids.board_input.insert_text(
-                key.name
-            )
-        App.get_running_app().machine.key_press(key.name)
-        store = JsonStore(DATA_DIR)
-        game_id = str(App.get_running_app().game_id)
-        current_output_text = store.get(game_id)["current_output_text"]
-        store_put(current_output_text=current_output_text + key.name)
+        board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
+        if not board_output.focus:
+            board_output.insert_text(key.name)
+        store_put(current_output_text=board_output.text)
+        # Updating rotors
+        new_rotors = App.get_running_app().machine.get_display()
+        save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
+        rotor_screen = self.manager.get_screen("rotor_screen")
+        rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
+        rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]
+        rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id

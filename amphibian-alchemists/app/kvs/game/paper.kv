@@ -1,43 +1,52 @@
 <PaperLabel@Label>:
     color: 0, 0, 0, 1
-<PaperBackground@Image>:
-    source: "misc/paper.png"
+    markup: True
+    text_size: root.width, None
+    size: self.texture_size
+    halign: "center"
 
-<InputPaper@AnchorLayout>:
-    size_hint: 0.5, 1
+<InputPaper@RecycleView>:
+    canvas.before:
+        Color:
+        Rectangle:
+            source: "misc/paper.png"
+            size: self.size
+            pos: self.pos
     recycle_view_input: recycle_view_input
-    PaperBackground:
-    RecycleView:
-        id: recycle_view_input
-        size_hint: 0.6, 0.9
-        viewclass: "PaperLabel"
-        data: []
-        RecycleBoxLayout:
-            default_size: None, dp(25)
-            default_size_hint: 1, None
-            size_hint_y: None
-            height: self.minimum_height
-            orientation: "vertical"
+    id: recycle_view_input
+    viewclass: "PaperLabel"
+    data: []
+    RecycleBoxLayout:
+        padding: dp(10)
+        default_size: None, dp(25)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
 
-<OutputPaper@AnchorLayout>:
-    size_hint: 0.5, 1
+<OutputPaper@RecycleView>:
+    canvas.before:
+        Color:
+        Rectangle:
+            source: "misc/paper.png"
+            size: self.size
+            pos: self.pos
     recycle_view_output: recycle_view_output
-    PaperBackground:
-    RecycleView:
-        id: recycle_view_output
-        size_hint: 0.6, 0.9
-        viewclass: "PaperLabel"
-        data: []
-        RecycleBoxLayout:
-            default_size: None, dp(25)
-            default_size_hint: 1, None
-            size_hint_y: None
-            height: self.minimum_height
-            orientation: "vertical"
+    id: recycle_view_output
+    viewclass: "PaperLabel"
+    data: []
+    RecycleBoxLayout:
+        padding: dp(10)
+        default_size: None, dp(25)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
 
 <Paper>:
     name: "paper_screen"
     BoxLayout:
+        spacing: dp(20)
         InputPaper:
             id: input_paper
         OutputPaper:
