@@ -12,8 +12,11 @@ from kivy.uix.image import Image
 from kivy.clock import Clock
 from kivy import Logger
 from kivy.uix.label import Label
+from kivy.uix.button import Button
 
 import math
+
+
 
 
 class GameView(Widget):
@@ -29,9 +32,18 @@ class GameView(Widget):
         self.free_ships = []  # list of free ship. Use to avoid allocate new ship
         self.hp_bar = None  # will be init later
         self.score = None  # will be init later
+        self.pause_btn = None
 
     def show_game(self):
         Animation.cancel_all(self)
+        pause_btn = Button(background_normal=str(IMAGES_PATH.format('ui_pause.png')),
+                                background_down=str(IMAGES_PATH.format('ui_pause_click.png')),
+                                pos=((WINDOW_WIDTH / 3) + 80, WINDOW_HEIGHT - 70),
+                                border=(0, 0, 0, 0),
+                                size_hint=[None, None],
+                                width=40,
+                                height=40)
+        pause_btn.bind(on_press=self.show_pause_menu)
         self.canvas.clear()
         with self.canvas:
             # sky = Image(source=IMAGES_PATH.format('sky.png'))
@@ -72,6 +84,11 @@ class GameView(Widget):
             self.hp_bar.size = self.hp_bar.texture_size
 
             self.score = Label(pos=(990, 700), text=f'Score:   0', font_size=75)
+
+        self.add_widget(pause_btn)
+
+
+
 
     @staticmethod
     def _sin_transition(progress):
@@ -140,3 +157,6 @@ class GameView(Widget):
             Animation.cancel_all(ship_view)
             ship_view.pos = (WINDOW_WIDTH + 100, 0)
             self.free_ships.append(ship_view)
+
+    def show_pause_menu(self, *args):
+        print('Print..')
