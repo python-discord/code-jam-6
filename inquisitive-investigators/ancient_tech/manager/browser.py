@@ -9,6 +9,7 @@ from kivy.properties import StringProperty
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.properties import ObjectProperty
 
 from .file import NewFile
 from ..utils.utils import file_info
@@ -90,6 +91,7 @@ class Files(RecycleBoxLayout):
 
 
 class FileBrowser(FloatLayout):
+    recycle_view = ObjectProperty()
     pass
 
 

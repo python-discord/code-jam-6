@@ -1,6 +1,11 @@
 #:kivy 1.11.1
 
 <Main>:
+    left_browser: left
+    right_browser: right
+    terminal: terminal
+    footer: footer
+
     FileBrowser:
         id: left
         pos_hint: {'top': 1}
@@ -13,9 +18,11 @@
         pos_hint: {'top': .2}
         size_hint: 1,.01
     Terminal:
+        id: terminal
         pos_hint: {'top': .19}
         size_hint: 1,.15
     Footer:
+        id: footer
         pos_hint: {'top': .04}
         size_hint: 1,.04
 
