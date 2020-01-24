@@ -15,6 +15,7 @@ class Engine(Widget):
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
         self._keyboard.bind(on_key_up=self._on_keyboard_up)
+        Window.set_system_cursor("crosshair")
 
         Window.bind(mouse_pos=self.update_mouse_pos)
 
@@ -75,3 +76,5 @@ class Engine(Widget):
         :return: None
         """
         self.pressed_keys.discard(key_code[0])
+
+
