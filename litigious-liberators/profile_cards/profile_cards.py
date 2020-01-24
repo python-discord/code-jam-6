@@ -96,11 +96,7 @@ class ProfileList(ScreenManager):
             for element in x:
                 yield element
 
-    def _keyboard_closed(self):
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
-        self._keyboard = None
-
-    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
+    def card_swipe(self, direction):
         next_profile = next(self.cycler)
         with open(f"{self.profile_dir}/{next_profile}", "r") as profile_file:
             profile = safe_load(profile_file.read())
@@ -108,22 +104,27 @@ class ProfileList(ScreenManager):
         trans = SlideTransition()
         totals = Counter()
         totals.update(self.attributes)
+        next_card = ProfileCard(profile)
+        delta = current.right_delta if direction == "right" else current.left_delta
+        totals.update(delta)
+        self.attributes = totals
+        self.switch_to(next_card, direction=direction, transition=trans)
+        self.remove_widget(current)
+
+    def _keyboard_closed(self):
+        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
+        self._keyboard = None
+
+    def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
         if keycode[1] == "right":
             #  popup = SwipePopup(size_hint=(0.2, 0.4))
             #  popup.open()
-            next_card = ProfileCard(profile)
-            totals.update(current.right_delta)
-            self.attributes = totals
-            self.switch_to(next_card, direction="right", transition=trans)
+            self.card_swipe("right")
 
         elif keycode[1] == "left":
             #  popup = SwipePopup(size_hint=(0.2, 0.4))
             #  popup.open()
-            next_card = ProfileCard(profile)
-            totals.update(current.left_delta)
-            self.attributes = totals
-            self.switch_to(next_card, direction="left", transition=trans)
-        self.remove_widget(current)
+            self.card_swipe("left")
         return True
 
 
