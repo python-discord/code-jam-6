@@ -121,7 +121,7 @@ class DeletePopup(BasePopup):
             self._remove(self.filel)
         elif self.filer is not None:
             self._remove(self.filel)
-        
+
         self.dismiss()
 
     def _remove(self, dir_) -> None:
@@ -152,6 +152,7 @@ class DeletePopup(BasePopup):
                 self.ctx.parent.ids.right.ids.rv.update(state=1, file=data)
             else:
                 self.ctx.parent.ids.right.ids.rv.update(state=2, file=data)
+
 
 class QuitPopup(BasePopup):
     pass
