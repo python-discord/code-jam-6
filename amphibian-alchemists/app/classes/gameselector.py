@@ -37,13 +37,14 @@ class GameSelectorScreen(Screen):
         if not os.path.exists(DATA_DIR):
             store = JsonStore(DATA_DIR)
             store.put("latest_game_id", id=None)
+        self.rv.data = []
         self.populate()
 
     def populate(self):
         store = JsonStore(DATA_DIR)
         latest_game_id = store.get("latest_game_id")["id"]
         if latest_game_id is not None:
-            for x in range(int(latest_game_id)):
+            for x in range(int(latest_game_id) + 1):
                 game = store.get(str(x))
                 title = game["game_title"]
                 created = str(game["created_date"])
@@ -59,4 +60,5 @@ class GameSelectorScreen(Screen):
             self.rv.data = [{"text": self.no_saved_games}]
 
     def load_game(self, game):
+        App.get_running_app().game_id = int(game.index)
         self.manager.current = "game_screen"
