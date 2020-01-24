@@ -40,7 +40,16 @@ class NewFile(Label):
             else:
                 self.ctx.update(state=2, file=data)
 
-            self.parent.parent.parent.ids.header.current_dir = str(path)
+            current_path = ''
+            for part in path.parts[-5:]:
+                if len(part) > 10:
+                    part = part[:5] + '..'
+                if '\\' not in part:
+                    current_path += part + '\\'
+                else:
+                    current_path += part
+
+            self.parent.parent.parent.ids.header.current_dir = current_path[:-1]
 
         else:
             Logger.info('FileBrowser: Not a directory!')
