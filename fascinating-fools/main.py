@@ -7,8 +7,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.core.audio import SoundLoader
+from kivy.uix.textinput import TextInput
 
-from question import Question
+from question import Question, connection
 
 #sounds
 error_sound = SoundLoader.load('sounds/error.wav')
@@ -144,7 +145,7 @@ class TriviaCategoryScreen(Screen):
     def __init__(self, **kwargs):
         super(TriviaCategoryScreen, self).__init__(**kwargs)
         self.layout = GridLayout()
-        self.layout.rows = 2
+        self.layout.rows = 3
         self.layout.padding = (200, 0, 200, 100)
         self.layout.spacing = [20, 10]
         self.layout.add_widget(
@@ -154,7 +155,7 @@ class TriviaCategoryScreen(Screen):
         self.start_button.bind(on_press=self.press_start_button)
         self.layout.add_widget(self.start_button)
         # go back home
-        self.go_back_home = Button(text='Home', )
+        self.go_back_home = Button(text='Home', size_hint=(.5, .5))
         self.go_back_home.bind(on_press=self.process_go_back_home)
         self.layout.add_widget(self.go_back_home)
         # Add the above layout to this screen
@@ -167,7 +168,7 @@ class TriviaCategoryScreen(Screen):
         print(
             f"Inside TriviaCategoryScreen :: Pressed button :> {pressed.text}")
         self.manager.current = 'play_screen'
-        self.manager.get_screen('play_screen').category = pressed.text
+        self.manager.get_screen('play_screen').category = self.category
         self.category_questions = Question(self.category).get_questions()
         # Set the question to start , the choices and the correct answer
         self.manager.get_screen(
@@ -231,7 +232,7 @@ class PlayScreen(Screen):
 
     def check_answer(self, pressed):
         print(
-            f" Selected answer {pressed.text}, Checking question number {self.question_number}, The length of the category questions :> {len(self.category_questions)}"
+            f" Selected answer {pressed.text}, The category is {self.category} Checking question number {self.question_number}, The length of the category questions :> {len(self.category_questions)}"
         )
 
         if self.question_number == len(self.category_questions):
@@ -249,6 +250,7 @@ class PlayScreen(Screen):
             self.manager.get_screen('results_screen').score = self.runnig_score
             self.manager.get_screen('results_screen').quiz_length = len(
                 self.category_questions)
+            self.manager.get_screen('results_screen').category = self.category
             # Reset the question number , in case the user restarts the screen
             self.question_number = 1
             # Reset the score
@@ -300,6 +302,11 @@ class ResultsScreen(Screen):
         self.layout.spacing = [20, 10]
         # Initiliaze scores
         self.score = 0
+        #Initilaise the current player
+        self.playing_username = None
+        self.rank = None
+        self.total_players = None
+
         self.layout.add_widget(
             Label(text='Quiz complete', font_size=50, size_hint=(1, 1)))
         self.score_label = Label(text="", font_size=40)
@@ -308,9 +315,12 @@ class ResultsScreen(Screen):
         # Label(text='Personal Best 345 points! Congrats !!', font_size=35))
         # self.layout.add_widget(
         # Label(text='Correct on first attempt is 9/10', font_size=25))
-        self.layout.add_widget(
-            Label(text='Your rank on the Leaderboard is 1 out of 100',
-                  font_size=25))
+        self.user_name_input = TextInput(
+            text="Enter your username (enter when done)!", multiline=False)
+        self.layout.add_widget(self.user_name_input)
+        self.leader_board_label = Label(font_size=25)
+        # Add the leader_board label once the user hits enter on the user_name field
+        self.user_name_input.bind(on_text_validate=self.user_name_entered)
         self.restart = Button(text='Restart')
         self.restart.bind(on_press=self.handle_restart)
         self.layout.add_widget(self.restart)
@@ -325,7 +335,89 @@ class ResultsScreen(Screen):
     def on_enter(self, ):
         print(f"The current score :> {self.score}")
         self.score_label.text = f"Score is {self.score}/ {self.quiz_length}"
-        # Store scores on the leaderboard
+        # Update the leaderboard stats
+        self.total_players = self.get_total_players(self.category)
+        self.rank = self.get_rank(self.playing_username, self.category)
+        if self.rank == 0:
+            self.rank = self.total_players
+        self.leader_board_label.text = f"Hey {self.playing_username} ! Your rank on the leaderboard is {self.rank} out of {self.total_players}"
+
+    def get_rank(self, user_name, category):
+        rank = 0
+        cursor = connection.cursor()
+        sql = 'SELECT *, RANK() OVER (ORDER BY score DESC) output_rank FROM leaderboard WHERE Category = ? ;'
+        params = (category, )
+        cursor.execute(sql, params)
+        results = [dict(row) for row in cursor.fetchall()]
+        for raw_rank in results:
+            if raw_rank.get('username') == user_name:
+                rank = raw_rank.get('output_rank')
+        return rank
+
+    def get_total_players(self, category):
+        cursor = connection.cursor()
+        sql = 'SELECT COUNT(*) AS total FROM leaderboard WHERE Category = ?;'
+        params = (category, )
+        cursor.execute(sql, params)
+        results = [dict(row) for row in cursor.fetchall()]
+        return results[0].get('total')
+
+    def update_user_leaderboard_score(self, user_name, category, new_score):
+        cursor = connection.cursor()
+        sql = 'SELECT * FROM leaderboard WHERE username = ? AND Category = ?;'
+        params = (user_name, category)
+        cursor.execute(sql, params)
+        results = [dict(row) for row in cursor.fetchall()]
+
+        current_score = results[0].get('score')
+        if new_score > current_score:
+            print(
+                f"Updating imporoved score for {user_name} in Category {category} to {new_score}"
+            )
+            sql = 'UPDATE leaderboard SET score = ? WHERE username = ? AND Category = ?;'
+            params = (new_score, user_name, self.category)
+            cursor.execute(sql, params)
+
+    def user_name_entered(self, user_name_input_event):
+        try:
+            print(
+                f"{user_name_input_event}, Current player is {self.playing_username}"
+            )
+            user_name = user_name_input_event.text
+            rank = self.get_rank(user_name, self.category)
+            self.total_players = self.get_total_players(self.category)
+            if self.total_players == 0:
+                self.total_players = 1  # First player on this category
+            print(
+                f"Current rank is {rank}, and total players are {self.total_players}"
+            )
+
+            if not rank:
+                # First time for this user
+                cursor = connection.cursor()
+                sql = "INSERT INTO leaderboard (username, score, category) VALUES (?, ?, ?);"
+                params = (user_name, self.score, self.category)
+                cursor.execute(sql, params)
+                self.rank = self.total_players
+            else:
+                # This is a returning player update the score
+                print(f"New score is {self.score}")
+                self.update_user_leaderboard_score(user_name, self.category,
+                                                   self.score)
+                # refresh rank
+                self.rank = self.get_rank(user_name, self.category)
+
+            # Delete the current user_name input
+            self.layout.remove_widget(self.user_name_input)
+            # If the app is not stopped, continue using the current username
+            self.playing_username = user_name
+            # Add the leaderboard label
+            self.leader_board_label.text = f"Hey {self.playing_username} ! Your rank on the leaderboard is {self.rank} out of {self.total_players}"
+            self.layout.add_widget(self.leader_board_label)
+            # Commit current transactions
+            connection.commit()
+        except Exception as e:
+            print(f"Error {e}")
 
 
 class AncientTriviaApp(App):
