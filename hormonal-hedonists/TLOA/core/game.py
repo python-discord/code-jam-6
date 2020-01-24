@@ -4,7 +4,7 @@ from typing import List, Optional
 
 from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.core.constants import (
-    Actions, TICK, NUMBER_OF_LANES, SHIP_SPAWN_CHANCE,
+    Actions, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
     SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE
 )
 from TLOA.entities import MirrorCannon, BrownShip, GoldenShip, LightRays
@@ -31,7 +31,7 @@ class Game(EventDispatcher):
 
         # Create & initialize Mesh instance for Reflected Sun rays/Death Rays
         self.death_rays = LightRays(
-            point=Vector(600, self.mirror.state*LANE_WIDTH),
+            point=Vector(600, LANE_BOUNDS[self.mirror.state][1]),
             surface=self.mirror.mirror_axis)
 
         self.ship_lanes: List[List[BrownShip]] = [[] for _ in range(NUMBER_OF_LANES)]
