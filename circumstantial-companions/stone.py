@@ -3,16 +3,12 @@ from random import choice, random
 
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.core.image import Image as CoreImage
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Line, Rectangle
-from kivy.lang import Builder
 from kivy.core.audio import SoundLoader
-from kivy.vector import Vector
 from PIL import Image
 import numpy as np
 
-from mixins import RepeatingBackground
 
 GRAVITY = .02
 FRICTION = .9
@@ -31,6 +27,8 @@ CHISEL_RADIUS_RANGE = (3e-4, 5e-3)
 DEFAULT_CHISEL_RADIUS = 6e-4
 CHISEL_POWER_RANGE = (50, 500)
 DEFAULT_CHISEL_POWER = 100
+
+BACKGROUND = 'assets/img/background.png'
 
 def get_pebble_radius(width, height):
     scaled_w, scaled_h = PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
@@ -117,13 +115,12 @@ class Pebble:
             self.velocity = vx, vy
 
 
-class Chisel(RepeatingBackground, Widget):
+class Chisel(Widget):
     """
     Handles collision detection between pebbles and the hammer.  Creates Pebbles on collision.
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.setup_background("assets/img/chisel_background.png", 0.3, (0.4, 0.4, 0.4, 1))
         self.sound = SoundLoader.load('assets/sounds/dig.wav')
 
         self.set_radius(DEFAULT_CHISEL_RADIUS)
@@ -131,12 +128,17 @@ class Chisel(RepeatingBackground, Widget):
 
         self.setup_canvas()
 
+        self.resize_event = Clock.schedule_once(lambda dt: None, 0)
+        self.bind(size=self._delayed_resize, pos=self._delayed_resize)
+
     def setup_canvas(self):
         self.pebbles = {}
         self.positions = []
         self.circles = []
         pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         with self.canvas:
+            self.bg = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
+            self.bg.texture.mag_filter = 'nearest'
             for color, x, y in pebble_setup():
                 Color(*color)
                 self.positions.append((x, y))
@@ -145,8 +147,13 @@ class Chisel(RepeatingBackground, Widget):
                 circle = (scaled_x, scaled_y, pebble_radius, 0, 360, PEBBLE_SEGMENTS)
                 self.circles.append(Line(circle=circle, width=pebble_radius))
 
-    def resize(self, instance, value):
-        self.update_background(instance, value)
+    def _delayed_resize(self, *args):
+        self.resize_event.cancel()
+        self.resize_event = Clock.schedule_once(lambda dt: self.resize(*args), .3)
+
+    def resize(self, *args):
+        self.bg.pos = self.pos
+        self.bg.size = self.size
         pebble_radius = self.pebble_radius = get_pebble_radius(self.width, self.height)
         for i, (x, y) in enumerate(self.positions):
             self.circles[i].width = pebble_radius
