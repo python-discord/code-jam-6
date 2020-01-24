@@ -314,6 +314,7 @@
             BoxLayout:
                 size_hint_y: 0.1
                 Button:
+                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
                     size_hint_x: 0.5
                     text: "Go back!"
                     on_release: root.manager.current = "game_screen"

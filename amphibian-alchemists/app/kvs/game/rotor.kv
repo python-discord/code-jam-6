@@ -92,8 +92,9 @@
         anchor_x: "left"
         anchor_y: "top"
         BoxLayout:
-            size_hint: 0.1, 0.1
+            size_hint: 0.20, 0.1
             Button:
+                on_press: app.root.get_screen("game_screen").button_press_swoosh()
                 text: "Go back!"
                 on_release: root.manager.current = "game_screen"
     AnchorLayout:

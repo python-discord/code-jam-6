@@ -62,6 +62,7 @@
                 size_hint: 1, 0.575
                 RotorDisplay:
                 Button:
+                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
                     background_color: 0, 0, 0, 0
                     on_release: root.manager.current = "rotor_screen"
             BoxLayout
@@ -70,6 +71,7 @@
                     id: enigma_keyboard
             AnchorLayout:
                 Button:
+                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
                     background_color: 0, 0, 0, 0
                     on_release: root.manager.current = "plugboard_screen"
                 PlugBoardModified:

@@ -117,6 +117,7 @@ class GameScreen(Screen):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
 
+
     def key_click(self):
         SoundLoader.load("misc/keyboard_click.wav").play()
 
@@ -125,6 +126,9 @@ class GameScreen(Screen):
 
     def button_press_positive(self):
         SoundLoader.load("misc/button_1.wav").play()
+
+    def button_press_swoosh(self):
+        SoundLoader.load("misc/swoosh.mp3").play()
 
     def button_press_negative(self):
         SoundLoader.load("misc/button_2.wav").play()
