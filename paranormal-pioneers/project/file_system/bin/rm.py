@@ -1,5 +1,4 @@
 from argparse import Namespace
-from pathlib import Path
 import os
 
 from project.core import command
@@ -23,7 +22,7 @@ class RM(command.Command):
     def handle_file(self, ns: Namespace, term: Terminal) -> None:
         self.files = [self._resolve_path(term.path, file, term.fs) for file in ns.file]
 
-    def main(self, ns: Namespace, term: Terminal) -> str:
+    def main(self, ns: Namespace, term: Terminal) -> None:
         for f in self.files:
             os.remove(f)
 

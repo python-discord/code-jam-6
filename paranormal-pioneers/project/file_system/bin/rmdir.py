@@ -1,5 +1,4 @@
 from argparse import Namespace
-from pathlib import Path
 import os
 
 from project.core import command
@@ -23,7 +22,7 @@ class Rmdir(command.Command):
     def handle_dir(self, ns: Namespace, term: Terminal) -> None:
         self.dirs = [self._resolve_path(term.path, dir, term.fs) for dir in ns.dir]
 
-    def main(self, ns: Namespace, term: Terminal) -> str:
+    def main(self, ns: Namespace, term: Terminal) -> None:
         for dir in self.dirs:
             os.rmdir(dir)
 

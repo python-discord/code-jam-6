@@ -23,7 +23,7 @@ class Mkdir(command.Command):
     def handle_dir(self, ns: Namespace, term: Terminal) -> None:
         self.dirs = [self._resolve_path(term.path, dir, term.fs) for dir in ns.dir]
 
-    def main(self, ns: Namespace, term: Terminal) -> str:
+    def main(self, ns: Namespace, term: Terminal) -> None:
         for d in self.dirs:
             os.mkdir(d)
 
