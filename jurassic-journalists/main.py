@@ -100,7 +100,7 @@ class TextPaper(Image):
         """ Type on the paper """
         # Drawing on the image
         ImageDraw.Draw(self.txt).text((self.head["x"], self.head["y"]),
-                                      key.char, font=key.font, fill=128)
+                                      key.char, font=key.font, fill=key.color)
         # Scrolling up
 
         # Shoudln't move paper if it is the first letter of the line

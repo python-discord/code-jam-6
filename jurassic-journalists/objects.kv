@@ -17,17 +17,12 @@
 	FloatLayout:
 		typw: typw
 		TextPaper:
-		    #canvas.after:
-			 #   Color:
-			#	    rgba: (0,0,0,0)
-			 #   Rectangle:
-			#	    pos: self.pos
-			#		size: self.size #self.width, self.height //2 + 125
-			#    Color:
-			#	    rgba: (0,0,0,1)
-			 #   Rectangle:
-			#	    pos: self.parent.width, self.parent.height//2
-			#		size: self.width, self.height //2 + 125
+		    canvas.after:
+			    Color:
+				    rgba: (.59, .29, 0, 1)
+			    Rectangle:
+				    size: 720, 600 # don't hardcoded
+					pos: 0, 0
 			id: typw
 			source: 'blank.png'
 			#pos_hint: {'x': 0.2, 'y':.5}
@@ -43,7 +38,7 @@
 		GestureSurface:
             size: self.size
             pos: self.pos
-			#on_gesture_complete: typw.text += '_b'
+			on_gesture_complete: print(self.properties())
 		Row1:
 			txt: 'q'
 			pos_hint: {'x': .16, 'y': self.anim_y}
