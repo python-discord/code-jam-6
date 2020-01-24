@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-from TLOA.core.constants import Actions, SHIP_SCORE, LANE_NUMBER, LANE_WIDTH
-=======
 import random
 
 from typing import List, Optional
