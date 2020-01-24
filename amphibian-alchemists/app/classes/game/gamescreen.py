@@ -3,6 +3,8 @@ from datetime import datetime
 from random import sample
 from string import ascii_uppercase
 
+from requests import get
+
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
@@ -11,7 +13,6 @@ from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
-from requests import get
 
 from .save_game import on_config_change, save_rotors, store_put
 
@@ -84,7 +85,7 @@ def setup_new_game_settings():
     plug_array = sample(ascii_uppercase, 20)
     plugs = []
     for i in range(10):
-        plugs.append("".join(plug_array[i * 2: i * 2 + 2]))  # noqa
+        plugs.append("".join(plug_array[i * 2 : i * 2 + 2]))  # noqa
     plug_settings = " ".join(x for x in plugs)
     rotors = sample(ascii_uppercase, 3)
     rotor_setting = "".join(rotors)
@@ -112,11 +113,7 @@ def setup_new_game_settings():
         last_saved_output_text="",
         created_date=datetime.now().isoformat(),
         last_saved_date=datetime.now().isoformat(),
-        encrypted_state={
-            "reflector": "B",
-            "rotors": rotor_setting,
-            "plugs": plugs
-        },
+        encrypted_state={"reflector": "B", "rotors": rotor_setting, "plugs": plugs},
         current_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
