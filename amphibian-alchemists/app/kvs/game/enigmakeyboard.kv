@@ -29,11 +29,8 @@
 
     Lamp:
         id: lamp
-    TextInput:
-        id: board_input
-        multiline: False
-        on_text:
-            if self.text != self.text.upper(): self.text = self.text.upper()
+    EnigmaOutput:
+        id: board_output
 
 <Keyboard@GridLayout>:
     canvas:
