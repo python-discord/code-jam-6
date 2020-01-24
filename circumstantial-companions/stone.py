@@ -137,10 +137,10 @@ class Chisel(Widget):
         with self.canvas:
             Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            for (r, g, b, a), x, y in pebble_setup():
-                scaled_x = x * self.width
-                scaled_y = y * self.height
-                for factor, depth in ((.5, 1), (1,0)):
+            for factor, depth in ((.5, 1), (1, 0)):
+                for (r, g, b, a), x, y in pebble_setup():
+                    scaled_x = x * self.width
+                    scaled_y = y * self.height
                     Color(factor * r, factor * g, factor * b, a)
                     self.positions.append((x, y, depth))
                     self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
