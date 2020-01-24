@@ -33,6 +33,8 @@
 <Rotor@BoxLayout>:
     orientation: "vertical"
     screen: root.parent.parent.parent.parent
+    rotor_number: 0
+    rotor_value: rotor_value
     canvas:
         Color:
             rgb: 165 / 255, 165 / 255, 165 / 255
@@ -46,15 +48,15 @@
             text: "+"
             pos_hint: {"center_x": 0.5, "top": 0.62}
             on_release:
-                if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
+                setattr(rotor_value, "text", root.screen.keys[root.screen.keys.index(rotor_value.text) + 1])
     RelativeLayout:
         RotorLabel:
             id: rotor_value
-            index: 0
-            text: root.screen.keys[self.index]
-            on_index:
-                if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
-                elif self.index == 0: setattr(down, "disabled", True)
+            text: app.machine.get_display()[root.rotor_number - 1]
+            on_text:
+                if self.text == "Z": setattr(up, "disabled", True)
+                elif self.text == "A": setattr(down, "disabled", True)
+                else: setattr(up, "disabled", False), setattr(down, "disabled", False)
     RelativeLayout:
         RotorButton:
             id: down
@@ -62,23 +64,27 @@
             disabled: True
             pos_hint: {"center_x": 0.5, "top": 0.575}
             on_release:
-                if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
+                setattr(rotor_value, "text", root.screen.keys[root.screen.keys.index(rotor_value.text) - 1])
 
 <Rotors@BoxLayout>:
     size_hint_y: 0.7
     spacing: dp(10)
     Rotor:
         id: first_rotor
+        rotor_number: 1
     Gear:
     Rotor:
         id: second_rotor
+        rotor_number: 2
     Gear:
     Rotor:
         id: third_rotor
+        rotor_number: 3
     Gear:
 
 <RotorScreen>:
     name: "rotor_screen"
+    rotor_section: rotor_section
     AnchorLayout:
         anchor_x: "left"
         anchor_y: "top"

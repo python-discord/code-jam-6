@@ -183,6 +183,10 @@ class GameScreen(Screen):
         new_rotors = App.get_running_app().machine.get_display()
         save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
         # on_config_change() Not necessary since machine auto configured
+        rotor_screen = self.manager.get_screen("rotor_screen")
+        rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
+        rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]
+        rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id

@@ -5,11 +5,10 @@ from .save_game import save_rotors
 
 class RotorScreen(Screen):
     def on_leave(self, *args):
-        rotor_section = self.ids.rotor_section.ids
         save_rotors(
-            rotor_section.first_rotor.ids.rotor_value.text,
-            rotor_section.second_rotor.ids.rotor_value.text,
-            rotor_section.third_rotor.ids.rotor_value.text,
+            self.rotor_section.ids.first_rotor.rotor_value.text,
+            self.rotor_section.ids.second_rotor.rotor_value.text,
+            self.rotor_section.ids.third_rotor.rotor_value.text,
         )
 
     keys = [
