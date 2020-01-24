@@ -18,10 +18,12 @@ class Engine(Widget):
         Window.set_system_cursor("crosshair")
 
         Window.bind(mouse_pos=self.update_mouse_pos)
+        Window.bind(on_touch_down=self.update_mouse_down)
+        Window.bind(on_touch_up=self.update_mouse_up)
 
         # keep track of the currently pressed keys in a set for smooth motion
         self.pressed_keys = set()
-
+        self.mouse_keys = set()
         # keep track of the current mouse position
         self.mouse_position = 0, 0
 
@@ -33,6 +35,13 @@ class Engine(Widget):
 
     def update_mouse_pos(self, _, n):
         self.mouse_position = n
+
+    def update_mouse_down(self, _, touch):
+        self.mouse_keys.add(touch.button)
+
+    def update_mouse_up(self, _, touch):
+        self.mouse_keys.discard(touch.button)
+        print(touch.button)
 
     def add_screen(self, screen: Screen) -> None:
         """Add the sprite to the internal list and add the widget."""
