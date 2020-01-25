@@ -30,24 +30,26 @@
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: "On a clear day you chance upon a crippled juvenile T-Rex.\n its leg trapped in a strange contraption. \nJudging from the bleeding, it will not survive long:"
+                text: "On a clear day you chance upon a crippled juvenile T-Rex.\n his leg trapped in a strange contraption. \nJudging from the bleeding, he will not survive long:"
                 font_size: '25dp'
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
                 spacing: '10dp'
                 ToggleButton:
-                    text: 'Use the sharpened rock mercifully ending its life with a quick thrust'
+                    text: 'Use the sharpened rock mercifully ending his life with a quick thrust'
                     group: 'Q1'
                     state: 'down'
                 ToggleButton:
-                    text: 'Use herbs from your pack to put it to sleep.'
+                    text: 'Use herbs from your pack to put him to sleep.'
                     group: 'Q1'
                 ToggleButton:
                     text: "Do not interfere in the natural evolution of events, but rather take the opportunity to learn \nmore about this species as one day you might face a fight a fully grown one."
                     group: 'Q1'
                 ToggleButton:
-                    text: 'A4'
+                    # TODO: show some toast about your action's consequences
+                    # For example: you chose to save him so he ends up telling stuff
+                    text: 'Even being higher chances of him not surviving you want to help him'
                     group: 'Q1'
             BoxLayout:
                 orientation: 'horizontal'
@@ -63,7 +65,40 @@
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: 'Profile creation question #2:'
+                text: 'You hear some noise coming from the bush.'
+                font_size: '30dp'
+            BoxLayout:
+                orientation: 'vertical'
+                padding: '10dp'
+                spacing: '10dp'
+                ToggleButton:
+                    text: 'You reach out to get a knife from your bag.'
+                    group: 'Q2'
+                    state: 'down'
+                ToggleButton:
+                    text: 'You try to hide behind a tree'
+                    group: 'Q2'
+                ToggleButton:
+                    text: 'You stand there just looking at the bush'
+                    group: 'Q2'
+                ToggleButton:
+                    text: 'You are fearless and you move forward towards bush to see whats there'
+                    group: 'Q2'
+            BoxLayout:
+                orientation: 'horizontal'
+                padding: '10dp', '50dp'
+                spacing: '10dp'
+                Button:
+                    text: 'Go Back'
+                    on_release: root.ids.profile_carousel.load_previous()
+                Button:
+                    text: 'Continue'
+                    # TODO: With this design we only need to valiedate the name. But we need more questions.
+                    on_release: root.ids.profile_carousel.load_next()
+        BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'In the dark night, you see a fallen star and\n you close your eyes and join your hands\n to make a wish. Choose a wise wish as\n it might come true.'
                 font_size: '30dp'
             BoxLayout:
                 orientation: 'vertical'
@@ -71,17 +106,17 @@
                 spacing: '10dp'
                 ToggleButton:
                     text: 'A1'
-                    group: 'Q1'
+                    group: 'Q3'
                     state: 'down'
                 ToggleButton:
                     text: 'A2'
-                    group: 'Q1'
+                    group: 'Q3'
                 ToggleButton:
                     text: 'A3'
-                    group: 'Q1'
+                    group: 'Q3'
                 ToggleButton:
                     text: 'A4'
-                    group: 'Q1'
+                    group: 'Q3'
             BoxLayout:
                 orientation: 'horizontal'
                 padding: '10dp', '50dp'
