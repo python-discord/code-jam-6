@@ -66,4 +66,35 @@ class GameSelectorScreen(Screen):
 
     def load_game(self, game):
         App.get_running_app().game_id = int(game.index)
+
+        # Prepare data
+        store = JsonStore(DATA_DIR)
+        plugs = store.get(str(App.get_running_app().game_id))["current_state"]["plugs"]
+        # Assumes the data plugs are even. If game goes well
+        # If not, we pop the last one.
+        if len("".join(i for i in plugs)) % 2 != 0:
+            new_plugs = []
+            for x in plugs:
+                new_plugs.append(str(x)[0])
+                new_plugs.append(str(x)[1])
+            # save_plugs(new_plugs)
+            # Reset plugs to be the new even numbered length
+            plugs = store.get(str(App.get_running_app().game_id))["current_state"][
+                "plugs"
+            ]
+
+        """
+        Begin creation of plugs
+        We have to use get_plug method.
+        We have to find all PlugHole instances
+        """
+        plugboard_screen = self.manager.get_screen("plugboard_screen")
+        plugholes_instances = plugboard_screen.ids.plug_board.ids
+        # Plugs prepared. Select instances. Adding in.
+        for x in plugs:
+            instance1 = plugholes_instances[str(x)[0]]
+            instance2 = plugholes_instances[str(x)[1]]
+            plugboard_screen.handle_plug_release(instance1)
+            plugboard_screen.handle_plug_release(instance2)
+
         self.manager.current = "game_screen"

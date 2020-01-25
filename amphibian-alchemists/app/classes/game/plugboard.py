@@ -4,7 +4,6 @@ from kivy.app import App
 from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.uix.screenmanager import Screen
-from kivy.storage.jsonstore import JsonStore
 
 from .save_game import save_plugs
 
@@ -33,36 +32,6 @@ class PlugboardScreen(Screen):
         [85 / 255, 0, 34 / 255],
         [1, 102 / 255, 0],
     )
-
-    def on_enter(self, *args):
-        # Prepare data
-        store = JsonStore(DATA_DIR)
-        plugs = store.get(str(App.get_running_app().game_id))["current_state"]["plugs"]
-        # Assumes the data plugs are even. If game goes well
-        # If not, we pop the last one.
-        if len("".join(i for i in plugs)) % 2 != 0:
-            new_plugs = []
-            for x in plugs:
-                new_plugs.append(str(x)[0])
-                new_plugs.append(str(x)[1])
-            save_plugs(new_plugs)
-            # Reset plugs to be the new even numbered length
-            plugs = store.get(str(App.get_running_app().game_id))["current_state"][
-                "plugs"
-            ]
-
-        """
-        Begin creation of plugs
-        We have to use get_plug method.
-        We have to find all PlugHole instances
-        """
-        plugholes_instances = self.ids.plug_board.ids
-        # Plugs prepared. Select instances. Adding in.
-        for x in plugs:
-            instance1 = plugholes_instances[str(x)[0]]
-            instance2 = plugholes_instances[str(x)[1]]
-            self.get_plug(instance1)
-            self.get_plug(instance2)
 
     # Adding the plug (which is the plughole instance)
     def get_plug(self, instance):
@@ -132,8 +101,5 @@ class PlugboardScreen(Screen):
             del self.plug_reference[-1]
             del self.all_plugged[-1]
             self.plugs_in_screen -= 1
-        self.all_plugged = list(set(self.all_plugged))
+            self.ids.remove_plug.disabled = False
         save_plugs(self.all_plugged)
-
-    def statistics(self) -> list:
-        return [i + j for i, j in zip(self.all_plugged[::2], self.all_plugged[1::2])]
