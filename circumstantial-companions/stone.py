@@ -219,7 +219,10 @@ class Chisel(Widget):
         self.setup_canvas()
 
     def save(self, path_to_file):
-        pebble_dict = {'positions': self.positions, 'colors':self.colors}
+        _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
+        pebble_dict = {'positions': self.positions,
+                       'colors': self.colors,
+                       'aspect': (pebbles_per_row, pebbles_per_column)}
         with open(path_to_file, 'w') as file:
             json.dump(pebble_dict, file)
 
@@ -235,6 +238,7 @@ class Chisel(Widget):
         self.pebbles = {}
         self.positions = pebble_dict['positions']
         self.colors = pebble_dict['colors']
+        CURRENT_IMAGE[1:] = pebble_dict['aspect']
         self.pixels = []
         self.pebble_size = get_pebble_size(self.width, self.height)
         self.canvas.clear()
