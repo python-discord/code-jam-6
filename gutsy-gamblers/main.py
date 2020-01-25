@@ -347,11 +347,13 @@ class TimeWizard(Popup):
         self.clock = Clock.schedule_interval(self.update_date, self.dial.midnight_delta)
 
     def update_date(self, *args):
+        print('called update_date')
         self.clock.cancel()
         self.current_date.text = self.dial.date.strftime("%d/%m/%Y")
         self.clock = Clock.schedule_interval(self.update_date, self.dial.midnight_delta)
 
     def delta_override(self, *args):
+        print('called delta_override')
         if self.redraw_checkbox.active is True:
             self.dial.midnight_delta = 0.1
             self.update_date()
@@ -361,8 +363,13 @@ class TimeWizard(Popup):
             self.dial.midnight_delta = (datetime(year=midnight.year, month=midnight.month,
                                                  day=midnight.day,
                                                  hour=0, minute=0, second=0) - datetime.now()).seconds
-            self.update_date()
             self.dial.redraw()
+
+    def revert_date(self):
+        print('called revert_date')
+        self.dial.date = datetime.now()
+        self.update_date()
+        self.dial.redraw()
 
 
 # Settings panel #

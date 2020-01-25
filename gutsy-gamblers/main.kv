@@ -70,6 +70,10 @@
 		    id: current_date
 			size_hint: 1, 0.2
 
+		Button:
+		    text: "Revert date"
+		    on_press: root.revert_date()
+
 <NowMarker>:
 	Image:
 		source: 'assets/arrow_marker.png'
