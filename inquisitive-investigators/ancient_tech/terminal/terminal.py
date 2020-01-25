@@ -6,7 +6,7 @@ from kivy.properties import (
     ObjectProperty,
     StringProperty,
     NumericProperty,
-    ListProperty
+    ColorProperty
 )
 
 from .dispatcher import Shell
@@ -19,8 +19,8 @@ class Terminal(BoxLayout, Shell):
     terminal_input = ObjectProperty()
     recycle_view = ObjectProperty()
 
-    foreground_color = ListProperty((1, 1, 1, 1))
-    background_color = ListProperty((0, 0, 0, 1))
+    foreground_color = ColorProperty((1, 1, 1, 1))
+    background_color = ColorProperty((0, 0, 0, 1))
 
     font_name = StringProperty(
         './ancient_tech/static/retro_font.ttf'

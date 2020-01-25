@@ -8,7 +8,10 @@ class SavePopup(BasePopup):
     def __init__(self, ctx: 'EditorIO', *args: Any, **kwargs: Any) -> None:
         super(SavePopup, self).__init__(ctx, *args, **kwargs)
         self.ctx = ctx
-        self.ids.file.text = f'Would you like to save: {Path(self.ctx.file_path).name}'
+        self.ids.file.text = (
+            f'Would you like to save: '
+            f'{Path(self.ctx.file_path).name}'
+        )
 
     def save(self) -> None:
         text = self.ctx.text

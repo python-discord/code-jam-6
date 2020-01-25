@@ -10,12 +10,7 @@ Config.set('graphics', 'height', '650')
 
 from kivy.app import App
 from kivy.lang import Builder
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.screenmanager import (
-    ScreenManager,
-    NoTransition,
-    Screen
-)
+from kivy.uix.screenmanager import ScreenManager
 
 from .core import BrowserScreen
 from ..footer.footer import Footer
