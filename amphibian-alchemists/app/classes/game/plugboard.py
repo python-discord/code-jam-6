@@ -1,6 +1,7 @@
 from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.uix.screenmanager import Screen
+from kivy.core.audio import SoundLoader
 
 from .save_game import save_plugs
 
@@ -26,6 +27,9 @@ class PlugboardScreen(Screen):
         [1, 102 / 255, 0],
     )
 
+    def plug_in_click(self):
+        SoundLoader.load("misc/plug_in.wav").play()
+
     def get_plug(self, instance):
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
             plug = Factory.Plug(
@@ -38,6 +42,7 @@ class PlugboardScreen(Screen):
             self.plug_reference.append(plug)
             if self.plugs_in_screen % 2 != 0:
                 wire = Factory.Wire()
+                self.plug_in_click()
                 wire.points = [
                     *self.ids.plug_board.ids[self.all_plugged[-2]].center,
                     *self.ids.plug_board.ids[self.all_plugged[-1]].center,
