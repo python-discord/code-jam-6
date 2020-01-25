@@ -11,6 +11,7 @@
 <TimeWizard>:
     title: 'Time Wizard'
     redraw_checkbox: redraw_checkbox
+    current_date: current_date
 
     size_hint: 0.25, 0.8
     pos_hint: {'center_x': 0.15, 'center_y': 0.5}
@@ -22,7 +23,7 @@
 			size_hint: 1, 0.2
         	cols: 2
         	Label:
-        		text: "Rapid Redraw"
+        		text: "Speedy Time"
 			CheckBox:
 				id: redraw_checkbox
 				active: False
@@ -66,8 +67,8 @@
 #					on_touch_up: root.date_lapse(round(self.value))
 
 		Label:
+		    id: current_date
 			size_hint: 1, 0.2
-			text: str(root.dial.date.strftime("%d/%m/%Y"))
 
 <NowMarker>:
 	Image:

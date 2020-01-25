@@ -139,8 +139,6 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
-        print(self.midnight_delta)
-
         # Restart the clock!
         self.clock.cancel()
         self.clock = Clock.schedule_interval(self.redraw, self.midnight_delta)
@@ -173,7 +171,7 @@ class DialWidget(FloatLayout):
             today_sunrise = now - today_sunrise
             today_sunset = now - today_sunset
 
-            # Convert timedelta into minutes and round
+            # Convert timedelta into minutes and rClock.schedule_interval(self.redraw, self.midnight_delta)ound
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 
@@ -341,20 +339,29 @@ class MainScreen(Screen):
 
 # Time control panel #
 class TimeWizard(Popup):
-
     def __init__(self, dial, **kwargs):
         self.dial = dial
         super(TimeWizard, self).__init__(**kwargs)
         self.redraw_checkbox.bind(active=self.delta_override)
+        self.current_date.text = self.dial.date.strftime("%d/%m/%Y")
+        self.clock = Clock.schedule_interval(self.update_date, self.dial.midnight_delta)
 
-    def delta_override(self):
+    def update_date(self, *args):
+        self.clock.cancel()
+        self.current_date.text = self.dial.date.strftime("%d/%m/%Y")
+        self.clock = Clock.schedule_interval(self.update_date, self.dial.midnight_delta)
+
+    def delta_override(self, *args):
         if self.redraw_checkbox.active is True:
             self.dial.midnight_delta = 0.1
+            self.update_date()
             self.dial.redraw()
         else:
-            self.dial.midnight_delta = (datetime(year=self.dial.midnight.year, month=self.dial.midnight.month,
-                                                 day=self.dial.midnight.day,
-                                                 hour=0, minute=0, second=0) - self.date).seconds
+            midnight = datetime.now() + timedelta(days=1)
+            self.dial.midnight_delta = (datetime(year=midnight.year, month=midnight.month,
+                                                 day=midnight.day,
+                                                 hour=0, minute=0, second=0) - datetime.now()).seconds
+            self.update_date()
             self.dial.redraw()
 
 
