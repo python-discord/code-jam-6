@@ -110,6 +110,7 @@ class ForthEnv:
         self.source = cmd
         self.words = forth_compile(cmd)  # some commands need the word list
         self.index = 0
+        print("compiled", self.words)  # DEBUG
         while self.index < len(self.words):
             #  print(self.data, self.words[self.index:], self.index)
             word = self.words[self.index]
@@ -243,7 +244,7 @@ def forth_compile(words: str) -> List[str]:
             self_label = scope_stacks["BEGIN"].pop()
             jump_label = scope_stacks["BEGIN"].pop()
             out.extend((str(jump_label), "-BRANCH", f' {self_label}'))
-        elif word in {'.(', '."', 's"'}:
+        elif word in {'.(', '."', 'S"'}:
             literal, term, rest = rest.partition(')' if word[-1] == '(' else '"')
             out.extend((word, literal, term))
         elif word == "(":
@@ -264,8 +265,7 @@ def repl() -> None:
 
     while True:
         try:
-            cmd = input("FORTH>")
-            print('compiled', cmd)  # DEBUG
+            cmd = input("\nFORTH>")
             env.forth_eval(cmd)
         except Exception as e:
             print(e)
