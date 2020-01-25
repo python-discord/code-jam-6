@@ -8,8 +8,9 @@ from primal.engine.sprite import Sprite, RotatableSprite
 
 
 class World:
-    RADIUS_WIDTH = 3
-    RADIUS_HEIGHT = 3
+    RADIUS_WIDTH = 4
+    RADIUS_HEIGHT = 4
+    LOAD_RADIUS = 1
 
     def __init__(self, pos: Tuple[float, float]):
         chunk_pos = World.get_chunk_coords_from_pos(pos)
@@ -31,13 +32,15 @@ class World:
         self.load_area(self.loaded_center)
 
     def update(self, pos: Tuple[float, float]):
-        chunk_pos = World.get_chunk_coords_from_pos(pos)
+        x, y = World.get_chunk_coords_from_pos(pos)
+        lx, ly = self.loaded_center
 
-        if chunk_pos == self.loaded_center:
-            return
+        if x + World.LOAD_RADIUS == lx or x - World.LOAD_RADIUS == lx or x == lx:
+            if y + World.LOAD_RADIUS == ly or y - World.LOAD_RADIUS == ly or y == ly:
+                return
 
-        self.loaded_center = chunk_pos
-        self.load_area(chunk_pos)
+        self.loaded_center = x, y
+        self.load_area(self.loaded_center)
 
     def draw(self, canvas: RenderContext):
         for row in self.chunk_instructions:
