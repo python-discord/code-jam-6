@@ -10,10 +10,10 @@ class HealthBar:
 
         self.size = size
 
-        self.bg = ColorSprite(None, pos, size, (0.427, .0, .0))	        
-        self.bar = ColorSprite(None, pos, size, (1, 0, 0))	
 
-        
+        self.bg = ColorSprite(None, pos, size, (.0, .0, .0, .25))
+        self.bar = ColorSprite(None, pos, size, (1, .0, .0))
+
 
     def get_current_width(self) -> float:
         if self.health < 0:
