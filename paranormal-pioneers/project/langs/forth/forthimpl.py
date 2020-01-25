@@ -1,6 +1,6 @@
 import operator as op
 from re import sub
-from typing import List, Union, Callable, Dict, TypeVar, Any, Iterable
+from typing import List, Union, Callable, Dict, TypeVar, Any, Iterable, Optional, IO
 
 from project.langs.forth import wordimpl
 
@@ -278,11 +278,17 @@ def forth_compile(words: str) -> List[str]:
     return out
 
 
-def repl() -> None:
+def init_env() -> ForthEnv:
     env = ForthEnv(DEFAULT_ENTRIES)
     with open(f"{__file__}/../defaults.forth") as f:
-        code = f.read()
-        env.forth_eval(code)
+        env.forth_eval(f.read())
+    return env
+
+
+def repl(file: Optional[IO] = None) -> None:
+    env = init_env()
+    if file:
+        env.forth_eval(file.read())
 
     while True:
         try:
