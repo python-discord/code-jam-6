@@ -179,6 +179,7 @@ class SettingsScreen(Popup):
         self.location_field.text = self.config_friendlyname
 
     def on_config_latlon(self, instance, value):
+        """Assumes this will only ever be set on a valid key"""
         self.close_button.disabled = False
 
 
