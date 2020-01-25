@@ -1,6 +1,6 @@
 from backend.card_format import Card
-from backend.main import load_game
-from backend.main import Game
+from backend.main import load_game, Game
+from backend import path_handler
 from frontend.frontend import MainWidget
 from frontend.swipe import Rotater  # noqa: F401
 from dataclasses import dataclass
@@ -62,12 +62,16 @@ class CardGameApp(App):
         Config.set("graphics", "width", "900")
         Config.set("graphics", "height", "1000")
 
+        story_name = "caveman"
+
         global_idmap["data"] = ctl = DataController()
-        global_idmap["all_assets"] = "./Game/"
-        global_idmap["game_assets"] = "./Game/GameArt/"
-        global_idmap["card_assets"] = "./Game/CardArt/"
-        print(global_idmap["game_assets"])
-        ctl.game = game = load_game()
+        # Kivy really does not like path lib or joinpath or anything with path unless
+        # it's a hardcoded string
+        global_idmap["all_assets"] = f"{path_handler.get_game_asset_directory_path(story_name)}\\"
+        global_idmap["game_assets"] = f"{path_handler.get_game_art_path(story_name)}\\"
+        global_idmap["card_assets"] = f"{path_handler.get_card_art_path(story_name)}\\"
+
+        ctl.game = game = load_game(story_name)
         ctl.active_card = game.start_game()
         ctl.set_game_state()
         return MainWidget()

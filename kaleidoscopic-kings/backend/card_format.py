@@ -272,15 +272,15 @@ class Card:
                 that start card is always drawn first - so you can chain additional response cards
                 to it.
     card_image: Image filename including extension.
-    text:
+    text:       Card text.
     options:    Passed as dictionary which was loaded directly from json,
                 then it is converted and saved as list of Option objects.
-    conditions: Passed as dictionary loaded directly from json example
+                There can be 0, 1 or 2 options.
+    conditions: [optional] Passed as dictionary loaded directly from json example
                 {"player_health": 0.5} and this card would only be  valid if player health is more
                 or equal than 50%
                 After init we convert it to list of GameVariable objects.
-
-    card_sound: Sound file filename including extension.
+    card_sound: [optional] Sound file filename including extension.
     """
     CARD_TYPES: ClassVar[Tuple[str, str]] = ("event", "response", "start")
 
