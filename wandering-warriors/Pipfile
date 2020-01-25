@@ -9,6 +9,10 @@ pre-commit = "*"
 
 [packages]
 kivy = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.7"
+
+[scripts]
+generate = "python scripts/generate.py"
