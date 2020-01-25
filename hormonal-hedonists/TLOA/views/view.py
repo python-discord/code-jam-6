@@ -3,7 +3,7 @@ import math
 from random import randint
 
 from TLOA.core.game import Game
-from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH,
+from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
                                  WINDOW_HEIGHT, LANE_BOUNDS)
 from TLOA.views import ShipView
 
@@ -44,24 +44,36 @@ class GameView(Widget):
         self._hp_bar.size = self._hp_bar.texture_size
 
         self._score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
-        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
-                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
-                                border=(0, 0, 0, 0),
-                                pos=((WINDOW_WIDTH / 3) + 80, WINDOW_HEIGHT - 70),
-                                width=40,
-                                height=40,
-                                on_release=self.show_pause_menu)
-        self.pause_menu = Popup(title='Pirate ship are on hold...',
+
+        self.pause_menu_opened = False
+
+        self.pause_menu = Popup(title='Pirate ships are on hold...',
                                 title_size='20sp',
                                 title_align='center',
-                                title_font='',
+                                title_color=(1, 0.1, 0.1, 1),
+                                title_font=FONT_PATH.format('Pacifico-Regular.ttf'),
                                 content=Label(text="hello world"),
                                 separator_color=(0, 0, 0, 0),
-                                separator_height = 0,
+                                separator_height=0,
                                 size_hint=(None, None),
                                 size=(300, 400),
                                 auto_dismiss=False,
                                 background=IMAGES_PATH.format('yellow_panel.png'))
+        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
+                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
+                                border=(0, 0, 0, 0),
+                                pos=((WINDOW_WIDTH / 3) + 85, WINDOW_HEIGHT - 65),
+                                width=35,
+                                height=35,
+                                on_release=self.open_pause_menu)
+
+    def open_pause_menu(self, *args):
+        self.pause_menu.open()
+        self.pause_menu_opened = True
+
+    def close_pause_menu(self, *args):
+        self.pause_menu.dismiss()
+        self.pause_menu_opened = False
 
     def show_game(self, running):
         Animation.cancel_all(self)
@@ -111,9 +123,6 @@ class GameView(Widget):
         self.add_widget(self._score)
         self.add_widget(self.pause_btn)
 
-    def show_pause_menu(self, *args):
-        self.pause_menu.open()
-        print('Open menu...')
 
     def on_island_health_change(self, game, value):
         health = math.ceil(value/10) * 10
@@ -160,6 +169,11 @@ class GameView(Widget):
 
     def _on_keyboard_down(self, keyboard, key_code, text, modifiers):
         action = KEY_MAPPING.get(key_code[1])
+        if key_code[1] == 'escape' and not self.pause_menu_opened:
+            self.open_pause_menu()
+        elif key_code[1] == 'escape' and self.pause_menu_opened:
+            self.close_pause_menu()
+
         if action is None:
             return True
 
