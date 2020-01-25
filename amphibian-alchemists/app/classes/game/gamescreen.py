@@ -117,7 +117,6 @@ class GameScreen(Screen):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
 
-
     def plug_remove_pop(self):
         SoundLoader.load("misc/pop.wav").play()
 
