@@ -23,8 +23,8 @@ from ui.screens.add_contact_screen import AddContactScreen
 
 from util.utility import Utility
 
-# import gc
-# gc.disable()
+import gc
+gc.disable()
 
 
 class MainBox(FloatLayout):

@@ -1,3 +1,4 @@
+from kivy.properties import ObjectProperty, ListProperty
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivymd.button import MDRectangleFlatIconButton
@@ -21,7 +22,19 @@ class WelcomeButton(MDRectangleFlatIconButton):
 
 
 class TrainingMenuScreen(Screen):
+    texture = ObjectProperty(None)
+    tex_coords = ListProperty([0, 0, 1, 0, 1, 1, 0, 1])
 
     def __init__(self, **kwargs):
         super(TrainingMenuScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
+
+        Clock.schedule_once(self.texture_init, 0)
+        Clock.schedule_interval(self.scroll_texture, 1 / 60.)
+
+    def texture_init(self, *args):
+        self.canvas.before.children[-1].texture.wrap = 'repeat'
+
+    def scroll_texture(self, dt):
+        for i in range(0, 8, 2):
+            self.tex_coords[i] += dt / 3.
