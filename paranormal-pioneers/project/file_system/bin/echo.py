@@ -6,6 +6,9 @@ from project.core.terminal import Terminal
 
 
 class Echo(command.Command):
+    """Print any given text.
+    Example: echo Hello, World!
+    """
     def __init__(self) -> None:
         super().__init__(name='echo')
 

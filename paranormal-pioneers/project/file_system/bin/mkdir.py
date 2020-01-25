@@ -1,32 +1,33 @@
 from argparse import Namespace
-from pathlib import PurePath
-import os
 
 from project.core import command
 from project.core.parser import Parser
 from project.core.terminal import Terminal
-from project.core.utils import PathLike, FS
+from project.core.utils import OSException
 
 
-class Mkdir(command.Command):
-    """Create the DIRECTORY(ies), if they do not already exist."""
+class MKDir(command.Command):
+    """Create a new directory.
+    Example: mkdir test
+    """
     def __init__(self) -> None:
         super().__init__(name='mkdir')
 
-    def _resolve_path(self, cwd: PathLike, path: PathLike, filesystem: FS) -> PurePath:
-        """Make user provided path relative with current working directory."""
-        path = PurePath(cwd) / path
-        filesystem.check_env(path)
-        return path
-
-    @command.option('dir', nargs='+')
+    @command.option('dir', nargs='?')
     def handle_dir(self, ns: Namespace, term: Terminal) -> None:
-        self.dirs = [self._resolve_path(term.path, dir, term.fs) for dir in ns.dir]
+        if ns.dir is None:
+            raise OSException('error: path not specified')
+
+        self.dir = term.fs.get_path(term.path, ns.dir, check_existing=False)
 
     def main(self, ns: Namespace, term: Terminal) -> None:
-        for d in self.dirs:
-            os.mkdir(d)
+        if self.dir.exists():
+            raise OSException('error: path already exists')
+        try:
+            self.dir.mkdir()
+        except OSError:
+            raise OSException('error: can not find path') from None
 
 
 def setup(parser: Parser) -> None:
-    parser.add_command(Mkdir())
+    parser.add_command(MKDir())

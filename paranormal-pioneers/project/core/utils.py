@@ -1,9 +1,8 @@
 from functools import wraps
-from pathlib import Path
 from typing import Any, Callable, IO, Generator, Iterable, List, Union
 
 from project.core.constants import BIN_DIR, CANNOT_EXIT_ENV, FILE_SYSTEM
-from project.core.log import log
+from project.core.path import Path
 
 Function = Callable[[Any], Any]
 PathLike = Union[str, Path]
@@ -63,21 +62,25 @@ class FS:
             else:
                 return False
 
-    def change_dir(self, before: PathLike, after: PathLike) -> PathLike:
-        new_dir: PathLike = self.find_dir(before, after)
+    def get_path(
+        self, before: PathLike, after: PathLike,
+        check_existing: bool = True,
+        check_dir: bool = True
+    ) -> PathLike:
+        new_path: PathLike = self.find_path(before, after)
 
-        self.check_env(new_dir)
+        self.check_env(new_path)
 
-        if not new_dir.exists():
+        if not new_path.exists() and check_existing:
             raise OSException('error: path does not exist')
 
-        if not new_dir.is_dir():
+        if not new_path.is_dir() and check_dir and check_existing:
             raise OSException('error: not a directory')
 
-        return new_dir
+        return new_path
 
     @resolve_path()
-    def find_dir(self, before: PathLike, after: PathLike) -> PathLike:
+    def find_path(self, before: PathLike, after: PathLike) -> PathLike:
         path: Path = Path(before)
         parts: List[str] = Path(str(after)).parts
 
@@ -95,8 +98,4 @@ class FS:
 
     @resolve_path()
     def is_file(self, path: PathLike) -> bool:
-        return path.is_file()
-
-    @resolve_path()
-    def touch(self, path: PathLike) -> None:
-        path.touch()
+        return Path(path).is_file()

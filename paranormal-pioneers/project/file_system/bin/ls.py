@@ -14,12 +14,15 @@ name_form = '{}'
 
 
 class LS(command.Command):
+    """List all files in a given directory.
+    Example: ls -a -l ./bin
+    """
     def __init__(self) -> None:
         super().__init__(name='ls')
 
     @command.option('dir', nargs='?', default='.')
     def handle_dir(self, ns: Namespace, term: Terminal) -> None:
-        self.dir = term.fs.change_dir(term.path, ns.dir)
+        self.dir = term.fs.get_path(term.path, ns.dir)
 
     @command.option('-a', '--all', action='store_true', default=False)
     def handle_all(self, ns: Namespace, term: Terminal) -> None:
@@ -69,7 +72,7 @@ def _make(max_len: int, column: List[str], fill: str) -> Iterator[str]:
 
 def _gen(strings: List[List[str]], fill: str = ' ') -> Iterator[Iterator[str]]:
     for column in zip(*strings):
-        yield _make(max(map(lambda string: len(string), column)), column, fill)
+        yield _make(max(map(len, column)), column, fill)
 
 
 def expand(strings: List[List[str]], fill: str = ' ') -> List[List[str]]:

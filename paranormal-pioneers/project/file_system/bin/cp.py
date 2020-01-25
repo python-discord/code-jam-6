@@ -6,10 +6,10 @@ from project.core.terminal import Terminal
 from project.core.utils import OSException
 
 
-class MV(command.Command):
+class Copy(command.Command):
     """Move a file or a directory to another directory."""
     def __init__(self) -> None:
-        super().__init__(name='mv')
+        super().__init__(name='cp')
 
     @command.option('src', nargs='?')
     def handle_source(self, ns: Namespace, term: Terminal) -> None:
@@ -23,14 +23,16 @@ class MV(command.Command):
         if ns.dest is None:
             raise OSException('error: destination not given')
 
-        self.dest = term.fs.get_path(term.path, ns.dest)
+        self.dest = term.fs.get_path(term.path, ns.dest, check_existing=False)
 
     def main(self, ns: Namespace, term: Terminal) -> None:
-        if self.src.is_file():
-            self.dest /= self.src.name
-
-        self.src.rename(self.dest)
+        if not self.dest.is_dir():
+            raise OSException('error: destination is not a directory')
+        try:
+            self.src.copy(self.dest)
+        except OSError:
+            raise OSException('error: failed to copy path') from None
 
 
 def setup(parser: Parser) -> None:
-    parser.add_command(MV())
+    parser.add_command(Copy())

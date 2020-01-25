@@ -9,6 +9,9 @@ from project.core.terminal import Terminal
 
 
 class Exit(command.Command):
+    """Exit terminal with given code.
+    Example: exit -1
+    """
     def __init__(self) -> None:
         super().__init__(name='exit')
 
