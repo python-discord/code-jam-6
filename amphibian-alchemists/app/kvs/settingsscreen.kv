@@ -15,6 +15,7 @@
             spacing: dp(10)
             Button:
                 text: "Confirm"
+                on_release: app.root.get_screen("settings_screen").delete_saved_games(root)
             Button:
                 text: "Cancel"
                 on_release: root.dismiss()
@@ -51,6 +52,10 @@
 
 <SettingsScreen>:
     name: "settings_screen"
+    allow_fullscreen: allow_fullscreen
+    auto_save: auto_save
+    background_volume: background_volume
+    effects_volume: effects_volume
     AnchorLayout:
         anchor_x: "left"
         anchor_y: "top"
@@ -72,11 +77,15 @@
                         Label:
                             text: "Auto save when closing the game"
                         Label:
-                            text: "Saved games:" + "\n" + "Number of saved games"
+                            text: "Saved games:"
                     BoxLayout:
                         orientation: "vertical"
                         CheckBox:
+                            id: allow_fullscreen
+                            on_state: root.save_settings("allow_fullscreen")
                         CheckBox:
+                            id: auto_save
+                            on_state: root.save_settings("auto_save")
                         RelativeLayout:
                             Button:
                                 size_hint: 0.4, 0.4
@@ -98,11 +107,13 @@
                             SoundSliderLayout:
                                 SoundSlider:
                                     id: background_volume
+                                    on_value: root.save_settings("background_volume")
                                 Label:
                                     text: str(background_volume.value) if background_volume.value != 0 else "Muted"
                         RelativeLayout:
                             SoundSliderLayout:
                                 SoundSlider:
                                     id: effects_volume
+                                    on_value: root.save_settings("effects_volume")
                                 Label:
                                     text: str(effects_volume.value) if effects_volume.value != 0 else "Muted"
