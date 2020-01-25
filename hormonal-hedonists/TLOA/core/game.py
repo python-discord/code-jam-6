@@ -68,8 +68,11 @@ class Game(EventDispatcher):
             death_rays_focus_x = self.closestShip.shape.x + 100
 
             # Deal damage to the ship.
-            self.closestShip.health -= 2
+            if self.closestShip.id == 'golden_ship':
+                self.closestShip.health -= 1    # Deal less Damage to Golden Ships
 
+            if self.closestShip.id == 'brown_ship':
+                self.closestShip.health -= 3    # Deal more Damage to Brown Ships.
         else:
             death_rays_focus_x = 600
 
