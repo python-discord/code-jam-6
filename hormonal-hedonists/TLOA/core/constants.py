@@ -9,6 +9,7 @@ WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT
 
 ATLAS_PATH = "atlas://assets/world/{}"
 IMAGES_PATH = 'assets/images/{}'
+AUDIO_PATH = 'assets/sfx/{}'
 
 TICK = 1 / 30  # 30 FPS
 
