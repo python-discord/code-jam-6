@@ -3,10 +3,13 @@ from functools import reduce, partial
 from typing import Iterable, TypeVar, Callable
 
 T = TypeVar('T')
-ForthEnv = 'src.forth.ForthEnv'
+ForthEnv = 'project.langs.forth.forthimpl.ForthEnv'
 
 
-def _step_to(to_search: Iterable[T], item: T, predicate: Callable[[T, T], bool] = lambda i, x: x != i) -> int:
+def _step_to(to_search: Iterable[T],
+             item: T,
+             predicate: Callable[[T, T], bool] = lambda i, x: x != i
+             ) -> int:
     return reduce(lambda a, _: a + 1,
                   it.takewhile(
                       partial(predicate, item),
@@ -40,9 +43,6 @@ def forth_do(env: ForthEnv) -> int:
     return 0
 
 
-#  256 0 DO I 16 MOD 0= IF CR THEN 1 . LOOP
-
-
 def forth_loop(env: ForthEnv) -> int:
     label = env.data.pop()
     env.rstack[-1] += 1
@@ -54,7 +54,7 @@ def forth_loop(env: ForthEnv) -> int:
     return 0
 
 
-def forth_steploop(env: ForthEnv):
+def forth_steploop(env: ForthEnv) -> int:
     label = env.data.pop()
     step = env.data.pop()
     env.rstack[-1] += step
@@ -85,7 +85,10 @@ def forth_puts(env: ForthEnv, char='"') -> int:
 def forth_def(env: ForthEnv) -> int:
     from .forthimpl import ForthEntry
     idx = _step_to(env.words[env.index:], ';')
-    words_ = {env.words[env.index + 1]: ForthEntry(env.words[env.index + 2: env.index + idx], special=False)}
+    words_ = {env.words[env.index + 1]: ForthEntry(
+        env.words[env.index + 2: env.index + idx],
+        special=False
+    )}
     print('defined', words_)  # DEBUG
     env.forth_dict.update(words_)
     return idx
@@ -94,6 +97,13 @@ def forth_def(env: ForthEnv) -> int:
 def forth_var(env: ForthEnv) -> int:
     name = env.words[env.index + 1]
     env.var_dict.update({name: None})
+    return 1
+
+
+def forth_const(env: ForthEnv) -> int:
+    val = env.data.pop()
+    name = env.words[env.index + 1]
+    env.var_dict.update({name: val})
     return 1
 
 

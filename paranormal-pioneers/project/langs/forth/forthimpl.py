@@ -2,7 +2,7 @@ import operator as op
 from re import sub
 from typing import List, Union, Callable, Dict, TypeVar, Any
 
-from forth import wordimpl
+from project.langs.forth import wordimpl
 
 
 def partial_kw(**kwargs):
@@ -65,7 +65,8 @@ class VarToken:
 class ForthEnv:
     def __init__(self, forth_dict: Dict[str, ForthEntry]):
         self.data: List = []
-        # return stack, however, as there is no return stack used, just a dedicated stack for R words
+        # return stack, however, as there is no return stack used,
+        # this is just a dedicated stack for R words
         self.astack: List = []
         self.rstack: List = []  # internal values, e.g. for loops
         self.words: List[str] = []
@@ -144,7 +145,8 @@ DEFAULT_ENTRIES = {
     ";": ForthEntry(lambda a: 0),
     "!": ForthEntry(wordimpl.vset),
     "@": ForthEntry(wordimpl.vget),
-    "VARIABLE": ForthEntry(wordimpl.forth_var)
+    "VARIABLE": ForthEntry(wordimpl.forth_var),
+    "CONSTANT": ForthEntry(wordimpl.forth_const)
 }
 
 T = TypeVar("T")
@@ -222,4 +224,3 @@ def repl() -> None:
             print('ok')
         except Exception as e:
             print(e)
-
