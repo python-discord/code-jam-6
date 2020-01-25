@@ -56,7 +56,7 @@ class CustomImage(Image):
         Image.__init__(self, **kwargs)
 
 
-class CompassContainer(RelativeLayout):
+class NavContainer(RelativeLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.app = App.get_running_app()
@@ -95,7 +95,17 @@ class CompassContainer(RelativeLayout):
             if self.point_inside_polygon(x, y, points):
                 self.app.nav_control.go(k)
 
-        return super(CompassContainer, self).on_touch_down(touch)
+        return super(NavContainer, self).on_touch_down(touch)
+
+
+class LookContainer(NavContainer):
+    def on_kv_post(self, base_widget):
+        self.buttons = {  # change with LookControl
+            navcont.Directions.NORTH: self.canvas.get_group('n'),
+            navcont.Directions.EAST: self.canvas.get_group('e'),
+            navcont.Directions.SOUTH: self.canvas.get_group('s'),
+            navcont.Directions.WEST: self.canvas.get_group('w')
+        }
 
 
 class TextDisplayContainer(ScrollView):

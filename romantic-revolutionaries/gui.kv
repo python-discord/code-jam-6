@@ -17,7 +17,7 @@
 
     BoxLayout:
         size_hint: 1, None
-        height: root.height/5
+        height: root.height/4
         padding: 10
         canvas:
             Color:
@@ -26,32 +26,63 @@
                 size: self.size
                 pos: self.pos
 
-        CompassContainer:
+        NavContainer:
+            id: nav_container
             size_hint: None, 1
             width: self.height
+            pos: 10, self.y
             canvas:
                 Color:
                     rgba: 1, 1, 1, 1
                 Rectangle:
                     size: self.width/3, self.width/3
                     pos: self.height/2-(self.width/3)/2, self.width/2-(self.width/3)/2
-                    source: 'images/log.png'
+                    source: 'images/log_nav.png'
                 Triangle:
                     group: 's'
                     points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2,0]
-                    source: 'images/triangle_ns.png'
+                    source: 'images/nav_arrow_ns.png'
                 Triangle:
                     group: 'w'
                     points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [0,self.width/2]
-                    source: 'images/triangle_w.png'
+                    source: 'images/nav_arrow_w.png'
                 Triangle:
                     group: 'n'
                     points: [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2,self.width]
-                    source: 'images/triangle_ns.png'
+                    source: 'images/nav_arrow_ns.png'
                 Triangle:
                     group: 'e'
                     points: [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width, self.width/2]
-                    source: 'images/triangle_e.png'
+                    source: 'images/nav_arrow_e.png'
+
+        LookContainer:
+            id: look_container
+            size_hint: None, 1
+            width: self.height
+            pos: root.right-self.width-10, self.y
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    size: self.width/3, self.width/3
+                    pos: self.height/2-(self.width/3)/2, self.width/2-(self.width/3)/2
+                    source: 'images/log_look.png'
+                Triangle:
+                    group: 's'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2,0]
+                    source: 'images/look_arrow_ns.png'
+                Triangle:
+                    group: 'w'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [0,self.width/2]
+                    source: 'images/look_arrow_w.png'
+                Triangle:
+                    group: 'n'
+                    points: [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2,self.width]
+                    source: 'images/look_arrow_ns.png'
+                Triangle:
+                    group: 'e'
+                    points: [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width, self.width/2]
+                    source: 'images/look_arrow_e.png'
 
     BoxLayout:
         size_hint: 1, None
