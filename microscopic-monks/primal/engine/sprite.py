@@ -12,7 +12,7 @@ import json
 
 
 class Sprite:
-    resource_dir = (Path('.') / 'resources').absolute()
+    resource_dir = Path('.', 'primal', 'resources').absolute()
 
     def __init__(self, image: str, pos: Tuple[float, float] = (0, 0),
                  size: Tuple[float, float] = (50, 50), **kwargs) -> None:
@@ -31,7 +31,7 @@ class Sprite:
         return self.pos
 
     def get_center(self):
-        return (self.pos[0] + self.size[0] / 2, self.pos[1] + self.size[1] / 2)
+        return self.pos[0] + self.size[0] / 2, self.pos[1] + self.size[1] / 2
 
     def draw(self, canvas: RenderContext):
         canvas.add(self.bg_rect)
