@@ -38,9 +38,6 @@ class GameScreen(Screen):
 
         self.inventory = Inventory((20, 20))
         self.inventory.draw(self.canvas)
-
-
-
         self.gui_camera.end_region()
 
     def update(self, delta: float):
@@ -97,12 +94,30 @@ class GameScreen(Screen):
 
         pos_x, pos_y = self.player.get_center()
 
-        for features in self.world.get_features(1):
+        for chunk in self.world.get_chunk_in_range(1):
+            features = chunk.get_features()
+            clicked = False
+            remove_features = set()
+
             for feature in features:
                 x, y = feature.get_center()
                 dx, dy = x - pos_x, y - pos_y
-
                 if dx * dx + dy * dy < 15_000 and feature.collide_with((mx, my), (1, 1)):
                     feature.hit()
-                    self.clicked_features[feature] = 3.5
-                    return
+                    if feature.get_health() == 0:
+                        remove_features.add(feature)
+                        if feature in self.clicked_features:
+                            del self.clicked_features[feature]
+                    else:
+                        self.clicked_features[feature] = 3.5
+                    clicked = True
+                    break
+
+            for feature in remove_features:
+                chunk.remove_feature(feature)
+
+            if len(remove_features) != 0:
+                self.world.render_chunk(chunk)
+
+            if clicked:
+                return

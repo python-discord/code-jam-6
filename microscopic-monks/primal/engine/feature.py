@@ -24,6 +24,9 @@ class Feature:
     def get_center(self) -> Tuple[float, float]:
         return self.feature.get_center()
 
+    def get_health(self) -> float:
+        return self.health_bar.get_health()
+
     def get_size(self) -> Tuple[float, float]:
         return self.feature.get_size()
 

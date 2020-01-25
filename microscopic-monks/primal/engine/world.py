@@ -45,10 +45,10 @@ class World:
 
         self.load_area(self.loaded_center)
 
-    def get_features(self, rng: int):
+    def get_chunk_in_range(self, rng: int):
         for y in World.get_loaded_range(World.RADIUS_HEIGHT, rng):
             for x in World.get_loaded_range(World.RADIUS_WIDTH, rng):
-                yield self.loaded_chunks[y][x].get_features()
+                yield self.loaded_chunks[y][x]
 
     def update(self, pos: Tuple[float, float]):
         x, y = pos
@@ -75,6 +75,22 @@ class World:
 
         canvas.add(self.world_group)
 
+    def render_chunk_at(self, x: int, y: int):
+        instruction_group = self.features_chunk_instructions[y][x]
+        self.world_group.remove(instruction_group)
+
+        instruction_group = InstructionGroup()
+        self.features_chunk_instructions[y][x] = instruction_group
+        self.world_group.add(instruction_group)
+        self.loaded_chunks[y][x].draw_features(instruction_group)
+
+    def render_chunk(self, chunk):
+        for y in range(len(self.loaded_chunks)):
+            for x in range(len(self.loaded_chunks[y])):
+                if chunk == self.loaded_chunks[y][x]:
+                    self.render_chunk_at(x, y)
+                    return
+
     def load_area(self, pos: Tuple[int, int]):
         for index_y, y in enumerate(World.get_loaded_range(pos[1], World.RADIUS_HEIGHT)):
             if y not in self.chunks:
@@ -88,14 +104,7 @@ class World:
                 terrain_instruction = self.terrain_instructions[index_y][index_x]
                 self.loaded_chunks[index_y][index_x] = row_chunks[x]
                 self.loaded_chunks[index_y][index_x].draw(terrain_instruction)
-
-                instruction_group = self.features_chunk_instructions[index_y][index_x]
-                self.world_group.remove(instruction_group)
-
-                instruction_group = InstructionGroup()
-                self.features_chunk_instructions[index_y][index_x] = instruction_group
-                self.world_group.add(instruction_group)
-                self.loaded_chunks[index_y][index_x].draw_features(instruction_group)
+                self.render_chunk_at(index_x, index_y)
 
     @staticmethod
     def get_loaded_range(x: int, rng: int):
