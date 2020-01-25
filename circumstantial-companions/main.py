@@ -16,7 +16,6 @@ from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button as KivyButton
 from kivy.uix.filechooser import FileChooserListView
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -296,7 +295,6 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
 class ChiselApp(App):
     def build(self):
-        root = FloatLayout()
         navdrawer = NavigationDrawer()
         navdrawer.toggle_state()
         navdrawer.anim_type = "slide_above_anim"
@@ -315,9 +313,8 @@ class ChiselApp(App):
         navdrawer.bind(_anim_progress=self._set_side_panel_opacity)
         navdrawer.bind(_anim_progress=self.disable_chisel)
 
-        root.add_widget(navdrawer)
         Window.add_widget(Cursor(), "after")
-        return root
+        return navdrawer
 
     def _set_side_panel_opacity(self, instance, value):
         instance.side_panel.opacity = math.ceil(instance._anim_progress)
