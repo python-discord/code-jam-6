@@ -20,17 +20,60 @@ class Bead(Rectangle):
         if not self.anim:
             return 0
 
-        return self.anim.progress
+        return 1 - (self.anim.progress - 1) ** 2
 
 
-class AbacusColumn:
-    def __init__(self, n_beads):
+class AbacusColumn(FloatLayout):
+    def __init__(self, n_beads, parent, **kwargs):
+        super(AbacusColumn, self).__init__(**kwargs)
+
+        self.abacus = parent
+    
         self.n_beads = n_beads
         self.up = []
         self.down = []
 
         for i in range(n_beads):
             self.down.append(Bead())
+
+    def on_touch_down(self, touch):
+        if self.abacus.suppress_input:
+            return
+
+        for bead in self.up + self.down:
+            if bead.anim is not None:
+                return
+
+        self.abacus.update()
+
+        tx, ty = touch.pos
+        x, y = self.pos
+        w, h = self.size
+
+        if x < tx and x + w > tx and y < ty and y + h > ty:            
+            for i in range(len(self.down)):
+                x, y = self.down[i].pos
+                w, h = self.down[i].size
+
+                if x < tx and x + w > tx and y < ty and y + h > ty:
+                    anim = AbacusAnim()
+                    anim.add_shift_up(self, i + 1)
+
+                    Thread(target=self.abacus.build_anim(anim)).start()
+
+                    return
+
+            for i in range(len(self.up)):
+                x, y = self.up[i].pos
+                w, h = self.up[i].size
+
+                if x < tx and x + w > tx and y < ty and y + h > ty:
+                    anim = AbacusAnim()
+                    anim.add_shift_down(self, i + 1)
+
+                    Thread(target=self.abacus.build_anim(anim)).start()
+
+                    return
 
     def shift_up(self, n):
         if n == -1:
@@ -84,13 +127,13 @@ class Abacus(FloatLayout):
     MAX_BEAD_SPACING = 8
 
     N_BARS = 12
-    N_TOP_BEADS = 1
-    N_BOTTOM_BEADS = 4
+    N_TOP_BEADS = 2
+    N_BOTTOM_BEADS = 5
 
     TOP_V = N_BOTTOM_BEADS + 1
     PLACE = (N_TOP_BEADS + 1) * TOP_V
 
-    ANIM_CLOCK_CYCLE = 0.02
+    ANIM_CLOCK_CYCLE = 0.003
 
     def __init__(self, **kwargs):
         super(Abacus, self).__init__(**kwargs)
@@ -126,10 +169,17 @@ class Abacus(FloatLayout):
             for i in range(self.N_BARS):
                 self.bar_rects.append([Rectangle(), Rectangle()])
 
-                self.top_beads.append(AbacusColumn(self.N_TOP_BEADS))
-                self.bottom_beads.append(AbacusColumn(self.N_BOTTOM_BEADS))
+                top = AbacusColumn(self.N_TOP_BEADS, self)
+                self.add_widget(top)
+
+                bottom = AbacusColumn(self.N_BOTTOM_BEADS, self)
+                self.add_widget(bottom)
+
+                self.top_beads.append(top)
+                self.bottom_beads.append(bottom)
 
         self.anim_queue = deque([])
+        self.suppress_input = False
 
         self.bind(pos=self.update, size=self.update)
         self.update()
@@ -201,6 +251,9 @@ class Abacus(FloatLayout):
 
             top_beads = self.top_beads[i]
 
+            top_beads.size = (bead_w, self.y + self.height - div_y - border_w)
+            top_beads.pos = (bead_x, div_y + border_w)
+
             bead_space = div_y - border_w - bead_w / 2 * self.N_BOTTOM_BEADS - self.y
 
             for j in range(len(top_beads.down)):
@@ -210,7 +263,7 @@ class Abacus(FloatLayout):
 
                 bead.pos = (
                     bead_x,
-                    self.y + self.height - border_w - bead_w / 2 - j * bead_w / 2 - anim_offset
+                    self.y + self.height - border_w - bead_w / 2 - (len(top_beads.down) - j - 1) * bead_w / 2 - anim_offset
                 )
                 bead.size = (bead_w, bead_w / 2)
 
@@ -226,6 +279,9 @@ class Abacus(FloatLayout):
                 bead.size = (bead_w, bead_w / 2)
 
             bottom_beads = self.bottom_beads[i]
+
+            bottom_beads.size = (bead_w, div_y - border_w - self.y)
+            bottom_beads.pos = (bead_x, self.y + border_w)
 
             for j in range(len(bottom_beads.down)):
                 bead = bottom_beads.down[j]
