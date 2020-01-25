@@ -61,5 +61,15 @@ class OrthographicCamera(Camera):
 
         return projection
 
+    def get_position_projection(self, pos):
+        projection = self.get_projection()
+        x, y = pos
+
+        x, y, _ = projection.project(x, y, 0, Matrix(), projection, 0, 0, self.viewport_width, self.viewport_height)
+        x -= self.viewport_width
+        y -= self.viewport_height
+
+        return -x, -y
+
     def set_zoom(self, zoom: float):
         self.zoom = zoom
