@@ -48,7 +48,18 @@ class ImageButton(ButtonBehavior, Image):
 
 
 class SelectionScreen(Screen):
-    pass
+    def on_pre_enter(self, *args):
+        # print(self.manager.get_screen("create_profile").__dict__)#.profile_data)
+        return super().on_pre_enter(*args)
+
+    def on_enter(self, *args):
+        print(self.ids)
+        print(self.manager.get_screen("create_profile").profile_data["attributes"])
+        print(self.ids["profile_list"])
+        self.ids["profile_list"]._attributes = self.manager.get_screen(
+            "create_profile"
+        ).profile_data["attributes"]
+        return super().on_enter(*args)
 
 
 class LossScreen(Screen):
