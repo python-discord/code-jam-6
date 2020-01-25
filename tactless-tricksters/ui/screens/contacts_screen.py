@@ -53,7 +53,6 @@ class ContactScreen(Screen):
         add_contact_btn.text_color = [1, 1, 1, 1]
         add_contact_btn.bind(on_press=lambda x: self.change_screen('add_contact'))
         add_contact_anchor.add_widget(add_contact_btn)
-        self.add_widget(add_contact_anchor)
 
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
         toolbar = MDToolbar(title='Contacts', anchor_title='center')
@@ -62,6 +61,7 @@ class ContactScreen(Screen):
         toolbar_anchor.add_widget(toolbar)
 
         self.add_widget(layout)
+        self.add_widget(add_contact_anchor)
         self.add_widget(toolbar_anchor)
 
         self.do_layout()

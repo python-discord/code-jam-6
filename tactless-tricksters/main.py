@@ -15,6 +15,7 @@ from ui.screens.decoder_screen import DecoderScreen
 from ui.screens.message_screen import MessageScreen
 from ui.screens.conversation_screen import ConversationScreen
 from ui.screens.contacts_screen import ContactScreen
+from ui.screens.add_contact_screen import AddContactScreen
 
 from util.utility import Utility
 
@@ -37,6 +38,7 @@ class MainBox(FloatLayout):
         self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
         self.content.add_widget(ContactScreen(name='contact', util=self.util))
+        self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
         # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
         # # Place screens here
 
