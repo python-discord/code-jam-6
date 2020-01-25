@@ -66,8 +66,8 @@ class FS:
         self, before: PathLike, after: PathLike,
         check_existing: bool = True,
         check_dir: bool = True
-    ) -> PathLike:
-        new_path: PathLike = self.find_path(before, after)
+    ) -> Path:
+        new_path: Path = self.find_path(before, after)
 
         self.check_env(new_path)
 
@@ -80,7 +80,7 @@ class FS:
         return new_path
 
     @resolve_path()
-    def find_path(self, before: PathLike, after: PathLike) -> PathLike:
+    def find_path(self, before: PathLike, after: PathLike) -> Path:
         path: Path = Path(before)
         parts: List[str] = Path(str(after)).parts
 
