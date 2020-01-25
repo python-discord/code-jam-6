@@ -101,7 +101,12 @@ class DrawPad(FloatLayout):
 
             # check if line matches known gesture.
             value = check_gesture(self.ud['lines'][0].points, self.gdb)
-            print(value)
+
+            if value:
+                print(f"Gesture value: {value}")
+                # TODO: report value to relevant module
+                # TODO: fade line out
+                self.click()
 
     def click(self):
         for l in self.lines:
