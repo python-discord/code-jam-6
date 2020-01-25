@@ -21,7 +21,6 @@ python_version = "3.7"
 
 [scripts]
 firestarter = "python -m firestarter"
-firestarter1 = "python -m firestarter1"
 lint = "flake8"
 precommit = "pre-commit install"
 test = "coverage run -m unittest"

@@ -37,37 +37,27 @@ class Dino1(Widget):
 class MyGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        sprite_list = []
+
         self.player = Player(self.assets['spritesheet_caveman'], (50, 90))
-        self.platform_01 = Platform(self.assets['Untitled'], (50, 20))
-        self.platform_01.change_mode(3)
-        self.platform_02 = Platform(self.assets['Untitled'], (50 + 60, 20))
-        self.platform_02.change_mode(3)
-        self.platform_03 = Platform(self.assets['Untitled'], (50 + 60 * 2, 20))
-        self.platform_03.change_mode(3)
-        self.platform_04 = Platform(self.assets['Untitled'], (50 + 60 * 3, 20))
-        self.platform_04.change_mode(3)
-        self.platform_05 = Platform(self.assets['Untitled'], (50 + 60 * 4, 20))
-        self.platform_05.change_mode(3)
-        self.duck = Duck(self.assets['duck_animation'], (800, 500))
-        self.duck1 = Duck(self.assets['duck_animation'], (1100, 400))
-        self.duck2 = Duck(self.assets['duck_animation'], (300, 600))
-        self.duck3 = Duck(self.assets['duck_animation'], (900, 300))
+        sprite_list.append(self.player)
 
-        self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
-        self.coin.change_mode(2)
+        for x in range(-10, 40):
+            exec("""self.platform_""" + str(x + 10) + """= Platform(self.assets['Untitled1'],
+                (50 + 60 *""" + str(x) + """, 3))""")
+            exec("sprite_list.append(self.platform_" + str(x + 10) + ")")
 
-        self.add_sprites(
-            [self.player,
-             self.coin,
-             self.duck,
-             self.duck1,
-             self.duck2,
-             self.duck3,
-             self.platform_01, self.platform_02,
-             self.platform_03, self.platform_04,
-             self.platform_05
-             ]
-        )
+        for x in range(0, 35):
+            exec("""self.duck""" + str(x) + """= Duck(self.assets['duck_animation'],
+            (1100 - 10 *""" + str(x) + """, 600 - 10 *""" + str(x) + """))""")
+            exec("sprite_list.append(self.duck" + str(x) + ")")
+
+        for x in range(0, 20):
+            exec("""self.coin""" + str(x) + """= PickUpCoin(self.assets['Untitled'],
+            (60 + 50 *""" + str(x) + """, 80 + 40))""")
+            exec("sprite_list.append(self.coin" + str(x) + ")")
+
+        self.add_sprites(sprite_list)
 
         Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)
 
@@ -82,22 +72,11 @@ class MyGame(Engine):
             self.background.add_widget(img, index=6)
 
     def update(self, dt: float) -> None:
-        self.duck.pos[0] = self.duck.pos[0] - 2
-        self.duck1.pos[0] = self.duck1.pos[0] - 2
-        self.duck2.pos[0] = self.duck2.pos[0] - 2
-        self.duck3.pos[0] = self.duck3.pos[0] - 2
 
-        if self.duck.pos < self.pos:
-            self.duck.pos[0] = 1400
-
-        if self.duck1.pos < self.pos:
-            self.duck1.pos[0] = 1600
-
-        if self.duck2.pos < self.pos:
-            self.duck2.pos[0] = 1700
-
-        if self.duck3.pos < self.pos:
-            self.duck3.pos[0] = 1650
+        for x in range(0, 35):
+            exec("self.duck" + str(x) + ".pos[0] = self.duck" + str(x) + ".pos[0] - 2")
+            exec("""if self.duck""" + str(x) + """.pos < self.pos:
+                    self.duck""" + str(x) + """.pos[0] = 2000 - 10*""" + str(x))
 
         if 'spacebar' in self.pressed_keys and self.player.is_standing:
             self.player.acc_y = 15
@@ -107,6 +86,7 @@ class MyGame(Engine):
 
         if 'd' in self.pressed_keys:
             self.player.vel_x = 7.5
+#            self.player.angle = 90
 
     dino = ObjectProperty(None)
     dino1 = ObjectProperty(None)

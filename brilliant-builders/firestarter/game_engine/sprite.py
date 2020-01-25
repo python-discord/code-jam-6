@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import List, Tuple
 
-from kivy.graphics import Rectangle
+from kivy.graphics import PopMatrix, PushMatrix, Rectangle, Rotate
 from kivy.graphics.texture import Texture
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
@@ -112,6 +112,7 @@ class Player(Sprite):
     vel_x = NumericProperty(0)
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
+    angle = NumericProperty(0)
 
     def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs) -> None:
         super().__init__(config, pos, **kwargs)
@@ -120,6 +121,15 @@ class Player(Sprite):
 
     def update(self, other_sprites: List[Sprite]) -> None:
         """Update the players position and handle collisions (very inefficiently!!)"""
+        # update the direction
+        with self.canvas.before:
+            PushMatrix()
+            self.rotate = Rotate(angle=self.angle, origin=self.center)
+            self.angle = 0
+
+        with self.canvas.after:
+            PopMatrix()
+
         # update the position
         old_pos = (self.pos[0], self.pos[1])
 
