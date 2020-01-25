@@ -1,3 +1,4 @@
+from kivy.properties import ObjectProperty, ListProperty
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.uix.anchorlayout import AnchorLayout
@@ -21,7 +22,6 @@ Builder.load_string("""
     md_border_color: app.theme_cls.primary_color
     pos_hint: {'center_y': 1.5, 'center_x': 0.5}
 
-
 <BlankLabel@MDLabel>
     text: ''
 #    font_style: 'H6'
@@ -29,10 +29,11 @@ Builder.load_string("""
 <WelcomeScreen>
     canvas.before:
         Rectangle:
-            size: self.size
             pos: self.pos
-            source: 'ui/img/welcome_2.png'
-
+            size: self.size
+            source: 'ui/img/morse_code_bg.jpg'
+            tex_coords: root.tex_coords
+            
     MDCard:
         padding: dp(24)
         spacing: dp(24)
@@ -85,6 +86,24 @@ Builder.load_string("""
                 text: 'Calibrate'
                 icon: 'cogs'
                 # TODO: create calibration screen
+
+            BlankLabel:
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Train'
+                icon: 'dumbbell'
+                on_press:
+                    root.manager.current = 'training'
+
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Exit'
+                icon: 'close'
+                on_press:
+                    # TODO: create exit function
+                    root.manager.current = ''
 """)
 
 
@@ -106,6 +125,9 @@ class WelcomeButton(MDRectangleFlatIconButton):
 
 
 class WelcomeScreen(Screen):
+    texture = ObjectProperty(None)
+    tex_coords = ListProperty([0, 0, 1, 0, 1, 1, 0, 1])
+
     def __init__(self, **kwargs):
         super(WelcomeScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
@@ -113,3 +135,13 @@ class WelcomeScreen(Screen):
         self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
         self.nav_bar_anchor.add_widget(self.nav_bar)
         self.add_widget(self.nav_bar_anchor)
+
+        Clock.schedule_once(self.texture_init, 0)
+        Clock.schedule_interval(self.scroll_texture, 1 / 60.)
+
+    def texture_init(self, *args):
+        self.canvas.before.children[-1].texture.wrap = 'repeat'
+
+    def scroll_texture(self, dt):
+        for i in range(0, 8, 2):
+            self.tex_coords[i] += dt / 3.

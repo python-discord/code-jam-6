@@ -1,5 +1,6 @@
 # qpy:kivy
 # Kivy Imports
+from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.anchorlayout import AnchorLayout
@@ -9,18 +10,21 @@ from kivy.app import App
 
 
 # Project imports
+from ui.screens.training_menu_screen import TrainingMenuScreen
 from ui.screens.welcome_screen import WelcomeScreen
 from ui.screens.encoder_screen import EncoderScreen
 from ui.screens.decoder_screen import DecoderScreen
 from ui.screens.message_screen import MessageScreen
 from ui.screens.conversation_screen import ConversationScreen
+from ui.screens.tapping_training_screen import TappingScreen
+from ui.screens.listening_training_screen import ListeningScreen
 from ui.screens.contacts_screen import ContactScreen
 from ui.screens.add_contact_screen import AddContactScreen
 from ui.screens.calibration_screen import CalibrationScreen
 from util.utility import Utility
 
-# import gc
-# gc.disable()
+import gc
+gc.disable()
 
 
 class MainBox(FloatLayout):
@@ -40,6 +44,9 @@ class MainBox(FloatLayout):
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
         self.content.add_widget(ContactScreen(name='contact', util=self.util))
         self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
+        self.content.add_widget(TrainingMenuScreen(name='training', util=self.util))
+        self.content.add_widget(ListeningScreen(name='listening', util=self.util))
+        self.content.add_widget(TappingScreen(name='tapping', util=self.util))
         # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
         # # Place screens here
 

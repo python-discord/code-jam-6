@@ -7,8 +7,8 @@ from kivymd.cards import MDCard
 
 
 class AudioIndicator(BoxLayout):
-    def __init__(self, stack_width=10, stack_height=10):
-        super(AudioIndicator, self).__init__()
+    def __init__(self, stack_width=10, stack_height=10, **kwargs):
+        super(AudioIndicator, self).__init__(**kwargs)
         self.orientation = 'horizontal'
         self.stack_width = stack_width
         self.stack_height = stack_height
