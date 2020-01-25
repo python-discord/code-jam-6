@@ -17,7 +17,7 @@ class GameScreen(Screen):
         self.world = World((0, 0))
         self.world.draw(self.canvas)
 
-        self.player = Player('testimg.png', (0, 0), (100, 100), 0)
+        self.player = Player('player.png', (0, 0), (100, 100), 0)
         self.player.draw(self.canvas)
 
         self.camera.end_region()
