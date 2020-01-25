@@ -37,7 +37,6 @@ class Engine(Widget):
         # call the update method every frame
         Clock.schedule_interval(self._update, 1.0 / 60.0)
         Clock.schedule_interval(self._animate, 1.0 / 10.0)
-        Clock.schedule_interval(self.dino_update, 60.0 / 60.0)
 
     def add_sprite(self, sprite: Sprite) -> None:
         """Add the sprite to the internal list and add the widget."""

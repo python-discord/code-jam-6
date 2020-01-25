@@ -67,14 +67,6 @@ class PickUpCoin(Sprite):
         return False
 
 
-class Duck(Sprite):
-    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
-        super().__init__(config, pos, **kwargs)
-
-    def update(self, other_sprites: List[Sprite]) -> None:
-        pass
-
-
 class Player(Sprite):
     acc_x = NumericProperty(0)
     acc_y = NumericProperty(0)
