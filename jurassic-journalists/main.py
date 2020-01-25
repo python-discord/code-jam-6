@@ -8,6 +8,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.image import Image
+from kivy.uix import colorpicker
 from kivy.lang import Builder
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty # noqa
 from kivy.core.window import Window
@@ -93,7 +94,7 @@ class TextPaper(Image):
 
     def type(self, key):
         """ Type on the paper """
-        # Drawing on the image
+        # Redner Text
         ImageDraw.Draw(self.txt).text((self.head["x"], self.head["y"]),
                                       key.char, font=key.font, fill=key.color)
         # Scrolling up
@@ -161,9 +162,11 @@ class JurassicJournalistApp(App):
     def build(self):
         Builder.load_file('buttons.kv')
         Builder.load_file('objects.kv')
-        Window.borderless = True
+        Window.borderless = False
+        #pick = colorpicker.ColorPicker()
+        #Window.add_widget(pick)
+        #pick.bind(color = on_color)
         return MainScreen()
-
 
 if __name__ == '__main__':
     JurassicJournalistApp().run()

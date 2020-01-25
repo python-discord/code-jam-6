@@ -1,5 +1,10 @@
 <TextPaper@GestureSurface>
 
+<pick@Popup>
+    ColorPicker:
+        size: (50,50)
+        on_color: typw.colour = self.color
+
 <TypeWriter@Popup>
     canvas.before:
         Color:
@@ -16,6 +21,7 @@
     separator_color: 0,0,0,0
     FloatLayout:
         typw: typw
+
         TextPaper:
             canvas.after:
                 Color:
@@ -143,6 +149,7 @@
             pos_hint: {'x': 0.832, 'y': self.anim_y}
             size_hint: .08, .105
             txt: '_b'
+
 
 <PhoneScreen>:
     name: 'PhoneScreen'
