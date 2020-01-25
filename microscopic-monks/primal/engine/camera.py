@@ -44,10 +44,10 @@ class OrthographicCamera(Camera):
         self.pos_y = y
 
     def update(self, delta: float = 0.0):
-        self.projection_matrix.matrix = self.get_matrix_projection()
+        self.projection_matrix.matrix = self.get_projection()
         self.modelview_matrix.matrix = Matrix()
 
-    def get_matrix_projection(self):
+    def get_projection(self) -> Matrix:
         width = self.viewport_width / 2
         height = self.viewport_height / 2
 
