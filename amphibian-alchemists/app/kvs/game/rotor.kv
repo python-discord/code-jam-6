@@ -49,20 +49,15 @@
             on_press:
                 app.root.get_screen("game_screen").rotor_turn()
             on_release:
-                setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) + 1])
+                setattr(rotor_value, "text", app.keys[::-1][app.keys[::-1].index(rotor_value.text) - 1])
     RelativeLayout:
         RotorLabel:
             id: rotor_value
             text: app.machine.get_display()[root.rotor_number - 1]
-            on_text:
-                if self.text == "Z": setattr(up, "disabled", True)
-                elif self.text == "A": setattr(down, "disabled", True)
-                else: setattr(up, "disabled", False), setattr(down, "disabled", False)
     RelativeLayout:
         RotorButton:
             id: down
             text: "-"
-            disabled: True
             pos_hint: {"center_x": 0.5, "top": 0.575}
             on_press:
                 app.root.get_screen("game_screen").rotor_turn()
