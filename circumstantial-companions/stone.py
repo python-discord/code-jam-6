@@ -190,10 +190,10 @@ class Chisel(Widget):
 
         for i, (x, y, z) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(touch, x, y))
-            if velocity and ((x, y) not in dislodged or dislodged[x, y][1] < z):
-                    dislodged[x, y] = (i, z, velocity)
+            if velocity and ((x, y) not in dislodged or dislodged[x, y][0] < z):
+                    dislodged[x, y] = (z, i, velocity)
 
-        for (x, y), (i, z, velocity) in dislodged.items():
+        for (x, y), (z, i, velocity) in dislodged.items():
                 self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
 
     def on_touch_down(self, touch):
