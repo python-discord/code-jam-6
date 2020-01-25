@@ -115,6 +115,11 @@ class GameView(Widget):
             for ship in lane:
                 self.add_widget(ship.shape)
 
+        # work-around to show death ray above ships
+        with self.canvas:
+            self.canvas.add(self._game.death_rays.color)
+            self.canvas.add(self._game.death_rays)
+
     @staticmethod
     def _sin_transition(progress: float):
         return math.sin(progress * math.pi)
