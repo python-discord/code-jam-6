@@ -3,8 +3,8 @@ from kivy.uix.widget import Widget
 from kivy.metrics import dp
 from kivy.app import App
 
-from kivymd.cards import MDCard
-from kivymd.label import MDIcon, MDLabel
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDIcon, MDLabel
 
 
 class ContactCard(ButtonBehavior, MDCard):

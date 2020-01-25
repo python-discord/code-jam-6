@@ -8,9 +8,9 @@ from kivy.core.window import Window
 from kivy.metrics import dp
 
 # kivymd imports
-from kivymd.toolbar import MDToolbar
-from kivymd.label import MDLabel
-from kivymd.textfields import MDTextFieldRound
+from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextFieldRound
 
 # project imports
 from ui.widgets.conversation_bubble import ConversationBubble

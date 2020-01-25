@@ -2,9 +2,9 @@ from kivy.uix.behaviors import ButtonBehavior
 from kivy.metrics import dp
 from kivy.clock import Clock
 
-from kivymd.cards import MDCard
-from kivymd.label import MDLabel
-from kivymd.menus import MDMenu, MDDropdownMenu
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+from kivymd.uix.menu import MDMenu, MDDropdownMenu
 
 from functools import partial
 

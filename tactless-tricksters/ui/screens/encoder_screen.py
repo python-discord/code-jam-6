@@ -7,11 +7,10 @@ from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 
 # kivymd imports
-from kivymd.button import MDFloatingActionButton
-from kivymd.toolbar import MDToolbar
-from kivymd.textfields import MDTextFieldRound
-from kivymd.label import MDLabel
-from kivymd.cards import MDCard
+from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.textfield import MDTextFieldRound
+from kivymd.uix.label import MDLabel
+from kivymd.uix.card import MDCard
 
 # Project imports
 from ui.widgets.audio_indicator import AudioIndicator
@@ -21,6 +20,7 @@ import random
 
 # Speech to text imports
 #import speech_recognition as sr
+
 
 class EncoderScreen(Screen):
     def __init__(self, **kwargs):

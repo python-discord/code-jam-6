@@ -8,9 +8,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.scrollview import ScrollView
 
 # kivymd imports
-from kivymd.toolbar import MDToolbar
-from kivymd.label import MDLabel
-from kivymd.button import MDFloatingActionButton
+from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDFloatingActionButton
 
 # project imports
 from ui.widgets.contact_card import ContactCard
