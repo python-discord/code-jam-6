@@ -3,19 +3,23 @@ from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
 
-UP = "assets/img/cursor/hammer_up_pixelized.png"
-DOWN = "assets/img/cursor/hammer_down_pixelized.png"
+UP = "assets/img/cursor/up.png"
+DOWN = "assets/img/cursor/down.png"
 
 class CursorImage(Image):
     def __init__(self):
         super().__init__(source=UP)
-        self.size = (40, 40 / self.image_ratio)
+        self.texture.mag_filter = 'nearest'
+        self.allow_stretch = True
+        self.size = (40, 40)
 
     def on_touch_down(self, touch):
         self.source = DOWN
+        self.texture.mag_filter = 'nearest'
 
     def on_touch_up(self, touch):
         self.source = UP
+        self.texture.mag_filter = 'nearest'
 
 
 class Cursor(Widget):

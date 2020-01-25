@@ -232,7 +232,9 @@ class Chisel(Widget):
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
             for color, (x, y, z) in zip(self.colors, self.positions):
                 Color(*color)
-                self.pixels.append(Rectangle(pos=(x, y), size=self.pebble_size))
+                scaled_x = x * self.width
+                scaled_y = y * self.height
+                self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
         self.background.texture.mag_filter = 'nearest'
 
 
