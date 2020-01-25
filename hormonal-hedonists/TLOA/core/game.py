@@ -70,10 +70,10 @@ class Game(EventDispatcher):
 
             # Deal damage to the ship.
             if self.closestShip.id == 'golden_ship':
-                self.closestShip.health -= 1    # Deal less Damage to Golden Ships
+                self.closestShip.health -= 0.1    # Deal less Damage to Golden Ships
 
             if self.closestShip.id == 'brown_ship':
-                self.closestShip.health -= 3    # Deal more Damage to Brown Ships.
+                self.closestShip.health -= 0.5    # Deal more Damage to Brown Ships.
         else:
             death_rays_focus_x = MIRROR_CANNON_RANGE
 
