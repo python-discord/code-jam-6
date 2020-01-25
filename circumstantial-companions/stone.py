@@ -169,11 +169,10 @@ class Chisel(Widget):
             self.pixels[i].pos = (scaled_x, scaled_y)
             self.pixels[i].size = self.pebble_size
 
-    def poke_power(self, touch, pebble_x, pebble_y):
+    def poke_power(self, tx, ty, touch_velocity, pebble_x, pebble_y):
         """
         Returns the force vector of a poke.
         """
-        tx, ty = touch.spos
         dx, dy = pebble_x - tx, pebble_y - ty
         distance = dx**2 + dy**2
 
@@ -182,19 +181,20 @@ class Chisel(Widget):
         if not distance:
             distance = 1e-4
 
-        tdx, tdy = touch.dsx, touch.dsy
-        touch_velocity = tdx**2 + tdy**2
         power = max(CHISEL_POWER * touch_velocity, MIN_POWER) / distance
         return power * dx, power * dy
 
     def poke(self, touch):
         """
-        Apply a poke to each pebble.
+        Apply a poke to each pebble ignoring pebbles that are below other pebbles.
         """
+        tx, ty = touch.spos
+        tdx, tdy = touch.dsx, touch.dsy
+        touch_velocity = tdx**2 + tdy**2
         dislodged = {}
 
         for i, (x, y, z) in enumerate(self.positions):
-            velocity = is_dislodged(self.poke_power(touch, x, y))
+            velocity = is_dislodged(self.poke_power(tx, ty, touch_velocity, x, y))
             if velocity and ((x, y) not in dislodged or dislodged[x, y][0] < z):
                     dislodged[x, y] = (z, i, velocity)
 
