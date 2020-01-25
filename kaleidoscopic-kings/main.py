@@ -1,4 +1,5 @@
 # from frontend.swipe import SwipeCard
+# from frontend.swipe import Rotater
 from frontend.frontend import DataController, MainWidget
 from backend.main import load_game
 

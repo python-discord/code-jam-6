@@ -32,6 +32,7 @@ class Rotater(Scatter):
         self.axis = touch.spos[0]
         self.saxis = touch.spos[0]
         self.anim = None
+        self.rotation = 0
         self.dir = 0
 
     def on_touch_move(self, touch):
@@ -73,7 +74,6 @@ class Rotater(Scatter):
 class SwipeCard(FloatLayout):
     def __init__(self, **kwargs):
         super(SwipeCard, self).__init__(**kwargs)
-        self.size = (800, 800)
 
     # def on_keyboard_down(self, keyboard, keycode, text, modifiers):
     #     """Moves the image around."""
