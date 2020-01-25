@@ -31,11 +31,15 @@ from stone import Chisel
 FONT = contextvars.ContextVar("font")
 OPTIONS_BACKGROUND = "assets/img/options_background.png"
 CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(4))
+BUTTON_NORMAL = "assets/img/button_normal.png"
+BUTTON_PRESSED = "assets/img/button_pressed.png"
 
 class Button(SignBorder, KivyButton):
     def __init__(self, text, **kwargs):
         super().__init__(text=text, font_name=FONT.get(), **kwargs)
         self.setup_border()
+        self.background_normal = BUTTON_NORMAL
+        self.background_down = BUTTON_PRESSED
 
 
 class SelectLanguagePopup(SignBorder, Popup):
