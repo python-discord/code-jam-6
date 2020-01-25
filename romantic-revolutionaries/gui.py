@@ -33,6 +33,7 @@ class MainContainer(BoxLayout, InputEvents):
     foreground_color = ListProperty((1, 1, 1, 1))
     background_color = ListProperty((0, 0, 0, 0))
     text_display_label = ObjectProperty(None)
+    command_console = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -63,10 +64,10 @@ class NavContainer(RelativeLayout):
 
     def on_kv_post(self, base_widget):
         self.buttons = {
-            navcont.Directions.NORTH: self.canvas.get_group('n'),
-            navcont.Directions.EAST: self.canvas.get_group('e'),
-            navcont.Directions.SOUTH: self.canvas.get_group('s'),
-            navcont.Directions.WEST: self.canvas.get_group('w')
+            'north': self.canvas.get_group('n'),
+            'east': self.canvas.get_group('e'),
+            'south': self.canvas.get_group('s'),
+            'west': self.canvas.get_group('w')
         }
 
     def point_inside_polygon(self, x, y, poly):
@@ -93,7 +94,7 @@ class NavContainer(RelativeLayout):
             points = v[0].points
             x, y = self.to_local(touch.pos[0], touch.pos[1])
             if self.point_inside_polygon(x, y, points):
-                self.app.nav_control.go(k)
+                self.app.fake_command(k)
 
         return super(NavContainer, self).on_touch_down(touch)
 
@@ -106,6 +107,9 @@ class LookContainer(NavContainer):
             navcont.Directions.SOUTH: self.canvas.get_group('s'),
             navcont.Directions.WEST: self.canvas.get_group('w')
         }
+
+    def on_touch_down(self, touch):
+        pass
 
 
 class TextDisplayContainer(ScrollView):
@@ -145,16 +149,7 @@ class CommandInput(TextInput):
     def keyboard_on_key_down(self, window, keycode, text, modifiers):
         # ENTER key
         if keycode[0] == 13:
-            self.validate_cursor_pos()
-            text = self.text[self._cursor_pos:]
-            if text.strip() == '':
-                self.prompt()
-                return
-            Clock.schedule_once(partial(self._run_cmd, text))
-            self.cmd_history.append(text)
-
-            self.text = ''
-            self.prompt()
+            self._on_enter()
 
         # UP ARROW key
         elif keycode[0] == 273:
@@ -174,6 +169,18 @@ class CommandInput(TextInput):
         return super(CommandInput, self).keyboard_on_key_down(
             window, keycode, text, modifiers
         )
+
+    def _on_enter(self):
+        self.validate_cursor_pos()
+        text = self.text[self._cursor_pos:]
+        if text.strip() == '':
+            self.prompt()
+            return
+        Clock.schedule_once(partial(self._run_cmd, text))
+        self.cmd_history.append(text)
+
+        self.text = ''
+        self.prompt()
 
     def validate_cursor_pos(self, *args):
         if self.cursor_index() < self._cursor_pos:
@@ -220,8 +227,12 @@ class GUIApp(App):
     def add_text(self, text, on_newline=True):
         self.gui.add_text(text, on_newline)
 
-    def pass_command(self, cmd):
-        self.command_handler.parse_command(cmd)
+    def pass_command(self, text):
+        self.command_handler.parse_command(text)
+
+    def fake_command(self, text):
+        self.gui.command_console.set_input_text(text)
+        self.gui.command_console._on_enter()
 
 
 if __name__ == '__main__':

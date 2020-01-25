@@ -73,17 +73,19 @@ class Move(Command):
         if room is not None:
             self.app.add_text(room.intro_text())
 
-        next_path_text = "There are paths leading"
+        next_path_text = "There are paths leading[color=FFFF00]"
         if visible_block[0][1] != 0:
-            next_path_text += ' North'
+            next_path_text += ' north,'
         if visible_block[1][0] != 0:
-            next_path_text += ' West'
+            next_path_text += ' west,'
         if visible_block[1][2] != 0:
-            next_path_text += ' East'
+            next_path_text += ' east,'
         if visible_block[2][1] != 0:
-            next_path_text += ' South'
+            next_path_text += ' south,'
 
-        next_path_text += '.'
+        next_path_text = next_path_text[:-1]
+
+        next_path_text += '[/color].'
         self.app.add_text(next_path_text)
 
         # for _ in visible_block:
