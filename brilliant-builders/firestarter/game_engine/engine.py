@@ -28,7 +28,7 @@ class Engine(Widget):
         self.sprites: List[Sprite] = []  # TODO: make this only accept sprite classes
 
         # dict of assets
-        self.assets = load_resources()[0]
+        self.assets, self.levels = load_resources()
 
         # call the update method every frame
         Clock.schedule_interval(self._update, 1.0 / 60.0)

@@ -10,7 +10,18 @@ from kivy.logger import Logger
 import toml
 
 RESOURCE_DIR = (Path('.') / 'firestarter' / 'resources').absolute()
-RESOURCE_TYPES = ['sprites']
+RESOURCE_TYPES = ['sprites', 'levels']
+
+
+def load_level(folder_path: Path, lv: str) -> Dict:
+    with open((folder_path / lv).as_posix()) as f:
+        lv_dt = toml.load(f)
+
+    for obj in lv_dt['object']:
+        if 'args' not in obj:
+            obj['args'] = {}
+
+    return lv_dt
 
 
 def load_sprite(folder_path: Path, sp: str) -> Optional[SpriteConfig]:
@@ -59,5 +70,6 @@ def load_resources() -> List[Dict[str, Any]]:
 
 
 LOADER_MAPPING = {
-    'sprites': load_sprite
+    'sprites': load_sprite,
+    'levels': load_level
 }
