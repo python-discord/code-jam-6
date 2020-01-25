@@ -49,14 +49,6 @@ class Game(EventDispatcher):
         if not self.running:
             return False
 
-        # Deal damage with mirror
-
-        # Simulating damage
-        # if random.random() < 0.5:
-        #    lane = self.ship_lanes[random.randrange(6)]
-        #    if lane:
-        #        lane[random.randrange(len(lane))].health -= 2
-
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
             for ship in lane[:]:
