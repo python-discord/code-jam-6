@@ -40,6 +40,32 @@ Features
         '''
 
 
+class EditPopup(BasePopup):
+
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any) -> None:
+        super().__init__(ctx, *args, **kwargs)
+        self.ctx = ctx
+
+    def edit(self, side: str) -> None:
+        if side == 'left':
+            browser = self.ctx.parent.ids.left
+        else:
+            browser = self.ctx.parent.ids.right
+
+        file = browser.ids.rv.selected
+        manager = self.ctx.parent.parent.manager
+        editor = manager.get_screen('text_editor')
+
+        if file is not None:
+            editor.editor.file_path = str(Path(file.txt))
+
+            with open(Path(file.txt), 'r') as f:
+                editor.editor.text = f.read()
+
+            manager.current = 'text_editor'
+            self.dismiss()
+
+
 class Mkdir(BasePopup):
     left = NumericProperty()
     right = NumericProperty()
@@ -99,6 +125,7 @@ class Mkdir(BasePopup):
 
 
 class DeletePopup(BasePopup):
+
     def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
         super().__init__(ctx, *args, **kwargs)
         self.filer = None
@@ -174,7 +201,7 @@ class CreatePopup(BasePopup):
         self.filemanager = 0
 
     def buttonselect(self, manager):
-        self.left, self.right = 0, 0
+        self.left = self.right = 0
         self.filemanager = manager
         if manager == 1:
             self.left = .2
@@ -185,14 +212,14 @@ class CreatePopup(BasePopup):
         if self.filemanager != 0 or file_name != '':
             # Left Directory
             if self.filemanager == 1:
-                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.current_dir + '\\' + file_name)
+                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.current_dir) / file_name
                 if not dir_.exists():
                     dir_.touch()
                 else:
                     print('File name already exists')
             # Right Directory
             elif self.filemanager == 2:
-                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.current_dir + '\\' + file_name)
+                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.current_dir) / file_name
                 if not dir_.exists():
                     dir_.touch()
                 else:
@@ -201,6 +228,32 @@ class CreatePopup(BasePopup):
                 print('Choose a browser side')
         else:
             Logger.info('MkDir: Enter a File name')
+
+        path = Path(dir_)
+        self.ctx.parent.ids.left.ids.rv.dirs = path.parent.iterdir()
+
+        gen = self.ctx.parent.ids.left.ids.rv.generate
+        dirs = self.ctx.parent.ids.left.ids.rv.dirs
+        data = [gen(file_name) for file_name in dirs]
+
+        if self.ctx.parent.ids.left.ids.rv.selected is not None:
+
+            if len(path.parent.parts) > 1:
+                state = 1
+            else:
+                state = 2
+
+            self.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
+
+        if self.ctx.parent.ids.right.ids.rv.selected is not None:
+
+            if len(path.parent.parts) > 1:
+                state = 1
+            else:
+                state = 2
+
+            self.ctx.parent.ids.right.ids.rv.update(state=state, file=data)
+
         self.dismiss()
 
 

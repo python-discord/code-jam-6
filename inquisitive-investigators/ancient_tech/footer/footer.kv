@@ -65,6 +65,52 @@
             on_press: root.dismiss()
             color: 0.34,1,1,1
 
+<EditPopup>:
+    title: 'Edit a file'
+
+    FloatLayout:
+        
+        Button:
+            id: left
+
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, 0
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .7}
+            text: '[ Left Manager ]'
+            color: 0.34,1,1,1
+            on_press: root.edit('left')
+
+        Button:
+            id: right
+
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, 0
+
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .7}
+            text: '[ Right Manager ]'
+            color: 0.34,1,1,1
+            on_press: root.edit('right')
+
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .3}
+            text: '[ Cancel ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
 <Mkdir>:
     title: 'Make a new Directory?'
     FloatLayout:
@@ -112,7 +158,7 @@
             color: 0.34,1,1,1
             on_press: root.dismiss()
 
-<CreatePopup>
+<CreatePopup>:
     title: 'Make a new File?'
     FloatLayout:
         TextInput:

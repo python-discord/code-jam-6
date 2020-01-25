@@ -13,6 +13,7 @@ from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import (
     ScreenManager,
+    NoTransition,
     Screen
 )
 
