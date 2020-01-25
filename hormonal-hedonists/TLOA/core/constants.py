@@ -1,4 +1,5 @@
 from enum import Enum, unique
+from kivy.vector import Vector
 
 
 TITLE = "The Legend of Archimedes"
@@ -21,6 +22,11 @@ SHIP_SPAWN_CHANCE = 1 / 5
 MAX_SHIP_HEALTH = 100
 GOLD_SHIP_CHANCE = 1 / 10
 
+MIRROR_DIAMETER = 80
+MIRROR_CANNON_POS = Vector(150, 260)
+MIRROR_OFFSET = Vector(97, 78)
+LIGHT_SOURCE_POS = Vector(700, 620)
+LIGHT_FOCUS_POS = Vector(600, 50)
 
 @unique
 class Actions(Enum):

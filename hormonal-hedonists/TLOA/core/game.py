@@ -2,11 +2,10 @@ import random
 
 from typing import List, Optional
 
-from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
+# from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.core.constants import (
     Actions, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
-    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE
-)
+    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS)
 from TLOA.entities import MirrorCannon, BrownShip, GoldenShip, LightRays
 
 from kivy import Logger
@@ -78,7 +77,7 @@ class Game(EventDispatcher):
         else:
             death_rays_focus_x = 600
 
-        # Trace Death rays into the closest ship in the active lane.
+        # Trace Death rays onto the closest ship in the active lane.
         self.death_rays.trace(
             point=Vector(death_rays_focus_x, 100+LANE_BOUNDS[self.mirror.state][1]),
             surface=self.mirror.mirror_axis)
