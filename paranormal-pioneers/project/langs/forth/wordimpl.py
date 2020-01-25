@@ -7,15 +7,18 @@ ForthEnv = 'project.langs.forth.forthimpl.ForthEnv'
 
 
 # BRANCH, :
-def _step_to(to_search: Iterable[T],
-             item: T,
-             predicate: Callable[[T, T], bool] = lambda i, x: x != i
-             ) -> int:
-    return reduce(lambda a, _: a + 1,
-                  it.takewhile(
-                      partial(predicate, item),
-                      to_search),
-                  0)
+def _step_to(
+    to_search: Iterable[T],
+    item: T,
+    predicate: Callable[[T, T], bool] = lambda i, x: x != i
+) -> int:
+    return reduce(
+        lambda a, _: a + 1,
+        it.takewhile(
+            partial(predicate, item),
+            to_search
+        ), 0
+    )
 
 
 # BRANCH, LOOP

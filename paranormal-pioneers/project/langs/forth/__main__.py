@@ -1,4 +1,3 @@
-from project.langs.forth.forthimpl import repl
+from project.langs.forth.forthimpl import launch_repl
 
-if __name__ == '__main__':
-    repl()
+launch_repl()
