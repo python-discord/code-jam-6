@@ -31,6 +31,7 @@ MIRROR_ANGLES = [
 LIGHT_SOURCE_POS = Vector(700, 620)
 LIGHT_FOCUS_POS = Vector(600, 50)
 
+
 @unique
 class Actions(Enum):
     MOVE_LEFT = 'LEFT'
