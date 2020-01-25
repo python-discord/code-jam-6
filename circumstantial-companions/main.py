@@ -32,14 +32,22 @@ FONT = contextvars.ContextVar("font")
 OPTIONS_BACKGROUND = "assets/img/options_background.png"
 CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(4))
 BUTTON_NORMAL = "assets/img/button_normal.png"
+BUTTON_HOVER = "assets/img/button_hover.png"
 BUTTON_PRESSED = "assets/img/button_pressed.png"
 
 class Button(SignBorder, KivyButton):
     def __init__(self, text, **kwargs):
         super().__init__(text=text, font_name=FONT.get(), **kwargs)
         self.setup_border()
+        Window.bind(mouse_pos=self._on_mouse_pos)
         self.background_normal = BUTTON_NORMAL
         self.background_down = BUTTON_PRESSED
+
+    def _on_mouse_pos(self, window, pos):
+        if self.collide_point(*self.to_widget(*pos)):
+            self.background_normal = BUTTON_HOVER
+        else:
+            self.background_normal = BUTTON_NORMAL
 
 
 class SelectLanguagePopup(SignBorder, Popup):
