@@ -1,3 +1,4 @@
+
 Hello and thanks for using Rex-Explorer! Made over the course of a week for CodeJam VI, Rex-Explorer is a TUI file explorer with a built in terminal and many other features!
 
 Features
