@@ -4,7 +4,7 @@ from typing import Tuple, Set
 from kivy.graphics.instructions import RenderContext, InstructionGroup
 
 from primal.engine.perlin import sample
-from primal.engine.sprite import Sprite
+from primal.engine.sprite import Sprite, RotatableSprite
 from primal.engine.feature import Feature
 
 
@@ -147,9 +147,9 @@ class Chunk:
             s = random.randint(100, 150)
             angle = 0
             sprite = 'r.png'
-
-            self.chunk_features.add(
-                Feature(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
+            rock = Feature(sprite, Chunk.get_random_position(self.pos), .0, (s, s), angle)
+            rock.feature.set_angle(random.randint(0, 360))
+            self.chunk_features.add(rock)
 
         if self.type != 2:
             return
@@ -160,14 +160,19 @@ class Chunk:
             sprite = 'topOfTree.png'
 
             self.chunk_features.add(
-                Feature(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
+                Feature(sprite, Chunk.get_random_position(self.pos), .1, (s, s), angle))
 
     def draw(self, terrain: Sprite):
         terrain.set_position(self.pos)
         terrain.set_source(self.image)
 
+    def sort_key(self, f: Feature):
+        return f.get_z()
+
     def draw_features(self, group: InstructionGroup):
-        for feature in self.chunk_features:
+        list = sorted(self.chunk_features, key=self.sort_key)
+
+        for feature in list:
             feature.draw(group)
 
     def get_features(self) -> Set[Feature]:

@@ -109,3 +109,4 @@ venv.bak/
 # JetBrains IDE
 .idea/
 *.db
+microscopic-monks/primal/resources/bushBase.png
