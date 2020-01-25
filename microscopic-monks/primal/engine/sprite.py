@@ -37,19 +37,6 @@ class Sprite:
     def draw(self, canvas: RenderContext):
         canvas.add(self.bg_rect)
 
-class Item(Sprite):
-    def __init__(self, name, player: Player, **kwargs):
-        self.pos = player.get_center()
-        with open((self.resource_dir / "items.json").as_posix() , "r") as read_file:
-            data = json.load(read_file)[name]
-        super().__init__(data["source"], self.pos, data["size"], **kwargs)
-        self.rotate = Rotate(angle=player.get_rotation(), origin=player.get_center())
-
-    def draw(self, canvas: RenderContext):
-        canvas.add(PushMatrix())
-        canvas.add(self.rotate)
-        canvas.add(self.bg_rect)
-        canvas.add(PopMatrix())
 
 
 class Player(Sprite):
@@ -79,6 +66,20 @@ class Player(Sprite):
         canvas.add(PopMatrix())
 
 
+class Item(Sprite):
+    def __init__(self, name, player: Player, **kwargs):
+        self.pos = Player.get_center()
+        with open((self.resource_dir / "items.json").as_posix() , "r") as read_file:
+            data = json.load(read_file)[name]
+        super().__init__(data["source"], self.pos, data["size"], **kwargs)
+        self.rotate = Rotate(angle=player.get_rotation(), origin=player.get_center())
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
+        
 class Terrain(Sprite):
     def __init__(self, seed, pos: tuple = (0, 0), **kwargs) -> None:
         self.m = int(pos[0] / 10000)
@@ -123,8 +124,17 @@ class Rock(Sprite):
         canvas.add(PopMatrix())
 
 class Inventory(Sprite):
-    def __init__(self, image: str, pos: tuple = (300, 0), size: tuple = (400, 400), orientation: int = 0, **kwargs):
-       super().__init__(image, pos, size, **kwargs)
+    def __init__(self, image: str, pos: tuple = (300, 0), size: tuple = (100, 100), orientation: int = 0, **kwargs):
+       super().__init__('Weapon-Inventory.png', pos, size, **kwargs)
+       self.rotate = Rotate(angle=orientation, origin=(pos[0] + size[0] / 2, pos[1] + size[1] / 2))
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
+
+
+
     '''
     Weapon Base is the actual backround that the weapons will be displayed on
     To Do: Make actual image, find actual image location
