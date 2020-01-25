@@ -63,13 +63,9 @@ class TerminalInput(TextInput):
             else:
                 Clock.schedule_once(self.prompt)
 
-        # Backspace = 8
-        # Delete = 127
         elif keycode[0] in KEYS['del', 'backspace']:
             self.cancel_selection()
 
-        # C = 99
-        # Stop execution
         elif keycode[0] in KEYS['c'] and 'ctrl' in modifiers:
             self.shell.stop()
 
@@ -105,8 +101,10 @@ class TerminalInput(TextInput):
                 self._cursor_pos
             )
 
-
     def prompt(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Prompts the user for an input.
+        """
         at_info = (f'[{self.user}@{self.host} '
             f'{os.path.basename(str(self.current))}]>'
         )
@@ -115,10 +113,20 @@ class TerminalInput(TextInput):
         self.text += at_info
 
     def on_cwd_change(self, cwd: str) -> None:
+        """
+        Updates the current working directory.
+        """
         self.current = cwd
 
     def on_output(self, output: bytes) -> None:
+        """
+        Displays the output to terminal.
+        """
         self.text += output.decode()
 
     def on_complete(self) -> None:
+        """
+        Prompts the user after a
+        process has finished running.
+        """
         self.prompt()

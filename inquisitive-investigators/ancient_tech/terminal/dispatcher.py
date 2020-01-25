@@ -1,6 +1,6 @@
 import subprocess
-from os import chdir, getcwd
 from pathlib import Path
+from os import chdir, getcwd
 from typing import Any, List
 
 from kivy.event import EventDispatcher

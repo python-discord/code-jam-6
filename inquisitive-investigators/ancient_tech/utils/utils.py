@@ -18,7 +18,7 @@ from .constants import (
 
 
 def bytes_conversion(
-        size: int, unit: str = UNITS[0]
+    size: int, unit: str = UNITS[0]
 ) -> Tuple[str, str]:
     """
     Recursively converts bytes to the biggest
@@ -27,10 +27,12 @@ def bytes_conversion(
     Returns the size and unit.
     """
     if size >= BASE_SIZE:
+
         return bytes_conversion(
             size // BASE_SIZE,
             unit=UNITS[UNITS.index(unit) + 1]
         )
+        
     return str(size), unit
 
 
@@ -39,7 +41,6 @@ def threaded(func: Callable) -> Callable:
     A decorator that runs a function on
     a separate thread.
     """
-
     def wrapper(*args, **kwargs):
         thread = Thread(target=func, args=args, kwargs=kwargs)
         thread.daemon = True
@@ -49,7 +50,7 @@ def threaded(func: Callable) -> Callable:
 
 
 def file_info(
-        ctx: 'RV', dir_: str
+    ctx: 'RV', dir_: str
 ) -> Union[Dict[str, str], Dict[str, 'RV']]:
     """
     Returns information on the
@@ -114,6 +115,10 @@ def file_info(
 
 
 def short_path(path: str) -> str:
+    """
+    Returns a shortened path for 
+    the current directory header.
+    """
     if len(path) > MAX_PATH_LENGTH:
         parts = Path(path).parts
 

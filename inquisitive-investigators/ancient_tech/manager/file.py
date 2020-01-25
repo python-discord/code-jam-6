@@ -5,7 +5,8 @@ from kivy.uix.label import Label
 from kivy.properties import (
     ObjectProperty,
     StringProperty,
-    NumericProperty)
+    NumericProperty
+)
 
 from ..utils.utils import short_path
 
@@ -24,6 +25,9 @@ class NewFile(Label):
                 self.activate()
 
     def activate(self) -> None:
+        """
+        Opens the file/directory that was selected.
+        """
         Logger.info(f'FileBrowser: Pressed "{self.txt}"')
 
         if self.txt == '<-':
