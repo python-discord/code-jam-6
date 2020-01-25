@@ -216,7 +216,9 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         title = Label(text=_("Options"),
                       font_name=FONT.get(),
                       font_size=sp(30),
-                      size_hint=(1, 0.05))
+                      size_hint=(1, 0.05),
+                      outline_color=(0, 0, 0),
+                      outline_width=2)
 
         # Language selection
         language_btn = Button(_("Select language"),
