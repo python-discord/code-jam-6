@@ -1,4 +1,4 @@
 [[object]]
 class = 'GenericObject'
 args = {sprite = 'box', mode = 2, collide = true}
-coords = [350,20]
+pos = [350,20]

@@ -7,23 +7,23 @@ from kivy.properties import (
     NumericProperty, ReferenceListProperty)
 
 
-class GenericSprite(Sprite):
+class GenericObject(Sprite):
     def __init__(
             self,
-            config: Union[SpriteConfig, str],
+            sprite: Union[SpriteConfig, str],
             pos: Tuple[int, int],
             collide: bool = False,
             mode: int = 1,
             engine: Engine = None,
             **kwargs
     ):
-        # Resolve config if needed
-        if isinstance(config, str):
+        # Resolve sprite if needed
+        if isinstance(sprite, str):
             if not engine:
                 raise ValueError('Argument engine required when searching for sprite')
-            config = engine.assets[config]
+            sprite = engine.assets[sprite]
 
-        super().__init__(config, pos, **kwargs)
+        super().__init__(sprite, pos, **kwargs)
 
         self.collide = collide
         self.change_mode(mode)
