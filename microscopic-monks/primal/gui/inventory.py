@@ -1,10 +1,10 @@
 from kivy.graphics.instructions import RenderContext
 from primal.engine.sprite import Sprite
+from typing import Tuple, Union
 
 class Inventory(Sprite):
-    def __init__(self, pos, size, orientation: int = 0, **kwargs):
-        super().__init__('Weapon-Inventory.png', pos, size, **kwargs)
-        self.baseinv = Sprite(None, pos, size)
+    def __init__(self, image: Union[str, None], pos, size, orientation: int = 0, **kwargs):
+        self.baseinv = Sprite(image, pos, size)
 
     def draw(self, canvas: RenderContext):
         self.baseinv.draw(canvas)
