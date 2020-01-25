@@ -51,6 +51,7 @@ class Rotater(Scatter):
             self.anim = None
         self.dir = tmp_dir
         if self.anim is None:
+            self.rotation = 0
             if self.dir == -1:
                 self.anim = Animation(x=self.init_x-1500,
                                       rotation=25,
@@ -70,27 +71,38 @@ class Rotater(Scatter):
         self.axis = touch.spos[0]
 
     def on_touch_up(self, touch):
+
         if self.anim:
             self.anim.stop(self)
-            self.anim_down = Animation(
-                                    x=self.init_x + 1500 if self.dir > 1 else self.init_x - 150,
-                                    y=self.init_y-1500,
-                                    rotation=-90 if self.dir > 1 else 90,
-                                    transition=AnimationTransition.linear,
-                                    duration=1)
-            self.anim_down += Animation(
-                x=self.init_x,
-                y=self.init_y,
-                rotation=0,
-                transition=AnimationTransition.linear,
-                duration=0
-            )
-            self.anim_down.start(self)
+            if ac.KEYFRAME > 0.1:
+                self.anim_down = Animation(
+                                        x=self.init_x + 1500 if self.dir == 1 else -1500,
+                                        y=self.init_y-1500,
+                                        rotation=self.rotation + -90 if self.dir == 1 else 90,
+                                        transition=AnimationTransition.linear,
+                                        duration=1)
+                self.anim_down += Animation(
+                    x=self.init_x,
+                    y=self.init_y,
+                    rotation=0,
+                    transition=AnimationTransition.linear,
+                    duration=0
+                )
+                self.anim_down.start(self)
 
-            if self.dir == 1:
-                self.choice(1)
-            if self.dir == -1:
-                self.choice(2)
+                if self.dir == 1:
+                    self.choice(1)
+                if self.dir == -1:
+                    self.choice(2)
+            else:
+                self.rotation = 0
+                self.anim_return = Animation(
+                    x=self.init_x,
+                    y=self.init_y,
+                    transition=AnimationTransition.linear,
+                    duration=0.2
+                )
+                self.anim_return.start(self)
 
         ac.KEYFRAME = 0
         self.saxis = 0
