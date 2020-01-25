@@ -1,5 +1,5 @@
 # from frontend.swipe import SwipeCard
-from frontend.swipe import Rotater
+from frontend.swipe import Rotater  # noqa: F401
 from frontend.frontend import DataController, MainWidget
 from backend.main import load_game
 
@@ -11,7 +11,6 @@ from kivy.lang import global_idmap
 
 class CardGameApp(App):
     active_card = ObjectProperty()
-    Rotater
 
     def build(self):
         Config.set("graphics", "width", "900")
