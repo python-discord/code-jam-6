@@ -9,6 +9,7 @@ FloatLayout:
         on_press:
             root.ids.cannon.fire_cannon()
     Label:
+        color: 0,0,0,1
         text: "Enter Velocity Here:"
         size_hint: (0.3, 0.05)
         pos_hint: {"x":0.0, "y":0.9}
@@ -25,6 +26,7 @@ FloatLayout:
             root.ids.cannon.set_velocity(root.ids.velocity.text)
             root.ids.velocity.text = ""
     Label:
+        color: 0,0,0,1
         text: "Enter Angle Here:"
         size_hint: (0.3, 0.05)
         pos_hint: {"x":0.0, "y":0.7}
@@ -39,4 +41,5 @@ FloatLayout:
         pos_hint: {"x": 0.0, "y":0.6}
         on_press:
             root.ids.cannon.set_angle(root.ids.angle.text)
+            root.ids.cannon.rot_animation
             root.ids.angle.text = ""
