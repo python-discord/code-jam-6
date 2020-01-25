@@ -14,7 +14,7 @@
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'room.png'
+            source: 'assets/room.png'
     Button:
         on_release: root.manager.current = 'PhoneScreen'
         pos_hint : {'x': .9, 'y': .9}
@@ -23,8 +23,8 @@
     Button:
         size_hint: None, None
         pos_hint: {'x': .7, 'y': .45}
-        background_normal: 'typewriter.png'
-        background_down: 'typewriter.png'
+        background_normal: 'assets/typewriter.png'
+        background_down: 'assets/typewriter.png'
         on_release: F.TypeWriter().open()
 
 
@@ -44,7 +44,7 @@
         id: typw2
         background_color: .95,.93,.8,.8 # 0,0,0,0
         padding: 12,12,12,12
-        font_name: '1942.ttf'
+        font_name: 'assets/1942.ttf'
         pos_hint: {'x': 0.2, 'y':.5}
         size_hint: .6, .5
         readonly: True

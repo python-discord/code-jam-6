@@ -18,13 +18,11 @@ from PIL import ImageDraw
 from PIL import Image as Im
 
 
-# Global Variables
-
 # Screen Dimensions
-# SCREEN_WIDTH = 540
-# SCREEN_HEIGHT = 720
 SCREEN_WIDTH, SCREEN_HEIGHT = Window.size
-# Paper Dimensions
+if SCREEN_HEIGHT / SCREEN_WIDTH < 1.5:
+    SCREEN_WIDTH = 540
+    SCREEN_HEIGHT = 720
 STARTING_X = 50 # PAPER_WIDTH - 240
 STARTING_Y = 50 # PAPER_HEIGHT + 100
 PAPER_WIDTH = SCREEN_WIDTH * .7 - STARTING_X
@@ -43,14 +41,13 @@ class PhoneScreen(Screen):
 
 
 class TypeWriterButton(Button):
-    sound = SoundLoader.load('click.wav')
+    sound = SoundLoader.load('assets/click.wav')
     def on_release(self):
         self.parent.typw.text += self.txt
         if abs(self.anim_y - self.default_y) >= .01:
             Animation(anim_y = self.default_y, d=.025, t='out_bounce').start(self)
         else:
             Animation(anim_y = self.anim_y + .005, d=.025, t='out_bounce').start(self)
-       
 
 
 class TextPaper(Image):
@@ -64,28 +61,21 @@ class TextPaper(Image):
         # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
         self.colour = 255, 255, 255, 255
         self.txt = Im.new('RGBA', (int(SCREEN_WIDTH *.75), PAPER_HEIGHT), (200,200,200,255))
-        self.default_pos = PAPER_WIDTH//2,  - abs((SCREEN_HEIGHT - PAPER_HEIGHT)//2) + STARTING_Y
+        self.default_pos = PAPER_WIDTH//2,  - (SCREEN_HEIGHT + PAPER_HEIGHT - STARTING_Y) // 8
         # Type writer does not type from the top rather type from the bottom.
         # self.txt = self.img.copy()
         self.head = {'x': STARTING_X, 'y': STARTING_Y}
         self.pos = self.default_pos
         self.size = [PAPER_WIDTH, PAPER_HEIGHT]
-
         self.first_letter = True
         self.font_size = None
-        """
-        self.mesh_texture = CoreImage('paper.png').texture
-        Clock.schedule_interval(self.update_points, 0)
-        """
 
     def update(self):
         """ Update the paper """
         data = BytesIO()
         i = self.letters[-1]
-
         # Type on the paper
         self.type(i)
-
         # Save updated txt (image) in data var to update the CoreImage Texture.
         self.txt.save(data, format='png')
         data.seek(0)
@@ -94,12 +84,11 @@ class TextPaper(Image):
 
     def type(self, key):
         """ Type on the paper """
-        # Redner Text
+        # Render Text
         ImageDraw.Draw(self.txt).text((self.head["x"], self.head["y"]),
                                       key.char, font=key.font, fill=key.color)
         # Scrolling up
-
-        # Shoudln't move paper if it is the first letter of the line
+        # Shouldn't move paper if it is the first letter of the line
         if self.first_letter:
             self.first_letter = False
         else:
@@ -162,10 +151,7 @@ class JurassicJournalistApp(App):
     def build(self):
         Builder.load_file('buttons.kv')
         Builder.load_file('objects.kv')
-        Window.borderless = False
-        #pick = colorpicker.ColorPicker()
-        #Window.add_widget(pick)
-        #pick.bind(color = on_color)
+        Window.size = SCREEN_WIDTH, SCREEN_HEIGHT
         return MainScreen()
 
 if __name__ == '__main__':

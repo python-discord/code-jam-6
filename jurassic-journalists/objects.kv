@@ -1,10 +1,5 @@
 <TextPaper@GestureSurface>
 
-<pick@Popup>
-    ColorPicker:
-        size: (50,50)
-        on_color: typw.colour = self.color
-
 <TypeWriter@Popup>
     canvas.before:
         Color:
@@ -16,7 +11,7 @@
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'atlas://typewriter/typewriter_base'
+            source: 'atlas://assets/typewriter/typewriter_base'
     title: ''
     separator_color: 0,0,0,0
     FloatLayout:
@@ -25,12 +20,12 @@
         TextPaper:
             canvas.after:
                 Color:
-                    rgba: (.59, .29, 0, 1)
+                    rgba: (.59,.29,0,1)
                 Rectangle:
                     size: root.width, self.height // 2 - 40
-                    pos: 0, 0
+                    pos: 0,0
             id: typw
-            source: 'blank.png'
+            source: 'assets/blank.png'
             #pos_hint: {'x': 0.2, 'y':.5}
             pos: self.pos
             size: self.size
@@ -40,7 +35,7 @@
             fontsize: 24
             text: ''
             on_text: 
-                self.letters.append(Letter(self.text[-1], self.fontsize, '1942.ttf', self.colour)) if '_' not in self.text[-2:] else self.escaped()
+                self.letters.append(Letter(self.text[-1], self.fontsize, 'assets/1942.ttf', self.colour)) if '_' not in self.text[-2:] else self.escaped()
             on_letters: self.update()
         GestureSurface:
             size: self.size
@@ -149,7 +144,20 @@
             pos_hint: {'x': 0.832, 'y': self.anim_y}
             size_hint: .08, .105
             txt: '_b'
+        Button:
+            size_hint: None, None
+            pos_hint: {'x': 0, 'y': .3}
+            background_normal: 'assets/color_wheel.png'
+            background_down: 'assets/color_wheel.png'
+            on_release: F.Pick().open() # on_double_tap
 
+<Pick@Popup>
+    size: 540,300
+	size_hint: None, None
+	title: ''
+    separator_color: 0,0,0,0	
+    ColorPicker:
+        on_color: typw.colour = self.color
 
 <PhoneScreen>:
     name: 'PhoneScreen'
@@ -163,7 +171,7 @@
         id: typw2
         background_color: .95,.93,.8,.8 # 0,0,0,0
         padding: 12,12,12,12
-        font_name: '1942.ttf'
+        font_name: 'assets/1942.ttf'
         pos_hint: {'x': 0.2, 'y':.5}
         size_hint: .6, .5
         readonly: True
