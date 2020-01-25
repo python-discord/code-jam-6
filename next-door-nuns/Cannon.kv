@@ -2,19 +2,26 @@ FloatLayout:
     Cannon:
         id: cannon
 
-    Image:
-        id: image
-        source: 'cannon.png'
-        pos: 8,3
-        size_hint: .075,.075
-        canvas.before:
-            PushMatrix
-            Rotate:
-                angle: cannon.angle_int_deg
-                origin: self.center
-        canvas.after:
-            PopMatrix
+    #Image:
+     #   id: image
+     #   source: 'cannon.png'
+     #   pos: 8,3
+     #   size_hint: .075,.075
+     #   canvas.before:
+     #       PushMatrix
+     #       Rotate:
+     #           angle: cannon.angle_int_deg
+     #           origin: self.center
+     #   canvas.after:
+     #       PopMatrix
 
+    Target:
+        id:target
+        canvas:
+            Rectangle:
+                size: (35,35)
+                pos: (400,0)
+                source: 'python_discord_logo.png'
     Button:
         text: "Fire!"
         size_hint: (0.2, 0.05)
