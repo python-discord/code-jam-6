@@ -4,6 +4,7 @@ from primal.engine.sprite import Player
 from primal.engine.world import World
 
 from primal.gui.health import HealthBar
+from primal.gui.inventory import Inventory
 
 
 class GameScreen(Screen):
@@ -28,6 +29,11 @@ class GameScreen(Screen):
         self.health_bar = HealthBar((20, 680), (250, 20), 100.0)
         self.health_bar.draw(self.canvas)
         self.health_bar.set_health(80)
+
+        self.inventory = Inventory((-10, 100), (200,200), 0)
+        self.inventory.draw(self.canvas)
+
+
 
         self.gui_camera.end_region()
 
