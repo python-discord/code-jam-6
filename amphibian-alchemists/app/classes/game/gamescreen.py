@@ -102,9 +102,7 @@ class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.upper() in App.get_running_app().keys:
             s = App.get_running_app().machine.key_press(substring.upper())
-        else:
-            s = substring
-        return super().insert_text(s, from_undo=from_undo)
+            return super().insert_text(s, from_undo=from_undo)
 
 
 class GameScreen(Screen):
@@ -171,6 +169,7 @@ class GameScreen(Screen):
             current_output_text=game["last_saved_output_text"],
         )
         on_config_change()
+        self.load_output_text()
 
     def save_game(self):
         game_id = App.get_running_app().game_id
@@ -179,9 +178,20 @@ class GameScreen(Screen):
         store_put(
             last_saved_date=datetime.now().isoformat(),
             last_saved_state=game["current_state"],
-            last_saved_output_text=game["current_output_text"],
+            last_saved_output_text=self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text,
         )
 
     def change_game_title(self, btn, title):
         if title != "" or title is not None:
             store_put(game_title=title)
+
+    def load_output_text(self):
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        keyboard_output = store.get(str(game_id))["last_saved_output_text"]
+        if keyboard_output:
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = (
+                keyboard_output
+            )
+        else:
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""

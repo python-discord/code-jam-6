@@ -82,5 +82,6 @@ class GameSelectorScreen(Screen):
         App.get_running_app().game_id = int(game.index)
         self.manager.get_screen("rotor_screen").load_rotors()
         self.manager.get_screen("plugboard_screen").load_plugs()
+        self.manager.get_screen("game_screen").load_output_text()
 
         self.manager.current = "game_screen"
