@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 
 from kivy.app import App
 from kivy.properties import ObjectProperty
@@ -48,8 +49,11 @@ class GameSelectorScreen(Screen):
             for x in range(int(latest_game_id) + 1):
                 game = store.get(str(x))
                 title = game["game_title"]
-                created = str(game["created_date"])
-                last_saved = str(game["last_saved_date"])
+                DATE_FORMAT = "%b %d %Y %H:%M:%S"
+                created = datetime.fromisoformat(str(game["created_date"]))
+                created = created.strftime(DATE_FORMAT)
+                last_saved = datetime.fromisoformat(str(game["last_saved_date"]))
+                last_saved = last_saved.strftime(DATE_FORMAT)
                 self.rv.data.append(
                     {
                         "text": f"{title}\n"
