@@ -114,7 +114,8 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                          size_hint=(1, None),
                          height=dp(42))
 
-        # Animation
+        # Animation - Normal loading of an animation won't apply desired mag_filter to each
+        # individual texture, so we load each frame and cycle through the textures 'by-hand'.
         images = []
         for source in CAVEMAN:
             image = Image(source=source, size_hint=(1, 1), allow_stretch=True)
@@ -125,7 +126,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         animation = Image(source=CAVEMAN[0], size_hint=(1, 1), allow_stretch=True)
         animation.texture.mag_filter = 'nearest'
 
-        def next_texture(dt):
+        def next_texture(*args):
             animation.texture = next(images).texture
         Clock.schedule_interval(next_texture, .2)
 
