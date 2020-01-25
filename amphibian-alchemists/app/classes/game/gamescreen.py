@@ -169,7 +169,7 @@ class GameScreen(Screen):
             current_output_text=game["last_saved_output_text"],
         )
         on_config_change()
-        self.load_output_text()
+        self.manager.get_screen("game_selector_screen").load_game(game_id)
 
     def save_game(self):
         game_id = App.get_running_app().game_id

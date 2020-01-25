@@ -68,18 +68,12 @@ class GameSelectorScreen(Screen):
         self.manager.get_screen(
             "game_screen"
         ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
-
-        plugboard_screen = self.manager.get_screen("plugboard_screen")
-        if plugboard_screen.plugs_in_screen % 2 != 0:
-            plugboard_screen.remove_single_plug()
-        else:
-            for _ in range(plugboard_screen.plugs_in_screen // 2):
-                plugboard_screen.remove_grouped_plugs()
+        self.manager.get_screen("plugboard_screen").clear_plugs()
 
         self.manager.current = "game_screen"
 
-    def load_game(self, game):
-        App.get_running_app().game_id = int(game.index)
+    def load_game(self, game_index):
+        App.get_running_app().game_id = int(game_index)
         self.manager.get_screen("rotor_screen").load_rotors()
         self.manager.get_screen("plugboard_screen").load_plugs()
         self.manager.get_screen("game_screen").load_output_text()

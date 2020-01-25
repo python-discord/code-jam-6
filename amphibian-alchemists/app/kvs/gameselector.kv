@@ -22,7 +22,7 @@
             Button:
                 text: "Load game"
                 disabled: not root.last_selected
-                on_release: if root.last_selected: root.load_game(root.last_selected)
+                on_release: if root.last_selected: root.load_game(root.last_selected.index)
             Button:
                 text: "New game"
                 on_release: root.new_game()

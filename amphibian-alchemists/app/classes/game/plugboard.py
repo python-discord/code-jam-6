@@ -108,7 +108,16 @@ class PlugboardScreen(Screen):
         self.remove_single_plug()
         save_plugs(self.all_plugged)
 
+    def clear_plugs(self):
+        if self.plugs_in_screen % 2 != 0:
+            self.remove_single_plug()
+        else:
+            for _ in range(self.plugs_in_screen // 2):
+                self.remove_grouped_plugs()
+
     def load_plugs(self):
+        if self.all_plugged:
+            self.clear_plugs()
         # Prepare data
         store = JsonStore(DATA_DIR)
         plugs = store.get(str(App.get_running_app().game_id))["current_state"]["plugs"]
