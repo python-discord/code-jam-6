@@ -6,6 +6,7 @@ from kivy.properties import NumericProperty
 from kivy.uix.popup import Popup
 from kivy.logger import Logger
 
+from ..core.exceptions import InvalidBrowser
 
 class BasePopup(Popup):
 
@@ -20,6 +21,32 @@ class BasePopup(Popup):
         return super(BasePopup, self).on_dismiss(
             *args, **kwargs
         )
+
+    def update(self, browser_side: str, dir_: str) -> None:
+        dir_ = Path(dir_)
+        base = self.ctx.parent.ids
+
+        if browser_side in ('left', 1):
+            browser = base.left.ids.rv
+
+        elif browser_side == ('right', 2):
+            browser = base.right.ids.rv
+
+        else:
+            raise InvalidBrowser(
+                'Browser side should be either "left" or "right"'
+            )
+
+        browser.dirs = dir_.iterdir()
+
+        gen = browser.generate
+        dirs = browser.dirs
+        data = [gen(file_name) for file_name in dirs]
+
+        if len(dir_.parts) > 1:
+            browser.update(state=1, file=data)
+        else:
+            browser.update(state=2, file=data)
 
 
 class AboutPopup(BasePopup):
@@ -74,42 +101,25 @@ class Mkdir(BasePopup):
 
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
+            dir_ = self.ctx.parent.ids
+
             if self.filemanager == 1:
-                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.current_dir)
+                dir_ = Path(dir_.left.ids.header.ids.directory.current_dir)
                 new_dir = dir_ / dir_name
-
-                if not new_dir.exists():
-                    new_dir.mkdir()
-                else:
-                    Logger.info('MkDir: Directory already exists')
-
-                self.ctx.parent.ids.left.ids.rv.dirs = dir_.iterdir()
-                data = [self.ctx.parent.ids.left.ids.rv.generate(file_name) for file_name in
-                        self.ctx.parent.ids.left.ids.rv.dirs]
-
-                if len(dir_.parts) > 1:
-                    self.ctx.parent.ids.left.ids.rv.update(state=1, file=data)
-                else:
-                    self.ctx.parent.ids.left.ids.rv.update(state=2, file=data)
 
             elif self.filemanager == 2:
-                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.current_dir)
+                dir_ = Path(dir_.right.ids.header.ids.directory.current_dir)
                 new_dir = dir_ / dir_name
 
-                if not new_dir.exists():
-                    new_dir.mkdir()
-                else:
-                    Logger.info('MkDir: Directory already exists')
 
-                self.ctx.parent.ids.right.ids.rv.dirs = dir_.iterdir()
-                data = [self.ctx.parent.ids.right.ids.rv.generate(file_name) for file_name in
-                        self.ctx.parent.ids.right.ids.rv.dirs]
+            if not new_dir.exists():
+                new_dir.mkdir()
 
-                if len(dir_.parts) > 1:
-                    self.ctx.parent.ids.right.ids.rv.update(state=1, file=data)
-                else:
-                    self.ctx.parent.ids.right.ids.rv.update(state=2, file=data)
-            self.dismiss()
+                self.update(self.filemanager, dir_)
+                self.dismiss()
+            else:
+                Logger.info('MkDir: Directory already exists')
+
         else:
             Logger.info('MkDir: Enter a directory name / Choose a browser side')
 
@@ -157,29 +167,13 @@ class DeletePopup(BasePopup):
             rmtree(path)
             Logger.info(f'Delete: Removed directory {dir_.name}')
 
-        self.ctx.parent.ids.left.ids.rv.dirs = path.parent.iterdir()
-
-        gen = self.ctx.parent.ids.left.ids.rv.generate
-        dirs = self.ctx.parent.ids.left.ids.rv.dirs
-        data = [gen(file_name) for file_name in dirs]
-
+        dir_ = path.parent
+        
         if self.ctx.parent.ids.left.ids.rv.selected is not None:
-
-            if len(path.parent.parts) > 1:
-                state = 1
-            else:
-                state = 2
-
-            self.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
+            self.update('left', dir_)
 
         if self.ctx.parent.ids.right.ids.rv.selected is not None:
-
-            if len(path.parent.parts) > 1:
-                state = 1
-            else:
-                state = 2
-
-            self.ctx.parent.ids.right.ids.rv.update(state=state, file=data)
+            self.update('right', dir_)
 
 
 class CreatePopup(BasePopup):
@@ -200,78 +194,28 @@ class CreatePopup(BasePopup):
 
     def mkfile(self, file_name: str) -> None:
         if self.filemanager != 0 or file_name != '':
-            # Left Directory
+            base = self.ctx.parent.ids
+
             if self.filemanager == 1:
-                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.current_dir) / file_name
-                if not dir_.exists():
-                    dir_.touch()
-                else:
-                    print('File name already exists')
-            # Right Directory
+                current = base.left.ids.header.ids.directory.current_dir
+
             elif self.filemanager == 2:
-                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.current_dir) / file_name
-                if not dir_.exists():
-                    dir_.touch()
-                else:
-                    print('File name already exists')
+                current = base.right.ids.header.ids.directory.current_dir
+                
+            dir_ = Path(current) / file_name
+                
+            if not dir_.exists():
+                dir_.touch()
+        
+                self.update(self.filemanager, current)
+                self.dismiss()
+
             else:
-                print('Choose a browser side')
+                Logger.info('Create: File already exists')
+            
         else:
-            Logger.info('MkDir: Enter a File name')
-
-        path = Path(dir_)
-        self.ctx.parent.ids.left.ids.rv.dirs = path.parent.iterdir()
-
-        gen = self.ctx.parent.ids.left.ids.rv.generate
-        dirs = self.ctx.parent.ids.left.ids.rv.dirs
-        data = [gen(file_name) for file_name in dirs]
-
-        if self.ctx.parent.ids.left.ids.rv.selected is not None:
-
-            if len(path.parent.parts) > 1:
-                state = 1
-            else:
-                state = 2
-
-            self.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
-
-        if self.ctx.parent.ids.right.ids.rv.selected is not None:
-
-            if len(path.parent.parts) > 1:
-                state = 1
-            else:
-                state = 2
-
-            self.ctx.parent.ids.right.ids.rv.update(state=state, file=data)
-
-        self.dismiss()
+            Logger.info('Create: Enter a File name')
 
 
 class QuitPopup(BasePopup):
     pass
-
-
-def update(widget, directory):
-    widget.ctx.parent.ids.left.ids.rv.dirs = directory.parent.iterdir()
-
-    gen = widget.ctx.parent.ids.left.ids.rv.generate
-    dirs = widget.ctx.parent.ids.left.ids.rv.dirs
-    data = [gen(file_name) for file_name in dirs]
-
-    if widget.ctx.parent.ids.left.ids.rv.selected is not None:
-
-        if len(directory.parent.parts) > 1:
-            state = 1
-        else:
-            state = 2
-
-        widget.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
-
-    if widget.ctx.parent.ids.right.ids.rv.selected is not None:
-
-        if len(directory.parent.parts) > 1:
-            state = 1
-        else:
-            state = 2
-
-        widget.ctx.parent.ids.right.ids.rv.update(state=state, file=data)

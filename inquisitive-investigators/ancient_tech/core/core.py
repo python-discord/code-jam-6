@@ -24,8 +24,8 @@ class Browser(FloatLayout, Controller):
         super(Browser, self).__init__(*args, **kwargs)
 
     def on_update(
-            self, browser_side: str,
-            state: int, files: List[str]
+        self, browser_side: str,
+        state: int, files: List[str]
     ) -> None:
         if browser == 'left':
             browser = self.left_browser
@@ -34,7 +34,9 @@ class Browser(FloatLayout, Controller):
             browser = self.right_browser
 
         else:
-            raise InvalidBrowser('Browser position should be either "left" or "right"')
+            raise InvalidBrowser(
+                'Browser position should be either "left" or "right"'
+            )
 
         browser.recycle_view.update(state, files)
 
