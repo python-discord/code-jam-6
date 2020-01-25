@@ -48,19 +48,14 @@ class ImageButton(ButtonBehavior, Image):
 
 
 class SelectionScreen(Screen):
-    pass
-    # def on_pre_enter(self, *args):
-    #     # print(self.manager.get_screen("create_profile").__dict__)#.profile_data)
-    #     return super().on_pre_enter(*args)
-    #
-    # def on_enter(self, *args):
-    #     print(self.ids)
-    #     print(self.manager.get_screen("create_profile").profile_data["attributes"])
-    #     print(self.ids["profile_list"])
-    #     self.ids["profile_list"]._attributes = self.manager.get_screen(
-    #         "create_profile"
-    #     ).profile_data["attributes"]
-    #     return super().on_enter(*args)
+    def on_pre_enter(self, *args):
+        self.ids["profile_list"]._keyboard = Window.request_keyboard(
+            self.ids["profile_list"]._keyboard_closed, self.ids["profile_list"]
+        )
+        self.ids["profile_list"]._keyboard.bind(
+            on_key_down=self.ids["profile_list"]._on_keyboard_down
+        )
+        return super().on_pre_enter(*args)
 
 
 class LossScreen(Screen):
@@ -101,8 +96,8 @@ class ProfileList(ScreenManager):
         self.cycler = self.r_cycle(self.profile_list)
         #  should be initialisable in main app
         self._attributes = Counter({"Knowledge": 5, "Welfare": 5, "Energy": 5})
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+        # self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        # self._keyboard.bind(on_key_down=self._on_keyboard_down)
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
             profile = safe_load(profile_file.read())
             self.add_widget(ProfileCard(profile))
