@@ -39,13 +39,12 @@ class MyGame(Engine):
              self.coin,
              self.platform_01, self.platform_02,
              self.platform_03, self.platform_04,
-             self.platform_05, self.platform_06
-             self.platform_05, self.platform-06
+             self.platform_05, self.platform_06,
              self.hearts
              ]
         )
 
-        self.unload_level([self.player, self.platform_01])
+        self.unload_level([self.player, self.hearts, self.platform_01])
         self.load_level(self.levels['testzone'])
 
         Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)

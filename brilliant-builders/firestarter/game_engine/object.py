@@ -35,6 +35,15 @@ class GenericObject(Sprite):
         return self.collide
 
 
+class PlayerUiHeart(Sprite):
+
+    def update(self, *args) -> None:
+        pass
+
+    def on_collision(self, other: Sprite) -> bool:
+        return False
+
+
 class Platform(Sprite):
     def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
         super().__init__(config, pos, **kwargs)
@@ -66,10 +75,18 @@ class Player(Sprite):
     vel_y = NumericProperty(0)
     vel = ReferenceListProperty(vel_x, vel_y)
 
+    score = NumericProperty(0)
+    lives = NumericProperty(5)
+
     def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs) -> None:
         super().__init__(config, pos, **kwargs)
         self.is_standing: bool = False
-        self.score: int = 0
+        self.checkpoint: Tuple[int, int] = pos
+        self.respawn: Tuple[int, int] = pos
+
+    def set_lives(self, value: int) -> None:
+        """Set the players lives."""
+        self.lives = value
 
     def update(self, other_sprites: List[Sprite]) -> None:
         """Update the players position and handle collisions (very inefficiently!!)"""
@@ -111,12 +128,18 @@ class Player(Sprite):
         # apply some downwards acceleration (gravity)
         self.acc_y = -1
 
+        if self.pos[1] < 0:
+            # we fell out of the map!
+            self.lives -= 1
+            if self.lives > 0:
+                # respawn at the checkpoint
+                self.pos = self.checkpoint
+            else:
+                self.pos = self.respawn
+
     def collides_with(self, other_sprites: List[Sprite]) -> bool:
         # deal with collisions
         for sprite in other_sprites:
             if sprite != self and self.collide_widget(sprite):
                 if sprite.on_collision(self):
                     return True
-
-    def on_collision(self, other: Sprite) -> None:
-        pass
