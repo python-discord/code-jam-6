@@ -39,7 +39,11 @@ FILE_EXTENSION = ".chisel-project"
 
 class Button(SignBorder, KivyButton):
     def __init__(self, text, **kwargs):
-        super().__init__(text=text, font_name=FONT.get(), **kwargs)
+        super().__init__(text=text,
+                         font_name=FONT.get(),
+                         outline_color=(0, 0, 0),
+                         outline_width=2,
+                         **kwargs)
         self.setup_border()
         Window.bind(mouse_pos=self._on_mouse_pos)
         self.background_normal = BUTTON_NORMAL
@@ -85,7 +89,7 @@ class ImportPopup(SignBorder, Popup):
         self.chisel = chisel
         layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
         self.file_chooser = FileChooserListView(path=".", filters=[self._filter_file], size_hint=(1, 0.85))
-        self.btn = Button(_("Open..."), disabled=True, font_size=sp(16), size_hint=(1, 0.15))
+        self.btn = Button(_("Please select a file."), disabled=True, font_size=sp(16), size_hint=(1, 0.15))
 
         self.file_chooser.bind(path=self._change_title, selection=self._change_btn_name)
         self.btn.bind(on_release=self._select_file)
@@ -153,7 +157,7 @@ class SaveAsPopup(SignBorder, Popup):
         self.text_input.bind(text=self._change_btn_name, on_text_validate=self._save_file)
         self.btn.bind(on_release=self._save_file)
 
-        for widget in (self.file_choose, self.text_input, self.btn):
+        for widget in (self.file_chooser, self.text_input, self.btn):
             layout.add_widget(widget)
 
         super().__init__(title="",
