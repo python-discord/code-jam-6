@@ -63,8 +63,10 @@ class CardGameApp(App):
         Config.set("graphics", "height", "1000")
 
         global_idmap["data"] = ctl = DataController()
-        global_idmap["assets_file"] = "./assets/"
-
+        global_idmap["all_assets"] = "./Game/"
+        global_idmap["game_assets"] = "./Game/GameArt/"
+        global_idmap["card_assets"] = "./Game/CardArt/"
+        print(global_idmap['game_assets'])
         ctl.game = game = load_game()
         ctl.active_card = game.start_game()
         ctl.set_game_state()
