@@ -3,21 +3,21 @@ from argparse import Namespace
 from project.core import command
 from project.core.parser import Parser
 from project.core.terminal import Terminal
-from project.core.utils import FS, OSException, PathLike
+from project.core.utils import OSException
 
 
 class Cat(command.Command):
+    """Print contents of a file.
+    Example: cat .termrc
+    """
     def __init__(self):
         super().__init__(name='cat')
 
-    def get_path(self, before: PathLike, after: PathLike, fs: FS) -> PathLike:
-        path = fs.find_dir(before, after)
-        fs.check_env(path)
-        return path
-
-    @command.option('path')
+    @command.option('path', nargs='?')
     def handle_path(self, ns: Namespace, term: Terminal) -> None:
-        self.path = self.get_path(term.path, ns.path, term.fs)
+        if ns.path is None:
+            raise OSException('error: path not specified')
+        self.path = term.fs.get_path(term.path, ns.path, check_dir=False)
 
     def main(self, ns: Namespace, term: Terminal) -> None:
         try:

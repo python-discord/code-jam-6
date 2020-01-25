@@ -1,4 +1,4 @@
-from pathlib import Path
+from project.core.path import Path
 
 CANNOT_EXIT_ENV = True
 

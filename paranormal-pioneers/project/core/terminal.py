@@ -1,8 +1,8 @@
-from pathlib import Path
 from sys import stderr, stdin, stdout
 from typing import IO, NoReturn
 
 from project.core.constants import FILE_SYSTEM
+from project.core.path import Path
 from project.core.utils import FS
 from project.core.parser import Parser
 

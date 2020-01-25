@@ -1,6 +1,6 @@
 from argparse import ArgumentParser, Namespace
 from types import FunctionType
-from typing import Any, Callable, List, Tuple, Union
+from typing import Any, Callable, List, Optional, Tuple, Union
 
 from project.core.utils import OSException
 
@@ -42,16 +42,21 @@ def option(*args: Any, **kwargs: Any) -> Function:
 def setup_parser(**kwargs) -> PatchedParser:
     kwargs.update(add_help=False)
     parser = PatchedParser(**kwargs)
-    parser.add_argument('-h', '--help', action='store_true', default=False)
+    parser.add_argument(
+        '-h', '--help', action='store_true', default=False,
+        help='Show help on how to use a command.'
+    )
     return parser
 
 
 class Command:
-    def __init__(self, name: str) -> None:
+    def __init__(self, name: Optional[str] = None) -> None:
         self._opt: List[Option] = []
-        self._parser: PatchedParser = setup_parser(prog=name)
+        self._parser: PatchedParser = setup_parser(prog=name, description=self.doc)
 
-        self._name: str = name
+        self._name: str = (
+            self.__class__.__name__ if name is None else name
+        )
 
         self._make_args()
 
@@ -59,7 +64,11 @@ class Command:
         return f'<Command {self.name}>'
 
     @property
-    def parser(self):
+    def doc(self) -> Optional[str]:
+        return self.__class__.__doc__
+
+    @property
+    def parser(self) -> ArgumentParser:
         return self._parser
 
     @property
@@ -94,8 +103,9 @@ class Command:
         return self._parser.parse_args(args)
 
     def _make_args(self) -> None:
-        for entry in dir(self):
+        for entry in (self.__class__.__dict__):
             maybe_option = getattr(self, entry)
+            print(entry, maybe_option)
             if isinstance(maybe_option, Option):
                 maybe_option._expose_to(self._parser)
                 self._opt.append(maybe_option)

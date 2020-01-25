@@ -1,21 +1,18 @@
 from argparse import Namespace
-from datetime import datetime
 
 from project.core import command
 from project.core.parser import Parser
 from project.core.terminal import Terminal
 
 
-class Date(command.Command):
-    """Print current time.
-    Example: date
-    """
+class PWD(command.Command):
+    """Print current working directory."""
     def __init__(self) -> None:
-        super().__init__(name='date')
+        super().__init__(name='pwd')
 
     def main(self, ns: Namespace, term: Terminal) -> str:
-        return datetime.now().strftime('%a %b %d %H:%M:%S %Y')
+        return str(term.path)
 
 
 def setup(parser: Parser) -> None:
-    parser.add_command(Date())
+    parser.add_command(PWD())
