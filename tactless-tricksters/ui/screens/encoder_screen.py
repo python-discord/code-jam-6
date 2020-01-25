@@ -15,10 +15,12 @@ from kivymd.cards import MDCard
 
 # Project imports
 from ui.widgets.audio_indicator import AudioIndicator
-
+from ui.widgets.nav_drawer import MyNavigationLayout
 # TODO remove after debug
 import random
 
+# Speech to text imports
+#import speech_recognition as sr
 
 class EncoderScreen(Screen):
     def __init__(self, **kwargs):
@@ -67,6 +69,12 @@ class EncoderScreen(Screen):
         self.add_widget(encode_card)
         self.add_widget(play_button_anchor)
 
+        # Nav Bar
+        self.nav_bar = MyNavigationLayout()
+        self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
+        self.nav_bar_anchor.add_widget(self.nav_bar)
+        self.add_widget(self.nav_bar_anchor)
+
     def update_audio_indicator(self, dt):
         if hasattr(self.audio_indicator, 'stack_width'):
             level_array = []
@@ -89,7 +97,37 @@ class EncoderScreen(Screen):
             self.encode_output_label.text = 'Enter Text to Encode before playing'
 
     def speech_to_text(self):
-        print('Insert speech to text functionality here')
+        recognizedSpeech = ""
+
+        # obtain audio from the microphone
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            print("Say something!")
+            audio = r.listen(source)
+
+        # # recognize speech using Google Cloud Speech
+        # GOOGLE_CLOUD_SPEECH_CREDENTIALS = None
+        # try:
+        #     recognizedSpeech = r.recognize_google_cloud(audio, credentials_json=GOOGLE_CLOUD_SPEECH_CREDENTIALS)
+        #     print("Google Cloud:",recognizedSpeech)
+        # except sr.UnknownValueError:
+        #     print("Google Cloud Speech could not understand audio")
+        # except sr.RequestError as e:
+        #     print("Could not request results from Google Cloud Speech service; {0}".format(e))
+        # except:
+        #     print("Google Cloud: Another Exception occurred. Trying with Sphinx.")
+
+        #If google cloud fails, try with Sphinx
+        if recognizedSpeech == "":
+            try:
+                recognizedSpeech = r.recognize_sphinx(audio)
+                print("Sphinx:",recognizedSpeech)
+            except sr.UnknownValueError:
+                print("Sphinx could not understand audio")
+            except sr.RequestError as e:
+                print("Sphinx error; {0}".format(e))
+
+        self.encode_input.text = recognizedSpeech
 
     def return_home(self):
         self.manager.current = 'welcome'

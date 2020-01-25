@@ -12,6 +12,7 @@ from kivymd.label import MDLabel
 from kivymd.button import MDFloatingActionButton
 
 # project imports
+from ui.widgets.nav_drawer import MyNavigationLayout
 from ui.widgets.message_card import MessageCard
 
 
@@ -24,7 +25,7 @@ class MessageScreen(Screen):
     def ui_layout(self):
         layout = BoxLayout(orientation='vertical')
 
-        scroll = ScrollView(do_scroll_x=False, size_hint=(1, None), size=(Window.width, Window.height))
+        self.scroll = ScrollView(do_scroll_x=False, size_hint=(1, None), size=(Window.width, Window.height))
         scroll_box = BoxLayout(orientation='vertical', size_hint_y=None, padding=(dp(1), dp(60)), spacing=dp(1))
         scroll_box.bind(minimum_height=scroll_box.setter('height'))
         # Add more self.scrollbox.add_widget(MDLabel(text='')) to increase padding
@@ -43,8 +44,8 @@ class MessageScreen(Screen):
                                        source=temp_dict['img_source'],)
             scroll_box.add_widget(message_card)
 
-        scroll.add_widget(scroll_box)
-        layout.add_widget(scroll)
+        self.scroll.add_widget(scroll_box)
+        layout.add_widget(self.scroll)
 
         self.add_widget(layout)
 
@@ -59,7 +60,13 @@ class MessageScreen(Screen):
         create_message_anchor.add_widget(create_message_btn)
         self.add_widget(create_message_anchor)
 
+        # Nav Bar
+        self.nav_bar = MyNavigationLayout(scroll_view=self.scroll)
+        self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
+        self.nav_bar_anchor.add_widget(self.nav_bar)
+        self.add_widget(self.nav_bar_anchor)
+
     def switch_screens(self):
-        print("Switch Screens to create message")
+        self.manager.current = 'contact'
 
 

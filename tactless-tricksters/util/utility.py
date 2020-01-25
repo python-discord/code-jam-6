@@ -65,6 +65,7 @@ message_dict ={'Bob': {
                                 }
                             }
 
+contact_list = ['Bob', 'Rob', 'Rod']
 
 class Utility(object):
     def __init__(self):
@@ -72,6 +73,7 @@ class Utility(object):
         self.morse = Morse()
         # Temp debug data
         self.message_dict = message_dict
+        self.contact_list = contact_list
         self.morse = Morse()
         self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=9)
 

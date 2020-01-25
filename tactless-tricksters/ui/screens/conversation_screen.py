@@ -24,7 +24,6 @@ class ConversationScreen(Screen):
 
     def ui_layout(self, contact):
         self.clear_widgets()
-        self.update_nav_bar(contact)
 
         layout = BoxLayout(orientation='vertical')
         scroll = ScrollView(do_scroll_x=False, size_hint=(1, None), size=(Window.width, Window.height))
@@ -66,27 +65,22 @@ class ConversationScreen(Screen):
         self.text_input.children[2].children[0].bind(on_press=lambda x: self.send_message(self.text_input.text))
         text_input_anchor.add_widget(self.text_input)
 
+        toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
+        toolbar = MDToolbar(title=contact, anchor_title='center')
+        toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
+        toolbar.left_action_items = [['arrow-left', lambda x: self.return_screen()]]
+        toolbar_anchor.add_widget(toolbar)
+
         self.add_widget(layout)
         self.add_widget(text_input_anchor)
+        self.add_widget(toolbar_anchor)
+
         self.do_layout()
 
     def send_message(self, msg):
         print("Sending message:%s" % msg)
         self.text_input.text = ''
 
-    def update_nav_bar(self, contact):
-        app = App.get_running_app().root
-        if hasattr(app, 'nav_bar'):
-            toolbar = app.nav_bar.toolbar
-            toolbar.title = contact
-            toolbar.left_action_items = [['arrow-left', lambda x: self.return_screen()]]
-
     def return_screen(self):
-        print('debug')
-        app = App.get_running_app().root
-        if hasattr(app, 'nav_bar'):
-            toolbar = app.nav_bar.toolbar
-            toolbar.title = 'Messages'
-            toolbar.left_action_items = [['menu', lambda x: app.nav_bar.toggle_nav_drawer()]]
         self.manager.current = 'message'
 

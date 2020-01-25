@@ -18,20 +18,18 @@ from ui.screens.message_screen import MessageScreen
 from ui.screens.conversation_screen import ConversationScreen
 from ui.screens.tapping_training_screen import TappingScreen
 from ui.screens.listening_training_screen import ListeningScreen
+from ui.screens.contacts_screen import ContactScreen
+from ui.screens.add_contact_screen import AddContactScreen
 
 from util.utility import Utility
-from ui.widgets.nav_drawer import MyNavigationLayout
 
-import gc
-gc.disable()
+# import gc
+# gc.disable()
 
 
 class MainBox(FloatLayout):
     def __init__(self, **kwargs):
         super(MainBox, self).__init__()
-        self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        self.nav_bar = MyNavigationLayout()
-        self.nav_bar_anchor.add_widget(self.nav_bar)
         self.screens = AnchorLayout(anchor_x='center', anchor_y='center')
         self.util = Utility()
         self.content = ScreenManager()
@@ -43,6 +41,8 @@ class MainBox(FloatLayout):
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
         self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
+        self.content.add_widget(ContactScreen(name='contact', util=self.util))
+        self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
         self.content.add_widget(TrainingMenuScreen(name='training', util=self.util))
         self.content.add_widget(ListeningScreen(name='listening', util=self.util))
         self.content.add_widget(TappingScreen(name='tapping', util=self.util))
@@ -52,7 +52,6 @@ class MainBox(FloatLayout):
         self.screens.add_widget(self.content)
 
         self.add_widget(self.screens)
-        self.add_widget(self.nav_bar_anchor)
 
 
 class MainApp(App):

@@ -1,5 +1,6 @@
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.app import App
+from kivy.clock import Clock
 from kivymd.navigationdrawer import MDNavigationDrawer, NavigationDrawerIconButton, \
                                      NavigationLayout
 from kivymd.toolbar import MDToolbar
@@ -27,7 +28,6 @@ class ContentNavigationDrawer(MDNavigationDrawer):
         self.add_widget(self.message)
         self.add_widget(self.training)
 
-
     def scr_chng(self, screen, nav_item):
         self.nav_layout.toggle_nav_drawer()
         # I have to manually reset the color back to white
@@ -37,10 +37,11 @@ class ContentNavigationDrawer(MDNavigationDrawer):
 
 
 class MyNavigationLayout(NavigationLayout):
-    def __init__(self):
+    def __init__(self, scroll_view=None):
         super(MyNavigationLayout, self).__init__()
         self.content_nav_drawer = ContentNavigationDrawer(self)
         self.drawer_open = False
+        self.scroll_view = scroll_view
 
         self.add_widget(self.content_nav_drawer)
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
@@ -51,9 +52,16 @@ class MyNavigationLayout(NavigationLayout):
         toolbar_anchor.add_widget(self.toolbar)
         self.add_widget(toolbar_anchor)
 
-    def toggle_nav_drawer(self):
-        self.drawer_open = not self.drawer_open
-        current_screen = App.get_running_app().root.content.current_screen
-        current_screen.disabled = self.drawer_open
-        super().toggle_nav_drawer()
+        # This is here because on scroll views the buttons behind the nav bar
+        # will count as being pressed instead of the nav drawer buttons
+        if self.scroll_view:
+            Clock.schedule_interval(self.disable_scroll_buttons, 0.1)
+
+    def disable_scroll_buttons(self, dt):
+        if self.state == 'open':
+            self.scroll_view.disabled = True
+        else:
+            self.scroll_view.disabled = False
+
+
 

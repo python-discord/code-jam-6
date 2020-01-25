@@ -1,42 +1,91 @@
-from kivy.app import App
-from kivy.clock import Clock
-from kivy.properties import ListProperty, ObjectProperty
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.uix.screenmanager import Screen
+from kivy.clock import Clock
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.lang import Builder
+# KivyMD imports
 from kivymd.button import MDRectangleFlatIconButton
-from kivymd.label import MDLabel
-from kivymd.toolbar import MDToolbar
+# Project imports
+from ui.widgets.nav_drawer import MyNavigationLayout
 
 
-class WelcomeScreen(Screen):
-    texture = ObjectProperty(None)
-    tex_coords = ListProperty([0, 0, 1, 0, 1, 1, 0, 1])
+Builder.load_string("""
+#:kivy 1.11.1
+#:import MDCard kivymd.cards
+#:import MDToolbar kivymd.toolbar
+#:import MDRectangleFlatIconButton kivymd.button
+#:import MDLabel kivymd.label
 
-    def __init__(self, **kwargs):
-        super(WelcomeScreen, self).__init__(name=kwargs.get('name'))
-        Clock.schedule_once(self.texture_init, 0)
+<WelcomeButton>
+    elevation_normal: 10
+    md_bg_color: app.theme_cls.primary_color
+    md_border_color: app.theme_cls.primary_color
+    pos_hint: {'center_y': 1.5, 'center_x': 0.5}
 
-        Clock.schedule_interval(self.scroll_texture, 1/60.)
-        self.util = kwargs.get('util')
-        self.app = App.get_running_app()
-        self.ui_layout()
 
-    def texture_init(self, *args):
-        self.canvas.before.children[-1].texture.wrap = 'repeat'
+<BlankLabel@MDLabel>
+    text: ''
+#    font_style: 'H6'
 
-    def scroll_texture(self, dt):
-        for i in range(0, 8, 2):
-            self.tex_coords[i] += dt / 3.
+<WelcomeScreen>
+    canvas.before:
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            source: 'ui/img/welcome_2.png'
 
-    def ui_layout(self):
-        toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        toolbar = MDToolbar(title="Enigma", anchor_title='center')
-        toolbar.md_bg_color = self.app.get_running_app().theme_cls.primary_color
-        toolbar_anchor.add_widget(toolbar)
+    MDCard:
+        padding: dp(24)
+        spacing: dp(24)
+        orientation: 'vertical'
+        size_hint: .65, .35
+        pos_hint: {'center_x': 0.5, 'top': 0.8}
+        md_bg_color: app.theme_cls.accent_color
 
-        welcome_label = MDLabel(text='Welcome!', font_style='H4', halign='center')
-        welcome_label.theme_text_color = 'Custom'
-        welcome_label.text_color = [1, 1, 1, 1]
+        MDLabel:
+            text: 'Welcome!'
+            font_style: 'H4'
+            halign: 'center'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+        GridLayout:
+            spacing: dp(24)
+            cols: 5
+            pos_hint: {'center_x': 0.5}
+
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Decode'
+                icon: 'database-export'
+                on_press:
+                    root.manager.current = 'decode'
+
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Encode'
+                icon: 'database-import'
+                on_press:
+                    root.manager.current = 'encode'
+
+            BlankLabel:
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Sign In'
+                icon: 'login-variant'
+                on_press:
+                    root.manager.current = ''
+
+            BlankLabel:
+
+            WelcomeButton:
+                text: 'Calibrate'
+                icon: 'cogs'
+                # TODO: create calibration screen
+""")
 
 
 class WelcomeButton(MDRectangleFlatIconButton):
@@ -54,3 +103,13 @@ class WelcomeButton(MDRectangleFlatIconButton):
         # Set Icon to white
         self.children[0].children[1].text_color = [1, 1, 1, 1]
         self.children[0].children[1].font_size = 30
+
+
+class WelcomeScreen(Screen):
+    def __init__(self, **kwargs):
+        super(WelcomeScreen, self).__init__(name=kwargs.get('name'))
+        self.util = kwargs.get('util')
+        self.nav_bar = MyNavigationLayout()
+        self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
+        self.nav_bar_anchor.add_widget(self.nav_bar)
+        self.add_widget(self.nav_bar_anchor)
