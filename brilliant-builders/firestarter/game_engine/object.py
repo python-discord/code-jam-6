@@ -88,6 +88,11 @@ class Player(Sprite):
         """Set the players lives."""
         self.lives = value
 
+    def on_cam_move(self, offset: Tuple[float, float]) -> None:
+        super().on_cam_move(offset)
+        self.respawn = (self.respawn[0] + offset[0], self.respawn[1] + offset[1])
+        self.checkpoint = (self.checkpoint[0] + offset[0], self.checkpoint[1] + offset[1])
+
     def update(self, other_sprites: List[Sprite]) -> None:
         """Update the players position and handle collisions (very inefficiently!!)"""
         # update the position

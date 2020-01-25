@@ -1,5 +1,6 @@
+from itertools import chain
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional, Tuple
 
 from firestarter.game_engine.resources_loader import load_resources
 from firestarter.game_engine.sprite import Sprite
@@ -15,6 +16,8 @@ IMAGE_EXTENSIONS = ['png']
 
 class Engine(Widget):
     resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
+    X_PLAYER_OFFSET = -200  # how far from the center of the screen we want the player
+    Y_PLAYER_OFFSET = -50  # how far from the center of the screen we want the player
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -28,6 +31,10 @@ class Engine(Widget):
 
         # list of sprites
         self.sprites: List[Sprite] = []  # TODO: make this only accept sprite classes
+        # list of elements that shouldn't be moved
+        self.static_sprites: List[Sprite] = []
+        # Object the camera should follow
+        self.cam_target: Optional[Sprite] = None
 
         # dict of assets
         self.assets, self.levels = load_resources()
@@ -38,14 +45,31 @@ class Engine(Widget):
         Clock.schedule_interval(self._update, 1.0 / 60.0)
         Clock.schedule_interval(self._animate, 1.0 / 10.0)
 
-    def add_sprite(self, sprite: Sprite) -> None:
+    def move_camera(self, offset: Tuple[float, float]) -> None:
+        for sprite in self.sprites:
+            sprite.on_cam_move(offset)
+
+    def add_player(self, sprite: Sprite) -> None:
+        """Add the player sprite and set it as the cam target."""
+        self.add_sprite(sprite)
+        self.cam_target = sprite
+
+    def add_sprite(self, sprite: Sprite, static: bool = False) -> None:
         """Add the sprite to the internal list and add the widget."""
-        self.sprites.append(sprite)
+        if static:
+            self.static_sprites.append(sprite)
+        else:
+            self.sprites.append(sprite)
+
         self.add_widget(sprite)
 
-    def add_sprites(self, sprites: List[Sprite]) -> None:
+    def add_sprites(self, sprites: List[Sprite], static: bool = False) -> None:
         """Add the list of sprites to the internal list and add the widgets."""
-        self.sprites.extend(sprites)
+        if static:
+            self.static_sprites.extend(sprites)
+        else:
+            self.sprites.extend(sprites)
+
         sprite: Sprite
         for sprite in sprites:
             self.add_widget(sprite)
@@ -86,13 +110,28 @@ class Engine(Widget):
     def _animate(self, dt: float) -> None:
         """Advance all the animations by one."""
         sprite: Sprite
-        for sprite in self.sprites:
+        for sprite in chain(self.sprites, self.static_sprites):
             sprite.cycle_animation()
 
+    def center_target(self) -> Tuple[float, float]:
+        """Return a offset that will slowly center the target."""
+
+        distance_to_center = ((self.cam_target.pos[0] - self.center_x - self.X_PLAYER_OFFSET),
+                              (self.cam_target.pos[1] - self.center_y - self.Y_PLAYER_OFFSET))
+
+        x_offset = -1 * distance_to_center[0] / (self.width / 2) * 5
+        x_offset = x_offset * 2 if abs(x_offset) > .75 else 0
+
+        y_offset = -1 * distance_to_center[1] / self.height * 5
+        y_offset = y_offset if abs(y_offset) > .75 else 0
+
+        return x_offset, y_offset
+
     def _update(self, dt: float) -> None:
-        """Update all sprites positions and call the users update function."""
+        """Move the camera, update all sprites positions and call the users update function."""
+        self.move_camera(self.center_target())
         sprite: Sprite
-        for sprite in self.sprites:
+        for sprite in chain(self.sprites, self.static_sprites):
             if sprite.killed:
                 self.sprites.remove(sprite)
                 self.remove_widget(sprite)

@@ -65,6 +65,9 @@ class Sprite(Widget):
     def update(self, *args) -> None:
         raise NotImplementedError()
 
+    def on_cam_move(self, offset: Tuple[float, float]) -> None:
+        self.pos = (self.pos[0] + offset[0], self.pos[1] + offset[1])
+
     def on_collision(self, other: Sprite) -> bool:
         """Return False if you can pass through, else return True"""
         return True

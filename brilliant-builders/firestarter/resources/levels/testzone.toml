@@ -1,9 +1,29 @@
 [[object]]
 class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [200,20]
+
+[[object]]
+class = 'GenericObject'
 args = {sprite = 'box', mode = 2, collide = true}
-pos = [350,20]
+pos = [350,60]
 
 [[object]]
 class = 'GenericObject'
 args = {sprite = 'box', mode = 1, collide = true}
-pos = [200,20]
+pos = [500,100]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [650,140]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [800,200]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [950,240]
