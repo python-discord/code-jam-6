@@ -1,3 +1,5 @@
+\ an RC4 example, taken from wikipedia
+
 0 value ii        0 value jj
 0 value KeyAddr   0 value KeyLen
 create SArray   256 allot   \ state array of 256 bytes
