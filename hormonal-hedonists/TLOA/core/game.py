@@ -2,10 +2,9 @@ import random
 
 from typing import List, Optional
 
-# from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.core.constants import (
     Actions, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
-    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS)
+    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS, MIRROR_CANNON_RANGE)
 from TLOA.entities import MirrorCannon, BrownShip, GoldenShip, LightRays
 
 from kivy import Logger
@@ -85,7 +84,7 @@ class Game(EventDispatcher):
         active_lane = self.mirror.state
         closest_ship = None
         for ship in self.ship_lanes[active_lane]:
-            if (ship.shape.x < 900):
+            if (ship.shape.x < MIRROR_CANNON_RANGE):
                 if closest_ship:
                     if (closest_ship.shape.x > ship.shape.x):
                         closest_ship = ship
