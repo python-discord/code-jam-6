@@ -36,5 +36,5 @@ class Manager(ScreenManager):
 class AncientTechApp(App):
 
     def build(self):
-        self.title = 'Hello world'
+        self.title = 'Rex Explorer'
         return Manager()

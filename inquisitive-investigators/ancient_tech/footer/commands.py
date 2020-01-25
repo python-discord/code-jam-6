@@ -27,12 +27,16 @@ class AboutPopup(BasePopup):
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.ids.AboutInfo.text = '''
-        Scroll Effect! Hopefully it works!
+Hello thanks for using RexExplorer! made over the course of a week from CodeJam VI, RexExplorer is a TUI file explorer with a built in terminal with many features!
         
-        Features:
-                  yeah there here, we got like a file thing
-                  Oh yeah and were adding a text editor too!
-                  is this scrolling yet?
+Features 
+- Be able to experience what it was like to browse files and directories on your computer from the old days!
+        
+- A built in terminal? yeah we were suprised too! be able to change directories or even commit your own application to github!
+        
+- A built in editor too! What did you just want to look at your files, see what it was like to edit files back in the old'n days!
+        
+- Create files, New Directories to utilize your built in Editor, Terminal and File Explorer 
         '''
 
 
