@@ -7,12 +7,15 @@ verify_ssl = true
 flake8 = "*"
 
 [packages]
-docutils = {version = "*", sys_platform = "== 'win32'"}
-pygments = {version = "*", sys_platform = "== 'win32'"}
-pypiwin32 = {version = "*", sys_platform = "== 'win32'"}
-kivy-deps-sdl2 = {version = "==0.1.*", sys_platform = "== 'win32'"}
-kivy-deps-glew = {version = "==0.1.*", sys_platform = "== 'win32'"}
+docutils = {version = "*",sys_platform = "== 'win32'"}
+pygments = {version = "*",sys_platform = "== 'win32'"}
+pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
+kivy-deps-sdl2 = {version = "==0.1.*",sys_platform = "== 'win32'"}
+kivy-deps-glew = {version = "==0.1.*",sys_platform = "== 'win32'"}
 kivy = "==1.11.1"
+pipfile = "*"
+ffpyplayer = "*"
+graph = "*"
 
 [requires]
 python_version = "3.7"
