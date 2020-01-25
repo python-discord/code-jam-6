@@ -14,6 +14,7 @@
         font_size: 12
         pos_hint: {'center_x': 0.5, 'center_y': 0.95}
         size_hint: 0.2, 0.05
+        on_press: root.settings_button()
 
 
 <TimeWizard>:
@@ -80,3 +81,41 @@
 		Button:
 		    text: "Revert date"
 		    on_press: root.revert_date()
+
+<SettingsScreen>:
+    id: body
+    # kivy automatically fills the corresponding properties on the
+    # class in main.py with the objects of the id for propertyname : id
+    location_field : loc
+    feedback : feedback
+    guess_location : guess
+    close_button: close_settings
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            text: "Enter a location or guess by ip"
+
+        TextInput:
+            id: loc
+
+        Label:
+            id: feedback
+            text: ""
+
+        BoxLayout:
+            orientation: "horizontal"
+
+#            Button:
+#                text: "Update"
+
+            GuessLocationButton:
+                id: guess
+                settingsscreen: body
+                text: "Guess by IP"
+
+        Button:
+            id : close_settings
+            text : "Close Settings"
+            on_release: root.dismiss()

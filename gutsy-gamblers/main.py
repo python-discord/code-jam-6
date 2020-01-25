@@ -1,17 +1,18 @@
 from datetime import datetime, timedelta
-import pickle
-
 import kivy
-import requests
+
+from geopy import Point
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import Metrics
-from kivy.uix.label import Label
+from kivy.properties import ConfigParserProperty, ObjectProperty
+from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 
+import datahelpers
 from dials import (
     DialWidget,
     NowMarker
@@ -22,14 +23,39 @@ kivy.require('1.11.1')
 
 # Screens in the App #
 class MainScreen(Screen):
+    config_latlon = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_LATLON, 'app', val_type=str)
+
     def __init__(self, **kwargs):
         super(MainScreen, self).__init__(**kwargs)
 
-        self.dial_widget = DialWidget()
+        # hacky config file validation for bad or missing coords
+
+        # we have to store or it would draw under the dials
+        settings_modal = None
+
+        try:
+            pt = Point(self.config_latlon)
+        except ValueError:
+
+            pt = Point()
+            settings_modal = SettingsScreen()
+            settings_modal.config_friendlyname = ''
+
+            if self.config_latlon != '':
+                settings_modal.feedback.text =\
+                    "Invalid location detected in config, please select a new location"
+                self.config_latlon = ''
+
+        self.dial_widget = DialWidget(latlon_point=pt)
         self.now_marker = NowMarker()
 
         self.add_widget(self.dial_widget)
         self.add_widget(self.now_marker)
+
+        # workaround for kivy's LIFO draw order
+        if settings_modal is not None:
+            Clock.schedule_once(lambda dt: settings_modal.open(), 0.5)
 
     def on_size(self, a, b):
         # Maintains a constant aspect ratio of 0.5625 (16:9)
@@ -48,17 +74,7 @@ class MainScreen(Screen):
         time_control_popup.open()
 
     def settings_button(self):
-        SettingsScreen()
-
-    def ipgeolocate(self):
-        resp = requests.get('http://ip-api.com/json/').json()
-
-        # pickle the object for testing purposes
-        temp_latlong = [resp['lat'], resp['lon']]
-        with open('latlong.tmp', 'wb') as f:
-            pickle.dump(temp_latlong, f)
-
-        return resp['lat'], resp['lon']
+        SettingsScreen().open()
 
 
 # Time control panel #
@@ -104,38 +120,87 @@ class TimeWizard(Popup):
 
 
 # Settings panel #
+
+class GuessLocationButton(Button):
+    """
+    Holds IP guessing logic for now.
+
+    Putting all of it in screen caused weakref errors.
+    """
+    settingsscreen = ObjectProperty()
+    latlon = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_LATLON, 'app', val_type=str)
+    friendlyname = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_FRIENDLY, 'app', val_type=str)
+
+    def on_press(self):
+
+        response = datahelpers.guess_location_by_ip()
+
+        location_field = self.settingsscreen.location_field
+        feedback = self.settingsscreen.feedback
+
+        if response is None:
+            feedback.text = "Error when connecting to geoip server"
+            return
+
+        self.disabled = True
+
+        self.latlon = response[datahelpers.LOCATION_LATLON]
+
+        if datahelpers.LOCATION_FRIENDLY in response:
+            location_field.text = response[datahelpers.LOCATION_FRIENDLY]
+            self.friendlyname = response[datahelpers.LOCATION_FRIENDLY]
+        else:
+            location_field.text = self.latlon
+            self.friendlyname = self.latlon
+
+        feedback.text = "Successfully got location!"
+        Clock.schedule_once(lambda dt: setattr(self, 'disabled', False), timeout=45 / 60)
+        Clock.schedule_once(lambda dt: setattr(feedback, 'text', ""), timeout=5)
+
+
 class SettingsScreen(Popup):
+
+    sundial = ObjectProperty()  # passed in if needed?
+
+    location_field = ObjectProperty()
+    close_button = ObjectProperty()
+    feedback = ObjectProperty()
+
+    config_latlon = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_LATLON, 'app', val_type=str)
+    config_friendlyname = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_FRIENDLY, 'app', val_type=str)
+
     def __init__(self, **kwargs):
-        super(SettingsScreen, self).__init__(**kwargs)
+        super().__init__(**kwargs)
+        self.close_button.disabled = self.config_latlon == ''
+        self.location_field.text = self.config_friendlyname
 
-        resp = requests.get('http://ip-api.com/json/').json()
-        city = resp['city']
-        region = resp['regionName']
-        country = resp['country']
-
-        settings_popup = Popup(title="Settings",
-                               content=Label(
-                                   text=f'Currently in {city}, {region}, {country}'
-                               ),
-                               size_hint=(None, None), size=(500, 200))
-        settings_popup.open()
-
-
-class WindowManager(ScreenManager):
-    pass
+    def on_config_latlon(self, instance, value):
+        self.close_button.disabled = False
 
 
 class SunClock(App):
     """
     Core class.
     """
+
+    # properties because we can't use on_config_change as it's tied into the
+    # mobile oriented settings system
+
+    def build_config(self, config):
+        config.setdefaults('global', {
+            'location_friendly': '',
+            'location_latlon': '',
+        })
+
     def build(self):
         Builder.load_file('main.kv')
-        sm = WindowManager()
+        sm = ScreenManager()
 
-        screens = [MainScreen(name='main')]
-        for screen in screens:
-            sm.add_widget(screen)
+        sm.add_widget(MainScreen(name='main'))
 
         sm.current = 'main'
 
