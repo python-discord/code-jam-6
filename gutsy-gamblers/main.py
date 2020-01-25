@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
 import kivy
+import re
 
 from geopy import Point
+from geopy.geocoders import Nominatim
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -120,6 +122,45 @@ class TimeWizard(Popup):
 
 
 # Settings panel #
+
+class UpdateLocationButton(Button):
+    """
+    Button for updating location.
+    """
+    settingsscreen = ObjectProperty()
+
+    latlon = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_LATLON, 'app', val_type=str)
+    friendlyname = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_FRIENDLY, 'app', val_type=str)
+
+    latlong_regex = re.compile(r'^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$')
+
+    def on_press(self):
+        input_location = self.settingsscreen.location_field.text
+        feedback = self.settingsscreen.feedback
+
+        # Use a regex to check if they entered a lat and long manually
+        latlong_re = self.latlong_regex.match(input_location)
+
+        if latlong_re:
+            lat, _, long, _ = latlong_re.groups()
+            self.latlon = f'{lat},{long}'
+            feedback.text = 'Successfully set Latitude and Longitude'
+            return
+
+        geolocator = Nominatim(user_agent="interactive_python_session_client")
+        resp = geolocator.geocode(input_location)
+
+        # Possible that location isn't found
+        if not resp:
+            feedback.text = 'Failed to find location, try again!'
+            return
+
+        self.latlon = f'{resp.latitude},{resp.longitude}'
+        self.friendlyname = resp.address
+        feedback.text = f'Successfully set location to {resp.address}'
+
 
 class GuessLocationButton(Button):
     """
