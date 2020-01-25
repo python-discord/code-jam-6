@@ -1,4 +1,4 @@
 [animation]
 size=[32,32]
-modes=1
-frame_count=[1]
+modes=4
+frame_count=[4,4,4,4]
