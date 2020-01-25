@@ -70,7 +70,10 @@ class ProfileCard(Screen):
         self.ids.left_choice.text += profile["Choices"]["left"]
         self.results = profile["Results"]
         self.ids.picture.popup.content.story.text = profile["Biography"]
-        self.ids.name.font_name = "../fonts/Oldenburg/Oldenburg-Regular.ttf"
+        # self.ids.name.font_name = "../fonts/Oldenburg/Oldenburg-Regular.ttf"
+        # #When launching it from terminal using main.py the relative path to font changes.
+        # To test this part as isolated app uncomment the line above and comment the line bellow
+        self.ids.name.font_name = "fonts/Oldenburg/Oldenburg-Regular.ttf"
 
 
 class ProfileList(ScreenManager):
