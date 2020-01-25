@@ -20,7 +20,7 @@ class Footer(BoxLayout):
         self.config_keyboard()
         self.actions = {
             '1': self.about,
-            '2': self.view,
+            '2': self.edit,
             '4': self.down,
             '5': self.up,
             '6': self.mkdir,
@@ -72,9 +72,9 @@ class Footer(BoxLayout):
         popup.open()
         return True
 
-    def view(self) -> None:
-        # not working
-        self.parent.manager.current = 'text_editor'
+    def edit(self) -> None:
+        popup = EditPopup(self, size_hint=(.5, .3), pos_hint={'center_x': .5, 'center_y': .5})
+        popup.open()
         return True
 
     def down(self):

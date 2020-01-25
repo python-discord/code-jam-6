@@ -36,6 +36,32 @@ class AboutPopup(BasePopup):
         '''
 
 
+class EditPopup(BasePopup):
+
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any) -> None:
+        super().__init__(ctx, *args, **kwargs)
+        self.ctx = ctx
+
+    def edit(self, side: str) -> None:
+        if side == 'left':
+            browser = self.ctx.parent.ids.left
+        else:
+            browser = self.ctx.parent.ids.right
+
+        file = browser.ids.rv.selected
+        manager = self.ctx.parent.parent.manager
+        editor = manager.get_screen('text_editor')
+
+        if file is not None:
+            editor.editor.file_path = Path(file.txt)
+
+            with open(Path(file.txt), 'r') as f:
+                editor.editor.text = f.read()
+
+            manager.current = 'text_editor'
+            self.dismiss()
+
+
 class Mkdir(BasePopup):
     left = NumericProperty()
     right = NumericProperty()
@@ -95,6 +121,7 @@ class Mkdir(BasePopup):
 
 
 class DeletePopup(BasePopup):
+
     def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
         super().__init__(ctx, *args, **kwargs)
         self.filer = None
@@ -170,7 +197,7 @@ class CreatePopup(BasePopup):
         self.filemanager = 0
 
     def buttonselect(self, manager):
-        self.left, self.right = 0, 0
+        self.left = self.right = 0
         self.filemanager = manager
         if manager == 1:
             self.left = .2

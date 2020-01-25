@@ -12,6 +12,7 @@ from kivy.lang import Builder
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import (
     ScreenManager,
+    NoTransition,
     Screen
 )
 
@@ -35,4 +36,4 @@ class Manager(ScreenManager):
 class AncientTechApp(App):
 
     def build(self):
-        return Manager()
+        return Manager(transition=NoTransition())

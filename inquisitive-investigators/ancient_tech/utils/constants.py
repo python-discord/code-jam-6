@@ -13,7 +13,8 @@ class _Keycodes:
             'backspace':  8,
             'esc':        27,
             'c':          99,
-            'x':          120
+            'x':          120,
+            's':          115,
         }
 
     def __getitem__(self, items: Union[str, Tuple]) -> List[int]:

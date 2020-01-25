@@ -1,9 +1,10 @@
 #:kivy 1.11.1
 
 <TextEditor>:
+    editor: editor
+    recycler: recycler
+    
     BoxLayout:
-        editor: editor
-        recycler: recycler
 
         RecycleView:
             viewclass: 'EditorIO'
@@ -11,7 +12,6 @@
                 
             EditorIO:
                 id: editor
-                shell: root
                 font_name: root.font_name
                 font_size: root.font_size
                 foreground_color: root.foreground_color
