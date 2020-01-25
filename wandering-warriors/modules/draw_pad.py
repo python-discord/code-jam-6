@@ -1,5 +1,5 @@
 from kivy.uix.floatlayout import FloatLayout
-from kivy.graphics import Color, Point, GraphicException
+from kivy.graphics import Color, Point, GraphicException, Rectangle
 from math import sqrt
 
 
@@ -25,6 +25,31 @@ class DrawPad(FloatLayout):
         self.in_pad = False
         self.lines = []
 
+        with self.canvas:
+            self.border = []
+
+            Color(1, 1, 1, 1)
+
+            for i in range(4):
+                self.border.append(Rectangle(source='assets/graphics/wood.png'))
+
+        self.bind(pos=self.update, size=self.update)
+
+        self.update()
+
+    def update(self, *args):
+        self.border[0].pos = self.pos
+        self.border[0].size = (self.width, 16)
+
+        self.border[1].pos = (self.x, self.y + self.height - 16)
+        self.border[1].size = (self.width, 16)
+
+        self.border[2].pos = self.pos
+        self.border[2].size = (16, self.height)
+
+        self.border[3].pos = (self.x + self.width - 16, self.y)
+        self.border[3].size = (16, self.height)
+
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
         self.ud = touch.ud
@@ -34,10 +59,10 @@ class DrawPad(FloatLayout):
            and touch.pos[1] < self.pos[1] + self.size[1]):
             self.in_pad = True
             self.ud['group'] = g = str(touch.uid)
-            pointsize = 1
+            pointsize = 3
             self.ud['color'] = 0
             with self.canvas.before:
-                Color(0, 0, 0)
+                Color(.2, .1, .05, .08)
                 self.ud['lines'] = [
                     Point(points=(touch.x, touch.y),
                           pointsize=pointsize, group=g)]
