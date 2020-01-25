@@ -22,7 +22,7 @@ class DungeonMap:
     def __init__(self):
         """Initialize instance."""
         self.callbacks = set()
-        self.current_location = (2, 2)
+        self.current_location = (1, 1)
         self.visible_block = self._get_visible_block()
         #                       [[0, 0, 0],
         #                        [0, 1, 1],
