@@ -157,6 +157,10 @@ DEFAULT_ENTRIES = {
     '<>': ForthEntry(pops(2)(op.ne)),
     'AND': ForthEntry(pops(2)(op.and_)),
     'OR': ForthEntry(pops(2)(op.or_)),
+    "INVERT": ForthEntry(pops(2)(op.inv)),
+    "XOR": ForthEntry(pops(2)(op.xor)),
+    "LSHIFT": ForthEntry(pops(2)(op.lshift)),
+    "RSHIFT": ForthEntry(pops(2)(op.rshift)),
     'ABS': ForthEntry(pops(1)(op.abs)),
     'MIN': ForthEntry(pops(2)(min)),
     'MAX': ForthEntry(pops(2)(max)),
@@ -204,6 +208,10 @@ DEFAULT_ENTRIES = {
     'VALUE': ForthEntry(wordimpl.value),
     'TO': ForthEntry(wordimpl.forth_to),
     'SOURCE': ForthEntry(wordimpl.source),
+    'HERE': ForthEntry(wordimpl.here),
+    'ALLOT': ForthEntry(wordimpl.allot),
+    ".X": ForthEntry(pops(1, returns=0)(lambda a: print(hex(a), end=' '))),
+    '0X': ForthEntry(wordimpl.hex_literal),
 }
 
 T = TypeVar('T')
@@ -300,11 +308,11 @@ def create_forth() -> ForthEnv:
     return forth
 
 
-def launch_repl() -> None:
-    forth = create_forth()
+def launch_repl(forth: ForthEnv = None) -> None:
+    forth = forth or create_forth()
     while True:
         try:
-            cmd = input('FORTH> ')
+            cmd = input('\nFORTH> ')
             forth.eval(cmd)
         except Exception as e:
             print(e)

@@ -23,7 +23,7 @@ class Forth(command.Command):
     def __init__(self) -> None:
         super().__init__(name='forth')
 
-    @command.option('-f', '--file', nargs='?', default=None,
+    @command.option('file', nargs='?', default=None,
                     help="the file passed will be evaluated and no repl will start, unless the i flag is present")
     def handle_file(self, ns: Namespace, term: Terminal) -> None:
         if ns.file:
@@ -34,7 +34,15 @@ class Forth(command.Command):
     @command.option('-i', '--interactive', action='store_true', default=False,
                     help="regardless of whether a file was passed, start the repl  after loading the file")
     def handle_n(self, ns: Namespace, term: Terminal):
-        self.n = ns.interactive
+        self.i = ns.interactive
 
     def main(self, ns: Namespace, term: Terminal) -> None:
-        pass
+        from project.langs.forth import forthimpl
+        if self.file:
+            with self.file.open() as f:
+                env: forthimpl.ForthEnv = forthimpl.create_forth()
+                env.eval(f.read())
+                if self.i:
+                    forthimpl.launch_repl(env)
+        else:
+            forthimpl.launch_repl()

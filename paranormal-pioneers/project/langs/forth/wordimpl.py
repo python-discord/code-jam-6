@@ -131,7 +131,7 @@ def forth_def(env: ForthEnv) -> int:
         env.words[env.index + 2: env.index + idx],
         special=False
     )}
-    print('defined', words_)  # DEBUG
+    #  print('defined', words_)  # DEBUG
     env.forth_dict.update(words_)
     return idx
 
