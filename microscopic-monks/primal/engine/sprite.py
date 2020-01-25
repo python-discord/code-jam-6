@@ -29,11 +29,15 @@ class Sprite:
         else:
             self.bg_rect = Rectangle(source=(Sprite.resource_dir / image).as_posix(),
                                      pos=self.pos, size=self.size)
+        self.bg_rect.texture.mag_filter = 'nearest'
+        self.bg_rect.texture.min_filter = 'nearest'
 
     def set_source(self, source: str):
         image = (Sprite.resource_dir / source).as_posix()
         if image != self.get_source():
             self.bg_rect.source = (Sprite.resource_dir / source).as_posix()
+        self.bg_rect.texture.mag_filter = 'nearest'
+        self.bg_rect.texture.min_filter = 'nearest'
 
     def get_source(self) -> str:
         return self.bg_rect.source
