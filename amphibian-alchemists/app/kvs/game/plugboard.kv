@@ -35,7 +35,7 @@
             BoxLayout:
                 ScrollView:
                     PopupLabel:
-                        text: "\n".join(app.root.get_screen("plugboard_screen").statistics())
+                        text: "\n".join(app.root.get_screen("plugboard_screen").wires)
                 StackLayout:
                     PopupLabel:
                         text: str(app.root.get_screen("plugboard_screen").plugs_in_screen)
