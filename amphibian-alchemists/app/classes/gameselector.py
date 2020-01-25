@@ -65,6 +65,8 @@ class GameSelectorScreen(Screen):
             self.rv.data = [{"text": self.no_saved_games}]
 
     def new_game(self):
+        App.get_running_app().game_id = None
+        self.manager.get_screen("rotor_screen").reset_rotors()
         self.manager.get_screen(
             "game_screen"
         ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
