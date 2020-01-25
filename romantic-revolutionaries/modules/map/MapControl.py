@@ -8,9 +8,9 @@ class DungeonMap:
 
     map_vector = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 1, 0, 0, 1, 1, 0],
+        [0, 0, 1, 0, 1, 0, 0, 0, 0, 0],
+        [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 0, 1, 0, 1, 0, 0, 1, 1, 0],
         [0, 0, 1, 0, 1, 0, 0, 1, 0, 0],
         [0, 0, 1, 0, 1, 0, 0, 1, 0, 0],
         [0, 0, 1, 1, 1, 0, 0, 1, 0, 0],
@@ -22,7 +22,7 @@ class DungeonMap:
     def __init__(self):
         """Initialize instance."""
         self.callbacks = set()
-        self.current_location = (1, 1)
+        self.current_location = (2, 2)
         self.visible_block = self._get_visible_block()
         #                       [[0, 0, 0],
         #                        [0, 1, 1],

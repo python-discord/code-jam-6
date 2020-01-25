@@ -86,9 +86,9 @@ class Move(Command):
         next_path_text += '.'
         self.app.add_text(next_path_text)
 
-        for _ in visible_block:
-            print(_)
-        print()
+        # for _ in visible_block:
+        #     print(_)
+        # print()
 
 
 class CommandHandler:

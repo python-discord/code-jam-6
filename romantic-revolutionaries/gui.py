@@ -197,7 +197,9 @@ class GUIApp(App):
         return self.gui
 
     def start_game(self):
-        self.add_text('Welcome to the [color=00FF00]game[/color]!')
+        self.add_text("""You find yourself in a cave with a flickering torch on the wall.
+        You can make out four paths, each equally foreboding.
+        """)
         self.nav_control = navcont.NavControl()
         self.map_control = MapControl.DungeonMap()
         self.nav_control.subscribe(self.map_control.callback)
