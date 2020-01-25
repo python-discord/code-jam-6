@@ -6,6 +6,7 @@ from firestarter.game_engine.sprite import Sprite
 
 from kivy.clock import Clock
 from kivy.core.window import Keyboard, Window
+from kivy.logger import Logger
 from kivy.uix.widget import Widget
 
 IMAGE_EXTENSIONS = ['png']
@@ -49,6 +50,13 @@ class Engine(Widget):
     def update(self, dt: float) -> None:
         """This function will be overwritten by the user."""
         pass
+
+    def unload_level(self, preserve: List = []) -> None:
+        """Unload current level and kill all objects except objects in preserve."""
+        Logger.info("Engine: Unloading current level")
+        for sp in self.sprites:
+            if sp not in preserve:
+                sp.kill()
 
     def _animate(self, dt: float) -> None:
         """Advance all the animations by one."""
