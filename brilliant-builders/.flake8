@@ -1,4 +1,4 @@
 [flake8]
 max-line-length=100
 exclude=.cache,.venv,.svn,CVS,.bzr,.hg,.git,__pycache__,.tox
-ignore=TYP002,TYP003,TYP101,TYP102,TYP204,TYP206
+ignore=TYP002,TYP003,TYP101,TYP102,TYP204,TYP206, F401
