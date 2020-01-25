@@ -5,7 +5,7 @@ from random import randint
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
                                  WINDOW_HEIGHT, LANE_BOUNDS)
-from TLOA.views import ShipView
+from TLOA.views import (ShipView, PauseMenuView)
 
 from kivy import Logger
 from kivy.animation import Animation
@@ -23,6 +23,7 @@ class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
         super().__init__(**kwargs)
         self._game = game
+        self.pause_menu_content = PauseMenuView()
 
         game.mirror.bind(state=self.on_mirror_state_change)
         game.bind(running=lambda _, value: self.show_game(value))
@@ -33,6 +34,9 @@ class GameView(Widget):
 
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+        self.pause_menu_content.button_resume.bind(on_release=self.close_pause_menu)
+        self.pause_menu_content.button_exit.bind(on_release=self.exit_game)
 
         self._background = Image(
             source=IMAGES_PATH.format('background.zip'),
@@ -52,13 +56,14 @@ class GameView(Widget):
                                 title_align='center',
                                 title_color=(1, 0.1, 0.1, 1),
                                 title_font=FONT_PATH.format('Pacifico-Regular.ttf'),
-                                content=Label(text="hello world"),
+                                content=self.pause_menu_content,
                                 separator_color=(0, 0, 0, 0),
                                 separator_height=0,
                                 size_hint=(None, None),
-                                size=(300, 400),
+                                size=(300, 250),
                                 auto_dismiss=False,
                                 background=IMAGES_PATH.format('yellow_panel.png'))
+
         self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
                                 background_down=IMAGES_PATH.format('ui_pause_click.png'),
                                 border=(0, 0, 0, 0),
@@ -67,6 +72,9 @@ class GameView(Widget):
                                 height=35,
                                 on_release=self.open_pause_menu)
 
+    def exit_game(self, *args):
+        quit()
+        
     def open_pause_menu(self, *args):
         self.pause_menu.open()
         self.pause_menu_opened = True
