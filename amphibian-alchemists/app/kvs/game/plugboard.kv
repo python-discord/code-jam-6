@@ -20,7 +20,7 @@
 
 <PlugResume@Popup>:
     size_hint: 0.5, 0.5
-    title: "Plugs resume"
+    title: "Statistics"
     BoxLayout:
         spacing: dp(10)
         orientation: "vertical"
@@ -35,7 +35,7 @@
             BoxLayout:
                 ScrollView:
                     PopupLabel:
-                        text: "\n".join(app.root.get_screen("plugboard_screen").wires)
+                        text: "\n".join(app.root.get_screen("plugboard_screen").statistics())
                 StackLayout:
                     PopupLabel:
                         text: str(app.root.get_screen("plugboard_screen").plugs_in_screen)

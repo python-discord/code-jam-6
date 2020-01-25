@@ -134,3 +134,6 @@ class PlugboardScreen(Screen):
             self.plugs_in_screen -= 1
         self.all_plugged = list(set(self.all_plugged))
         save_plugs(self.all_plugged)
+
+    def statistics(self) -> list:
+        return [i+j for i, j in zip(self.all_plugged[::2], self.all_plugged[1::2])]
