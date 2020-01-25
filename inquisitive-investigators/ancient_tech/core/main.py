@@ -1,5 +1,6 @@
 from kivy import Config
 
+Config.set('kivy', 'window_icon', 'ancient_tech/static/icon.png')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('graphics', 'minimum_width', '1300')
@@ -35,4 +36,5 @@ class Manager(ScreenManager):
 class AncientTechApp(App):
 
     def build(self):
+        self.title = 'Hello world'
         return Manager()

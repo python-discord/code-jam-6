@@ -151,7 +151,7 @@
             pos_hint: {'center_x': .5, 'center_y': .25}
             text: '[ Create New File ]'
             color: 0.34,1,1,1
-            on_press: print('Created File')
+            on_press: root.mkfile(root.ids.create.text)
         Button:
             size_hint: .3,.1
             pos_hint: {'center_x': .5, 'center_y': .1}
