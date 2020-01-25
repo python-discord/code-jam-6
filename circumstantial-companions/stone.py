@@ -223,7 +223,7 @@ class Chisel(Widget):
             pebble_dict = json.load(file)
         self.pebbles = {}
         self.positions = pebble_dict['positions']
-        self.colors = ['colors']
+        self.colors = pebble_dict['colors']
         self.pixels = []
         self.pebble_size = get_pebble_size(self.width, self.height)
         self.canvas.clear()
