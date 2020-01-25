@@ -30,14 +30,34 @@
             pos: self.pos
 
 <Ledger>:
+    #:set BORDER_W 6
+
     size_hint_x: 1.6
     canvas:
         Color:
             rgba: 1, 1, 1, 1
         Rectangle:
-            pos: map(lambda a: a + 7, self.pos)
-            size: map(lambda a: a - 14, self.size)
+            pos: self.pos
+            size: self.size
             source: 'assets/graphics/sandstone.jpg'  # TODO: make this platform independent?
+        Color:
+            rgba: 0, 0, 0, 0.1
+        Rectangle:
+            pos: self.pos
+            size: (self.width, BORDER_W)
+        Color:
+            rgba: 1, 1, 1, 0.3
+        Rectangle:
+            pos: (self.x, self.y + self.height - BORDER_W)
+            size: (self.width, BORDER_W)
+        Color:
+            rgba: 0.5, 0.5, 0.5, 0.3
+        Rectangle:
+            pos: (self.x, self.y + BORDER_W)
+            size: (BORDER_W, self.height - 2 * BORDER_W)
+        Rectangle:
+            pos: (self.x + self.width - BORDER_W, self.y + BORDER_W)
+            size: (BORDER_W, self.height - 2 * BORDER_W)
 
 <OperationsBar>:
     size_hint_x: None
