@@ -1,6 +1,8 @@
 # Circumstantial Companions
 
-Chisel by Circumstantial Companions.
+SMASH ROCK!  FASTER SWING = MORE ROCK SMASHED! This app is a pre-historically accurate
+representation of Paleolithic technology.  Re-invent the wheel with this (rock)cutting-edge
+simulation! A caveman workout routine guaranteed to give you chiseled slabs fast!
 
 ## Installation
 
