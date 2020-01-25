@@ -1,7 +1,7 @@
 from typing import List
 
 from kivy.clock import Clock
-from kivy.core.window import Keyboard, Window
+from kivy.core.window import Window
 from kivy.uix.widget import Widget
 
 from .screen import Screen
@@ -12,9 +12,9 @@ class Engine(Widget):
         super().__init__(**kwargs)
 
         # bind the keyboard and its callbacks
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
-        self._keyboard.bind(on_key_up=self._on_keyboard_up)
+        self.keyboard = Window.request_keyboard(self.on_keyboard_closed, self)
+        self.keyboard.bind(on_key_down=self.on_keyboard_down)
+        self.keyboard.bind(on_key_up=self.on_keyboard_up)
         Window.set_system_cursor("crosshair")
 
         self.window_size = 1, 1
@@ -24,10 +24,9 @@ class Engine(Widget):
         Window.bind(on_touch_down=self.update_mouse_down)
         # Window.bind(on_touch_up=self.update_mouse_up)
 
-        # keep track of the currently pressed keys in a set for smooth motion
         self.pressed_keys = set()
         self.mouse_keys = set()
-        # keep track of the current mouse position
+
         self.mouse_position = 0, 0
 
         # list of screens to update
@@ -62,32 +61,13 @@ class Engine(Widget):
         for screen in self.screens:
             screen.update(dt)
 
-    def _keyboard_closed(self) -> None:
-        """Clean up once the keyboard is closed."""
-        self._keyboard.unbind(on_key_down=self._on_keyboard_down)
-        self._keyboard.unbind(on_key_up=self._on_keyboard_down)
-        self._keyboard = None
+    def on_keyboard_closed(self) -> None:
+        self.keyboard.unbind(on_key_down=self.on_keyboard_down)
+        self.keyboard.unbind(on_key_up=self.on_keyboard_down)
+        self.keyboard = None
 
-    def _on_keyboard_down(self,
-                          keyboard: Keyboard,
-                          key_code: tuple,
-                          text: str,
-                          modifiers: List) -> None:
-        """
-        Add the pressed key to the set of pressed keys.
-        :param keyboard: keyboard instance
-        :param key_code: pressed key code
-        :param text: key as text
-        :param modifiers: modifiers pressed
-        :return: None
-        """
-        self.pressed_keys.add(key_code[0])
+    def on_keyboard_down(self, _, key) -> None:
+        self.pressed_keys.add(key[0])
 
-    def _on_keyboard_up(self, keyboard: Keyboard, key_code: tuple) -> None:
-        """
-        Remove the pressed key to the set of pressed keys.
-        :param keyboard: keyboard instance
-        :param key_code: pressed key code
-        :return: None
-        """
-        self.pressed_keys.discard(key_code[0])
+    def _on_keyboard_up(self, _, key) -> None:
+        self.pressed_keys.discard(key[0])
