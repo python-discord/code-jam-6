@@ -44,6 +44,10 @@ class OrthographicCamera(Camera):
         self.pos_y = y
 
     def update(self, delta: float = 0.0):
+        self.projection_matrix.matrix = self.get_matrix_projection()
+        self.modelview_matrix.matrix = Matrix()
+
+    def get_matrix_projection(self):
         width = self.viewport_width / 2
         height = self.viewport_height / 2
 
@@ -55,10 +59,7 @@ class OrthographicCamera(Camera):
         projection.scale(self.zoom, self.zoom, self.zoom)
         projection.translate(1 + x / width * self.zoom, 1 + y / height * self.zoom, 0)
 
-        model_view = Matrix()
-
-        self.projection_matrix.matrix = projection
-        self.modelview_matrix.matrix = model_view
+        return projection
 
     def set_zoom(self, zoom: float):
         self.zoom = zoom
