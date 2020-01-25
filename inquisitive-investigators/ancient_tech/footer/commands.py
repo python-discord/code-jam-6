@@ -15,22 +15,28 @@ class BasePopup(Popup):
     ) -> None:
         super().__init__(*args, **kwargs)
         self.ctx = ctx
+        self.opp_update = False
 
-    def on_dismiss(self, *args: Any, **kwargs: Any):
+    def on_dismiss(self, *args: Any, **kwargs: Any) -> None:
         self.ctx._open = False
         return super(BasePopup, self).on_dismiss(
             *args, **kwargs
         )
 
     def update(self, browser_side: str, dir_: str) -> None:
+        """
+        Refreshes the specified browser side.
+        """
         dir_ = Path(dir_)
         base = self.ctx.parent.ids
 
         if browser_side in ('left', 1):
             browser = base.left.ids.rv
+            browser_side = 'left'
 
-        elif browser_side == ('right', 2):
+        elif browser_side in ('right', 2):
             browser = base.right.ids.rv
+            browser_side = 'right'
 
         else:
             raise InvalidBrowser(
@@ -43,11 +49,35 @@ class BasePopup(Popup):
         dirs = browser.dirs
         data = [gen(file_name) for file_name in dirs]
 
+        # Determine whether a back button should
+        # be generated. Based on whether the current
+        # directory is the root directory or not.
         if len(dir_.parts) > 1:
             browser.update(state=1, file=data)
         else:
             browser.update(state=2, file=data)
 
+        # If the opposite side is the same directory,
+        # update it too
+        if not self.opp_update:
+
+            if browser_side == 'left':
+                opp_dir = base.right.ids.header.ids.directory.current_dir
+
+                if opp_dir == str(dir_):
+                    self.opp_update = True
+                    self.update('right', opp_dir)
+
+            else:
+                opp_dir = base.left.ids.header.ids.directory.current_dir
+
+                if opp_dir == str(dir_):
+                    self.opp_update = True
+                    self.update('left', opp_dir)
+
+        else:
+            self.opp_update = False
+            
 
 class AboutPopup(BasePopup):
 
@@ -168,7 +198,7 @@ class DeletePopup(BasePopup):
             Logger.info(f'Delete: Removed directory {dir_.name}')
 
         dir_ = path.parent
-        
+
         if self.ctx.parent.ids.left.ids.rv.selected is not None:
             self.update('left', dir_)
 
