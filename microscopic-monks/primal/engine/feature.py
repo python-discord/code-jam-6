@@ -6,7 +6,7 @@ from kivy.graphics.instructions import InstructionGroup
 
 
 class Feature:
-    def __init__(self, sprite: str, pos: Tuple[float, float], size: Tuple[float, float],
+    def __init__(self, sprite: str, pos: Tuple[float, float], z: float, size: Tuple[float, float],
                  angle: float):
 
         hp_pos_x = (pos[0] + size[0] / 2) - 50
@@ -15,8 +15,12 @@ class Feature:
         self.health_bar = HealthBar((hp_pos_x, hp_pos_y), (100, 7), 5)
         self.feature = RotatableSprite(sprite, pos, size, angle)
         self.alpha = 0
+        self.z = z
 
         self.set_alpha(self.alpha)
+
+    def get_z(self) -> float:
+        return self.z
 
     def get_position(self) -> Tuple[float, float]:
         return self.feature.get_position()
