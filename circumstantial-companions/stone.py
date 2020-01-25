@@ -146,10 +146,10 @@ class Chisel(Widget):
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
             for depth, color_scale in enumerate((.4, .6, 1)):
                 for (r, g, b, a), x, y in pebble_setup():
-                    scaled_x = x * self.width
-                    scaled_y = y * self.height
                     color = color_scale * r, color_scale * g, color_scale * b, a
                     Color(*color)
+                    scaled_x = x * self.width
+                    scaled_y = y * self.height
                     self.colors.append(color)
                     self.positions.append((x, y, depth))
                     self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
@@ -166,7 +166,7 @@ class Chisel(Widget):
         for i, (x, y, z) in enumerate(self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
-            self.pixels[i].pos = (scaled_x, scaled_y)
+            self.pixels[i].pos = scaled_x, scaled_y
             self.pixels[i].size = self.pebble_size
 
     def poke_power(self, tx, ty, touch_velocity, pebble_x, pebble_y):
