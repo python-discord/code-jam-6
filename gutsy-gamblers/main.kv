@@ -96,7 +96,7 @@
         orientation: "vertical"
 
         Label:
-            text: "Enter a location or guess by ip"
+            text: "Enter a location or guess by ip.\nLocation can be entered as 'latitude, longitude' (ex: 53.3, -18.9)\nor by entering an address/city/location."
 
         TextInput:
             id: loc
@@ -108,8 +108,10 @@
         BoxLayout:
             orientation: "horizontal"
 
-#            Button:
-#                text: "Update"
+            UpdateLocationButton:
+                id: update
+                text: "Update"
+                settingsscreen: body
 
             GuessLocationButton:
                 id: guess
