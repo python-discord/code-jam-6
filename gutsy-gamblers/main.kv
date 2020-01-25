@@ -10,46 +10,64 @@
 
 <TimeWizard>:
     title: 'Time Wizard'
+    redraw_checkbox: redraw_checkbox
 
-    size_hint: 0.2, 0.8
+    size_hint: 0.25, 0.8
     pos_hint: {'center_x': 0.15, 'center_y': 0.5}
 
-    BoxLayout:
-        orientation: 'horizontal'
+	BoxLayout:
+		orientation: 'vertical'
 
-        BoxLayout:
-            orientation: 'vertical'
+		GridLayout:
+			size_hint: 1, 0.2
+        	cols: 2
+        	Label:
+        		text: "Rapid Redraw"
+			CheckBox:
+				id: redraw_checkbox
+				active: False
 
-            Label:
-            	text: "Day Length"
-            	font_size: 12
-                size_hint: None, 0.03
-                pos_hint: {'center_x': 0.5, 'center_y': 0}
 
-            Slider:
-                id: day_slider
-                orientation: 'vertical'
-                min: 1
-                max: 100
-                value: 1
-                on_touch_up: root.time_lapse(round(self.value))
+		BoxLayout:
+			orientation: 'horizontal'
 
-        BoxLayout:
-            orientation: 'vertical'
+			BoxLayout:
+				orientation: 'vertical'
 
-            Label:
-            	text: str(root.caller.date)
-            	font_size: 12
-                size_hint: None, 0.03
-                pos_hint: {'center_x': 0.5, 'center_y': 0}
+				Label:
+					text: "Day Length"
+					font_size: 12
+					size_hint: None, 0.03
+					pos_hint: {'center_x': 0.5, 'center_y': 0}
 
-            Slider:
-                id: date_slider
-                orientation: 'vertical'
-                min: 1
-                max: 30
-                value: 1
-                on_touch_up: root.date_lapse(round(self.value))
+				Slider:
+					id: day_slider
+					orientation: 'vertical'
+					min: 1
+					max: 100
+					value: 1
+#					on_touch_up: root.time_lapse(round(self.value))
+
+			BoxLayout:
+				orientation: 'vertical'
+
+				Label:
+					text: "Date Iterate"
+					font_size: 12
+					size_hint: None, 0.03
+					pos_hint: {'center_x': 0.5, 'center_y': 0}
+
+				Slider:
+					id: date_slider
+					orientation: 'vertical'
+					min: 1
+					max: 100
+					value: 1
+#					on_touch_up: root.date_lapse(round(self.value))
+
+		Label:
+			size_hint: 1, 0.2
+			text: str(root.dial.date.strftime("%d/%m/%Y"))
 
 <NowMarker>:
 	Image:

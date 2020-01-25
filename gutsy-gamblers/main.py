@@ -86,6 +86,10 @@ class DialWidget(FloatLayout):
         self.dial_size = (0.8, 0.8)
         self.date = datetime.now()
 
+        self.midnight = (self.date + timedelta(days=1))
+        self.midnight_delta = (datetime(year=self.midnight.year, month=self.midnight.month,
+                                        day=self.midnight.day, hour=0, minute=0, second=0) - self.date).seconds
+
         # Split suntime tuple into named variables
         self.sun_angles = self.sun_time()
         self.sunrise = self.sun_angles[0]
@@ -104,9 +108,9 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_set_marker)
 
         self.animate_dial()
-        self.clock = Clock.schedule_interval(self.redraw, self.day_length)
+        self.clock = Clock.schedule_interval(self.redraw, self.midnight_delta)
 
-    def animate_dial(self, restart=False):
+    def animate_dial(self):
         anim = Animation(angle=359, duration=self.day_length)
         anim += Animation(angle=359, duration=self.day_length)
         anim.repeat = True
@@ -135,9 +139,11 @@ class DialWidget(FloatLayout):
         self.add_widget(self.sun_rise_marker)
         self.add_widget(self.sun_set_marker)
 
+        print(self.midnight_delta)
+
         # Restart the clock!
         self.clock.cancel()
-        self.clock = Clock.schedule_interval(self.redraw, self.day_length)
+        self.clock = Clock.schedule_interval(self.redraw, self.midnight_delta)
 
     def sun_time(self):
         with open('latlong.tmp', 'rb') as f:
@@ -202,6 +208,7 @@ class DialWidget(FloatLayout):
     def on_angle(self, item, angle):
         if angle == 359:
             item.angle = 0
+            self.redraw()
 
 
 class DoubleVision(EffectBase):
@@ -334,18 +341,21 @@ class MainScreen(Screen):
 
 # Time control panel #
 class TimeWizard(Popup):
-    def __init__(self, caller, **kwargs):
-        self.caller = caller
+
+    def __init__(self, dial, **kwargs):
+        self.dial = dial
         super(TimeWizard, self).__init__(**kwargs)
+        self.redraw_checkbox.bind(active=self.delta_override)
 
-    def time_lapse(self, day):
-        self.caller.day_length = 86400 / day
-        self.caller.redraw()
-        self.caller.animate_dial(True)
-
-    def date_lapse(self, date):
-        self.caller.date_interval = date
-        self.caller.redraw()
+    def delta_override(self):
+        if self.redraw_checkbox.active is True:
+            self.dial.midnight_delta = 0.1
+            self.dial.redraw()
+        else:
+            self.dial.midnight_delta = (datetime(year=self.dial.midnight.year, month=self.dial.midnight.month,
+                                                 day=self.dial.midnight.day,
+                                                 hour=0, minute=0, second=0) - self.date).seconds
+            self.dial.redraw()
 
 
 # Settings panel #
