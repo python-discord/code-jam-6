@@ -1,10 +1,11 @@
 import random
-from typing import Tuple
+from typing import Tuple, Set
 
 from kivy.graphics.instructions import RenderContext, InstructionGroup
 
 from primal.engine.perlin import sample
-from primal.engine.sprite import Sprite, RotatableSprite
+from primal.engine.sprite import Sprite
+from primal.engine.feature import Feature
 
 
 class World:
@@ -13,6 +14,8 @@ class World:
     LOAD_RADIUS = 1
 
     def __init__(self, pos: Tuple[float, float]):
+        self.world_group = InstructionGroup()
+
         chunk_pos = World.get_chunk_coords_from_pos(pos)
 
         self.loaded_center = chunk_pos
@@ -36,10 +39,26 @@ class World:
             for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
 
+        for row in self.features_chunk_instructions:
+            for instruction in row:
+                self.world_group.add(instruction)
+
         self.load_area(self.loaded_center)
 
+    def get_features(self, rng: int):
+        for y in World.get_loaded_range(World.RADIUS_HEIGHT, rng):
+            for x in World.get_loaded_range(World.RADIUS_WIDTH, rng):
+                yield self.loaded_chunks[y][x].get_features()
+
     def update(self, pos: Tuple[float, float]):
-        x, y = World.get_chunk_coords_from_pos(pos)
+        x, y = pos
+
+        if x < 0:
+            x -= Chunk.SIZE
+        if y < 0:
+            y -= Chunk.SIZE
+
+        x, y = World.get_chunk_coords_from_pos((x, y))
         lx, ly = self.loaded_center
 
         if x + World.LOAD_RADIUS == lx or x - World.LOAD_RADIUS == lx or x == lx:
@@ -54,9 +73,7 @@ class World:
             for terrain in row:
                 terrain.draw(canvas)
 
-        for row in self.features_chunk_instructions:
-            for instruction in row:
-                canvas.add(instruction)
+        canvas.add(self.world_group)
 
     def load_area(self, pos: Tuple[int, int]):
         for index_y, y in enumerate(World.get_loaded_range(pos[1], World.RADIUS_HEIGHT)):
@@ -72,10 +89,13 @@ class World:
                 self.loaded_chunks[index_y][index_x] = row_chunks[x]
                 self.loaded_chunks[index_y][index_x].draw(terrain_instruction)
 
-        for y in range(len(self.loaded_chunks)):
-            for x in range(len(self.loaded_chunks[y])):
-                self.features_chunk_instructions[y][x].clear()
-                self.loaded_chunks[y][x].draw_features(self.features_chunk_instructions[y][x])
+                instruction_group = self.features_chunk_instructions[index_y][index_x]
+                self.world_group.remove(instruction_group)
+
+                instruction_group = InstructionGroup()
+                self.features_chunk_instructions[index_y][index_x] = instruction_group
+                self.world_group.add(instruction_group)
+                self.loaded_chunks[index_y][index_x].draw_features(instruction_group)
 
     @staticmethod
     def get_loaded_range(x: int, rng: int):
@@ -120,7 +140,7 @@ class Chunk:
             sprite = 'r.png'
 
             self.chunk_features.add(
-                RotatableSprite(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
+                Feature(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
 
         if self.type != 2:
             return
@@ -131,7 +151,7 @@ class Chunk:
             sprite = 'topOfTree.png'
 
             self.chunk_features.add(
-                RotatableSprite(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
+                Feature(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
 
     def draw(self, terrain: Sprite):
         terrain.set_position(self.pos)
@@ -140,6 +160,12 @@ class Chunk:
     def draw_features(self, group: InstructionGroup):
         for feature in self.chunk_features:
             feature.draw(group)
+
+    def get_features(self) -> Set[Feature]:
+        return self.chunk_features
+
+    def remove_feature(self, feature: Feature):
+        self.chunk_features.discard(feature)
 
     @staticmethod
     def get_random_position(pos):
