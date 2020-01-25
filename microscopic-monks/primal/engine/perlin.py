@@ -35,7 +35,7 @@ def _sample1d(x, seed=SEED, octave=1):
         randomize(tile(xi, periodx), 0, seed),
         randomize(tile(xi + 1, periodx), 0, seed),
         randomize(tile(xi + 2, periodx), 0, seed),
-        lerp) * 0.5 + 0.25;
+        lerp) * 0.5 + 0.25
 
 
 def _sample2d(x, y, seed=SEED, octave=1):
@@ -54,7 +54,7 @@ def _sample2d(x, y, seed=SEED, octave=1):
             randomize(tile(xi + 2, periodx), tile(yi - 1 + ii, periody), seed),
             lerpx)
 
-    return interpolate(*xSamples, lerpy) * 0.5 + 0.25;
+    return interpolate(*xSamples, lerpy) * 0.5 + 0.25
 
 
 def sample(x=None, y=None, seed=SEED, octave=1):

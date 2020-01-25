@@ -24,6 +24,8 @@ class OrthographicCamera(Camera):
         self.modelview_matrix = MatrixInstruction(Matrix(), 'modelview_mat')
         self.projection_matrix = MatrixInstruction(Matrix(), 'projection_mat')
 
+        self.update()
+
     def get_viewport(self) -> Tuple[int, int]:
         return self.viewport_width, self.viewport_height
 
