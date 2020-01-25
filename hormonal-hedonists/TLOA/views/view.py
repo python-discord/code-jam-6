@@ -2,15 +2,15 @@ import math
 
 from random import randint
 
-from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH,
                                  WINDOW_HEIGHT, LANE_BOUNDS)
+from TLOA.core.game import Game
 from TLOA.views import ShipView
 
 from kivy import Logger
 from kivy.animation import Animation
-from kivy.core.window import Window
 from kivy.clock import Clock
+from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
@@ -52,7 +52,6 @@ class GameView(Widget):
         self.add_widget(self._background)
 
         with self.canvas:
-
             # Load & configure the flock of bird animation frames
             birds = Image(
                 source=IMAGES_PATH.format('birds.zip'),
@@ -90,11 +89,11 @@ class GameView(Widget):
         # Add the Score display
         self.add_widget(self._score)
 
-    def on_island_health_change(self, game, value):
-        health = math.ceil(value/10) * 10
+    def on_island_health_change(self, _game: Game, health: int):
+        health = math.ceil(health / 10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
 
-    def on_add_ship(self, game, ship):
+    def on_add_ship(self, _game: Game, ship: ShipView):
         ship.shape = ShipView(
             ship,
             source=ATLAS_PATH.format(ship.id),
@@ -102,7 +101,7 @@ class GameView(Widget):
         )
         self.redraw_ships()
 
-    def on_remove_ship(self, game, ship):
+    def on_remove_ship(self, game: Game, ship: ShipView):
         ship.shape.clear_widgets()
         self.remove_widget(ship.shape)
         game.score += 1
@@ -117,7 +116,7 @@ class GameView(Widget):
                 self.add_widget(ship.shape)
 
     @staticmethod
-    def _sin_transition(progress):
+    def _sin_transition(progress: float):
         return math.sin(progress * math.pi)
 
     @staticmethod
@@ -126,20 +125,21 @@ class GameView(Widget):
         delay = randint(10, 30)
         Clock.schedule_once(lambda dt: animation.start(birds), delay)
 
-    def on_mirror_state_change(self, obj, value):
-        self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
+    @staticmethod
+    def on_mirror_state_change(mirror, value: int):
+        mirror.shape.source = ATLAS_PATH.format(f'{mirror.id}-{value}')
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
         self._keyboard = None
 
-    def _on_keyboard_down(self, keyboard, key_code, text, modifiers):
+    def _on_keyboard_down(self, _keyboard, key_code, _text, _modifiers):
         action = KEY_MAPPING.get(key_code[1])
         if action is None:
             return True
 
         return self._game.process_action(action)
 
-    def on_score_change(self, obj, value):
-        Logger.debug(f'New score: {value}')
-        self._score.text = f'Score: {value:3}'
+    def on_score_change(self, _game: Game, score: int):
+        Logger.debug(f'New score: {score}')
+        self._score.text = f'Score: {score:3}'

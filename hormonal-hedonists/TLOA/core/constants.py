@@ -1,4 +1,5 @@
 from enum import Enum, unique
+
 from kivy.vector import Vector
 
 
@@ -46,7 +47,6 @@ class Actions(Enum):
     MOVE_RIGHT = 'RIGHT'
     MOVE_UP = 'UP'
     MOVE_DOWN = 'DOWN'
-    JUMP = 'JUMP'
 
 
 KEY_MAPPING = {
@@ -58,5 +58,4 @@ KEY_MAPPING = {
     'left': Actions.MOVE_LEFT,
     'd': Actions.MOVE_RIGHT,
     'right': Actions.MOVE_RIGHT,
-    'space': Actions.JUMP,
 }

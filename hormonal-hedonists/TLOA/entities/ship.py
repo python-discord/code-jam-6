@@ -13,7 +13,7 @@ class BrownShip(MovingEntity):
     def step(self, dt, game):
         if self.is_anchored:
             game.health -= 10
-            self.health -= 100
+            self.health = 0
         else:
             x_stop = LANE_BOUNDS[self.lane_id][0]
             if self.shape.x > x_stop:

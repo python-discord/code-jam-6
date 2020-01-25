@@ -3,16 +3,18 @@ import random
 from typing import List, Optional
 
 from TLOA.core.constants import (
-    Actions, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
+    Actions, AUDIO_PATH, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
     SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS, LIGHT_FOCUS_OFFSET,
-    MIRROR_CANNON_RANGE)
+    MIRROR_CANNON_RANGE
+)
 from TLOA.entities import MirrorCannon, BrownShip, GoldenShip, LightRays
 
 from kivy import Logger
 from kivy.clock import Clock, ClockEvent
+from kivy.core.audio import Sound, SoundLoader
 from kivy.event import EventDispatcher
-from kivy.vector import Vector
 from kivy.properties import BooleanProperty, BoundedNumericProperty, NumericProperty
+from kivy.vector import Vector
 
 
 class Game(EventDispatcher):
@@ -24,6 +26,10 @@ class Game(EventDispatcher):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.mirror = MirrorCannon()
+
+        self._island_destroyed: Sound = SoundLoader.load(AUDIO_PATH.format("mirror_moving.wav"))
+        self._mirror_moving: Sound = SoundLoader.load(AUDIO_PATH.format("mirror_moving.wav"))
+        self._ship_destroyed: Sound = SoundLoader.load(AUDIO_PATH.format("ship_explosion.mp3"))
 
         # Create & initialize Mesh instance for Incident Sun rays
         self.sun_rays = LightRays(point=LIGHT_SOURCE_POS, surface=self.mirror.mirror_axis)
@@ -38,10 +44,17 @@ class Game(EventDispatcher):
         self._event: Optional[ClockEvent] = None
         self.register_event_type('on_add_ship')
         self.register_event_type('on_remove_ship')
+        self.bind(health=self.on_health_change)
 
     def start(self):
         Logger.info('Start game')
+
+        sound: Sound = SoundLoader.load(AUDIO_PATH.format("island_background.wav"))
+        sound.loop = True
+        sound.play()
+
         self.running = True
+
         Clock.schedule_interval(self.step, TICK)
         Clock.schedule_interval(lambda _: self.spawn_ship(), SHIP_SPAWN_RATE)
 
@@ -64,16 +77,16 @@ class Game(EventDispatcher):
         self.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self.mirror.mirror_axis)
 
         # Track the closest ship in the active lane
-        if self.closestShip:
+        if self.closest_ship:
             # focus the Death Rays to the ship's X position.
-            death_rays_focus_x = self.closestShip.shape.x + LIGHT_FOCUS_OFFSET.x
+            death_rays_focus_x = self.closest_ship.shape.x + LIGHT_FOCUS_OFFSET.x
 
             # Deal damage to the ship.
-            if self.closestShip.id == 'golden_ship':
-                self.closestShip.health -= 0.1    # Deal less Damage to Golden Ships
+            if self.closest_ship.id == GoldenShip.id:
+                self.closest_ship.health -= 0.1    # Deal less Damage to Golden Ships
 
-            if self.closestShip.id == 'brown_ship':
-                self.closestShip.health -= 0.5    # Deal more Damage to Brown Ships.
+            if self.closest_ship.id == BrownShip.id:
+                self.closest_ship.health -= 0.5    # Deal more Damage to Brown Ships.
         else:
             death_rays_focus_x = MIRROR_CANNON_RANGE
 
@@ -85,13 +98,13 @@ class Game(EventDispatcher):
 
     # This property returns the closest ship in the active lane.
     @property
-    def closestShip(self):
+    def closest_ship(self):
         active_lane = self.mirror.state
         closest_ship = None
         for ship in self.ship_lanes[active_lane]:
-            if (ship.shape.x < MIRROR_CANNON_RANGE):
+            if ship.shape.x < MIRROR_CANNON_RANGE:
                 if closest_ship:
-                    if (closest_ship.shape.x > ship.shape.x):
+                    if closest_ship.shape.x > ship.shape.x:
                         closest_ship = ship
                 else:
                     closest_ship = ship
@@ -110,23 +123,21 @@ class Game(EventDispatcher):
             self.dispatch('on_add_ship', ship)
             Logger.info("Ship Spawned at lane %d", lane)
 
+    def on_health_change(self, game, health):
+        if health <= 0:
+            self._island_destroyed.play()
+
     def on_add_ship(self, ship):
         pass
 
-    def on_remove_ship(self, ship):
-        pass
+    def on_remove_ship(self, _ship):
+        self._ship_destroyed.play()
 
     def process_action(self, action: Actions):
-        if action == Actions.MOVE_LEFT:
-            print('Moving Left')
+        if action in (Actions.MOVE_LEFT, Actions.MOVE_UP):
+            self._mirror_moving.play()
             self.mirror.state -= 1
-        elif action == Actions.MOVE_RIGHT:
-            print('Moving Right')
+        elif action in (Actions.MOVE_RIGHT, Actions.MOVE_DOWN):
+            self._mirror_moving.play()
             self.mirror.state += 1
-        elif action == Actions.MOVE_UP:
-            self.mirror.state += 1
-            print('Moving Up')
-        elif action == Actions.MOVE_DOWN:
-            self.mirror.state -= 1
-            print('Moving Down')
         return True

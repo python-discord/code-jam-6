@@ -1,9 +1,11 @@
-from TLOA.entities import Entity
+import math
+
 from TLOA.core.constants import (MIRROR_CANNON_POS, MIRROR_OFFSET,
                                  MIRROR_DIAMETER, MIRROR_ANGLES)
+from TLOA.entities import Entity
+
 from kivy.properties import BoundedNumericProperty
 from kivy.vector import Vector
-import math
 
 
 class MirrorCannon(Entity):
@@ -34,4 +36,4 @@ class MirrorCannon(Entity):
             round(0.5*MIRROR_DIAMETER*math.sin(math.radians(self.angle)))
         )
 
-        return (p0, p1, p2)
+        return p0, p1, p2
