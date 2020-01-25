@@ -4,6 +4,7 @@ representation of Paleolithic technology!  Re-invent the wheel with this (rock)c
 simulation! A caveman workout routine guaranteed to give you chiseled slabs fast!
 """
 import contextvars
+import json
 import math
 import os
 import webbrowser
@@ -38,6 +39,7 @@ BUTTON_PRESSED = "assets/img/button_pressed.png"
 FILE_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128  # actually (n - 1)
 GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
+CURSOR = Cursor()
 
 
 class Button(SignBorder, KivyButton):
@@ -71,19 +73,35 @@ class Popup(SignBorder, KivyPopup):
         self.setup_border()
 
 
+class InfoPopup(Popup):
+    def __init__(self, title, text, *, dismissable=True, size_hint):
+        layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
+        self.label = Label(text=text, font_name=FONT.get(), font_size=sp(20), halign="center", valign="middle")
+        layout.add_widget(self.label)
+        self.label.bind(size=self._resize_label)
+
+        super().__init__(title, layout, size_hint=size_hint, auto_dismiss=dismissable)
+        self._resize_label()
+
+        if dismissable:
+            btn = Button(_("Cancel"), font_size=sp(16), size_hint=(1, 0.3))
+            layout.add_widget(btn)
+            btn.bind(on_release=self.dismiss)
+
+    def _resize_label(self, *args):
+        self.label.text_size = self.label.size
+
+
 def open_error_popup(text):
-    layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-    label = Label(text=text, font_name=FONT.get(), font_size=sp(20), size_hint=(1, 0.7), halign="center", valign="middle")
-    btn = Button(_("Cancel"), font_size=sp(16), size_hint=(1, 0.3))
-    layout.add_widget(label)
-    layout.add_widget(btn)
-    popup = Popup(_("An error has occured."), layout, size_hint=(0.6, 0.5))
-    def _resize_label(*args):
-        label.text_size = label.size
-    label.bind(size=_resize_label)
-    btn.bind(on_release=popup.dismiss)
-    _resize_label()
+    popup = InfoPopup(_("An error has occured."), text, size_hint=(0.6, 0.5))
     popup.open()
+    return popup
+
+
+def open_loading_popup(text):
+    popup = InfoPopup(_("Loading..."), text, dismissable=False, size_hint=(0.6, 0.3))
+    popup.open()
+    return popup
 
 
 class SelectLanguagePopup(Popup):
@@ -146,10 +164,18 @@ class ImportPopup(Popup):
         selection = self.file_chooser.selection
         if selection:
             self.dismiss()
-            try:
-                self.chisel.load(selection[0])
-            except (ValueError, KeyError):
+            Window.remove_widget(CURSOR)
+            self.loading_popup = open_loading_popup(_("Importing the project."))
+            Clock.schedule_once(lambda dt: self._load_file(selection[0]), 0.1)
+    
+    def _load_file(self, path):
+        try:
+            self.chisel.load(path)
+        except (ValueError, KeyError):
                 open_error_popup(_("The file could not be loaded."))
+        finally:
+                self.loading_popup.dismiss()
+                Window.add_widget(CURSOR, "after")
 
     def on_dismiss(self, *args):
         self.file_chooser.cancel()
@@ -287,7 +313,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                            font_size=sp(18),
                            size_hint=(1, None),
                            height=dp(42))
-        reset_btn.bind(on_release=lambda btn: self.chisel.reset())
+        reset_btn.bind(on_release=self.reset_chisel)
 
         # Source code
         src_btn = Button(_("Source code"),
@@ -323,7 +349,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         for widget in widgets:
             self.add_widget(widget)
 
-    def update_background(self, instance, value):
+    def update_background(self, *args):
         # Overriden to snap to the right position.
         self.bg_rect.texture.uvsize = self._get_uvsize()
         self.bg_rect.texture = self.bg_rect.texture  # Required to trigger update.
@@ -331,10 +357,18 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         self.bg_rect.pos = (self.right - bg_width, self.y)
         self.bg_rect.size = (bg_width, bg_height)
 
-    def open_language_popup(self, btn):
+    def open_language_popup(self, *args):
         language_popup = SelectLanguagePopup()
         language_popup.bind(choice=lambda instance, choice: self.build(choice))
-        language_popup.open(btn)
+        language_popup.open()
+
+    def reset_chisel(self, *args):
+        Window.remove_widget(CURSOR)
+        popup = open_loading_popup(_("Resetting the canvas."))
+        Clock.schedule_once(lambda dt: (self.chisel.reset()
+                                        or popup.dismiss()
+                                        or Window.add_widget(CURSOR, "after")),
+                            0.1)
 
 
 class ChiselApp(App):
@@ -357,7 +391,7 @@ class ChiselApp(App):
         navdrawer.bind(_anim_progress=self._set_side_panel_opacity)
         navdrawer.bind(_anim_progress=self.disable_chisel)
 
-        Window.add_widget(Cursor(), "after")
+        Window.add_widget(CURSOR, "after")
         return navdrawer
 
     def _set_side_panel_opacity(self, instance, value):
