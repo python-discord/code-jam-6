@@ -1,4 +1,4 @@
-import os
+import os, random
 from datetime import datetime
 from random import sample
 from string import ascii_uppercase
@@ -21,6 +21,12 @@ DATA_DIR = os.path.join(
 
 
 def get_wiki_summary() -> str:
+    if True:
+        response = get('https://randomwordgenerator.com/json/sentences.json')
+        rand = random.randint(0,233)
+        print(response)
+        return response.json()['data'][rand]['sentence']
+
     endpoint = (
         "https://en.wikipedia.org/w/api.php?action=query&list=random&"
         "format=json&rnnamespace=0&rnlimit=1&origin=*"
