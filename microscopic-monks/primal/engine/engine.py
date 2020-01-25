@@ -69,5 +69,5 @@ class Engine(Widget):
     def on_keyboard_down(self, _, key) -> None:
         self.pressed_keys.add(key[0])
 
-    def _on_keyboard_up(self, _, key) -> None:
+    def on_keyboard_up(self, _, key) -> None:
         self.pressed_keys.discard(key[0])
