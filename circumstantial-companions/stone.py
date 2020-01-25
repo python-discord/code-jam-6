@@ -142,7 +142,7 @@ class Chisel(Widget):
         self.pixels = []
         self.pebble_size = get_pebble_size(self.width, self.height)
         with self.canvas:
-            Color(1, 1, 1, 1)
+            self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
             for depth, color_scale in enumerate((.4, .6, 1)):
                 for (r, g, b, a), x, y in pebble_setup():
@@ -219,6 +219,12 @@ class Chisel(Widget):
         with open(path_to_file, 'w') as file:
             json.dump(pebble_dict, file)
 
+    def export_png(self, path_to_file, transparent=False):
+        if transparent:
+            self.background_color.a = 0
+        self.export_to_png(path_to_file)
+        self.background_color.a = 1
+
     def load(self, path_to_file):
         with open(path_to_file, 'r') as file:
             pebble_dict = json.load(file)
@@ -229,7 +235,7 @@ class Chisel(Widget):
         self.pebble_size = get_pebble_size(self.width, self.height)
         self.canvas.clear()
         with self.canvas:
-            Color(1, 1, 1, 1)
+            self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
             for color, (x, y, z) in zip(self.colors, self.positions):
                 Color(*color)
