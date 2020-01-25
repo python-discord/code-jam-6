@@ -83,7 +83,7 @@ def forth_puts(env: ForthEnv, char='"') -> int:
 
 
 def forth_def(env: ForthEnv) -> int:
-    from .forth import ForthEntry
+    from .forthimpl import ForthEntry
     idx = _step_to(env.words[env.index:], ';')
     words_ = {env.words[env.index + 1]: ForthEntry(env.words[env.index + 2: env.index + idx], special=False)}
     print('defined', words_)  # DEBUG

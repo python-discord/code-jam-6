@@ -2,7 +2,7 @@ import operator as op
 from re import sub
 from typing import List, Union, Callable, Dict, TypeVar, Any
 
-from . import wordimpl
+from forth import wordimpl
 
 
 def partial_kw(**kwargs):
@@ -142,7 +142,9 @@ DEFAULT_ENTRIES = {
     ".(": ForthEntry((partial_kw(char=')'))(wordimpl.forth_puts)),
     ":": ForthEntry(wordimpl.forth_def),
     ";": ForthEntry(lambda a: 0),
-    "!": ForthEntry(wordimpl.vset)
+    "!": ForthEntry(wordimpl.vset),
+    "@": ForthEntry(wordimpl.vget),
+    "VARIABLE": ForthEntry(wordimpl.forth_var)
 }
 
 T = TypeVar("T")
@@ -221,6 +223,3 @@ def repl() -> None:
         except Exception as e:
             print(e)
 
-
-if __name__ == '__main__':
-    repl()
