@@ -18,7 +18,7 @@ from kivy.uix.button import Button as KivyButton
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.image import Image
 from kivy.uix.label import Label
-from kivy.uix.popup import Popup
+from kivy.uix.popup import Popup as KivyPopup
 from kivy.uix.relativelayout import RelativeLayout
 from kivy.uix.textinput import TextInput
 from kivy.garden.navigationdrawer import NavigationDrawer
@@ -35,6 +35,7 @@ BUTTON_NORMAL = "assets/img/button_normal.png"
 BUTTON_HOVER = "assets/img/button_hover.png"
 BUTTON_PRESSED = "assets/img/button_pressed.png"
 FILE_EXTENSION = ".chisel-project"
+MAX_FILENAME_LENGTH = 128  # actually (n - 1)
 
 
 class Button(SignBorder, KivyButton):
@@ -56,7 +57,34 @@ class Button(SignBorder, KivyButton):
             self.background_normal = BUTTON_NORMAL
 
 
-class SelectLanguagePopup(SignBorder, Popup):
+class Popup(SignBorder, KivyPopup):
+    def __init__(self, title, content, **kwargs):
+        super().__init__(title=title,
+                         title_font=FONT.get(),
+                         title_size=sp(20),
+                         title_align="center",
+                         content=content,
+                         separator_color=(0, 0, 0, 0),
+                         **kwargs)
+        self.setup_border()
+
+
+def open_error_popup(text):
+    layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
+    label = Label(text=text, font_name=FONT.get(), font_size=sp(20), size_hint=(1, 0.7), halign="center", valign="middle")
+    btn = Button(_("Cancel"), font_size=sp(16), size_hint=(1, 0.3))
+    layout.add_widget(label)
+    layout.add_widget(btn)
+    popup = Popup(_("An error has occured."), layout, size_hint=(0.6, 0.5))
+    def _resize_label(*args):
+        label.text_size = label.size
+    label.bind(size=_resize_label)
+    btn.bind(on_release=popup.dismiss)
+    _resize_label()
+    popup.open()
+
+
+class SelectLanguagePopup(Popup):
     choice = StringProperty()
 
     def __init__(self):
@@ -74,17 +102,10 @@ class SelectLanguagePopup(SignBorder, Popup):
             btn.bind(on_release=_make_select_function(locale_code))
             layout.add_widget(btn)
 
-        super().__init__(title=_("Select language"),
-                         title_font=FONT.get(),
-                         title_size=sp(20),
-                         title_align="center",
-                         content=layout,
-                         separator_color=(0, 0, 0, 0),
-                         size_hint=(0.5, 0.8))
-        self.setup_border()
+        super().__init__(_("Select language"), layout, size_hint=(0.5, 0.8))
 
 
-class ImportPopup(SignBorder, Popup):
+class ImportPopup(Popup):
     def __init__(self, chisel):
         self.chisel = chisel
         layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
@@ -97,15 +118,8 @@ class ImportPopup(SignBorder, Popup):
         layout.add_widget(self.file_chooser)
         layout.add_widget(self.btn)
 
-        super().__init__(title="",
-                         title_font=FONT.get(),
-                         title_size=sp(20),
-                         title_align="center",
-                         content=layout,
-                         separator_color=(0, 0, 0, 0),
-                         size_hint=(0.7, 0.9))
+        super().__init__("", layout, size_hint=(0.7, 0.9))
         self._change_title()
-        self.setup_border()
 
     @staticmethod
     def _filter_file(folder, filename):
@@ -130,13 +144,16 @@ class ImportPopup(SignBorder, Popup):
         selection = self.file_chooser.selection
         if selection:
             self.dismiss()
-            self.chisel.load(selection[0])
+            try:
+                self.chisel.load(selection[0])
+            except (ValueError, KeyError):
+                open_error_popup(_("The file could not be loaded."))
 
     def on_dismiss(self, *args):
         self.file_chooser.cancel()
 
 
-class SaveAsPopup(SignBorder, Popup):
+class SaveAsPopup(Popup):
     def __init__(self, chisel):
         self.chisel = chisel
         layout = BoxLayout(orientation="vertical",
@@ -154,21 +171,14 @@ class SaveAsPopup(SignBorder, Popup):
         self._change_btn_name()
 
         self.file_chooser.bind(path=self._change_title, selection=self._set_text)
-        self.text_input.bind(text=self._change_btn_name, on_text_validate=self._save_file)
+        self.text_input.bind(text=self._on_text_input, on_text_validate=self._save_file)
         self.btn.bind(on_release=self._save_file)
 
         for widget in (self.file_chooser, self.text_input, self.btn):
             layout.add_widget(widget)
 
-        super().__init__(title="",
-                         title_font=FONT.get(),
-                         title_size=sp(20),
-                         title_align="center",
-                         content=layout,
-                         separator_color=(0, 0, 0, 0),
-                         size_hint=(0.7, 0.9))
+        super().__init__("", layout, size_hint=(0.7, 0.9))
         self._change_title()
-        self.setup_border()
 
     @staticmethod
     def _filter_file(folder, filename):
@@ -179,6 +189,13 @@ class SaveAsPopup(SignBorder, Popup):
         if string.endswith(FILE_EXTENSION):
             return string
         return string + FILE_EXTENSION
+
+    @staticmethod
+    def _maybe_shorten(string):
+        if len(string) > 24:
+            filename, ext = string.rsplit(".", 1)
+            return filename[:6] + "..." + filename[-5:] + "." + ext
+        return string
 
     def _change_title(self, *args):
         path = self.file_chooser.path
@@ -191,13 +208,24 @@ class SaveAsPopup(SignBorder, Popup):
         if selection:
             self.text_input.text = os.path.basename(selection[0])
 
+    def _on_text_input(self, *args):
+        text = self.text_input.text
+        if len(text) > MAX_FILENAME_LENGTH:
+            self.text_input.text = text[:MAX_FILENAME_LENGTH]
+        self._change_btn_name()
+
     def _change_btn_name(self, *args):
         filename = self._resolve_filename(self.text_input.text)
-        self.btn.text = _('Save as "{filename}"').format(filename=filename)
+        self.btn.text = _('Save as "{filename}"').format(filename=self._maybe_shorten(filename))
 
     def _save_file(self, *args):
         filename = self._resolve_filename(self.text_input.text)
-        self.chisel.save(os.path.join(self.file_chooser.path, filename))
+        try:
+            self.chisel.save(os.path.join(self.file_chooser.path, filename))
+        except OSError:
+            open_error_popup(_("The file could not be saved due to an error "
+                               "raised by the operating system.\nCommon "
+                               "issue: Illegal characters in the file name."))
         self.dismiss()
 
     def on_dismiss(self, *args):
