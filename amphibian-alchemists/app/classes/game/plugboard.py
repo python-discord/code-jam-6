@@ -41,14 +41,15 @@ class PlugboardScreen(Screen):
         # Assumes the data plugs are even. If game goes well
         # If not, we pop the last one.
         if len("".join(i for i in plugs)) % 2 != 0:
-            print(1)
             new_plugs = []
             for x in plugs:
                 new_plugs.append(str(x)[0])
                 new_plugs.append(str(x)[1])
             save_plugs(new_plugs)
             # Reset plugs to be the new even numbered length
-            plugs = store.get(str(App.get_running_app().game_id))["current_state"]["plugs"]
+            plugs = store.get(str(App.get_running_app().game_id))["current_state"][
+                "plugs"
+            ]
 
         """
         Begin creation of plugs
@@ -131,6 +132,5 @@ class PlugboardScreen(Screen):
             del self.plug_reference[-1]
             del self.all_plugged[-1]
             self.plugs_in_screen -= 1
-        # Reset state so that
         self.all_plugged = list(set(self.all_plugged))
         save_plugs(self.all_plugged)
