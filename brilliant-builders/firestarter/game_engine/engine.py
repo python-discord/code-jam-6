@@ -1,6 +1,7 @@
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 
+from firestarter.game_engine.utils import get_all_subclasses
 from firestarter.game_engine.resources_loader import load_resources
 from firestarter.game_engine.sprite import Sprite
 
@@ -31,6 +32,8 @@ class Engine(Widget):
         # dict of assets
         self.assets, self.levels = load_resources()
 
+        self.sprite_classes = {cls.__name__: cls for cls in get_all_subclasses(Sprite)}
+
         # call the update method every frame
         Clock.schedule_interval(self._update, 1.0 / 60.0)
         Clock.schedule_interval(self._animate, 1.0 / 10.0)
@@ -57,6 +60,28 @@ class Engine(Widget):
         for sp in self.sprites:
             if sp not in preserve:
                 sp.kill()
+
+    def load_level(self, lv: Dict) -> dict:
+        """Load level and return a dictionary of newly created objects."""
+        Logger.info("Engine: Loading new level.")
+        objs = {}
+        obj_num = 0
+
+        for obj in lv['object']:
+            obj_id = obj['id'] if 'id' in obj else str(obj_num)
+
+            Logger.debug(f"Engine: Creating object {obj_id} from class {obj['class']}")
+
+            objs[obj_id] = (
+                self.sprite_classes[obj['class']](
+                    pos=obj['pos'],
+                    engine=self,
+                    **obj['args']
+                )
+            )
+            obj_num += 1
+        self.add_sprites(objs.values())
+        return objs
 
     def _animate(self, dt: float) -> None:
         """Advance all the animations by one."""
