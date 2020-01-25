@@ -146,6 +146,7 @@ class UpdateLocationButton(Button):
         if latlong_re:
             lat, _, long, _ = latlong_re.groups()
             self.latlon = f'{lat},{long}'
+            self.friendlyname = f'{lat},{long}'
             feedback.text = 'Successfully set Latitude and Longitude'
             return
 
