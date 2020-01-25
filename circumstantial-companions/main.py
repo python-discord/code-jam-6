@@ -83,7 +83,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         self.chisel = chisel
         self.popup = None
         super().__init__(orientation="vertical",
-                         spacing=dp(34),
+                         spacing=dp(32),
                          padding=(dp(20), dp(15)),
                          opacity=0)  # opacity is set when side panel is opened
         self.setup_background(OPTIONS_BACKGROUND)
@@ -112,6 +112,18 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                            height=dp(42))
         popup_btn.bind(on_release=self.popup.open)
         self.popup.bind(choice=lambda instance, choice: self.build(choice))
+
+        # Import
+        import_btn = Button(_("Import..."),
+                         font_size=sp(18),
+                         size_hint=(1, None),
+                         height=dp(42))
+
+        # Export
+        export_btn = Button(_("Export..."),
+                         font_size=sp(18),
+                         size_hint=(1, None),
+                         height=dp(42))
 
         # Reset
         reset_btn = Button(_("Reset"),
@@ -142,11 +154,18 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
             animation.texture = next(images).texture
         Clock.schedule_interval(next_texture, .2)
 
-        self.add_widget(title)
-        self.add_widget(popup_btn)
-        self.add_widget(reset_btn)
-        self.add_widget(src_btn)
-        self.add_widget(animation)
+        widgets = [
+            title,
+            popup_btn,
+            import_btn,
+            export_btn,
+            reset_btn,
+            src_btn,
+            animation
+        ]
+
+        for widget in widgets:
+            self.add_widget(widget)
 
     def update_background(self, instance, value):
         # Overriden to snap to the right position.
