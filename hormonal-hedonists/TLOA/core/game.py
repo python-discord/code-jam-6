@@ -23,6 +23,7 @@ class Game(EventDispatcher):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.pause_game = False
         self.mirror = MirrorCannon()
 
         # Create & initialize Mesh instance for Incident Sun rays
@@ -49,6 +50,8 @@ class Game(EventDispatcher):
         if not self.running:
             return False
 
+        elif self.pause_game == True:
+            return
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
             for ship in lane[:]:
@@ -117,6 +120,8 @@ class Game(EventDispatcher):
         pass
 
     def process_action(self, action: Actions):
+        if self.pause_game == True:
+            return
         if action == Actions.MOVE_LEFT:
             print('Moving Left')
             self.mirror.state -= 1

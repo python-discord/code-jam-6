@@ -74,14 +74,16 @@ class GameView(Widget):
 
     def exit_game(self, *args):
         quit()
-        
+
     def open_pause_menu(self, *args):
         self.pause_menu.open()
         self.pause_menu_opened = True
+        self._game.pause_game = True
 
     def close_pause_menu(self, *args):
         self.pause_menu.dismiss()
         self.pause_menu_opened = False
+        self._game.pause_game = False
 
     def show_game(self, running):
         Animation.cancel_all(self)
@@ -116,7 +118,8 @@ class GameView(Widget):
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
-            # Change the color and display the incident sun rays on the canvas
+            # Change the color and display the incident
+            # sun rays on the canvas
             self.canvas.add(self._game.sun_rays.color)
             self.canvas.add(self._game.sun_rays)
 
