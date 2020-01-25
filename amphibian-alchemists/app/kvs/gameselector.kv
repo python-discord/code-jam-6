@@ -21,11 +21,11 @@
                 on_release: root.manager.current = "main_screen"
             Button:
                 text: "Load game"
-                on_release: if root.last_selected: root.load_game(root.last_selected)
                 disabled: not root.last_selected
+                on_release: if root.last_selected: root.load_game(root.last_selected)
             Button:
                 text: "New game"
-                on_release: root.manager.current = "game_screen"
+                on_release: root.new_game()
 
     AnchorLayout:
         RecycleView:

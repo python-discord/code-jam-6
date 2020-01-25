@@ -78,6 +78,14 @@ class PlugboardScreen(Screen):
             del self.all_plugged[-2:]
             self.plugs_in_screen -= 2
 
+    def remove_single_plug(self):
+        if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
+            self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
+            del self.plug_reference[-1]
+            del self.all_plugged[-1]
+            self.plugs_in_screen -= 1
+            self.ids.remove_plug.disabled = False
+
     def on_plughole_recenter(self, instance, value):
         if self.manager.current == "plugboard_screen" and self.all_plugged:
             if instance.name in self.all_plugged:
@@ -96,10 +104,5 @@ class PlugboardScreen(Screen):
                             )
 
     def on_leave(self):
-        if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
-            self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
-            del self.plug_reference[-1]
-            del self.all_plugged[-1]
-            self.plugs_in_screen -= 1
-            self.ids.remove_plug.disabled = False
+        self.remove_single_plug()
         save_plugs(self.all_plugged)

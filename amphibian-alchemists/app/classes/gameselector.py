@@ -64,6 +64,20 @@ class GameSelectorScreen(Screen):
         else:
             self.rv.data = [{"text": self.no_saved_games}]
 
+    def new_game(self):
+        self.manager.get_screen(
+            "game_screen"
+        ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
+
+        plugboard_screen = self.manager.get_screen("plugboard_screen")
+        if plugboard_screen.plugs_in_screen % 2 != 0:
+            plugboard_screen.remove_single_plug()
+        else:
+            for _ in range(plugboard_screen.plugs_in_screen // 2):
+                plugboard_screen.remove_grouped_plugs()
+
+        self.manager.current = "game_screen"
+
     def load_game(self, game):
         App.get_running_app().game_id = int(game.index)
 
