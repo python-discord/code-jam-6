@@ -28,14 +28,13 @@ from i18n import DEFAULT_LOCALE, SYSTEM_LOCALE, LOCALES, TRANSLATIONS
 from mixins import RepeatingBackground, SignBorder
 from stone import Chisel
 
-font = contextvars.ContextVar("font")
-
+FONT = contextvars.ContextVar("font")
 OPTIONS_BACKGROUND = "assets/img/options_background.png"
 CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(4))
 
 class Button(SignBorder, KivyButton):
     def __init__(self, text, **kwargs):
-        super().__init__(text=text, font_name=font.get(), **kwargs)
+        super().__init__(text=text, font_name=FONT.get(), **kwargs)
         self.setup_border()
 
 
@@ -58,7 +57,7 @@ class SelectLanguagePopup(SignBorder, Popup):
             layout.add_widget(btn)
 
         super().__init__(title=_("Select language"),
-                         title_font=font.get(),
+                         title_font=FONT.get(),
                          title_size=sp(20),
                          title_align="center",
                          content=layout,
@@ -85,11 +84,11 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
             locale = DEFAULT_LOCALE
             TRANSLATIONS[DEFAULT_LOCALE].install()
 
-        font.set(LOCALES[locale]["font"])
+        FONT.set(LOCALES[locale]["font"])
 
         # Title
         title = Label(text=_("Options"),
-                      font_name=font.get(),
+                      font_name=FONT.get(),
                       font_size=sp(30),
                       size_hint=(1, 0.05))
 
