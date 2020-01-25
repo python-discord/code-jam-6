@@ -30,7 +30,7 @@ class GameScreen(Screen):
         self.health_bar.draw(self.canvas)
         self.health_bar.set_health(80)
 
-        self.inventory = Inventory('Weapon-Inventory.png',(1000, 200), (250,250), 0)
+        self.inventory = Inventory((20, 20))
         self.inventory.draw(self.canvas)
 
 
