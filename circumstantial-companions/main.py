@@ -31,8 +31,7 @@ from stone import Chisel
 font = contextvars.ContextVar("font")
 
 OPTIONS_BACKGROUND = "assets/img/options_background.png"
-HAMMER_ICON = "assets/img/cursor/hammer_up_pixelized.png"
-CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(1,5))
+CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(4))
 
 class Button(SignBorder, KivyButton):
     def __init__(self, text, **kwargs):
