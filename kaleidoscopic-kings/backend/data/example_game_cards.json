@@ -1,5 +1,31 @@
 [
   {
+    "card_id": "welcome",
+    "card_type": "start",
+    "card_image": "test.jpg",
+    "text": "Welcome hollaa!?",
+    "options": [
+      {
+        "text": "Swipe left to choose me!",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random"
+          }
+        ]
+      },
+      {
+        "text": "No swipe right and choose me!",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "card_id": "dino_kick",
     "card_type": "event",
     "card_image": "test.jpg",
