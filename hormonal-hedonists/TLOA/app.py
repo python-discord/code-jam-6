@@ -29,3 +29,6 @@ class HormonalHedonistsApp(App):
 
     def build(self):
         return self._view
+
+if __name__ == "__main__":
+    HormonalHedonistsApp.run()
