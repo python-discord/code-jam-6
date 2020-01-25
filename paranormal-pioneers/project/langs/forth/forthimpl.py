@@ -108,7 +108,7 @@ class ForthEnv:
         self.words: List[str] = []
         self.index = 0
         self.forth_dict = forth_dict
-        self.var_dict: Dict[str, Any] = {}
+        self.var_dict: Dict[str, Any] = {"BASE": 10}
         self.val_dict: Dict[str, Any] = {}
 
     def call_word(self, word: ForthEntry) -> int:
@@ -124,7 +124,7 @@ class ForthEnv:
         self.index = 0
         print("compiled", self.words)  # DEBUG
         while self.index < len(self.words):
-            #  print(self.data, self.words[self.index:], self.index)
+            #  print("DEBUG:", self.data, self.words[self.index:], self.index)
             word = self.words[self.index]
             if word in self.forth_dict:
                 d = self.call_word(self.forth_dict[word])
@@ -137,7 +137,7 @@ class ForthEnv:
                 try:
                     self.data.append(int(word))
                 except ValueError:
-                    self.data.append(float(word))
+                    print('unknown name:', word)
             elif not isinstance(word, str):
                 self.data.append(word)
             self.index += 1
@@ -207,8 +207,9 @@ DEFAULT_ENTRIES = {
     "TO": ForthEntry(wordimpl.forth_to),
     "SOURCE": ForthEntry(wordimpl.source),
     "HERE": ForthEntry(wordimpl.here),
-    "ALLOT": ForthEntry(wordimpl.allot)
-
+    "ALLOT": ForthEntry(wordimpl.allot),
+    ".X": ForthEntry(pops(1, returns=0)(lambda a: print(hex(a), end=' '))),
+    "0X": ForthEntry(wordimpl.hex_literal),
 }
 
 T = TypeVar("T")

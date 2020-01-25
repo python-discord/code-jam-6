@@ -241,3 +241,10 @@ def here(env: ForthEnv) -> int:
 def allot(env: ForthEnv) -> int:
     env.data_space.extend([0] * env.data.pop())
     return 0
+
+
+# 0X
+def hex_literal(env: ForthEnv) -> int:
+    literal = env.words[env.index + 1].upper()
+    env.data.append(int(literal, 16))
+    return 1
