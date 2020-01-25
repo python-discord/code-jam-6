@@ -294,7 +294,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                          font_size=sp(18),
                          size_hint=(1, None),
                          height=dp(42))
-        reset_btn.bind(on_release=lambda btn: webbrowser.open(GTIHUB_URL))
+        src_btn.bind(on_release=lambda btn: webbrowser.open(GTIHUB_URL))
 
         # Animation - Normal loading of an animation won't apply desired mag_filter to each
         # individual texture, so we load each frame and cycle through the textures 'by-hand'.
