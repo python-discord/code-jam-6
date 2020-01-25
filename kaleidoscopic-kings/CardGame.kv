@@ -83,51 +83,63 @@
 
 ##################  CARD  ##################
 <CardWidget@BoxLayout>:
-    BoxLayout:
-        orientation: 'vertical'
-        BoxLayout:
-            orientation: 'vertical'
-            id: card
+    Rotater:
+        id: test
+        do_rotation: False
+        do_scale: False
+        do_translation: False
+        size_hint: None, None
+        choice: data.choice_handler
+
+        SwipeCard:
+            id: swipe
+            size_hint: None, None
 
             BoxLayout:
-                size_hint_y: .3
-                Label:
-                    font_size: 20
-                    text_size: (self.size[0]*.6, self.size[1])
-                    center: root.center
-                    text: "[b]" + data.active_card.text+ "[/b]"
-                    halign: 'center'
-                    valign: 'center'
-                    markup: True
-            BoxLayout:
-                id: card_and_art
+                orientation: 'vertical'
                 BoxLayout:
-                    canvas.before:
-                        Rectangle:
-                            pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
-                            size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
-                            source: game_assets  + 'CardBackground.png'
-                    #         L    T    R     B
-                    padding: (100, 20, 100, 10)
-                    BoxLayout:
-                        padding: (30, 90, 30, 110)
-                        Image:
-                            source: card_assets + data.active_card.card_image
+                    orientation: 'vertical'
+                    id: card
 
-        BoxLayout:
-            size_hint:(1, .3)
-            orientation: 'horizontal'
-            padding: (50, 0)
-            ChoiceButton:
-                background_normal: game_assets + 'LeftButton.png'
-                text: data.active_card.options[0].text
-                text_size: (self.size[0]*.8, self.size[1])
-                on_press: data.choice_handler('1')
-            ChoiceButton:
-                background_normal: game_assets + 'RightButton.png'
-                text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
-                text_size: (self.size[0]*.8, self.size[1])
-                on_press: data.choice_handler('2')
+                    BoxLayout:
+                        size_hint_y: .3
+                        Label:
+                            font_size: 20
+                            text_size: (self.size[0]*.6, self.size[1])
+                            center: root.center
+                            text: "[b]" + data.active_card.text+ "[/b]"
+                            halign: 'center'
+                            valign: 'center'
+                            markup: True
+                    BoxLayout:
+                        id: card_and_art
+                        BoxLayout:
+                            canvas.before:
+                                Rectangle:
+                                    pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
+                                    size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
+                                    source: game_assets  + 'CardBackground.png'
+                            #         L    T    R     B
+                            padding: (100, 20, 100, 10)
+                            BoxLayout:
+                                padding: (30, 90, 30, 110)
+                                Image:
+                                    source: card_assets + data.active_card.card_image
+
+                BoxLayout:
+                    size_hint:(1, .3)
+                    orientation: 'horizontal'
+                    padding: (50, 0)
+                    ChoiceButton:
+                        background_normal: game_assets + 'LeftButton.png'
+                        text: data.active_card.options[0].text
+                        text_size: (self.size[0]*.8, self.size[1])
+                        on_press: data.choice_handler('1')
+                    ChoiceButton:
+                        background_normal: game_assets + 'RightButton.png'
+                        text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
+                        text_size: (self.size[0]*.8, self.size[1])
+                        on_press: data.choice_handler('2')
 
 
 <ChoiceButton@Button>:#
