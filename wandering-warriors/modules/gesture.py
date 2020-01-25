@@ -1,7 +1,8 @@
 from kivy.gesture import Gesture
+from .gesture_db import cun_1, cun_10
 
 
-def check_gesture(points, gdb):
+def check_gesture(points, gdb) -> int or None:
     g = Gesture()
 
     # convert raw DrawPad output to gesture compatible list
@@ -12,5 +13,10 @@ def check_gesture(points, gdb):
     # check if new gesture matches a known gesture
     g2 = gdb.find(g, minscore=0.70)
 
-    print(g2[1])
-    return g2
+    if g2:
+        if g2[1] == cun_1:
+            return 1
+        if g2[1] == cun_10:
+            return 10
+
+    return None
