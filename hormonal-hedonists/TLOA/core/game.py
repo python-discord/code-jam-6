@@ -25,6 +25,7 @@ class Game(EventDispatcher):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.pause_game = False
         self.mirror = MirrorCannon()
 
         self._island_destroyed: Sound = SoundLoader.load(AUDIO_PATH.format("mirror_moving.wav"))
@@ -62,6 +63,8 @@ class Game(EventDispatcher):
         if not self.running:
             return False
 
+        elif self.pause_game == True:
+            return
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
             for ship in lane[:]:
@@ -134,10 +137,12 @@ class Game(EventDispatcher):
         self._ship_destroyed.play()
 
     def process_action(self, action: Actions):
+        if self.pause_game == True:
+            return
         if action in (Actions.MOVE_LEFT, Actions.MOVE_UP):
             self._mirror_moving.play()
-            self.mirror.state -= 1
+            self.mirror.state += 1
         elif action in (Actions.MOVE_RIGHT, Actions.MOVE_DOWN):
             self._mirror_moving.play()
-            self.mirror.state += 1
+            self.mirror.state -= 1
         return True

@@ -2,24 +2,29 @@ import math
 
 from random import randint
 
-from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH,
-                                 WINDOW_HEIGHT, LANE_BOUNDS)
 from TLOA.core.game import Game
-from TLOA.views import ShipView
+from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
+                                 WINDOW_HEIGHT, LANE_BOUNDS)
+from TLOA.views import (ShipView, PauseMenuView)
 
 from kivy import Logger
 from kivy.animation import Animation
+from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
+from kivy.vector import Vector
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 
 
 class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
         super().__init__(**kwargs)
         self._game = game
+        self.pause_menu_content = PauseMenuView()
 
         game.mirror.bind(state=self.on_mirror_state_change)
         game.bind(running=lambda _, value: self.show_game(value))
@@ -30,6 +35,9 @@ class GameView(Widget):
 
         self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
+
+        self.pause_menu_content.button_resume.bind(on_release=self.close_pause_menu)
+        self.pause_menu_content.button_exit.bind(on_release=self.exit_game)
 
         self._background = Image(
             source=IMAGES_PATH.format('background.zip'),
@@ -42,6 +50,42 @@ class GameView(Widget):
 
         self._score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
 
+        self.pause_menu_opened = False
+
+        self.pause_menu = Popup(title='Pirate ships are on hold...',
+                                title_size='20sp',
+                                title_align='center',
+                                title_color=(1, 0.1, 0.1, 1),
+                                title_font=FONT_PATH.format('Pacifico-Regular.ttf'),
+                                content=self.pause_menu_content,
+                                separator_color=(0, 0, 0, 0),
+                                separator_height=0,
+                                size_hint=(None, None),
+                                size=(300, 250),
+                                auto_dismiss=False,
+                                background=IMAGES_PATH.format('yellow_panel.png'))
+
+        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
+                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
+                                border=(0, 0, 0, 0),
+                                pos=((WINDOW_WIDTH / 3) + 85, WINDOW_HEIGHT - 65),
+                                width=35,
+                                height=35,
+                                on_release=self.open_pause_menu)
+
+    def exit_game(self, *args):
+        quit()
+
+    def open_pause_menu(self, *args):
+        self.pause_menu.open()
+        self.pause_menu_opened = True
+        self._game.pause_game = True
+
+    def close_pause_menu(self, *args):
+        self.pause_menu.dismiss()
+        self.pause_menu_opened = False
+        self._game.pause_game = False
+
     def show_game(self, running):
         Animation.cancel_all(self)
         self.canvas.clear()
@@ -50,7 +94,6 @@ class GameView(Widget):
             return
 
         self.add_widget(self._background)
-
         with self.canvas:
             # Load & configure the flock of bird animation frames
             birds = Image(
@@ -75,7 +118,8 @@ class GameView(Widget):
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
-            # Change the color and display the incident sun rays on the canvas
+            # Change the color and display the incident
+            # sun rays on the canvas
             self.canvas.add(self._game.sun_rays.color)
             self.canvas.add(self._game.sun_rays)
 
@@ -88,6 +132,8 @@ class GameView(Widget):
 
         # Add the Score display
         self.add_widget(self._score)
+        self.add_widget(self.pause_btn)
+
 
     def on_island_health_change(self, _game: Game, health: int):
         health = math.ceil(health / 10) * 10
@@ -140,6 +186,11 @@ class GameView(Widget):
 
     def _on_keyboard_down(self, _keyboard, key_code, _text, _modifiers):
         action = KEY_MAPPING.get(key_code[1])
+        if key_code[1] == 'escape' and not self.pause_menu_opened:
+            self.open_pause_menu()
+        elif key_code[1] == 'escape' and self.pause_menu_opened:
+            self.close_pause_menu()
+
         if action is None:
             return True
 
