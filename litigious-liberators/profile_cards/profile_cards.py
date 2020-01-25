@@ -80,7 +80,9 @@ class ProfileCard(Screen):
         # self.ids.name.font_name = "../fonts/Oldenburg/Oldenburg-Regular.ttf"
         # #When launching it from terminal using main.py the relative path to font changes.
         # To test this part as isolated app uncomment the line above and comment the line bellow
-        self.ids.name.font_name = "fonts/Oldenburg/Oldenburg-Regular.ttf"
+        self.ids.name.font_name = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "../fonts/Oldenburg/Oldenburg-Regular.ttf"
+        )
 
 
 class ProfileList(ScreenManager):
