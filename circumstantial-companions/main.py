@@ -135,9 +135,17 @@ class ImportPopup(SignBorder, Popup):
 class SaveAsPopup(SignBorder, Popup):
     def __init__(self, chisel):
         self.chisel = chisel
-        layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-        self.file_chooser = FileChooserListView(path=".", filters=[self._filter_file], size_hint=(1, 0.75))
-        self.text_input = TextInput(text="Untitled" + FILE_EXTENSION, multiline=False, font_name=FONT.get(), font_size=sp(16), size_hint=(1, 0.1))
+        layout = BoxLayout(orientation="vertical",
+                           spacing=dp(34),
+                           padding=(dp(20), dp(15)))
+        self.file_chooser = FileChooserListView(path=".",
+                                                filters=[self._filter_file],
+                                                size_hint=(1, 0.75))
+        self.text_input = TextInput(text="Untitled" + FILE_EXTENSION,
+                                    multiline=False,
+                                    font_name=FONT.get(),
+                                    font_size=sp(16),
+                                    size_hint=(1, 0.1))
         self.btn = Button("", font_size=sp(16), size_hint=(1, 0.15))
         self._change_btn_name()
 
@@ -145,9 +153,8 @@ class SaveAsPopup(SignBorder, Popup):
         self.text_input.bind(text=self._change_btn_name, on_text_validate=self._save_file)
         self.btn.bind(on_release=self._save_file)
 
-        layout.add_widget(self.file_chooser)
-        layout.add_widget(self.text_input)
-        layout.add_widget(self.btn)
+        for widget in (self.file_choose, self.text_input, self.btn):
+            layout.add_widget(widget)
 
         super().__init__(title="",
                          title_font=FONT.get(),
