@@ -237,7 +237,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         self.chisel = chisel
         super().__init__(orientation="vertical",
                          spacing=dp(32),
-                         padding=(dp(20), dp(15)),
+                         padding=(dp(20), dp(30), dp(20), dp(15)),
                          opacity=0)  # opacity is set when side panel is opened
         self.setup_background(OPTIONS_BACKGROUND)
 

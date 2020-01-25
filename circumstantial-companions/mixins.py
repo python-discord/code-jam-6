@@ -3,7 +3,7 @@ from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from kivy.graphics import BorderImage, Color, Rectangle
 
-BORDER_IMAGE = "assets/img/sign-border-transparent.png"
+BORDER_IMAGE = "assets/img/sign_border.png"
 
 
 class RepeatingBackground:
@@ -78,7 +78,7 @@ class SignBorder:
                 size=(self.width + self.size_offset, self.height + self.size_offset),
                 pos=(self.x - self.size_offset / 2, self.y - self.size_offset / 2),
                 autoscale="both",
-                border=(30, 30, 30, 30))
+                border=(28, 32, 32, 32))
 
         self.bind(size=self._readjust_border, pos=self._readjust_border)
 
