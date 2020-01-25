@@ -154,8 +154,8 @@ class Chunk:
         if self.type != 2:
             return
 
-        while random.randint(0, 1) == 1:
-            s = random.randint(50, 100)
+        while random.randint(0, 3) != 1:
+            s = random.randint(150, 400)
             angle = random.randint(0, 359)
             sprite = 'topOfTree.png'
 
