@@ -52,7 +52,7 @@ class MyGame(Engine):
         self.hearts.change_mode(5)
         sprite_list.append(self.hearts)
         # Player
-        self.player = Player(self.assets['spritesheet_caveman'], (50, 90))
+        self.player = Player(self.assets['player'], (50, 90))
         self.player.bind(lives=self.update_hearts)
         sprite_list.append(self.player)
         # Platforms and Items, replace this later with a call to load the level
@@ -107,12 +107,18 @@ class MyGame(Engine):
                     self.duck""" + str(x) + """.pos[0] = 2000 - 10*""" + str(x))
 
         if 'spacebar' in self.pressed_keys and self.player.is_standing:
-            self.player.acc_y = 15
+            self.player.acc_y = 20
 
         if 'a' in self.pressed_keys:
-            self.player.vel_x = -7.5
+            if self.player.is_standing:
+                self.player.vel_x = -5
+            else:
+                self.player.vel_x = -4.5
         if 'd' in self.pressed_keys:
-            self.player.vel_x = 7.5
+            if self.player.is_standing:
+                self.player.vel_x = 5
+            else:
+                self.player.vel_x = 4.5
 
     dino = ObjectProperty(None)
     dino1 = ObjectProperty(None)
