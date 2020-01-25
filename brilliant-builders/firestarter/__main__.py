@@ -22,7 +22,7 @@ class MyGame(Engine):
         self.hearts = PlayerUiHeart(self.assets['hearts'], (0, self.height))
         self.hearts.change_mode(5)
         # Player
-        self.player = Player(self.assets['spritesheet_caveman'], (50, 90))
+        self.player = Player(self.assets['player'], (50, 90))
         self.player.bind(lives=self.update_hearts)
         # Platforms and Items, replace this later with a call to load the level
         self.platform_01 = Platform(self.assets['Untitled'], (50, 20))
@@ -66,7 +66,7 @@ class MyGame(Engine):
 
     def update(self, dt: float) -> None:
         if 'spacebar' in self.pressed_keys and self.player.is_standing:
-            self.player.acc_y = 15
+            self.player.acc_y = 20
 
         if 'a' in self.pressed_keys:
             self.player.vel_x = -7.5
