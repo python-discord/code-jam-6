@@ -12,6 +12,10 @@ import json
 
 class Sprite:
     resource_dir = Path('.', 'primal', 'resources').absolute()
+    try:
+        f = open(resource_dir / "testimg.png")
+    except FileNotFoundError:
+        resource_dir = Path('.', 'resources').absolute()
 
     def __init__(self, image: Union[str, None], pos: Tuple[float, float],
                  size: Tuple[float, float], **kwargs) -> None:
