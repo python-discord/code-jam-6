@@ -6,6 +6,7 @@
 #:import MDRectangleFlatIconButton kivymd.button
 #:import MDFloatingActionButton kivymd.button
 #:import MDLabel kivymd.label
+#:import AudioIndicator ui.widgets.audio_indicator.AudioIndicator
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -26,9 +27,10 @@
 <WelcomeScreen>
     canvas.before:
         Rectangle:
-            size: self.size
             pos: self.pos
-            source: 'ui/img/welcome_2.png'
+            size: self.size
+            source: 'ui/img/morse_code_bg.jpg'
+            tex_coords: root.tex_coords
 
     MDCard:
         padding: dp(24)
@@ -193,26 +195,26 @@
                     root.manager.current = 'tapping'
 
 <TappingScreen>
+    decode_input: decode_input
+
     AnchorLayout:
         anchor_x:'center'
         anchor_y:'bottom'
         padding: [dp(25), dp(25), dp(25), dp(25)]
 
         MDFloatingActionButton:
+            id: record_button
             icon: 'record'
             size: [dp(56), dp(56)]
             md_bg_color: app.theme_cls.primary_color
             text_color: [1, 1, 1, 1]
             on_press: root.decode_audio()
 
-    AnchorLayout:
-        anchor_x: 'center'
-        anchor_y: 'center'
-
-        Image:
-            source: 'ui/img/morse_code_alphabet.png'
-            size_hint: None, None
-            size: 400, 400
+#    AsyncImage:
+#        id: image
+#        source: 'ui/img/morse_code_alphabet.png'
+#        Rectangle:
+#            source: 'ui/img/morse_code_alphabet.png'
 
     MDTextFieldRound:
         id: decode_input
@@ -221,7 +223,7 @@
         icon_left: 'key-variant'
         icon_left_dasabled: True
         icon_right: 'database-export'
-        icon_callback: root.clear_text()
+        icon_callback: root.clear_input()
 
     MDCard:
         id: decode_card
@@ -241,6 +243,9 @@
             size_hint: 1, .05
             theme_text_color: 'Custom'
             text_color: [1, 1, 1, 1]
+
+        AudioIndicator:
+            id: audio_indicator
 
         MDLabel:
             id: decode_output_label
