@@ -1,10 +1,12 @@
+from kivy.utils import platform
 import os
 from typing import List
 
-import numpy as np
-import matplotlib.pyplot as plt
-from pyaudio import PyAudio, paInt16
-from scipy.io import wavfile
+IS_ANDROID = platform() == 'android'
+
+if not IS_ANDROID:
+    import numpy as np
+    from pyaudio import PyAudio, paInt16
 
 RATE = 16000
 CHUNK = 4000  # number of audio samples per frame of test_data
@@ -29,60 +31,65 @@ class AutoMorseRecognizer:
         self.debug = debug
         self.debug_plot = debug_plot
         self.active_threshold = active_threshold
-        self.old_buffer = np.array([])
-        self.pa = PyAudio()
-        self.stream = None
+        self.old_buffer = None
+        if not IS_ANDROID:
+            self.pa = PyAudio()
+            self.stream = None
 
     def calibrate_active_threshold(self):
         pass
 
     def start(self):
-        if self.stream is None:
-            self.stream = self.pa.open(format=paInt16,
-                                       channels=1,
-                                       rate=RATE,
-                                       input=True,
-                                       input_device_index=-1,
-                                       frames_per_buffer=CHUNK)
-        else:
-            self.stream.start_stream()
+        if not IS_ANDROID:
+            if self.stream is None:
+                self.stream = self.pa.open(format=paInt16,
+                                           channels=1,
+                                           rate=RATE,
+                                           input=True,
+                                           input_device_index=-1,
+                                           frames_per_buffer=CHUNK)
+            else:
+                self.stream.start_stream()
 
     def stop(self):
-        self.stream.stop_stream()
+        if not IS_ANDROID:
+            self.stream.stop_stream()
 
     def update(self):
-        try:
-            if self.stream is None or self.stream.is_stopped():
-                raise IOError('stream is not started yet (run start() before update())')
-            else:
-                data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
-                morse_code, speech_activity = self.get_morse_from_audio(data)
-        except Exception as e:
-            print(str(e))
-            morse_code, speech_activity = [], [0] * self.bits_per_frame
+        morse_code, speech_activity = [], [0] * self.bits_per_frame
+        if not IS_ANDROID:
+            try:
+                if self.stream is None or self.stream.is_stopped():
+                    raise IOError('stream is not started yet (run start() before update())')
+                else:
+                    data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
+                    morse_code, speech_activity = self.get_morse_from_audio(data)
+            except Exception as e:
+                print(str(e))
+                morse_code, speech_activity = [], [0] * self.bits_per_frame
         return morse_code, speech_activity
 
-    def run(self):
-        try:
-            self.start()
-            self.old_buffer = np.array([])
-            while True:
-                data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
-                morse_code, _ = self.get_morse_from_audio(data)
-                if morse_code:
-                    print(' '.join(morse_code), end=' ')
-        finally:
-            self.stop()
-
-    def get_morse_from_wav_file(self, audio_path):
-        fs, x = wavfile.read(audio_path)
-        x = x.astype(float)
-        self.old_buffer = np.array([])
-        for i in range(0, len(x)-CHUNK, CHUNK):
-            data = x[i:i+CHUNK]
-            morse_code, _ = self.get_morse_from_audio(data)
-            if morse_code:
-                print(''.join(morse_code), end='')
+    # def run(self):
+    #     try:
+    #         self.start()
+    #         self.old_buffer = np.array([])
+    #         while True:
+    #             data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
+    #             morse_code, _ = self.get_morse_from_audio(data)
+    #             if morse_code:
+    #                 print(' '.join(morse_code), end=' ')
+    #     finally:
+    #         self.stop()
+    #
+    # def get_morse_from_wav_file(self, audio_path):
+    #     fs, x = wavfile.read(audio_path)
+    #     x = x.astype(float)
+    #     self.old_buffer = np.array([])
+    #     for i in range(0, len(x)-CHUNK, CHUNK):
+    #         data = x[i:i+CHUNK]
+    #         morse_code, _ = self.get_morse_from_audio(data)
+    #         if morse_code:
+    #             print(''.join(morse_code), end='')
 
     @property
     def bits_per_frame(self):
@@ -104,14 +111,6 @@ class AutoMorseRecognizer:
         if self.debug:
             print(f'max intensity: {max(intensity)}')
             print(f'min intensity: {min(intensity)}')
-        if self. debug_plot:
-            normed_data = (data-min(data))/(max(data)-min(data))
-            plt.plot(np.arange(len(data)) / RATE, normed_data, label='chunked signal')
-            activity_timestamp = np.arange(len(speech_activity)) / DATA_RATE
-            plt.plot(activity_timestamp, speech_activity, label='active_vec')
-            plt.legend()
-            plt.show()
-
         return speech_activity
 
     def activity_to_morse(self, active_vec):
@@ -151,5 +150,3 @@ class AutoMorseRecognizer:
 
 if __name__ == "__main__":
     ms = AutoMorseRecognizer(debug=False, debug_plot=False)
-    # ms.run()
-    ms.get_morse_from_wav_file(os.path.join('test_data', 'morse_code_alphabet_16k.wav'))
