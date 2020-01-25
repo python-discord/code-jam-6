@@ -36,7 +36,6 @@ class MainBox(FloatLayout):
         self.content.transition = NoTransition()
 
         # Place screens here
-        self.content.add_widget(CalibrationScreen(name='calibration', util=self.util))
         self.content.add_widget(WelcomeScreen(name='welcome', util=self.util))
         self.content.add_widget(EncoderScreen(name='encode', util=self.util))
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
@@ -47,6 +46,7 @@ class MainBox(FloatLayout):
         self.content.add_widget(TrainingMenuScreen(name='training', util=self.util))
         self.content.add_widget(ListeningScreen(name='listening', util=self.util))
         self.content.add_widget(TappingScreen(name='tapping', util=self.util))
+        self.content.add_widget(CalibrationScreen(name='calibration', util=self.util))
         # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
         # # Place screens here
 

@@ -2,23 +2,111 @@ from kivy.properties import ObjectProperty, ListProperty
 from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivymd.button import MDRectangleFlatIconButton
+from kivy.lang import Builder
 
 
-class WelcomeButton(MDRectangleFlatIconButton):
-    """Simple buttons"""
+Builder.load_string('''
+#:import MDCard kivymd.cards
+#:import MDToolbar kivymd.toolbar
+#:import MDRectangleFlatIconButton kivymd.button
+#:import MDFloatingActionButton kivymd.button
+#:import MDLabel kivymd.label
+#:import AudioIndicator ui.widgets.audio_indicator.AudioIndicator
+#:import WelcomeButton ui.widgets.welcome_button
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_once(self._change_color)
 
-    def _change_color(self, _):
-        """Workaround to access children in this kivymd widget"""
-        # Set Label to White
-        self.children[0].children[0].text_color = [1, 1, 1, 1]
-        self.children[0].children[0].font_size = 20
-        # Set Icon to white
-        self.children[0].children[1].text_color = [1, 1, 1, 1]
-        self.children[0].children[1].font_size = 30
+<TrainingMenuScreen>
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'ui/img/morse_code_bg.jpg'
+            tex_coords: root.tex_coords
+
+    MDCard:
+        padding: dp(24)
+        spacing: dp(24)
+        orientation: 'vertical'
+        size_hint: .65, .35
+        pos_hint: {'center_x': 0.5, 'top': 0.8}
+        md_bg_color: app.theme_cls.accent_color
+
+        MDLabel:
+            text: 'Training'
+            font_style: 'H4'
+            halign: 'center'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+        MDLabel:
+            text: 'Listening to Morse code'
+            font_style: 'H5'
+            halign: 'left'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+        GridLayout:
+            spacing: dp(24)
+            cols: 3
+            pos_hint: {'center_x': 0.5}
+
+            WelcomeButton:
+                text: 'letters'
+                icon: 'walk'
+                on_press:
+                    root.training_difficulty = "Easy"
+                    root.manager.current = 'listening'
+
+            WelcomeButton:
+                text: 'words'
+                icon: 'run'
+                on_press:
+                    root.training_difficulty = "Medium"
+                    root.manager.current = 'listening'
+
+            WelcomeButton:
+                text: 'sentences'
+                icon: 'bike'
+                on_press:
+                    root.training_difficulty = "Hard"
+                    root.manager.current = 'listening'
+
+        MDLabel:
+            text: 'Tapping Morse Code'
+            font_style: 'H5'
+            halign: 'left'
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+            size_hint: 1, .3
+
+        GridLayout:
+            spacing: dp(24)
+            cols: 3
+            pos_hint: {'center_x': 0.5}
+
+            WelcomeButton:
+                text: 'letters'
+                icon: 'walk'
+                on_press:
+                    root.training_difficulty = "Easy"
+                    root.manager.current = 'tapping'
+
+            WelcomeButton:
+                text: 'words'
+                icon: 'run'
+                on_press:
+                    root.training_difficulty = "Medium"
+                    root.manager.current = 'tapping'
+
+            WelcomeButton:
+                text: 'sentences'
+                icon: 'bike'
+                on_press:
+                    root.training_difficulty = "Hard"
+                    root.manager.current = 'tapping'
+''')
 
 
 class TrainingMenuScreen(Screen):
