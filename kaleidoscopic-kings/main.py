@@ -1,25 +1,75 @@
-# from frontend.swipe import SwipeCard
-# from frontend.swipe import Rotater
-from frontend.frontend import DataController, MainWidget
-from backend.main import load_game
+from dataclasses import dataclass
+
+from kivy.event import EventDispatcher
+
+from backend.card_format import Card
+from frontend.frontend import MainWidget
+from backend.main import load_game, Game
 
 from kivy.app import App
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.config import Config
 from kivy.lang import global_idmap
 
 
-class CardGameApp(App):
-    active_card = ObjectProperty()
+class MainState:
+    def __init__(self, label: str, value: float):
+        self.label: str = label
+        value = f"{int(value*100//2)}%"
+        self.value: str = value
 
+
+@dataclass
+class GameState:
+    main_state_1: MainState
+    main_state_2: MainState
+    main_state_3: MainState
+    main_state_4: MainState
+
+
+class DataController(EventDispatcher):
+    """Manages global state for the app"""
+
+    active_card: Card = ObjectProperty(rebind=True)
+    game_state = ObjectProperty(rebind=True)
+    game: Game = ObjectProperty()
+    assets_loc = StringProperty("assets/")
+
+    def choice_handler(self, choice):
+        """Used to update state for the app when the user makes a choice"""
+        if choice == "1" or len(self.active_card.options) == 1:
+            outcome = self.active_card.options[0].get_outcome()
+            self.active_card = self.game.take_turn(outcome)
+        else:
+            outcome = self.active_card.options[0].get_outcome()
+            self.active_card = self.game.take_turn(outcome)
+
+        self.set_game_state()
+
+    def set_game_state(self):
+        """
+        Sets teh states for the 4 main player states. Currently uses dud values til the
+        backend version is done
+        """
+        states = [self.game.game_state.get_main_state(i) for i in range(4)]
+        self.game_state = self.game_state = GameState(
+            *[MainState(s.label, s.value) for s in states]
+        )
+
+
+class CardGameApp(App):
     def build(self):
         Config.set("graphics", "width", "900")
-        Config.set("graphics", "height", "900")
+        Config.set("graphics", "height", "1000")
 
         global_idmap["data"] = ctl = DataController()
-
+        global_idmap["all_assets"] = "./Game/"
+        global_idmap["game_assets"] = "./Game/GameArt/"
+        global_idmap["card_assets"] = "./Game/CardArt/"
+        print(global_idmap["game_assets"])
         ctl.game = game = load_game()
         ctl.active_card = game.start_game()
+        ctl.set_game_state()
         return MainWidget()
 
 
