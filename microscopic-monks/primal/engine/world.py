@@ -24,7 +24,13 @@ class World:
             for _ in World.get_loaded_row_range(chunk_pos[1])
         ]
 
-        self.chunk_instructions = [
+        size = Chunk.SIZE, Chunk.SIZE
+        self.terrain_instructions = [
+            [Sprite(None, (0, 0), size) for _ in World.get_loaded_col_range(chunk_pos[0])]
+            for _ in World.get_loaded_row_range(chunk_pos[1])
+        ]
+
+        self.features_chunk_instructions = [
             [InstructionGroup() for _ in World.get_loaded_col_range(chunk_pos[0])]
             for _ in World.get_loaded_row_range(chunk_pos[1])
         ]
@@ -43,7 +49,11 @@ class World:
         self.load_area(self.loaded_center)
 
     def draw(self, canvas: RenderContext):
-        for row in self.chunk_instructions:
+        for row in self.terrain_instructions:
+            for terrain in row:
+                terrain.draw(canvas)
+
+        for row in self.features_chunk_instructions:
             for instruction in row:
                 canvas.add(instruction)
 
@@ -54,18 +64,17 @@ class World:
 
             row_chunks = self.chunks[y]
             for index_x, x in enumerate(World.get_loaded_col_range(pos[0])):
-                instruction_group = self.chunk_instructions[index_y][index_x]
-                instruction_group.clear()
-
                 if x not in row_chunks:
                     row_chunks[x] = Chunk((x * Chunk.SIZE, y * Chunk.SIZE), self.seed)
 
+                terrain_instruction = self.terrain_instructions[index_y][index_x]
                 self.loaded_chunks[index_y][index_x] = row_chunks[x]
-                self.loaded_chunks[index_y][index_x].draw(instruction_group)
+                self.loaded_chunks[index_y][index_x].draw(terrain_instruction)
 
         for y in range(len(self.loaded_chunks)):
             for x in range(len(self.loaded_chunks[y])):
-                self.loaded_chunks[y][x].draw_features(self.chunk_instructions[y][x])
+                self.features_chunk_instructions[y][x].clear()
+                self.loaded_chunks[y][x].draw_features(self.features_chunk_instructions[y][x])
 
     @staticmethod
     def get_loaded_row_range(y: int):
@@ -90,19 +99,18 @@ class Chunk:
         self.chunk_features = set()
 
         if self.sample > 0.75:
-            image = 'i.png'
+            self.image = 'i.png'
             self.type = 3
         elif self.sample > 0.5:
-            image = 'l.png'
+            self.image = 'l.png'
             self.type = 2
         elif self.sample > 0.25:
-            image = 's.png'
+            self.image = 's.png'
             self.type = 1
         else:
-            image = 'w.png'
+            self.image = 'w.png'
             self.type = 0
 
-        self.terrain = Sprite(image, pos, (Chunk.SIZE, Chunk.SIZE))
         self.generate_terrain()
 
     def generate_terrain(self):
@@ -128,8 +136,9 @@ class Chunk:
             self.chunk_features.add(
                 RotatableSprite(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
 
-    def draw(self, group: InstructionGroup):
-        self.terrain.draw(group)
+    def draw(self, terrain: Sprite):
+        terrain.set_position(self.pos)
+        terrain.set_source(self.image)
 
     def draw_features(self, group: InstructionGroup):
         for feature in self.chunk_features:
