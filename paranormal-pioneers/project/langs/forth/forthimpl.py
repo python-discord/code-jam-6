@@ -1,6 +1,6 @@
 import operator as op
 from re import sub
-from typing import List, Union, Callable, Dict, TypeVar, Any
+from typing import List, Union, Callable, Dict, TypeVar, Any, Iterable
 
 from project.langs.forth import wordimpl
 
@@ -62,13 +62,38 @@ class VarToken:
         self.val = val
 
 
+class ExecToken:
+    def __init__(self, name):
+        self.name = name
+
+
+class Pointer:
+    def __init__(self, idx: int, arr: Iterable) -> None:
+        self.idx = idx
+        self.arr = list(arr)
+
+    def __add__(self, other: int) -> 'Pointer':
+        return Pointer(self.idx + other, self.arr)
+
+    def __sub__(self, other: int) -> 'Pointer':
+        return Pointer(self.idx - other, self.arr)
+
+    def resolve(self):
+        return self.arr[self.idx]
+
+    def set(self, val: Any) -> None:
+        self.arr[self.idx] = val
+
+
 class ForthEnv:
     def __init__(self, forth_dict: Dict[str, ForthEntry]):
+        self.source = ''
         self.data: List = []
         # return stack, however, as there is no return stack used,
         # this is just a dedicated stack for R words
         self.astack: List = []
-        self.rstack: List = []  # internal values, e.g. for loops
+        # internal values, e.g. for loops
+        self.rstack: List = []
         self.words: List[str] = []
         self.index = 0
         self.forth_dict = forth_dict
@@ -82,7 +107,8 @@ class ForthEnv:
             return -1
 
     def forth_eval(self, cmd) -> None:
-        self.words = cmd  # some commands need the word list
+        self.source = cmd
+        self.words = forth_compile(cmd)  # some commands need the word list
         self.index = 0
         while self.index < len(self.words):
             #  print(self.data, self.words[self.index:], self.index)
@@ -92,11 +118,13 @@ class ForthEnv:
                 self.index += d
             elif word in self.var_dict:
                 self.data.append(VarToken(word, self.var_dict[word]))
-            elif ' ' not in word:
+            elif isinstance(word, str) and ' ' not in word:
                 try:
                     self.data.append(int(word))
                 except ValueError:
                     self.data.append(float(word))
+            else:
+                self.data.append(word)
             self.index += 1
 
 
@@ -129,6 +157,7 @@ DEFAULT_ENTRIES = {
     "J": ForthEntry(wordimpl.forth_j),
     ".R": ForthEntry(pops(2, returns=0)(lambda v, s: print(f'{v:>{s}}', end=''))),
     '."': ForthEntry(wordimpl.forth_puts),
+    'S"': ForthEntry(wordimpl.forth_str_literal),
     '.S': ForthEntry(wordimpl.dots),
     "DUP": ForthEntry(pops(1, returns=1)(lambda a: (a, a))),
     "2DUP": ForthEntry(pops(2, returns=1)(lambda a, b: (a, b) * 2)),
@@ -146,7 +175,19 @@ DEFAULT_ENTRIES = {
     "!": ForthEntry(wordimpl.vset),
     "@": ForthEntry(wordimpl.vget),
     "VARIABLE": ForthEntry(wordimpl.forth_var),
-    "CONSTANT": ForthEntry(wordimpl.forth_const)
+    "CONSTANT": ForthEntry(wordimpl.forth_const),
+    "'": ForthEntry(wordimpl.quote),
+    "R>": ForthEntry(wordimpl.from_r),
+    ">R": ForthEntry(wordimpl.to_r),
+    "R@": ForthEntry(wordimpl.cp_r),
+    "EXECUTE": ForthEntry(wordimpl.execute),
+    "C!": ForthEntry(wordimpl.ptr_set),
+    "C@": ForthEntry(wordimpl.ptr_get),
+    "TYPE": ForthEntry(wordimpl.forth_type),
+    "VALUE": ForthEntry(wordimpl.value),
+    "TO": ForthEntry(wordimpl.forth_to),
+    "SOURCE": ForthEntry(wordimpl.source),
+
 }
 
 T = TypeVar("T")
@@ -161,6 +202,7 @@ def forth_compile(words: str) -> List[str]:
     while rest:
         rest = str(sub(r'\s', ' ', rest, 1))
         word, _, rest = rest.partition(' ')
+        word = word.upper()
         if word == 'IF':
             scope_stacks[word].append(labels)
             out.extend((str(labels), '?BRANCH'))
@@ -201,9 +243,13 @@ def forth_compile(words: str) -> List[str]:
             self_label = scope_stacks["BEGIN"].pop()
             jump_label = scope_stacks["BEGIN"].pop()
             out.extend((str(jump_label), "-BRANCH", f' {self_label}'))
-        elif word in {'.(', '."'}:
+        elif word in {'.(', '."', 's"'}:
             literal, term, rest = rest.partition(')' if word[-1] == '(' else '"')
             out.extend((word, literal, term))
+        elif word == "(":
+            _, _, rest = rest.partition(')')
+        elif word == "\\":
+            _, _, rest = rest.partition('\n')
         elif word:
             out.append(word)
     assert all(not o for o in scope_stacks.values())
@@ -214,13 +260,13 @@ def repl() -> None:
     env = ForthEnv(DEFAULT_ENTRIES)
     with open(f"{__file__}/../defaults.forth") as f:
         code = f.read()
-        env.forth_eval(forth_compile(code))
+        env.forth_eval(code)
 
     while True:
         try:
-            cmd = forth_compile(input("FORTH>"))
+            cmd = input("FORTH>")
             print('compiled', cmd)  # DEBUG
             env.forth_eval(cmd)
-            print('ok')
         except Exception as e:
             print(e)
+            raise e

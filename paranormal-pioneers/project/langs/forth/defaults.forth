@@ -1,3 +1,5 @@
+\ Default words which can be implemented in forth
+
 : SPACE 32 EMIT ;
 : SPACES ?DUP IF 0 DO SPACE LOOP THEN ;
 : 0> 0 > ;
@@ -17,6 +19,8 @@
 : NIP SWAP DROP ;
 : U.R .R ;
 : ? @ . ;
+: +! DUP @ ROT + SWAP ! ;
+
 : STAR ." *" ;
 : STARS 0 DO STAR LOOP ;
 : TRIANGLE
