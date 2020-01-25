@@ -12,7 +12,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, DictProperty
 from yaml import safe_load
 from kivy.core.window import Window
 from collections import Counter
@@ -77,6 +77,8 @@ class ProfileCard(Screen):
 
 
 class ProfileList(ScreenManager):
+    _attributes = DictProperty(None)
+
     def __init__(self, **kwargs):
         super(ProfileList, self).__init__(**kwargs)
         self.profile_dir = os.path.join(
