@@ -32,8 +32,7 @@ class Feature:
 
     def set_alpha(self, alpha: float):
         self.alpha = alpha
-        self.health_bar.bg.set_alpha(self.alpha / 4)
-        self.health_bar.bar.set_alpha(self.alpha)
+        self.health_bar.set_alpha(self.alpha)
 
     def hit(self):
         self.set_alpha(1)

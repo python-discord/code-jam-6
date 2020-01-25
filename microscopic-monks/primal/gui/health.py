@@ -34,5 +34,5 @@ class HealthBar:
         self.bar.draw(canvas)
 
     def set_alpha(self, alpha: float):
-        self.bg.set_alpha(alpha)
+        self.bg.set_alpha(alpha / 4)
         self.bar.set_alpha(alpha)
