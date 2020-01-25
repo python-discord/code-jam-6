@@ -6,6 +6,7 @@ simulation! A caveman workout routine guaranteed to give you chiseled slabs fast
 import contextvars
 import math
 import os
+import webbrowser
 from itertools import cycle
 
 from kivy.app import App
@@ -36,6 +37,7 @@ BUTTON_HOVER = "assets/img/button_hover.png"
 BUTTON_PRESSED = "assets/img/button_pressed.png"
 FILE_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128  # actually (n - 1)
+GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
 
 
 class Button(SignBorder, KivyButton):
@@ -292,6 +294,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                          font_size=sp(18),
                          size_hint=(1, None),
                          height=dp(42))
+        reset_btn.bind(on_release=lambda btn: webbrowser.open(GTIHUB_URL))
 
         # Animation - Normal loading of an animation won't apply desired mag_filter to each
         # individual texture, so we load each frame and cycle through the textures 'by-hand'.
