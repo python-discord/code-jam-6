@@ -1,0 +1,4 @@
+[animation]
+size = [320,64]
+modes = 6
+frame_count = [2,1,1,1,1,1]

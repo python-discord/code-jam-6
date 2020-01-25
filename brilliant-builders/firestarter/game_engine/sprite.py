@@ -36,6 +36,7 @@ class Sprite(Widget):
             self.bg_rect = Rectangle(texture=self.config.texture.get_region(0, 0, *config.size),
                                      pos=self.pos,
                                      size=self.size)
+            self.bg_rect.texture.mag_filter = 'nearest'
         self.bind(pos=self.redraw)
 
     def cycle_animation(self) -> None:
