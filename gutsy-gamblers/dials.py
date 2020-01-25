@@ -1,12 +1,20 @@
-import pickle
 from datetime import timedelta, datetime
 
+from geopy import Point
 from kivy.animation import Animation
+from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.properties import NumericProperty, Clock
+from kivy.properties import (
+    NumericProperty,
+    ObjectProperty,
+    ConfigParserProperty,
+    ReferenceListProperty
+)
 from kivy.uix.effectwidget import EffectWidget, EffectBase
 from kivy.uix.floatlayout import FloatLayout
 from suntime import SunTimeException, Sun
+
+import datahelpers
 
 hv_blur = """
 vec4 effect(vec4 color, sampler2D texture, vec2 tex_coords, vec2 coords)
@@ -63,6 +71,20 @@ class DialWidget(FloatLayout):
     """
     angle = NumericProperty(0)
 
+    config_latlon = latlon = ConfigParserProperty(
+        '', 'global', datahelpers.LOCATION_LATLON, 'app', val_type=str)
+
+    latlon_point = ObjectProperty()
+
+    sunrise = NumericProperty()
+    sunset = NumericProperty()
+    sun_angles = ReferenceListProperty(sunrise, sunset)
+
+    def on_config_latlon(self, instance, value):
+        """Handler for property change event"""
+        self.latlon_point = Point(value)
+        self.redraw()
+
     def __init__(self, **kwargs):
         super(DialWidget, self).__init__(**kwargs)
 
@@ -78,10 +100,8 @@ class DialWidget(FloatLayout):
                                         day=self.midnight.day,
                                         hour=0, minute=0, second=0) - self.date).seconds
 
-        # Split suntime tuple into named variables
+        # Set sunrise and sunset through reference list
         self.sun_angles = self.sun_time()
-        self.sunrise = self.sun_angles[0]
-        self.sunset = self.sun_angles[1]
 
         # Shading widget
         self.dial_shading = DialEffectWidget((self.sunrise, self.sunset))
@@ -106,9 +126,7 @@ class DialWidget(FloatLayout):
 
     def redraw(self, a=None):
         # Split suntime tuple into named variables
-        sun_angles = self.sun_time()
-        self.sunrise = sun_angles[0]
-        self.sunset = sun_angles[1]
+        self.sun_angles = self.sun_time()
 
         # Remove widgets
         self.remove_widget(self.dial_shading)
@@ -132,10 +150,9 @@ class DialWidget(FloatLayout):
         self.clock = Clock.schedule_interval(self.redraw, self.midnight_delta)
 
     def sun_time(self):
-        with open('latlong.tmp', 'rb') as f:
-            lat_long = pickle.load(f)
 
-        sun_time = Sun(lat_long[0], lat_long[1])
+        sun_time = Sun(self.latlon_point.latitude, self.latlon_point.longitude)
+
         self.date = self.date + timedelta(days=self.date_increase)
 
         try:
