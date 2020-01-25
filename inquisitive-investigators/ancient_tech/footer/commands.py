@@ -53,7 +53,7 @@ class EditPopup(BasePopup):
         editor = manager.get_screen('text_editor')
 
         if file is not None:
-            editor.editor.file_path = Path(file.txt)
+            editor.editor.file_path = str(Path(file.txt))
 
             with open(Path(file.txt), 'r') as f:
                 editor.editor.text = f.read()
@@ -204,6 +204,80 @@ class CreatePopup(BasePopup):
         else:
             self.right = .2
 
+    def mkfile(self, file_name: str) -> None:
+        if self.filemanager != 0 or file_name != '':
+            # Left Directory
+            if self.filemanager == 1:
+                dir_ = Path(self.ctx.parent.ids.left.ids.header.ids.directory.current_dir) / file_name
+                if not dir_.exists():
+                    dir_.touch()
+                else:
+                    print('File name already exists')
+            # Right Directory
+            elif self.filemanager == 2:
+                dir_ = Path(self.ctx.parent.ids.right.ids.header.ids.directory.current_dir) / file_name
+                if not dir_.exists():
+                    dir_.touch()
+                else:
+                    print('File name already exists')
+            else:
+                print('Choose a browser side')
+        else:
+            Logger.info('MkDir: Enter a File name')
+
+        path = Path(dir_)
+        self.ctx.parent.ids.left.ids.rv.dirs = path.parent.iterdir()
+
+        gen = self.ctx.parent.ids.left.ids.rv.generate
+        dirs = self.ctx.parent.ids.left.ids.rv.dirs
+        data = [gen(file_name) for file_name in dirs]
+
+        if self.ctx.parent.ids.left.ids.rv.selected is not None:
+
+            if len(path.parent.parts) > 1:
+                state = 1
+            else:
+                state = 2
+
+            self.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
+
+        if self.ctx.parent.ids.right.ids.rv.selected is not None:
+
+            if len(path.parent.parts) > 1:
+                state = 1
+            else:
+                state = 2
+
+            self.ctx.parent.ids.right.ids.rv.update(state=state, file=data)
+
+        self.dismiss()
+
 
 class QuitPopup(BasePopup):
     pass
+
+
+def update(widget, directory):
+    widget.ctx.parent.ids.left.ids.rv.dirs = directory.parent.iterdir()
+
+    gen = widget.ctx.parent.ids.left.ids.rv.generate
+    dirs = widget.ctx.parent.ids.left.ids.rv.dirs
+    data = [gen(file_name) for file_name in dirs]
+
+    if widget.ctx.parent.ids.left.ids.rv.selected is not None:
+
+        if len(directory.parent.parts) > 1:
+            state = 1
+        else:
+            state = 2
+
+        widget.ctx.parent.ids.left.ids.rv.update(state=state, file=data)
+
+    if widget.ctx.parent.ids.right.ids.rv.selected is not None:
+
+        if len(directory.parent.parts) > 1:
+            state = 1
+        else:
+            state = 2
+
+        widget.ctx.parent.ids.right.ids.rv.update(state=state, file=data)

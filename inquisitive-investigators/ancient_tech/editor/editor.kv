@@ -3,7 +3,7 @@
 <TextEditor>:
     editor: editor
     recycler: recycler
-    
+
     BoxLayout:
 
         RecycleView:
@@ -18,3 +18,21 @@
                 background_color: root.background_color
                 height: max(self.parent.height, self.minimum_height)
                 size_hint_y: None
+
+<SavePopup>:
+
+    FloatLayout:
+
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .3}
+            text: '[ Save ]'
+            color: 0.34,1,1,1
+            on_press: root.save()
+
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .3}
+            text: '[ Cancel ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()

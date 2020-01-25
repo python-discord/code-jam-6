@@ -1,10 +1,11 @@
 from typing import Any
-from kivy.uix.popup import Popup
+from ..footer.commands import BasePopup
 
-class SavePopup(Popup):
 
-    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any) -> None:
-        super().__init__(ctx, *args, **kwargs)
+class SavePopup(BasePopup):
+
+    def __init__(self, ctx: 'EditorIO', *args: Any, **kwargs: Any) -> None:
+        super(SavePopup, self).__init__(ctx, *args, **kwargs)
         self.ctx = ctx
 
     def save(self) -> None:
@@ -16,3 +17,5 @@ class SavePopup(Popup):
 
         with open(path, 'r') as f:
             self.ctx.text = f.read()
+
+        self.dismiss()

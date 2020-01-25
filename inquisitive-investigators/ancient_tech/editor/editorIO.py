@@ -7,6 +7,7 @@ from kivy.properties import (
     ObservableList
 )
 
+from .save import SavePopup
 from ..utils.constants import KEYS
 
 
@@ -25,7 +26,8 @@ class EditorIO(TextInput):
         ):
 
         if keycode[0] in KEYS['s'] and 'ctrl' in modifiers:
-            pass
+            popup = SavePopup(self, size_hint=(.5, .5), pos_hint={'center_x': .5, 'center_y': .5})
+            popup.open()
 
         elif keycode[0] in KEYS['esc']:
             self.parent.parent.parent.manager.current = 'browser'
