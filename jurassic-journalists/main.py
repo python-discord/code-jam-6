@@ -8,7 +8,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.image import Image
-from kivy.uix import colorpicker
+from kivy.uix.popup import Popup
 from kivy.lang import Builder
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty # noqa
 from kivy.core.window import Window
@@ -121,6 +121,12 @@ class TextPaper(Image):
             self.head['x'] = STARTING_X
             self.y += self.font_size
             self.x = self.default_pos[0]
+
+
+class Pick(Popup):
+    def __init__(self, typw, **kwargs):
+       super().__init__(**kwargs)
+       self.typw = typw
 
 
 class PhoneButtons(Label):
