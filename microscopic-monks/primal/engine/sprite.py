@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Dict
 
 from kivy.graphics.context_instructions import PushMatrix, PopMatrix
 from kivy.core.window import Window
@@ -8,6 +8,8 @@ from kivy.graphics.instructions import RenderContext
 from kivy.graphics.context_instructions import Rotate
 import math
 from primal.engine.perlin import sample
+import json
+
 
 
 class Sprite:
@@ -29,8 +31,25 @@ class Sprite:
     def get_position(self) -> Tuple[float, float]:
         return self.pos
 
+    def get_center(self):
+        return (self.pos[0] + self.size[0] / 2, self.pos[1] + self.size[1] / 2)
+
     def draw(self, canvas: RenderContext):
         canvas.add(self.bg_rect)
+
+class Item(Sprite):
+    def __init__(self, name, player: Player, **kwargs):
+        self.pos = player.get_center()
+        with open((self.resource_dir / "items.json").as_posix() , "r") as read_file:
+            data = json.load(read_file)[name]
+        super().__init__(data["source"], self.pos, data["size"], **kwargs)
+        self.rotate = Rotate(angle=player.get_rotation(), origin=(self.pos[0] + self.size[0] / 2, self.pos[1] + self.size[1] / 2))
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
 
 
 class Player(Sprite):
