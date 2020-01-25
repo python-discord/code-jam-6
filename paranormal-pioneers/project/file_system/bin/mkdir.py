@@ -13,6 +13,10 @@ class MKDir(command.Command):
     def __init__(self) -> None:
         super().__init__(name='mkdir')
 
+    @command.option('-r', '--resolve', action='store_true', default=False)
+    def handle_resolving(self, ns: Namespace, term: Terminal) -> None:
+        self.resolve = ns.resolve
+
     @command.option('dir', nargs='?')
     def handle_dir(self, ns: Namespace, term: Terminal) -> None:
         if ns.dir is None:
@@ -24,7 +28,20 @@ class MKDir(command.Command):
         if self.dir.exists():
             raise OSException('error: path already exists')
         try:
-            self.dir.mkdir()
+            if self.resolve:
+                path, parts = self.dir.clone(), list()
+
+                while not path.exists():
+                    parts.append(path.name)
+                    path = path.parent
+
+                for part in reversed(parts):
+                    path /= part
+                    path.mkdir()
+
+            else:
+                self.dir.mkdir()
+
         except OSError:
             raise OSException('error: can not find path') from None
 
