@@ -8,124 +8,133 @@
 #            rgba: random(), random(), random(), 1
 #        Line:
 #            rectangle: [self.x, self.y, self.width, self.height]
-
-
-
-# Add this to MainWidget for the background
+########### Setting default font ###########
+<Widget>:
+    font_name: game_assets+'GlobalFont.ttf'
+    outline_color: (0,0,0)
+    outline_width: 1
 
 ################## LAYOUT ##################
 <MainWidget>:
-#    canvas.before:
-#        Rectangle:
-#            pos: self.pos
-#            size: self.size
-#            source: '../assets/cave_background.jpg'
-    id: main_layout
-    orientation: 'vertical'
-    cols: 2
-    StatusBar:
-        size_hint_x: 0.3
-    CardWidget
-        size_hint_x: 0.7
-
-
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: game_assets+'MainBackground.png'
+    GridLayout:
+        size_hint_max_x: 900
+        size_hint_max_y: 1000
+        center: root.center
+        cols: 2
+        StatusBar:
+            size_hint_x: 0.3
+        CardWidget
+            size_hint_x: 0.7
 
 
 ################## STATUS ##################
-<StatusBar>:
+<StatusBar@GridLayout>:
+    rows: 4
+    padding: (20, 180, 40, 75)
+    spacing: 5
+    StatusWidget:
+        StatusLabel:
+            text: data.game_state.main_state_1.label
+            valign: 'bottom'
+        StatusLabel:
+            valign: 'top'
+            text: data.game_state.main_state_1.value
+    StatusWidget:
+        StatusLabel:
+            text: data.game_state.main_state_2.label
+            valign: 'bottom'
+        StatusLabel:
+            valign: 'top'
+            text: data.game_state.main_state_2.value
+    StatusWidget:
+        StatusLabel:
+            text: data.game_state.main_state_3.label
+            valign: 'bottom'
+        StatusLabel:
+            text: data.game_state.main_state_3.value
+            valign: 'top'
+    StatusWidget:
+        StatusLabel:
+            text: data.game_state.main_state_4.label
+            valign: 'bottom'
+        StatusLabel:
+            text: data.game_state.main_state_4.value
+            valign: 'top'
+
+
+<StatusWidget@BoxLayout>:
     orientation: 'vertical'
-    padding: (0, 150)
-    Label:
-        text: "Health"
-    Label:
-        text: "Hunger"
-    Label:
-        text: "Thirst"
-    Label:
-        text: "Sanity"
+    canvas.before:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source: game_assets+ 'MainStateBackground.png'
 
+<StatusLabel@Label>:
+    font_size: 19
+    text_size: root.size
+    halign: 'center'
 
-<StatusWidget>:
-    orientation:
 
 ##################  CARD  ##################
-<CardWidget>:
-    Rotater:
-        id: test
-        do_rotation: False
-        do_scale: False
-        do_translation: False
-        size_hint: None, None
-        choice: data.choice_handler
-
-        SwipeCard:
-            id: swipe
-            size_hint: None, None
+<CardWidget@BoxLayout>:
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            id: card
 
             BoxLayout:
-                orientation: 'vertical'
-                padding: (5, 5)
-
-                # SwipeCard:
-                #     size: 5000, 5000
-                CardBoxLayout:
-                    # pos: swipe.pos, 0
-                    id: card
-                    BoxLayout:
-                        size_hint_y: .2
-                        Widget:
-                            size_hint_x: .2
-                        Label:
-                            font_size: 33
-                            text_size: self.size
-                            center: root.center
-                            text: "[b]" + data.active_card.text+ "[/b]"
-                            halign: 'center'
-                            markup: True
-                        Widget:
-                            size_hint_x: .2
-
-                    BoxLayout:
-                        BoxLayout:
-                            canvas.before:
-                                Rectangle:
-                                    pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
-                                    size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
-                                    source: data.assets_loc  + 'stone_tablet.png'
-                            #         L    T    R     B
-                            padding: (100, 20, 100, 10)
-                            BoxLayout:
-                                padding: (30, 90, 30, 110)
-                                Image:
-                                    source: data.assets_loc + data.active_card.card_image
-
+                size_hint_y: .3
+                Label:
+                    font_size: 20
+                    text_size: (self.size[0]*.6, self.size[1])
+                    center: root.center
+                    text: "[b]" + data.active_card.text+ "[/b]"
+                    halign: 'center'
+                    valign: 'center'
+                    markup: True
+            BoxLayout:
+                id: card_and_art
                 BoxLayout:
-                    size_hint:(1, .3)
-                    id: choices
-                    orientation: 'horizontal'
-                    Button:
-                        text: data.active_card.options[0].text
-                        font_size: 26
-                        center: root.center
-                        valign: 'center'
-                        halign: 'center'
-                        text_size: self.size
-                        on_press: data.choice_handler('1')
-                    Button:
-                        text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
-                        font_size: 26
-                        center: root.center
-                        valign: 'center'
-                        halign: 'center'
-                        text_size: self.size
-                        on_press: data.choice_handler('1')
-        # Test:
-        #     rotation: test.rotation
-        #     source: data.assets_loc  + 'python_discord_logo.png'
+                    canvas.before:
+                        Rectangle:
+                            pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
+                            size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
+                            source: game_assets  + 'CardBackground.png'
+                    #         L    T    R     B
+                    padding: (100, 20, 100, 10)
+                    BoxLayout:
+                        padding: (30, 90, 30, 110)
+                        Image:
+                            source: card_assets + data.active_card.card_image
+
+        BoxLayout:
+            size_hint:(1, .3)
+            orientation: 'horizontal'
+            padding: (50, 0)
+            ChoiceButton:
+                background_normal: game_assets + 'LeftButton.png'
+                text: data.active_card.options[0].text
+                text_size: (self.size[0]*.8, self.size[1])
+                on_press: data.choice_handler('1')
+            ChoiceButton:
+                background_normal: game_assets + 'RightButton.png'
+                text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
+                text_size: (self.size[0]*.8, self.size[1])
+                on_press: data.choice_handler('2')
 
 
+<ChoiceButton@Button>:#
 
-
-<CardBoxLayout>:
-    id: card
-    orientation: 'vertical'
+    line_height: 1.25
+    font_size: 18
+    center: root.center
+    valign: 'center'
+    halign: 'center'
+    text_size: self.size
