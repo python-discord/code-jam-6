@@ -307,6 +307,8 @@ class MainScreen(Screen):
         self.add_widget(self.dial_widget)
         self.add_widget(self.now_marker)
 
+        self.speedy_time = False
+
     def on_size(self, a, b):
         # Maintains a constant aspect ratio of 0.5625 (16:9)
         width, height = Window.size
@@ -320,7 +322,7 @@ class MainScreen(Screen):
         Window.size = (width, height)
 
     def time_control_button(self):
-        time_control_popup = TimeWizard(self.dial_widget)
+        time_control_popup = TimeWizard(self.dial_widget, self)
         time_control_popup.open()
 
     def settings_button(self):
@@ -339,10 +341,14 @@ class MainScreen(Screen):
 
 # Time control panel #
 class TimeWizard(Popup):
-    def __init__(self, dial, **kwargs):
+    def __init__(self, dial, parent, **kwargs):
         self.dial = dial
         super(TimeWizard, self).__init__(**kwargs)
         self.redraw_checkbox.bind(active=self.delta_override)
+
+        if self.parent.speedy_time is True:
+            self.redraw_checkbox.active = True
+
         self.current_date.text = self.dial.date.strftime("%d/%m/%Y")
         self.clock = Clock.schedule_interval(self.update_date, self.dial.midnight_delta)
 
@@ -358,12 +364,14 @@ class TimeWizard(Popup):
             self.dial.midnight_delta = 0.1
             self.update_date()
             self.dial.redraw()
+            self.parent.speedy_time = True
         else:
             midnight = datetime.now() + timedelta(days=1)
             self.dial.midnight_delta = (datetime(year=midnight.year, month=midnight.month,
                                                  day=midnight.day,
                                                  hour=0, minute=0, second=0) - datetime.now()).seconds
             self.dial.redraw()
+            self.parent.speedy_time = False
 
     def revert_date(self):
         print('called revert_date')
