@@ -200,13 +200,16 @@ class GUIApp(App):
         self.add_text('Welcome to the [color=00FF00]game[/color]!')
         self.nav_control = navcont.NavControl()
         self.map_control = MapControl.DungeonMap()
-        self.command_control = CommandHandler.CommandHandler(self, self.nav_control)
+        self.nav_control.subscribe(self.map_control.callback)
+        self.command_handler = CommandHandler.CommandHandler(self,
+                                                             nav_control=self.nav_control,
+                                                             map_control=self.map_control)
 
     def add_text(self, text, on_newline=True):
         self.gui.add_text(text, on_newline)
 
     def pass_command(self, cmd):
-        self.command_control.parse_command(cmd)
+        self.command_handler.parse_command(cmd)
 
 
 if __name__ == '__main__':
