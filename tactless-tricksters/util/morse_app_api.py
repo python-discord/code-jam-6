@@ -1,5 +1,5 @@
-import requests
-
+from kivy.network.urlrequest import UrlRequest
+import urllib
 
 class MorseAppApi(object):
     def __init__(self, util, auth_token=None):
@@ -44,88 +44,39 @@ class MorseAppApi(object):
         self.get_message = 'api/message/%s/%s' # sender/receiver
 
     def update_header(self, token):
-        self.auth_token = token
+        self.auth_token = token['token']
         self.logged_in = True if token else False
         self.header = {'Authorization': 'Token %s'} % self.auth_token
 
-    def create_user_req(self, username, password):
-        data = {'username': username, 'password': password}
+    def create_user_req(self, callback, username, password):
+        data = urllib.urlencode({'username': username, 'password': password})
         url = self.base_url + self.create_user
-        return self._handle_post_req(url=url, data=data)
+        self._handle_post_req(callback, url=url, data=data)
 
     def retrieve_token_req(self, username, password):
-        data = {'username': username, 'password': password}
+        data = urllib.urlencode({'username': username, 'password': password})
         url = self.base_url + self.retrieve_token
-        outs = self._handle_post_req(url=url, data=data)
-        if str(outs.status_code) == '200':
-            token = outs.content['token']
-            self.update_header(token)
-            return True
-        else:
-            return False
+        self._handle_post_req(self.update_header, url=url, data=data)
 
-    def query_user_req(self, username):
+    def query_user_req(self, callback, username):
         header = self.header
         url = self.query_user % username
-        outs = self._handle_get_req(url=url, header=header)
-        if str(outs.status_code) == '200':
-            return True
-        else:
-            return False
+        self._handle_get_req(callback, url=url, header=header)
 
-    def send_message_req(self, sender, receiver, message):
+    def send_message_req(self, callback, sender, receiver, message):
         header = self.header
-        data = {'sender': sender, 'receiver': receiver, 'message': message}
+        data = urllib.urlencode({'sender': sender, 'receiver': receiver, 'message': message})
         url = self.send_message
-        outs = self._handle_get_req(url=url, header=header, data=data)
-        if str(outs.status_code) == '200':
-            return True
-        else:
-            return False
+        self._handle_get_req(callback, url=url, header=header, data=data)
 
-    def get_message_req(self, sender, receiver):
+    def get_message_req(self, callback, sender, receiver):
         header = self.header
         url = self.get_message % (sender, receiver)
-        outs = self._handle_get_req(url=url, header=header, data=data)
-        if str(outs.status_code) == '200':
-            return outs.content
-        else:
-            return False
+        self._handle_get_req(callback, url=url, header=header, data=data)
 
-    def _handle_get_req(self, url, header=None, data=None):
-        try:
-            print('Send GET Request %s' % url)
-            outs = requests.get(url=url, header=header, data=data)
-            print('GET Response: %s' % outs.content)
-            if str(outs.status_code) in ['200', '201']:  # TODO Fix all the 201s to 200
-                return outs.content
-            else:
-                return None
-        except requests.exceptions.HTTPError as errh:
-            print("An Http Error occurred:" + repr(errh))
-        except requests.exceptions.ConnectionError as errc:
-            print("An Error Connecting to the API occurred:" + repr(errc))
-        except requests.exceptions.Timeout as errt:
-            print("A Timeout Error occurred:" + repr(errt))
-        except requests.exceptions.RequestException as err:
-            print("An Unknown Error occurred" + repr(err))
-        return None
+    def _handle_get_req(self, callback, url, header=None, data=None):
+        UrlRequest(url, method='GET', req_headers=header, req_body=data, on_success=callback)
 
-    def _handle_post_request(self, url, header=None, data=None):
-        try:
-            print('Send POST Request %s with Data %s' % (url, data))
-            outs = requests.post(url=url, header=header, data=data)
-            print('POST Response: %s' % outs.content)
-            if str(outs.status_code) in ['200', '201']:  # TODO Fix all the 201s to 200
-                return outs.content
-            else:
-                return None
-        except requests.exceptions.HTTPError as errh:
-            print("An Http Error occurred:" + repr(errh))
-        except requests.exceptions.ConnectionError as errc:
-            print("An Error Connecting to the API occurred:" + repr(errc))
-        except requests.exceptions.Timeout as errt:
-            print("A Timeout Error occurred:" + repr(errt))
-        except requests.exceptions.RequestException as err:
-            print("An Unknown Error occurred" + repr(err))
-        return None
+    def _handle_post_request(self, callback, url, header=None, data=None):
+        UrlRequest(url, method='POST', req_headers=header, req_body=data, on_success=callback)
+
