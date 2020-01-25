@@ -26,6 +26,9 @@ class MV(command.Command):
         self.dest = term.fs.get_path(term.path, ns.dest, check_existing=False)
 
     def main(self, ns: Namespace, term: Terminal) -> None:
+        if self.dest.is_dir():
+            self.dest /= self.src.name
+
         self.src.rename(self.dest)
 
 
