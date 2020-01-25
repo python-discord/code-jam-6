@@ -34,9 +34,9 @@
                     text: app.title
             Widget:
             MenuButton:
-                text: "New Game"
+                text: "Start"
                 on_press: app.root.get_screen('game_screen').button_press_swoosh()
-                on_release: root.manager.current = "game_screen"
+                on_release: root.manager.current = "game_selector_screen"
             MenuButton:
                 text: "Settings"
                 on_press: app.root.get_screen('game_screen').button_press_positive()

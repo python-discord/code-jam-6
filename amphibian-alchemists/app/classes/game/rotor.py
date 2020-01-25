@@ -1,6 +1,14 @@
+import os
+
+from kivy.app import App
+from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 
 from .save_game import save_rotors
+
+DATA_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
 
 
 class RotorScreen(Screen):
@@ -25,3 +33,12 @@ class RotorScreen(Screen):
             rotor_value.text = self.keys[self.keys.index(rotor_value.text) - 1]
             gear.index = (gear.index - 1) if gear.index > 0 else 9
             gear.source = f"misc/gear{gear.index}.png"
+
+    def load_rotors(self):
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        rotors = store.get(str(game_id))["current_state"]["rotors"]
+        section = self.rotor_section.ids
+        section.first_rotor.rotor_value.text = rotors[0]
+        section.second_rotor.rotor_value.text = rotors[1]
+        section.third_rotor.rotor_value.text = rotors[2]
