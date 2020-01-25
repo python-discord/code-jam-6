@@ -25,9 +25,9 @@ from ui.widgets.nav_drawer import MyNavigationLayout
 class MainBox(FloatLayout):
     def __init__(self, **kwargs):
         super(MainBox, self).__init__()
-        self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        self.nav_bar = MyNavigationLayout()
-        self.nav_bar_anchor.add_widget(self.nav_bar)
+        # self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
+        # self.nav_bar = MyNavigationLayout()
+        # self.nav_bar_anchor.add_widget(self.nav_bar)
         self.screens = AnchorLayout(anchor_x='center', anchor_y='center')
         self.util = Utility()
         self.content = ScreenManager()
@@ -45,7 +45,7 @@ class MainBox(FloatLayout):
         self.screens.add_widget(self.content)
 
         self.add_widget(self.screens)
-        self.add_widget(self.nav_bar_anchor)
+        # self.add_widget(self.nav_bar_anchor)
 
 
 class MainApp(App):
