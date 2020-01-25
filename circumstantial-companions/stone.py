@@ -15,15 +15,12 @@ DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .2
 
 DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
-PEBBLE_COUNT = 7.5e3 # per layer.
+PEBBLE_COUNT = 7e3 # per layer.
 PEBBLE_IMAGE_SCALE = .75
 
+CHISEL_RADIUS = 6e-4
 MIN_POWER = 1e-5
-
-CHISEL_RADIUS_RANGE = (3e-4, 5e-3)
-DEFAULT_CHISEL_RADIUS = 6e-4
-CHISEL_POWER_RANGE = (50, 500)
-DEFAULT_CHISEL_POWER = 100
+CHISEL_POWER = 100
 
 BACKGROUND = 'assets/img/background.png'
 SOUND = 'assets/sounds/dig.wav'
@@ -132,12 +129,7 @@ class Chisel(Widget):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.sound = sa.WaveObject.from_wave_file(SOUND)
-
-        self.set_radius(DEFAULT_CHISEL_RADIUS)
-        self.set_power(DEFAULT_CHISEL_POWER)
-
         self.setup_canvas()
-
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
 
@@ -180,14 +172,14 @@ class Chisel(Widget):
         dx, dy = pebble_x - tx, pebble_y - ty
         distance = dx**2 + dy**2
 
-        if distance > self.chisel_radius:
+        if distance > CHISEL_RADIUS:
             return 0, 0
         if not distance:
             distance = 1e-4
 
         tdx, tdy = touch.dsx, touch.dsy
         touch_velocity = tdx**2 + tdy**2
-        power = max(self.chisel_power * touch_velocity, MIN_POWER) / distance
+        power = max(CHISEL_POWER * touch_velocity, MIN_POWER) / distance
         return power * dx, power * dy
 
     def poke(self, touch):
@@ -221,12 +213,6 @@ class Chisel(Widget):
 
     def load(self, path_to_file):
         pass
-
-    def set_radius(self, value):
-        self.chisel_radius = value
-
-    def set_power(self, value):
-        self.chisel_power = value
 
 
 if __name__ == '__main__':
