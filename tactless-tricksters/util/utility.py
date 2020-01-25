@@ -67,16 +67,17 @@ message_dict ={'Bob': {
 
 contact_list = ['Bob', 'Rob', 'Rod']
 
+
 class Utility(object):
     def __init__(self):
         self.user_name = 'user_name'
+        self.calibration = 0.5
         self.morse = Morse()
         # Temp debug data
         self.message_dict = message_dict
         self.contact_list = contact_list
         self.morse = Morse()
-        self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=9)
-
+        self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=self.calibration)
 
     def morse_transmit_thread(self):
         morse_thread = Thread(target=self.morse.transmit)

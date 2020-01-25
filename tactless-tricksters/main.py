@@ -16,7 +16,7 @@ from ui.screens.message_screen import MessageScreen
 from ui.screens.conversation_screen import ConversationScreen
 from ui.screens.contacts_screen import ContactScreen
 from ui.screens.add_contact_screen import AddContactScreen
-
+from ui.screens.calibration_screen import CalibrationScreen
 from util.utility import Utility
 
 # import gc
@@ -32,6 +32,7 @@ class MainBox(FloatLayout):
         self.content.transition = NoTransition()
 
         # Place screens here
+        self.content.add_widget(CalibrationScreen(name='calibration', util=self.util))
         self.content.add_widget(WelcomeScreen(name='welcome', util=self.util))
         self.content.add_widget(EncoderScreen(name='encode', util=self.util))
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
