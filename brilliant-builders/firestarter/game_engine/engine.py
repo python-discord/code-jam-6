@@ -1,9 +1,9 @@
 from pathlib import Path
 from typing import Dict, List
 
-from firestarter.game_engine.utils import get_all_subclasses
 from firestarter.game_engine.resources_loader import load_resources
 from firestarter.game_engine.sprite import Sprite
+from firestarter.game_engine.utils import get_all_subclasses
 
 from kivy.clock import Clock
 from kivy.core.window import Keyboard, Window
