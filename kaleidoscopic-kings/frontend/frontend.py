@@ -1,5 +1,5 @@
-from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
 
 
-class MainWidget(GridLayout):
+class MainWidget(BoxLayout):
     """Parent widget for all children"""

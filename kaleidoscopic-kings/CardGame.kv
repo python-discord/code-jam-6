@@ -19,41 +19,46 @@
             pos: self.pos
             size: self.size
             source: game_assets+'MainBackground.png'
-    orientation: 'vertical'
-    cols: 2
-    StatusBar:
-        size_hint_x: 0.3
-    CardWidget
-        size_hint_x: 0.7
+    GridLayout:
+        size_hint_max_x: 900
+        size_hint_max_y: 1000
+        center: root.center
+        cols: 2
+        StatusBar:
+            size_hint_x: 0.3
+        CardWidget
+            size_hint_x: 0.7
 
 
 ################## STATUS ##################
 <StatusBar@GridLayout>:
     rows: 4
     padding: (40, 180, 40, 75)
+    spacing: 5
     StatusWidget:
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_1.label
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_1.value
     StatusWidget:
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_2.label
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_2.value
     StatusWidget:
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_3.label
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_3.value
     StatusWidget:
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_4.label
-        Label:
+        StatusLabel:
             text: data.game_state.main_state_4.value
 
 
 <StatusWidget@BoxLayout>:
+    padding: (30, 40)
     orientation: 'vertical'
     canvas.before:
         Rectangle:
@@ -61,6 +66,8 @@
             size:self.size
             source: game_assets+ 'MainStateBackground.png'
 
+<StatusLabel@Label>:
+    font_size: 21
 
 ##################  CARD  ##################
 <CardWidget@BoxLayout>:
@@ -71,14 +78,14 @@
             id: card
 
             BoxLayout:
-                size_hint_y: .2
+                size_hint_y: .3
                 Label:
-                    size_hint_x: .1
-                    font_size: 24
+                    font_size: 20
                     text_size: (self.size[0]*.6, self.size[1])
                     center: root.center
                     text: "[b]" + data.active_card.text+ "[/b]"
                     halign: 'center'
+                    valign: 'center'
                     markup: True
             BoxLayout:
                 id: card_and_art
@@ -102,16 +109,18 @@
             ChoiceButton:
                 background_normal: game_assets + 'LeftButton.png'
                 text: data.active_card.options[0].text
+                text_size: (self.size[0]*.8, self.size[1])
                 on_press: data.choice_handler('1')
             ChoiceButton:
                 background_normal: game_assets + 'RightButton.png'
                 text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
+                text_size: (self.size[0]*.8, self.size[1])
                 on_press: data.choice_handler('2')
 
 
 <ChoiceButton@Button>:
     line_height: 1.25
-    font_size: 18
+    font_size: 14
     center: root.center
     valign: 'center'
     halign: 'center'
