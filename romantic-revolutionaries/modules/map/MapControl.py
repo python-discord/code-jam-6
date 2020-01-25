@@ -67,11 +67,12 @@ class DungeonMap:
     def _notify(self):
         """Send all the messages to the subscribers."""
         for sub in self.callbacks:
-            try:
-                room = self.rooms[self.current_location]
-            except:
-                room = None
-            sub(self.current_location, room, self.visible_block, self.did_bonk)
+            # try:
+            #     room = self.rooms[self.current_location]
+            # except:
+            #     room = None
+            # sub(self.current_location, room, self.visible_block, self.did_bonk)
+            sub(self.current_location, self.visible_block, self.did_bonk)
 
     def _get_visible_block(self):
         visible_block = [[0, 0, 0],
