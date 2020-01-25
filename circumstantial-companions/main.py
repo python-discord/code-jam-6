@@ -129,8 +129,10 @@ class ImportPopup(Popup):
     def __init__(self, chisel):
         self.chisel = chisel
         layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-        self.file_chooser = FileChooserListView(path=".", filters=[self._filter_file], size_hint=(1, 0.85))
-        self.btn = Button(_("Please select a file."), disabled=True, font_size=sp(16), size_hint=(1, 0.15))
+        self.file_chooser = FileChooserListView(path=".", filters=[self._filter_file],
+                                                size_hint=(1, 0.85))
+        self.btn = Button(_("Please select a file."), disabled=True, font_size=sp(16),
+                          size_hint=(1, 0.15))
 
         self.file_chooser.bind(path=self._change_title, selection=self._change_btn_name)
         self.btn.bind(on_release=self._select_file)
