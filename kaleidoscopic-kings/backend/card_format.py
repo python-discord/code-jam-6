@@ -44,7 +44,7 @@ class GameVariable:
         return False
 
     def __repr__(self):
-        return str(self.value)
+        return f"{self.state_name_key}:{self.value}"
 
     def update(self, value: Union[int, float, bool]):
         if type(value) is int:
@@ -266,8 +266,11 @@ class Card:
     """Represents a card to be presented to the user.
 
     card_id:    Unique card name.
-    card_type:  Either "event" or "response".
+    card_type:  Either "event" , "response" or "start".
                 Response cards only exist to follow up on event cards.
+                There can only be one start card, only difference between event and start card is
+                that start card is always drawn first - so you can chain additional response cards
+                to it.
     card_image: Image filename including extension.
     text:
     options:    Passed as dictionary which was loaded directly from json,
@@ -279,7 +282,7 @@ class Card:
 
     card_sound: Sound file filename including extension.
     """
-    CARD_TYPES: ClassVar[Tuple[str, str]] = ("event", "response")
+    CARD_TYPES: ClassVar[Tuple[str, str]] = ("event", "response", "start")
 
     card_id: str
     card_type: str
