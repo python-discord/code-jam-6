@@ -142,14 +142,14 @@ class Chisel(Widget):
         self.pixels = []
         self.pebble_size = get_pebble_size(self.width, self.height)
         with self.canvas:
-            Color(1, 1, 1, 1)
+            self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
             for depth, color_scale in enumerate((.4, .6, 1)):
                 for (r, g, b, a), x, y in pebble_setup():
-                    scaled_x = x * self.width
-                    scaled_y = y * self.height
                     color = color_scale * r, color_scale * g, color_scale * b, a
                     Color(*color)
+                    scaled_x = x * self.width
+                    scaled_y = y * self.height
                     self.colors.append(color)
                     self.positions.append((x, y, depth))
                     self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
@@ -166,14 +166,13 @@ class Chisel(Widget):
         for i, (x, y, z) in enumerate(self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
-            self.pixels[i].pos = (scaled_x, scaled_y)
+            self.pixels[i].pos = scaled_x, scaled_y
             self.pixels[i].size = self.pebble_size
 
-    def poke_power(self, touch, pebble_x, pebble_y):
+    def poke_power(self, tx, ty, touch_velocity, pebble_x, pebble_y):
         """
         Returns the force vector of a poke.
         """
-        tx, ty = touch.spos
         dx, dy = pebble_x - tx, pebble_y - ty
         distance = dx**2 + dy**2
 
@@ -182,19 +181,20 @@ class Chisel(Widget):
         if not distance:
             distance = 1e-4
 
-        tdx, tdy = touch.dsx, touch.dsy
-        touch_velocity = tdx**2 + tdy**2
         power = max(CHISEL_POWER * touch_velocity, MIN_POWER) / distance
         return power * dx, power * dy
 
     def poke(self, touch):
         """
-        Apply a poke to each pebble.
+        Apply a poke to each pebble ignoring pebbles that are below other pebbles.
         """
+        tx, ty = touch.spos
+        tdx, tdy = touch.dsx, touch.dsy
+        touch_velocity = tdx**2 + tdy**2
         dislodged = {}
 
         for i, (x, y, z) in enumerate(self.positions):
-            velocity = is_dislodged(self.poke_power(touch, x, y))
+            velocity = is_dislodged(self.poke_power(tx, ty, touch_velocity, x, y))
             if velocity and ((x, y) not in dislodged or dislodged[x, y][0] < z):
                     dislodged[x, y] = (z, i, velocity)
 
@@ -219,6 +219,12 @@ class Chisel(Widget):
         with open(path_to_file, 'w') as file:
             json.dump(pebble_dict, file)
 
+    def export_png(self, path_to_file, transparent=False):
+        if transparent:
+            self.background_color.a = 0
+        self.export_to_png(path_to_file)
+        self.background_color.a = 1
+
     def load(self, path_to_file):
         with open(path_to_file, 'r') as file:
             pebble_dict = json.load(file)
@@ -229,7 +235,7 @@ class Chisel(Widget):
         self.pebble_size = get_pebble_size(self.width, self.height)
         self.canvas.clear()
         with self.canvas:
-            Color(1, 1, 1, 1)
+            self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
             for color, (x, y, z) in zip(self.colors, self.positions):
                 Color(*color)
