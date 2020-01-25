@@ -2,19 +2,6 @@ FloatLayout:
     Cannon:
         id: cannon
 
-    Image:
-        id: image
-        source: 'cannon.png'
-        # pos: self.parent.pos
-        size_hint: .2,.2
-        canvas.before:
-            PushMatrix
-            Rotate:
-                angle: cannon.angle_int_deg
-                origin: self.center
-        canvas.after:
-            PopMatrix
-
     Button:
         text: "Fire!"
         size_hint: (0.2, 0.05)

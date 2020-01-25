@@ -3,14 +3,9 @@ from kivy.properties import Clock
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 from kivy.graphics import Rectangle
-from kivy.graphics import Rotate
-from kivy.uix.image import Image
-from kivy.properties import NumericProperty
-from math import sin,cos,radians
 from kivy.animation import Animation
 
 class Cannon(Widget):
-    angle = NumericProperty(30)
     def __init__(self, **kwargs):
         super(Cannon, self).__init__(**kwargs)
         self.velocity = 0
@@ -29,7 +24,6 @@ class Cannon(Widget):
                 print(self.velocity)
 
     def set_angle(self, angle):
-        self.angle_int_deg = int(angle)
         if int(angle):
             if -1 < int(angle) <= 90:
                 self.angle = int(angle)
@@ -42,8 +36,9 @@ class Cannon(Widget):
     def fire_cannon(self):
         self.cannonball.pos = (self.cannon.pos[0] + self.cannon.size[0], self.cannon.pos[1] + self.cannon.size[1]/2)
         self.velocity_clock = Clock.schedule_interval(self.drop, 0.1)
-        self.velocity_y = self.velocity
-        self.velocity_x = self.velocity
+        self.velocity_y = self.velocity * (self.angle / 90)
+        self.velocity_x = self.velocity - self.velocity_y
+
     def drop(self, dt):
 
         if self.velocity_x >= 0:
