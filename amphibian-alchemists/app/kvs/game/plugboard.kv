@@ -20,7 +20,7 @@
 
 <PlugResume@Popup>:
     size_hint: 0.5, 0.5
-    title: "Plugs resume"
+    title: "Statistics"
     BoxLayout:
         spacing: dp(10)
         orientation: "vertical"
@@ -315,10 +315,10 @@
                 size_hint_y: 0.1
                 Button:
                     size_hint_x: 0.5
-                    text: "Go back!"
+                    text: "< Go back"
                     on_release: root.manager.current = "game_screen"
                 Button:
-                    text: "Plug resume"
+                    text: "Statistics"
                     on_release: Factory.PlugResume().open()
                 Button:
                     id: remove_plug
