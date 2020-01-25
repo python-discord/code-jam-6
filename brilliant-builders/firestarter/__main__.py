@@ -1,7 +1,13 @@
 from typing import Any
 
 from firestarter.game_engine.engine import Engine
-from firestarter.game_engine.object import GenericObject, PickUpCoin, Platform, Player, PlayerUiHeart
+from firestarter.game_engine.object import (
+    GenericObject,
+    PickUpCoin,
+    Platform,
+    Player,
+    PlayerUiHeart
+)
 
 from kivy.app import App
 from kivy.clock import Clock
