@@ -1,10 +1,10 @@
-from kivy.utils import platform
-import os
 from typing import List
 
-IS_ANDROID = platform() == 'android'
+from kivy.utils import platform
 
-if not IS_ANDROID:
+IS_MOBILE = platform in ['ios', 'android']
+
+if not IS_MOBILE:
     import numpy as np
     from pyaudio import PyAudio, paInt16
 
@@ -32,7 +32,7 @@ class AutoMorseRecognizer:
         self.debug_plot = debug_plot
         self.active_threshold = active_threshold
         self.old_buffer = None
-        if not IS_ANDROID:
+        if not IS_MOBILE:
             self.pa = PyAudio()
             self.stream = None
 
@@ -40,7 +40,7 @@ class AutoMorseRecognizer:
         pass
 
     def start(self):
-        if not IS_ANDROID:
+        if not IS_MOBILE:
             if self.stream is None:
                 self.stream = self.pa.open(format=paInt16,
                                            channels=1,
@@ -52,12 +52,12 @@ class AutoMorseRecognizer:
                 self.stream.start_stream()
 
     def stop(self):
-        if not IS_ANDROID:
+        if not IS_MOBILE:
             self.stream.stop_stream()
 
     def update(self):
         morse_code, speech_activity = [], [0] * self.bits_per_frame
-        if not IS_ANDROID:
+        if not IS_MOBILE:
             try:
                 if self.stream is None or self.stream.is_stopped():
                     raise IOError('stream is not started yet (run start() before update())')
