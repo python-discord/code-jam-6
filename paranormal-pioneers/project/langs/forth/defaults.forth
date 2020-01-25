@@ -20,11 +20,6 @@
 : U.R .R ;
 : ? @ . ;
 : +! DUP @ ROT + SWAP ! ;
-
-: STAR ." *" ;
-: STARS 0 DO STAR LOOP ;
-: TRIANGLE
-   DO  CR  9 I - SPACES  I 2* 1+ STARS  DUP +LOOP  DROP ;
-
-: DIAMONDS
-   0 DO  1 10 0 TRIANGLE  -1 0 9 TRIANGLE  LOOP ;
+: CREATE HERE 1+ VALUE ; \ probably not correct, but it works
+: , 1 ALLOT HERE C! ;
+: C, , ;

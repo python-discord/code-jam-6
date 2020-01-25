@@ -68,15 +68,24 @@ class ExecToken:
 
 
 class Pointer:
-    def __init__(self, idx: int, arr: Iterable) -> None:
+    def __init__(self, idx: int, arr: List) -> None:
         self.idx = idx
-        self.arr = list(arr)
+        self.arr = arr
 
     def __add__(self, other: int) -> 'Pointer':
         return Pointer(self.idx + other, self.arr)
 
+    def __radd__(self, other: int) -> 'Pointer':
+        return Pointer(self.idx + other, self.arr)
+
     def __sub__(self, other: int) -> 'Pointer':
         return Pointer(self.idx - other, self.arr)
+
+    def __rsub__(self, other: int) -> 'Pointer':
+        return Pointer(self.idx - other, self.arr)
+
+    def __repr__(self):
+        return f'Pointer to {self.arr[self.idx:]} at {self.idx}'
 
     def resolve(self):
         return self.arr[self.idx]
@@ -94,10 +103,13 @@ class ForthEnv:
         self.astack: List = []
         # internal values, e.g. for loops
         self.rstack: List = []
+        # used by HERE, CREATE and ALLOT
+        self.data_space = []
         self.words: List[str] = []
         self.index = 0
         self.forth_dict = forth_dict
         self.var_dict: Dict[str, Any] = {}
+        self.val_dict: Dict[str, Any] = {}
 
     def call_word(self, word: ForthEntry) -> int:
         if word.special:
@@ -117,6 +129,8 @@ class ForthEnv:
             if word in self.forth_dict:
                 d = self.call_word(self.forth_dict[word])
                 self.index += d
+            elif word in self.val_dict:
+                self.data.append(self.val_dict[word])
             elif word in self.var_dict:
                 self.data.append(VarToken(word, self.var_dict[word]))
             elif isinstance(word, str) and ' ' not in word:
@@ -124,7 +138,7 @@ class ForthEnv:
                     self.data.append(int(word))
                 except ValueError:
                     self.data.append(float(word))
-            else:
+            elif not isinstance(word, str):
                 self.data.append(word)
             self.index += 1
 
@@ -141,6 +155,10 @@ DEFAULT_ENTRIES = {
     "<>": ForthEntry(pops(2)(op.ne)),
     "AND": ForthEntry(pops(2)(op.and_)),
     "OR": ForthEntry(pops(2)(op.or_)),
+    "INVERT": ForthEntry(pops(2)(op.inv)),
+    "XOR": ForthEntry(pops(2)(op.xor)),
+    "LSHIFT": ForthEntry(pops(2)(op.lshift)),
+    "RSHIFT": ForthEntry(pops(2)(op.rshift)),
     "ABS": ForthEntry(pops(1)(op.abs)),
     "MIN": ForthEntry(pops(2)(min)),
     "MAX": ForthEntry(pops(2)(max)),
@@ -188,6 +206,8 @@ DEFAULT_ENTRIES = {
     "VALUE": ForthEntry(wordimpl.value),
     "TO": ForthEntry(wordimpl.forth_to),
     "SOURCE": ForthEntry(wordimpl.source),
+    "HERE": ForthEntry(wordimpl.here),
+    "ALLOT": ForthEntry(wordimpl.allot)
 
 }
 

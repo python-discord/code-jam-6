@@ -26,7 +26,7 @@ def _jump(env: ForthEnv, label, direction=1) -> int:
 
 def _str_literal(env: ForthEnv, literal: str):
     from project.langs.forth.forthimpl import Pointer
-    env.data.append(Pointer(0, literal))
+    env.data.append(Pointer(0, list(literal)))
     env.data.append(len(literal))
 
 
@@ -212,10 +212,9 @@ def execute(env: ForthEnv) -> int:
 
 # VALUE
 def value(env: ForthEnv) -> int:
-    from .forthimpl import ForthEntry
-    name = env.words[env.index + 1]
+    name = env.words[env.index + 1].upper()
     val = env.data.pop()
-    env.forth_dict.update({name: ForthEntry([val], special=False)})
+    env.val_dict.update({name: val})
     return 1
 
 
@@ -227,4 +226,18 @@ def forth_to(env: ForthEnv) -> int:
 # SOURCE
 def source(env: ForthEnv) -> int:
     _str_literal(env, env.source)
+    return 0
+
+
+# HERE
+def here(env: ForthEnv) -> int:
+    from project.langs.forth.forthimpl import Pointer
+    pointer = Pointer(len(env.data_space) - 1, env.data_space)
+    env.data.append(pointer)
+    return 0
+
+
+# ALLOT
+def allot(env: ForthEnv) -> int:
+    env.data_space.extend([0] * env.data.pop())
     return 0
