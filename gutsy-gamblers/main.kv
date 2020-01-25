@@ -1,128 +1,82 @@
 #:kivy 1.11.1
+#:include dials.kv
 
-<NowMarker>:
-	Image:
-		source: 'assets/arrow_marker.png'
-		size_hint: None, None
-		size: 75, 75
-		pos_hint: {'center_x': 0.5, 'center_y': 0.8}
+<MainScreen>:
+    Button:
+        text: "Time Control"
+        font_size: 12
+        pos_hint: {'center_x': 0.15, 'center_y': 0.95}
+        size_hint: 0.2, 0.05
+        on_press: root.time_control_button()
 
-<SunRiseMarker>:
-    rot_angle: 0
+    Button:
+        text: "Location"
+        font_size: 12
+        pos_hint: {'center_x': 0.5, 'center_y': 0.95}
+        size_hint: 0.2, 0.05
 
-    canvas.before:
-        PushMatrix
-        Rotate:
-            angle: root.rot_angle
-            origin: self.center
-    canvas.after:
-        PopMatrix
 
-	Image:
-		source: 'assets/sun_rise.png'
-		size_hint: 0.05, 0.05
-		pos_hint: {'center_x': 0.5, 'center_y': 0.85}
+<TimeWizard>:
+    title: 'Time Wizard'
+    redraw_checkbox: redraw_checkbox
+    current_date: current_date
 
-<SunSetMarker>:
-    rot_angle: 0
+    size_hint: 0.25, 0.8
+    pos_hint: {'center_x': 0.15, 'center_y': 0.5}
 
-    canvas.before:
-        PushMatrix
-        Rotate:
-            angle: root.rot_angle
-            origin: self.center
-    canvas.after:
-        PopMatrix
+	BoxLayout:
+		orientation: 'vertical'
 
-	Image:
-		source: 'assets/sun_set.png'
-		size_hint: 0.05, 0.05
-		pos_hint: {'center_x': 0.5, 'center_y': 0.85}
+		GridLayout:
+			size_hint: 1, 0.2
+        	cols: 2
+        	Label:
+        		text: "Speedy Time"
+			CheckBox:
+				id: redraw_checkbox
 
-<DialWidget>:
-    dial_file: ''
-    dial_size: (0, 0)
 
-	canvas.before:
-		PushMatrix
-		Rotate:
-			angle: root.angle
-			axis: 0, 0, 1
-			origin: (self.width / 2, self.height / 2)
+		BoxLayout:
+			orientation: 'horizontal'
 
-	canvas.after:
-		PopMatrix
+			BoxLayout:
+				orientation: 'vertical'
 
-	Image:
-	    source: root.dial_file
-		size_hint: root.dial_size
-		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+				Label:
+					text: "Day Length"
+					font_size: 12
+					size_hint: None, 0.03
+					pos_hint: {'center_x': 0.5, 'center_y': 0}
 
-<DialEffectWidget>:
-    shade_size: (0, 0)
-	size: 1, 1
-	pos: (self.width / 2) - (root.shade_size[0] / 2), (self.height / 2) - (root.shade_size[1] / 2)
+				Slider:
+					id: day_slider
+					orientation: 'vertical'
+					min: 1
+					max: 100
+					value: 1
+#					on_touch_up: root.time_lapse(round(self.value))
 
-    on_size: root._pos_check()
+			BoxLayout:
+				orientation: 'vertical'
 
-<SunShading>:
-    shade_size: (0, 0)
+				Label:
+					text: "Date Iterate"
+					font_size: 12
+					size_hint: None, 0.03
+					pos_hint: {'center_x': 0.5, 'center_y': 0}
 
-    shade_one_angle_start: 0
-    shade_one_angle_stop: 0
-    shade_one_color: 0, 0, 0, 1
+				Slider:
+					id: date_slider
+					orientation: 'vertical'
+					min: 1
+					max: 100
+					value: 1
+#					on_touch_up: root.date_lapse(round(self.value))
 
-    shade_two_angle_start: 0
-    shade_two_angle_stop: 0
-    shade_two_color: 0, 0, 0, 0
+		Label:
+		    id: current_date
+			size_hint: 1, 0.2
 
-    sun_one_angle_start: 0
-    sun_one_angle_stop: 0
-    sun_one_color: 0, 0, 0, 0
-
-    sun_two_angle_start: 0
-    sun_two_angle_stop: 0
-    sun_two_color: 0, 0, 0, 0
-
-    on_size: root._size_check()
-
-    canvas:
-        # Shade One #
-        Color:
-            rgba: root.shade_one_color
-
-        Ellipse:
-            size: root.shade_size
-            angle_start: root.shade_one_angle_start
-            angle_end: root.shade_one_angle_stop
-            pos: 0, 0
-
-        # Shade Two #
-        Color:
-            rgba: root.shade_two_color
-
-        Ellipse:
-            size: root.shade_size
-            angle_start: root.shade_two_angle_start
-            angle_end: root.shade_two_angle_stop
-            pos: 0, 0
-
-        # Sun One #
-        Color:
-            rgba: root.sun_one_color
-
-        Ellipse:
-            size: root.shade_size
-            angle_start: root.sun_one_angle_start
-            angle_end: root.sun_one_angle_stop
-            pos: 0, 0
-
-        # Sun Two #
-        Color:
-            rgba: root.sun_two_color
-
-        Ellipse:
-            size: root.shade_size
-            angle_start: root.sun_two_angle_start
-            angle_end: root.sun_two_angle_stop
-            pos: 0, 0
+		Button:
+		    text: "Revert date"
+		    on_press: root.revert_date()
