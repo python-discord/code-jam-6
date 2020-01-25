@@ -20,14 +20,14 @@ from PIL import Image as Im
 # Global Variables
 
 # Screen Dimensions
-SCREEN_WIDTH = 720
-SCREEN_HEIGHT = 1280
+SCREEN_WIDTH = 540
+SCREEN_HEIGHT = 720
 
 # Paper Dimensions
 STARTING_X = 50 # PAPER_WIDTH - 240
 STARTING_Y = 50 # PAPER_HEIGHT + 100
 PAPER_WIDTH = SCREEN_WIDTH * .7 - STARTING_X
-PAPER_HEIGHT = 720 # SCREEN_HEIGHT
+PAPER_HEIGHT = SCREEN_WIDTH
 
 class MainScreen(ScreenManager):
     ''' ScreenManager '''
@@ -58,19 +58,13 @@ class TextPaper(Image):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        '''
-        # actual screen size will be different, may need to adjust
-        SCREEN_WIDTH, SCREEN_HEIGHT = Window.size
-        PAPER_WIDTH = SCREEN_WIDTH * .7 - 50
-        PAPER_HEIGHT = SCREEN_HEIGHT
-        '''
         # Creating Blank Paper image to type on.
         # self.img = Im.open("paper.png")
         # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
-        self.img = Im.new('RGBA', (int(SCREEN_WIDTH *.75), PAPER_HEIGHT), (200,200,200,255))
-        self.default_pos = 225,  - (SCREEN_HEIGHT - PAPER_HEIGHT)//2 + STARTING_Y + 10
+        self.txt = Im.new('RGBA', (int(SCREEN_WIDTH *.75), PAPER_HEIGHT), (200,200,200,255))
+        self.default_pos = PAPER_WIDTH//2,  - ((SCREEN_HEIGHT - PAPER_HEIGHT)//2 + STARTING_Y)
         # Type writer does not type from the top rather type from the bottom.
-        self.txt = self.img.copy()
+        #self.txt = self.img.copy()
         self.head = {'x': STARTING_X, 'y': STARTING_Y}
         self.pos = self.default_pos
         self.size = [PAPER_WIDTH, PAPER_HEIGHT]
