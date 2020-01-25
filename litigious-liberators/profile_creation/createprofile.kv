@@ -8,6 +8,7 @@
             Label:
                 text: 'My Name is'
                 font_size: '30dp'
+#                font_name: "rock1.ttf"
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
@@ -29,22 +30,25 @@
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: 'I am a'
-                font_size: '30dp'
+                text: "On a clear day you chance upon a crippled juvenile T-Rex.\n its leg trapped in a strange contraption. \nJudging from the bleeding, it will not survive long:"
+                font_size: '25dp'
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
                 spacing: '10dp'
                 ToggleButton:
-                    text: 'Woman'
-                    group: 'sex'
+                    text: 'Use the sharpened rock mercifully ending its life with a quick thrust'
+                    group: 'Q1'
                     state: 'down'
                 ToggleButton:
-                    text: 'Man'
-                    group: 'sex'
+                    text: 'Use herbs from your pack to put it to sleep.'
+                    group: 'Q1'
                 ToggleButton:
-                    text: 'Other'
-                    group: 'sex'
+                    text: "Do not interfere in the natural evolution of events, but rather take the opportunity to learn \nmore about this species as one day you might face a fight a fully grown one."
+                    group: 'Q1'
+                ToggleButton:
+                    text: 'A4'
+                    group: 'Q1'
             BoxLayout:
                 orientation: 'horizontal'
                 padding: '10dp', '50dp'
@@ -59,63 +63,25 @@
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: 'My sexual orientation is'
-                font_size: '30dp'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: '10dp'
-                spacing: '10dp'
-                height: root.height / 2
-                ToggleButton:
-                    text: 'Straight'
-                ToggleButton:
-                    text: 'Gay'
-                ToggleButton:
-                    text: 'Lesbian'
-                ToggleButton:
-                    text: 'Bisexual'
-                ToggleButton:
-                    text: 'Asexual'
-                ToggleButton:
-                    text: 'Demisexual'
-                ToggleButton:
-                    text: 'Pansexual'
-                ToggleButton:
-                    text: 'Queer'
-                ToggleButton:
-                    text: 'Bicurious'
-                ToggleButton:
-                    text: 'Aromantic'
-            BoxLayout:
-                orientation: 'horizontal'
-                padding: '10dp', '50dp'
-                spacing: '10dp'
-                Button:
-                    text: 'Go Back'
-                    on_release: root.ids.profile_carousel.load_previous()
-                Button:
-                    text: 'Continue'
-                    on_release: root.ids.profile_carousel.load_next()
-
-        BoxLayout:
-            orientation: 'vertical'
-            Label:
-                text: 'Show me'
+                text: 'Profile creation question #2:'
                 font_size: '30dp'
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
                 spacing: '10dp'
                 ToggleButton:
-                    text: 'Women'
-                    group: 'sex'
+                    text: 'A1'
+                    group: 'Q1'
                     state: 'down'
                 ToggleButton:
-                    text: 'Men'
-                    group: 'sex'
+                    text: 'A2'
+                    group: 'Q1'
                 ToggleButton:
-                    text: 'Everyone'
-                    group: 'sex'
+                    text: 'A3'
+                    group: 'Q1'
+                ToggleButton:
+                    text: 'A4'
+                    group: 'Q1'
             BoxLayout:
                 orientation: 'horizontal'
                 padding: '10dp', '50dp'
@@ -125,52 +91,5 @@
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
-                    on_release: root.ids.profile_carousel.load_next()
-
-        BoxLayout:
-            orientation: 'vertical'
-            Label:
-                text: 'What I do'
-                font_size: '30dp'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: 10
-                spacing: 10
-                TextInput:
-                    font_size: '30dp'
-                    multiline: False
-            BoxLayout:
-                orientation: 'horizontal'
-                padding: '10dp', '50dp'
-                spacing: '10dp'
-                Button:
-                    text: 'Go Back'
-                    on_release: root.ids.profile_carousel.load_previous()
-                Button:
-                    text: 'Continue'
-                    on_release: root.ids.profile_carousel.load_next()
-
-
-        BoxLayout:
-            orientation: 'vertical'
-            Label:
-                text: 'Bio'
-                font_size: '30dp'
-            BoxLayout:
-                orientation: 'vertical'
-                padding: '10dp'
-                spacing: '10dp'
-                TextInput:
-                    font_size: '20dp'
-                    multiline: True
-            BoxLayout:
-                orientation: 'horizontal'
-                padding: '10dp', '50dp'
-                spacing: '10dp'
-                Button:
-                    text: 'Go Back'
-                    on_release: root.ids.profile_carousel.load_previous()
-                Button:
-                    text: 'Continue'
-                    # TODO: Validate input data from all cards? Or validate it on each step?
+                    # TODO: With this design we only need to valiedate the name. But we need more questions.
                     on_release: root.manager.current = "profile_selection"

@@ -59,6 +59,11 @@ Set up pre-commit hooks
 
 Now it should run before your commit :) 
 
+## Running the App:
+```bash
+python main.py -m screen:phone_iphone_6_plus,portrait,scale=0.40
+```
+
 ## Useful links
 
 
