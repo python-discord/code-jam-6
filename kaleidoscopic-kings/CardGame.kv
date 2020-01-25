@@ -11,6 +11,8 @@
 ########### Setting default font ###########
 <Widget>:
     font_name: game_assets+'GlobalFont.ttf'
+    outline_color: (0,0,0)
+    outline_width: 1
 
 ################## LAYOUT ##################
 <MainWidget>:
@@ -33,32 +35,39 @@
 ################## STATUS ##################
 <StatusBar@GridLayout>:
     rows: 4
-    padding: (40, 180, 40, 75)
+    padding: (20, 180, 40, 75)
     spacing: 5
     StatusWidget:
         StatusLabel:
             text: data.game_state.main_state_1.label
+            valign: 'bottom'
         StatusLabel:
+            valign: 'top'
             text: data.game_state.main_state_1.value
     StatusWidget:
         StatusLabel:
             text: data.game_state.main_state_2.label
+            valign: 'bottom'
         StatusLabel:
+            valign: 'top'
             text: data.game_state.main_state_2.value
     StatusWidget:
         StatusLabel:
             text: data.game_state.main_state_3.label
+            valign: 'bottom'
         StatusLabel:
             text: data.game_state.main_state_3.value
+            valign: 'top'
     StatusWidget:
         StatusLabel:
             text: data.game_state.main_state_4.label
+            valign: 'bottom'
         StatusLabel:
             text: data.game_state.main_state_4.value
+            valign: 'top'
 
 
 <StatusWidget@BoxLayout>:
-    padding: (30, 40)
     orientation: 'vertical'
     canvas.before:
         Rectangle:
@@ -67,7 +76,10 @@
             source: game_assets+ 'MainStateBackground.png'
 
 <StatusLabel@Label>:
-    font_size: 21
+    font_size: 19
+    text_size: root.size
+    halign: 'center'
+
 
 ##################  CARD  ##################
 <CardWidget@BoxLayout>:
@@ -118,9 +130,10 @@
                 on_press: data.choice_handler('2')
 
 
-<ChoiceButton@Button>:
+<ChoiceButton@Button>:#
+
     line_height: 1.25
-    font_size: 14
+    font_size: 18
     center: root.center
     valign: 'center'
     halign: 'center'

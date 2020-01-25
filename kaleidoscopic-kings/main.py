@@ -12,10 +12,11 @@ from kivy.config import Config
 from kivy.lang import global_idmap
 
 
-@dataclass
 class MainState:
-    label: str
-    value: str
+    def __init__(self, label: str, value: float):
+        self.label: str = label
+        value = f"{int(value*100//2)}%"
+        self.value: str = value
 
 
 @dataclass
@@ -51,9 +52,8 @@ class DataController(EventDispatcher):
         backend version is done
         """
         states = [self.game.game_state.get_main_state(i) for i in range(4)]
-        print(states)
         self.game_state = self.game_state = GameState(
-            *[MainState(s.label, str(s.value)) for s in states]
+            *[MainState(s.label, s.value) for s in states]
         )
 
 
@@ -66,7 +66,7 @@ class CardGameApp(App):
         global_idmap["all_assets"] = "./Game/"
         global_idmap["game_assets"] = "./Game/GameArt/"
         global_idmap["card_assets"] = "./Game/CardArt/"
-        print(global_idmap['game_assets'])
+        print(global_idmap["game_assets"])
         ctl.game = game = load_game()
         ctl.active_card = game.start_game()
         ctl.set_game_state()
