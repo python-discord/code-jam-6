@@ -1,5 +1,5 @@
 from TLOA.entities import Entity
-from TLOA.core.constants import(MIRROR_CANNON_POS, MIRROR_OFFSET,
+from TLOA.core.constants import( MIRROR_CANNON_POS, MIRROR_OFFSET,
                                 MIRROR_DIAMETER, MIRROR_ANGLES)
 from kivy.properties import BoundedNumericProperty
 from kivy.vector import Vector
