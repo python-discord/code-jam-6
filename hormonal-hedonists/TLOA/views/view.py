@@ -44,18 +44,6 @@ class GameView(Widget):
         self._hp_bar.size = self._hp_bar.texture_size
 
         self._score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
-        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
-                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
-                                border=(0, 0, 0, 0),
-                                pos=((WINDOW_WIDTH / 3) + 80, WINDOW_HEIGHT - 70),
-                                width=40,
-                                height=40,
-                                on_release=self.show_pause_menu)
-        self.pause_menu = Popup(title='Hello',
-                                content=Label(text="hello world"),
-                                size_hint=(None, None),
-                                size=(400, 400),
-                                auto_dismiss=False)
 
         self.pause_menu_opened = False
 
