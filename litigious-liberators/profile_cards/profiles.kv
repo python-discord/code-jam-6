@@ -12,27 +12,18 @@ BoxLayout:
             size: self.size
     BoxLayout
         orientation: "vertical"
-        spacing: 30
         BoxLayout
-            size_hint_y: 0.2
-            orientation: "horizontal"
-            AttributeFill
-                level: profile_list._attributes["Knowledge"]/10
-                color: 1, 0, 0.0
-            Label
-                text: str(profile_list._attributes["Knowledge"])+"/10"
-                font_name: "Oldenburg-Regular.ttf"
-                font_size: 30
-            Attribute2Fill
-                level: profile_list._attributes["Welfare"]/10
-                color: 1, 1, 0
-            Label
-                text: str(profile_list._attributes["Welfare"])
-            AttributeFill
-                level: profile_list._attributes["Energy"]/10
-                color: 1, 1, 0
-            Label
-                text: str(profile_list._attributes["Energy"])
+            size_hint_y: None
+            spacing: 20
+            ProgressBar:
+                max: 10
+                value: profile_list._attributes["Knowledge"]
+            ProgressBar:
+                max: 10
+                value: profile_list._attributes["Welfare"]
+            ProgressBar:
+                max: 10
+                value: profile_list._attributes["Energy"]
         ProfileList:
             id: profile_list
             size_hint_y: 0.8
