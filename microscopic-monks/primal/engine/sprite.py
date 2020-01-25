@@ -43,7 +43,7 @@ class Item(Sprite):
         with open((self.resource_dir / "items.json").as_posix() , "r") as read_file:
             data = json.load(read_file)[name]
         super().__init__(data["source"], self.pos, data["size"], **kwargs)
-        self.rotate = Rotate(angle=player.get_rotation(), origin=(self.pos[0] + self.size[0] / 2, self.pos[1] + self.size[1] / 2))
+        self.rotate = Rotate(angle=player.get_rotation(), origin=player.get_center())
 
     def draw(self, canvas: RenderContext):
         canvas.add(PushMatrix())
