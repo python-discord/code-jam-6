@@ -16,7 +16,7 @@ class Rotater(Scatter):
     def __init__(self, **kwargs):
         super(Rotater, self).__init__(**kwargs)
         self.size = (800, 800)
-        self.pos = (500, 0)
+        self.pos = (270, 0)
         self.rotation = 0
 
         self.init_x = self.x
@@ -39,6 +39,7 @@ class Rotater(Scatter):
         self.anim = None
         self.rotation = 0
         self.dir = 0
+
         self.x = self.init_x
         self.y = self.init_y
 
