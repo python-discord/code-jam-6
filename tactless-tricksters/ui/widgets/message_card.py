@@ -59,4 +59,3 @@ class MessageCard(LongpressButton, MDCardPost):
     def on_long_press(self):
         print('long press!')
         self.long_press = True
-

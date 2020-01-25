@@ -26,8 +26,13 @@ class ConversationScreen(Screen):
         self.clear_widgets()
 
         layout = BoxLayout(orientation='vertical')
-        scroll = ScrollView(do_scroll_x=False, size_hint=(1, None), size=(Window.width, Window.height))
-        scroll_box = BoxLayout(orientation='vertical', size_hint_y=None, padding=(dp(12), dp(60)), spacing=dp(5))
+        scroll = ScrollView(do_scroll_x=False,
+                            size_hint=(1, None),
+                            size=(Window.width, Window.height))
+        scroll_box = BoxLayout(orientation='vertical',
+                               size_hint_y=None,
+                               padding=(dp(12), dp(60)),
+                               spacing=dp(5))
         scroll_box.bind(minimum_height=scroll_box.setter('height'))
         # Add more self.scrollbox.add_widget(MDLabel(text='')) to increase padding
         scroll_box.add_widget(MDLabel(text=' '))
@@ -62,7 +67,8 @@ class ConversationScreen(Screen):
         # Hides left icon
         self.text_input.children[2].children[2].size = (0, 0)
         self.text_input.icon_right = 'send'
-        self.text_input.children[2].children[0].bind(on_press=lambda x: self.send_message(self.text_input.text))
+        self.text_input.children[2].children[0].bind(
+            on_press=lambda x: self.send_message(self.text_input.text))
         text_input_anchor.add_widget(self.text_input)
 
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
@@ -83,4 +89,3 @@ class ConversationScreen(Screen):
 
     def return_screen(self):
         self.manager.current = 'message'
-

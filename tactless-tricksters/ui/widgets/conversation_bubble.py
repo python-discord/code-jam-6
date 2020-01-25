@@ -1,12 +1,12 @@
-from kivy.uix.behaviors import ButtonBehavior
-from kivy.metrics import dp
-from kivy.clock import Clock
+from functools import partial
 
+from kivy.clock import Clock
+from kivy.metrics import dp
+from kivy.uix.behaviors import ButtonBehavior
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
-from kivymd.uix.menu import MDMenu, MDDropdownMenu
+from kivymd.uix.menu import MDDropdownMenu
 
-from functools import partial
 
 class ConversationBubble(ButtonBehavior, MDCard):
     def __init__(self, **kwargs):
@@ -29,8 +29,13 @@ class ConversationBubble(ButtonBehavior, MDCard):
         self.menu_items = []
         keys = ['encode', 'decode', 'play']
         for key in keys:
-            self.menu_items.append({'viewclass': 'MDMenuItem','text': key,'callback': partial(self.callback_for_menu_items,str(key))})
-        self.bind(on_press=lambda x: MDDropdownMenu(items=self.menu_items[:], width_mult=3, id=key).open(self))
+            self.menu_items.append(
+                {'viewclass': 'MDMenuItem',
+                 'text': key,
+                 'callback': partial(self.callback_for_menu_items, str(key))})
+        self.bind(on_press=lambda x: MDDropdownMenu(items=self.menu_items[:],
+                                                    width_mult=3,
+                                                    id=key).open(self))
 
     def on_children(self, *_):
         for c in self.children:

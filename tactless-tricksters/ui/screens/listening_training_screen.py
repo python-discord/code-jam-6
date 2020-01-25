@@ -26,28 +26,34 @@ class ListeningScreen(Screen):
 
     def ui_layout(self):
         play_button_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom',
-                                            padding=[dp(25), dp(25), dp(25), dp(25)])
+                                          padding=[dp(25), dp(25), dp(25), dp(25)])
 
         play_button = MDFloatingActionButton(icon='play', size=[dp(56), dp(56)])
-        play_button.md_bg_color = App.get_running_app().theme_cls.primary_color  # [76/255, 175/255, 80/255, 1]
+        # [76/255, 175/255, 80/255, 1]
+        play_button.md_bg_color = App.get_running_app().theme_cls.primary_color
         play_button.text_color = [1, 1, 1, 1]
         play_button.bind(on_press=lambda x: self.play_audio())
         play_button_anchor.add_widget(play_button)
 
-        self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5}, size_hint=(0.85, 0.5))
+        self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5},
+                                             size_hint=(0.85, 0.5))
         self.encode_input.icon_right = 'database-import'
-        self.encode_input.children[2].children[0].bind(on_press=lambda x: self.encode_audio(self.encode_input.text))
+        self.encode_input.children[2].children[0].bind(
+            on_press=lambda x: self.encode_audio(self.encode_input.text))
         self.encode_input.icon_left = 'microphone'
         self.encode_input.children[2].children[2].disabled = False
         self.encode_input.children[2].children[2].bind(on_press=lambda x: self.speech_to_text())
 
         encode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
-                             size_hint_x=0.85, size_hint_y=0.7, pos_hint={'top': 0.85, 'center_x': 0.5})
-        encode_label = MDLabel(text='Encode Morse Code Audio', font_style='Body1', halign='center', size_hint=(1, 0.5))
+                             size_hint_x=0.85, size_hint_y=0.7,
+                             pos_hint={'top': 0.85, 'center_x': 0.5})
+        encode_label = MDLabel(text='Encode Morse Code Audio', font_style='Body1',
+                               halign='center', size_hint=(1, 0.5))
         encode_label.theme_text_color = 'Custom'
         encode_label.text_color = [1, 1, 1, 1]
 
-        self.encode_output_label = MDLabel(text='Enter text to convert to morse code', halign='center', size_hint=(1, 0.5))
+        self.encode_output_label = MDLabel(text='Enter text to convert to morse code',
+                                           halign='center', size_hint=(1, 0.5))
         self.encode_output_label.theme_text_color = 'Custom'
         self.encode_output_label.text_color = [1, 1, 1, 1]
 

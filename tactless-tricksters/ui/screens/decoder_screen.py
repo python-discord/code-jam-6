@@ -16,7 +16,6 @@ from ui.widgets.audio_indicator import AudioIndicator
 from ui.widgets.nav_drawer import MyNavigationLayout
 
 
-
 class DecoderScreen(Screen):
     def __init__(self, **kwargs):
         super(DecoderScreen, self).__init__(name=kwargs.get('name'))
@@ -34,7 +33,8 @@ class DecoderScreen(Screen):
         self.record_button.bind(on_press=lambda x: self.decode_audio())
         record_button_anchor.add_widget(self.record_button)
 
-        self.decode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5}, size_hint=(0.85, 0.5))
+        self.decode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5},
+                                             size_hint=(0.85, 0.5))
         self.decode_input.icon_left_dasabled = True
         # Moves widget out of the field of view
         self.decode_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
@@ -43,15 +43,17 @@ class DecoderScreen(Screen):
         self.decode_input.children[2].children[0].bind(on_press=lambda x: self.clear_text())
 
         decode_card = MDCard(padding=dp(24), spacing=dp(24), orientation='vertical',
-                             size_hint_x=0.85, size_hint_y=0.7, pos_hint={'top': 0.85, 'center_x': 0.5})
+                             size_hint_x=0.85, size_hint_y=0.7,
+                             pos_hint={'top': 0.85, 'center_x': 0.5})
         decode_label = MDLabel(text='Decode Morse Code Audio', font_style='Body1', halign='center',
                                size_hint=(1, 0.5))
         decode_label.theme_text_color = 'Custom'
         decode_label.text_color = [1, 1, 1, 1]
         decode_card.add_widget(decode_label)
 
-        self.decode_output_label = MDLabel(text='Hit record or enter Morse Code below to start decoding',
-                                           font_style='Body1', halign='center', size_hint=(1, 0.5))
+        decode_text = 'Hit record or enter Morse Code below to start decoding'
+        self.decode_output_label = MDLabel(text=decode_text, font_style='Body1',
+                                           halign='center', size_hint=(1, 0.5))
         self.decode_output_label.theme_text_color = 'Custom'
         self.decode_output_label.text_color = [1, 1, 1, 1]
         self.audio_indicator = AudioIndicator(stack_width=self.amr.bits_per_frame)

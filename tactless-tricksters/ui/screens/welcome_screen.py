@@ -31,7 +31,7 @@ Builder.load_string("""
             size: self.size
             source: 'ui/img/morse_code_bg.jpg'
             tex_coords: root.tex_coords
-            
+
     MDCard:
         padding: dp(24)
         spacing: dp(24)
@@ -100,8 +100,7 @@ Builder.load_string("""
                 text: 'Exit'
                 icon: 'close'
                 on_press:
-                    # TODO: create exit function
-                    root.manager.current = ''
+                    app.stop()
 """)
 
 

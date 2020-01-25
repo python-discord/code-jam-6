@@ -2,7 +2,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.app import App
 from kivy.clock import Clock
 from kivymd.uix.navigationdrawer import MDNavigationDrawer, NavigationDrawerIconButton, \
-                                     NavigationLayout
+    NavigationLayout
 from kivymd.uix.toolbar import MDToolbar
 
 
@@ -13,15 +13,20 @@ class ContentNavigationDrawer(MDNavigationDrawer):
         self.use_logo = 'logo'
         self.drawer_logo = 'ui/img/nav_drawer_logo.png'
         self.home = NavigationDrawerIconButton(text="Home", icon='home',
-                                               on_press=lambda x: self.scr_chng('welcome', self.home))
+                                               on_press=lambda x:
+                                               self.scr_chng('welcome', self.home))
         self.encode = NavigationDrawerIconButton(text="Encode", icon='database-import',
-                                                 on_press=lambda x: self.scr_chng('encode', self.encode))
+                                                 on_press=lambda x:
+                                                 self.scr_chng('encode', self.encode))
         self.decode = NavigationDrawerIconButton(text="Decode", icon='database-export',
-                                                 on_press=lambda x: self.scr_chng('decode', self.decode))
+                                                 on_press=lambda x:
+                                                 self.scr_chng('decode', self.decode))
         self.message = NavigationDrawerIconButton(text="Messages", icon='message',
-                                                  on_press=lambda x: self.scr_chng('message', self.message))
+                                                  on_press=lambda x:
+                                                  self.scr_chng('message', self.message))
         self.training = NavigationDrawerIconButton(text="Training", icon='dumbbell',
-                                                  on_press=lambda x: self.scr_chng('training', self.training))
+                                                   on_press=lambda x:
+                                                   self.scr_chng('training', self.training))
         self.add_widget(self.home)
         self.add_widget(self.encode)
         self.add_widget(self.decode)
@@ -62,6 +67,3 @@ class MyNavigationLayout(NavigationLayout):
             self.scroll_view.disabled = True
         else:
             self.scroll_view.disabled = False
-
-
-

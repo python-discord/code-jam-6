@@ -1,29 +1,28 @@
 # qpy:kivy
 # Kivy Imports
-from kivy.properties import StringProperty
-from kivy.uix.screenmanager import ScreenManager
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.screenmanager import NoTransition
-from kivymd.theming import ThemeManager
+import gc
+
 from kivy.app import App
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import NoTransition
+from kivy.uix.screenmanager import ScreenManager
+from kivymd.theming import ThemeManager
 
-
+from ui.screens.add_contact_screen import AddContactScreen
+from ui.screens.calibration_screen import CalibrationScreen
+from ui.screens.contacts_screen import ContactScreen
+from ui.screens.conversation_screen import ConversationScreen
+from ui.screens.decoder_screen import DecoderScreen
+from ui.screens.encoder_screen import EncoderScreen
+from ui.screens.listening_training_screen import ListeningScreen
+from ui.screens.message_screen import MessageScreen
+from ui.screens.tapping_training_screen import TappingScreen
 # Project imports
 from ui.screens.training_menu_screen import TrainingMenuScreen
 from ui.screens.welcome_screen import WelcomeScreen
-from ui.screens.encoder_screen import EncoderScreen
-from ui.screens.decoder_screen import DecoderScreen
-from ui.screens.message_screen import MessageScreen
-from ui.screens.conversation_screen import ConversationScreen
-from ui.screens.tapping_training_screen import TappingScreen
-from ui.screens.listening_training_screen import ListeningScreen
-from ui.screens.contacts_screen import ContactScreen
-from ui.screens.add_contact_screen import AddContactScreen
-from ui.screens.calibration_screen import CalibrationScreen
 from util.utility import Utility
 
-import gc
 gc.disable()
 
 

@@ -50,10 +50,3 @@ class ContactCard(ButtonBehavior, MDCard):
             if screen.name == 'conversation':
                 screen.ui_layout(self.contact)
         App.get_running_app().root.content.current = 'conversation'
-
-
-
-
-
-
-

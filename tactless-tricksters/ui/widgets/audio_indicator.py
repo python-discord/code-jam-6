@@ -44,7 +44,7 @@ class AudioIndicatorStack(BoxLayout):
         self.spacing = dp(2)
         self.rect_array = []
         self.stack_height = stack_height
-        self.color_tuple = [App.get_running_app().theme_cls.primary_color,[0,0,0,0]]
+        self.color_tuple = [App.get_running_app().theme_cls.primary_color, [0, 0, 0, 0]]
 
         # Builds a stack of rectangle box layouts
         for i in range(self.stack_height):
@@ -52,9 +52,3 @@ class AudioIndicatorStack(BoxLayout):
             rect.md_bg_color = App.get_running_app().theme_cls.primary_color
             self.rect_array.append(rect)
             self.add_widget(rect)
-
-
-
-
-
-
