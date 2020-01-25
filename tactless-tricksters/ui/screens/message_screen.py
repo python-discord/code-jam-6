@@ -67,6 +67,6 @@ class MessageScreen(Screen):
         self.add_widget(self.nav_bar_anchor)
 
     def switch_screens(self):
-        print("Switch Screens to create message")
+        self.manager.current = 'contact'
 
 
