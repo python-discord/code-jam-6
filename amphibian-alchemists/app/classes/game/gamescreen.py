@@ -152,8 +152,8 @@ class GameScreen(Screen):
         store = JsonStore(DATA_DIR)
         game = store.get(str(game_id))
         current_output_text = game["current_output_text"]
-        ciphered_text = game["ciphered_text"][str(len(current_output_text) - 1)]
-        key.name = ciphered_text
+        ciphered_text = game["ciphered_text"]
+        key.name = str(ciphered_text)[len(current_output_text) - 1]
 
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
