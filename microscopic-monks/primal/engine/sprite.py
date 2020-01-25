@@ -50,6 +50,9 @@ class Player(Sprite):
         d = math.atan2(y - Window.size[1] / 2, x - Window.size[0] / 2) * 180 / math.pi
         self.rotate.angle = d
 
+    def get_rotation(self) -> int:
+        return self.rotate.angle
+
     def draw(self, canvas: RenderContext):
         canvas.add(PushMatrix())
         canvas.add(self.rotate)
