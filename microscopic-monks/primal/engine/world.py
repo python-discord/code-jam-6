@@ -1,10 +1,11 @@
 import random
-from typing import Tuple
+from typing import Tuple, Set
 
 from kivy.graphics.instructions import RenderContext, InstructionGroup
 
 from primal.engine.perlin import sample
-from primal.engine.sprite import Sprite, RotatableSprite
+from primal.engine.sprite import Sprite
+from primal.engine.feature import Feature
 
 
 class World:
@@ -13,6 +14,8 @@ class World:
     LOAD_RADIUS = 1
 
     def __init__(self, pos: Tuple[float, float]):
+        self.world_group = InstructionGroup()
+
         chunk_pos = World.get_chunk_coords_from_pos(pos)
 
         self.loaded_center = chunk_pos
@@ -20,25 +23,42 @@ class World:
         self.chunks = dict()
 
         self.loaded_chunks = [
-            [None for _ in World.get_loaded_col_range(chunk_pos[0])]
-            for _ in World.get_loaded_row_range(chunk_pos[1])
+            [None for _ in World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
 
         size = Chunk.SIZE, Chunk.SIZE
         self.terrain_instructions = [
-            [Sprite(None, (0, 0), size) for _ in World.get_loaded_col_range(chunk_pos[0])]
-            for _ in World.get_loaded_row_range(chunk_pos[1])
+            [Sprite(None, (0, 0), size) for _ in
+             World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
 
         self.features_chunk_instructions = [
-            [InstructionGroup() for _ in World.get_loaded_col_range(chunk_pos[0])]
-            for _ in World.get_loaded_row_range(chunk_pos[1])
+            [InstructionGroup() for _ in World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
+
+        for row in self.features_chunk_instructions:
+            for instruction in row:
+                self.world_group.add(instruction)
 
         self.load_area(self.loaded_center)
 
+    def get_chunk_in_range(self, rng: int):
+        for y in World.get_loaded_range(World.RADIUS_HEIGHT, rng):
+            for x in World.get_loaded_range(World.RADIUS_WIDTH, rng):
+                yield self.loaded_chunks[y][x]
+
     def update(self, pos: Tuple[float, float]):
-        x, y = World.get_chunk_coords_from_pos(pos)
+        x, y = pos
+
+        if x < 0:
+            x -= Chunk.SIZE
+        if y < 0:
+            y -= Chunk.SIZE
+
+        x, y = World.get_chunk_coords_from_pos((x, y))
         lx, ly = self.loaded_center
 
         if x + World.LOAD_RADIUS == lx or x - World.LOAD_RADIUS == lx or x == lx:
@@ -53,36 +73,42 @@ class World:
             for terrain in row:
                 terrain.draw(canvas)
 
-        for row in self.features_chunk_instructions:
-            for instruction in row:
-                canvas.add(instruction)
+        canvas.add(self.world_group)
+
+    def render_chunk_at(self, x: int, y: int):
+        instruction_group = self.features_chunk_instructions[y][x]
+        self.world_group.remove(instruction_group)
+
+        instruction_group = InstructionGroup()
+        self.features_chunk_instructions[y][x] = instruction_group
+        self.world_group.add(instruction_group)
+        self.loaded_chunks[y][x].draw_features(instruction_group)
+
+    def render_chunk(self, chunk):
+        for y in range(len(self.loaded_chunks)):
+            for x in range(len(self.loaded_chunks[y])):
+                if chunk == self.loaded_chunks[y][x]:
+                    self.render_chunk_at(x, y)
+                    return
 
     def load_area(self, pos: Tuple[int, int]):
-        for index_y, y in enumerate(World.get_loaded_row_range(pos[1])):
+        for index_y, y in enumerate(World.get_loaded_range(pos[1], World.RADIUS_HEIGHT)):
             if y not in self.chunks:
                 self.chunks[y] = dict()
 
             row_chunks = self.chunks[y]
-            for index_x, x in enumerate(World.get_loaded_col_range(pos[0])):
+            for index_x, x in enumerate(World.get_loaded_range(pos[0], World.RADIUS_WIDTH)):
                 if x not in row_chunks:
                     row_chunks[x] = Chunk((x * Chunk.SIZE, y * Chunk.SIZE), self.seed)
 
                 terrain_instruction = self.terrain_instructions[index_y][index_x]
                 self.loaded_chunks[index_y][index_x] = row_chunks[x]
                 self.loaded_chunks[index_y][index_x].draw(terrain_instruction)
-
-        for y in range(len(self.loaded_chunks)):
-            for x in range(len(self.loaded_chunks[y])):
-                self.features_chunk_instructions[y][x].clear()
-                self.loaded_chunks[y][x].draw_features(self.features_chunk_instructions[y][x])
+                self.render_chunk_at(index_x, index_y)
 
     @staticmethod
-    def get_loaded_row_range(y: int):
-        return range(y - World.RADIUS_HEIGHT, y + World.RADIUS_HEIGHT + 1)
-
-    @staticmethod
-    def get_loaded_col_range(x: int):
-        return range(x - World.RADIUS_WIDTH, x + World.RADIUS_WIDTH + 1)
+    def get_loaded_range(x: int, rng: int):
+        return range(x - rng, x + rng + 1)
 
     @staticmethod
     def get_chunk_coords_from_pos(pos: Tuple[float, float]) -> Tuple[int, int]:
@@ -123,18 +149,18 @@ class Chunk:
             sprite = 'r.png'
 
             self.chunk_features.add(
-                RotatableSprite(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
+                Feature(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
 
         if self.type != 2:
             return
 
-        while random.randint(0, 1) == 1:
-            s = random.randint(50, 100)
+        while random.randint(0, 3) != 1:
+            s = random.randint(150, 400)
             angle = random.randint(0, 359)
             sprite = 'topOfTree.png'
 
             self.chunk_features.add(
-                RotatableSprite(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
+                Feature(sprite, Chunk.get_random_position(self.pos), (s, s), angle))
 
     def draw(self, terrain: Sprite):
         terrain.set_position(self.pos)
@@ -143,6 +169,12 @@ class Chunk:
     def draw_features(self, group: InstructionGroup):
         for feature in self.chunk_features:
             feature.draw(group)
+
+    def get_features(self) -> Set[Feature]:
+        return self.chunk_features
+
+    def remove_feature(self, feature: Feature):
+        self.chunk_features.discard(feature)
 
     @staticmethod
     def get_random_position(pos):

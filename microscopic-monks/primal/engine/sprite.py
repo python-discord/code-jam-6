@@ -46,6 +46,9 @@ class Sprite:
         self.size = size
         self.bg_rect.size = size
 
+    def get_size(self) -> Tuple[float, float]:
+        return self.bg_rect.size
+
     def get_position(self) -> Tuple[float, float]:
         return self.pos
 
@@ -58,20 +61,23 @@ class Sprite:
 
 class ColorSprite(Sprite):
     def __init__(self, image: Union[str, None], pos: Tuple[float, float],
-                 size: Tuple[float, float], color: Tuple[float, float, float], **kwargs):
+                 size: Tuple[float, float], color: Tuple[float, float, float, float], **kwargs):
         super().__init__(image, pos, size, **kwargs)
 
-        self.color = color
+        self.color = Color(*color)
 
     def draw(self, canvas: Union[RenderContext, InstructionGroup]):
-        canvas.add(Color(*self.color))
+        canvas.add(self.color)
         canvas.add(self.bg_rect)
         canvas.add(Color(1, 1, 1, 1))
+
+    def set_alpha(self, alpha: float):
+        self.color.a = alpha
 
 
 class RotatableSprite(Sprite):
     def __init__(self, image: str, pos: Tuple[float, float],
-                 size: Tuple[float, float], angle: int, **kwargs) -> None:
+                 size: Tuple[float, float], angle: float, **kwargs) -> None:
         super().__init__(image, pos, size, **kwargs)
 
         self.rotate = Rotate(angle=angle, origin=self.get_center())
@@ -79,7 +85,7 @@ class RotatableSprite(Sprite):
     def set_angle(self, angle: float):
         self.rotate.angle = angle
 
-    def get_rotation(self) -> int:
+    def get_rotation(self) -> float:
         return self.rotate.angle
 
     def draw(self, canvas: Union[RenderContext, InstructionGroup]):

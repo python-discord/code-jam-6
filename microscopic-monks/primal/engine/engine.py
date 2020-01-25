@@ -17,9 +17,12 @@ class Engine(Widget):
         self._keyboard.bind(on_key_up=self._on_keyboard_up)
         Window.set_system_cursor("crosshair")
 
+        self.window_size = 1, 1
+        Window.bind(on_resize=self.on_resize)
+
         Window.bind(mouse_pos=self.update_mouse_pos)
         Window.bind(on_touch_down=self.update_mouse_down)
-        Window.bind(on_touch_up=self.update_mouse_up)
+        # Window.bind(on_touch_up=self.update_mouse_up)
 
         # keep track of the currently pressed keys in a set for smooth motion
         self.pressed_keys = set()
@@ -35,6 +38,9 @@ class Engine(Widget):
 
     def update_mouse_pos(self, _, n):
         self.mouse_position = n
+
+    def on_resize(self, _, width, height):
+        self.window_size = width, height
 
     def update_mouse_down(self, _, touch):
         self.mouse_keys.add(touch.button)
