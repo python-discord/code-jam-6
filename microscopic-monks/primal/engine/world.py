@@ -20,19 +20,20 @@ class World:
         self.chunks = dict()
 
         self.loaded_chunks = [
-            [None for _ in World.get_loaded_col_range(chunk_pos[0])]
-            for _ in World.get_loaded_row_range(chunk_pos[1])
+            [None for _ in World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
 
         size = Chunk.SIZE, Chunk.SIZE
         self.terrain_instructions = [
-            [Sprite(None, (0, 0), size) for _ in World.get_loaded_col_range(chunk_pos[0])]
-            for _ in World.get_loaded_row_range(chunk_pos[1])
+            [Sprite(None, (0, 0), size) for _ in
+             World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
 
         self.features_chunk_instructions = [
-            [InstructionGroup() for _ in World.get_loaded_col_range(chunk_pos[0])]
-            for _ in World.get_loaded_row_range(chunk_pos[1])
+            [InstructionGroup() for _ in World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
 
         self.load_area(self.loaded_center)
@@ -58,12 +59,12 @@ class World:
                 canvas.add(instruction)
 
     def load_area(self, pos: Tuple[int, int]):
-        for index_y, y in enumerate(World.get_loaded_row_range(pos[1])):
+        for index_y, y in enumerate(World.get_loaded_range(pos[1], World.RADIUS_HEIGHT)):
             if y not in self.chunks:
                 self.chunks[y] = dict()
 
             row_chunks = self.chunks[y]
-            for index_x, x in enumerate(World.get_loaded_col_range(pos[0])):
+            for index_x, x in enumerate(World.get_loaded_range(pos[0], World.RADIUS_WIDTH)):
                 if x not in row_chunks:
                     row_chunks[x] = Chunk((x * Chunk.SIZE, y * Chunk.SIZE), self.seed)
 
@@ -77,12 +78,8 @@ class World:
                 self.loaded_chunks[y][x].draw_features(self.features_chunk_instructions[y][x])
 
     @staticmethod
-    def get_loaded_row_range(y: int):
-        return range(y - World.RADIUS_HEIGHT, y + World.RADIUS_HEIGHT + 1)
-
-    @staticmethod
-    def get_loaded_col_range(x: int):
-        return range(x - World.RADIUS_WIDTH, x + World.RADIUS_WIDTH + 1)
+    def get_loaded_range(x: int, rng: int):
+        return range(x - rng, x + rng + 1)
 
     @staticmethod
     def get_chunk_coords_from_pos(pos: Tuple[float, float]) -> Tuple[int, int]:
