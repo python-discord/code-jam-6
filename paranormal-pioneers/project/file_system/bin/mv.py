@@ -7,7 +7,7 @@ from project.core.utils import OSException
 
 
 class MV(command.Command):
-    """Move a file or a directory to another directory."""
+    """Move or rename a file/directory."""
     def __init__(self) -> None:
         super().__init__(name='mv')
 
@@ -23,10 +23,10 @@ class MV(command.Command):
         if ns.dest is None:
             raise OSException('error: destination not given')
 
-        self.dest = term.fs.get_path(term.path, ns.dest)
+        self.dest = term.fs.get_path(term.path, ns.dest, check_existing=False)
 
     def main(self, ns: Namespace, term: Terminal) -> None:
-        if self.src.is_file():
+        if self.dest.is_dir():
             self.dest /= self.src.name
 
         self.src.rename(self.dest)
