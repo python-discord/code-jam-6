@@ -3,7 +3,7 @@ from typing import Tuple, Union
 
 from kivy.graphics.context_instructions import PushMatrix, PopMatrix
 from kivy.core.window import Window
-from kivy.graphics import Rectangle
+from kivy.graphics import Rectangle, Color
 from kivy.graphics.instructions import RenderContext, InstructionGroup
 from kivy.graphics.context_instructions import Rotate
 import math
@@ -38,6 +38,10 @@ class Sprite:
         self.pos = pos
         self.bg_rect.pos = pos
 
+    def set_size(self, size: Tuple[float, float]):
+        self.size = size
+        self.bg_rect.size = size
+
     def get_position(self) -> Tuple[float, float]:
         return self.pos
 
@@ -46,6 +50,19 @@ class Sprite:
 
     def draw(self, canvas: Union[RenderContext, InstructionGroup]):
         canvas.add(self.bg_rect)
+
+
+class ColorSprite(Sprite):
+    def __init__(self, image: Union[str, None], pos: Tuple[float, float],
+                 size: Tuple[float, float], color: Tuple[float, float, float], **kwargs):
+        super().__init__(image, pos, size, **kwargs)
+
+        self.color = color
+
+    def draw(self, canvas: Union[RenderContext, InstructionGroup]):
+        canvas.add(Color(*self.color))
+        canvas.add(self.bg_rect)
+        canvas.add(Color(1, 1, 1, 1))
 
 
 class RotatableSprite(Sprite):
