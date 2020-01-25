@@ -21,8 +21,8 @@
 			    Color:
 				    rgba: (.59, .29, 0, 1)
 			    Rectangle:
-				    size: 720, 600 # don't hardcoded
-					pos: 0, 0
+                                size: root.width, self.height // 2 - 40
+                                pos: 0, 0
 			id: typw
 			source: 'blank.png'
 			#pos_hint: {'x': 0.2, 'y':.5}
@@ -38,7 +38,7 @@
 		GestureSurface:
             size: self.size
             pos: self.pos
-			on_gesture_complete: print(self.properties())
+			on_gesture_complete: print("\n".join(f'{k} {getattr(self, k)}' for k in self.properties()))
 		Row1:
 			txt: 'q'
 			pos_hint: {'x': .16, 'y': self.anim_y}
