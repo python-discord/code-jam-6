@@ -22,10 +22,10 @@ DATA_DIR = os.path.join(
 
 def get_wiki_summary() -> str:
     if True:
-        response = get('https://randomwordgenerator.com/json/sentences.json')
-        rand = random.randint(0,233)
-        print(response)
-        return response.json()['data'][rand]['sentence']
+        response = get("https://randomwordgenerator.com/json/sentences.json")
+        rand = random.randint(0, 233)
+        easy_msg = response.json()["data"][rand]["sentence"]
+        return "abc"
 
     endpoint = (
         "https://en.wikipedia.org/w/api.php?action=query&list=random&"
