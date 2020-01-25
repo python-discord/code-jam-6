@@ -38,7 +38,13 @@ class RotorScreen(Screen):
         game_id = App.get_running_app().game_id
         store = JsonStore(DATA_DIR)
         rotors = store.get(str(game_id))["current_state"]["rotors"]
-        section = self.rotor_section.ids
-        section.first_rotor.rotor_value.text = rotors[0]
-        section.second_rotor.rotor_value.text = rotors[1]
-        section.third_rotor.rotor_value.text = rotors[2]
+        self.rotor_section.ids.first_rotor.rotor_value.text = rotors[0]
+        self.rotor_section.ids.second_rotor.rotor_value.text = rotors[1]
+        self.rotor_section.ids.third_rotor.rotor_value.text = rotors[2]
+
+    def reset_rotors(self):
+        App.get_running_app().machine.set_display("AAA")
+        rotors = App.get_running_app().machine.get_display()
+        self.rotor_section.ids.first_rotor.rotor_value.text = rotors[0]
+        self.rotor_section.ids.second_rotor.rotor_value.text = rotors[1]
+        self.rotor_section.ids.third_rotor.rotor_value.text = rotors[2]
