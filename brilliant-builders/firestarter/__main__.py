@@ -1,5 +1,5 @@
 from firestarter.game_engine.engine import Engine
-from firestarter.game_engine.sprite import PickUpCoin, Platform, Player
+from firestarter.game_engine.object import PickUpCoin, Platform, Player
 
 from kivy.app import App
 from kivy.clock import Clock
