@@ -118,8 +118,8 @@ class Chunk:
             return
 
         while random.randint(0, 1) == 1:
-            s = random.randint(50, 100)
-            angle = random.randint(0, 359)
+            s = random.randint(100, 150)
+            angle = 0
             sprite = 'r.png'
 
             self.chunk_features.add(
