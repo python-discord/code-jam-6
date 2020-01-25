@@ -1,5 +1,5 @@
 from firestarter.game_engine.engine import Engine
-from firestarter.game_engine.object import PickUpCoin, Platform, Player
+from firestarter.game_engine.object import GenericSprite, PickUpCoin, Platform, Player
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -20,6 +20,7 @@ class MyGame(Engine):
         self.platform_04.change_mode(3)
         self.platform_05 = Platform(self.assets['Untitled'], (50 + 60 * 4, 20))
         self.platform_05.change_mode(3)
+        self.platform_06 = GenericSprite('Untitled', (50 + 60 * 5, 20), True, 3, self)
 
         self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
         self.coin.change_mode(2)
@@ -29,7 +30,7 @@ class MyGame(Engine):
              self.coin,
              self.platform_01, self.platform_02,
              self.platform_03, self.platform_04,
-             self.platform_05
+             self.platform_05, self.platform_06
              ]
         )
 

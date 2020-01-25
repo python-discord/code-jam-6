@@ -7,7 +7,7 @@ from kivy.properties import (
     NumericProperty, ReferenceListProperty)
 
 
-class DefaultSprite(Sprite):
+class GenericSprite(Sprite):
     def __init__(
             self,
             config: Union[SpriteConfig, str],
