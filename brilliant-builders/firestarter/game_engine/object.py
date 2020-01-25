@@ -1,9 +1,38 @@
-from typing import List, Tuple
+from typing import List, Tuple, Union
 
+from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.sprite import Sprite, SpriteConfig
 
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
+
+
+class DefaultSprite(Sprite):
+    def __init__(
+            self,
+            config: Union[SpriteConfig, str],
+            pos: Tuple[int, int],
+            collide: bool = False,
+            mode: int = 1,
+            engine: Engine = None,
+            **kwargs
+    ):
+        # Resolve config if needed
+        if isinstance(config, str):
+            if not engine:
+                raise ValueError('Argument engine required when searching for sprite')
+            config = engine.assets[config]
+
+        super().__init__(config, pos, **kwargs)
+
+        self.collide = collide
+        self.change_mode(mode)
+
+    def update(self, *args) -> None:
+        pass
+
+    def on_collision(self, other: Sprite) -> bool:
+        return self.collide
 
 
 class Platform(Sprite):
