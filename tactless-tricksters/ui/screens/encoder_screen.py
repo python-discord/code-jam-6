@@ -15,12 +15,12 @@ from kivymd.cards import MDCard
 
 # Project imports
 from ui.widgets.audio_indicator import AudioIndicator
-
+from ui.widgets.nav_drawer import MyNavigationLayout
 # TODO remove after debug
 import random
 
 # Speech to text imports
-import speech_recognition as sr
+#import speech_recognition as sr
 
 class EncoderScreen(Screen):
     def __init__(self, **kwargs):
@@ -68,6 +68,12 @@ class EncoderScreen(Screen):
 
         self.add_widget(encode_card)
         self.add_widget(play_button_anchor)
+
+        # Nav Bar
+        self.nav_bar = MyNavigationLayout()
+        self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
+        self.nav_bar_anchor.add_widget(self.nav_bar)
+        self.add_widget(self.nav_bar_anchor)
 
     def update_audio_indicator(self, dt):
         if hasattr(self.audio_indicator, 'stack_width'):
