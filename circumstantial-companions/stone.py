@@ -1,4 +1,5 @@
 import math
+import json
 from random import choice, random
 
 from kivy.app import App
@@ -136,6 +137,7 @@ class Chisel(Widget):
     def setup_canvas(self):
         self.pebbles = {}
         self.positions = []
+        self.colors = []
         self.pixels = []
         self.pebble_size = get_pebble_size(self.width, self.height)
         with self.canvas:
@@ -145,7 +147,9 @@ class Chisel(Widget):
                 for (r, g, b, a), x, y in pebble_setup():
                     scaled_x = x * self.width
                     scaled_y = y * self.height
-                    Color(color_scale * r, color_scale * g, color_scale * b, a)
+                    color = color_scale * r, color_scale * g, color_scale * b, a
+                    Color(*color)
+                    self.colors.append(color)
                     self.positions.append((x, y, depth))
                     self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
         self.background.texture.mag_filter = 'nearest'
@@ -210,10 +214,26 @@ class Chisel(Widget):
         self.setup_canvas()
 
     def save(self, path_to_file):
-        pass
+        pebble_dict = {'positions': self.positions, 'colors':self.colors}
+        with open(path_to_file, 'w') as file:
+            json.dump(pebble_dict, file)
 
     def load(self, path_to_file):
-        pass
+        with open(path_to_file, 'r') as file:
+            pebble_dict = json.load(file)
+        self.pebbles = {}
+        self.positions = pebble_dict['positions']
+        self.colors = ['colors']
+        self.pixels = []
+        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.canvas.clear()
+        with self.canvas:
+            Color(1, 1, 1, 1)
+            self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
+            for color, (x, y, z) in zip(self.colors, self.positions):
+                Color(*color)
+                self.pixels.append(Rectangle(pos=(x, y), size=self.pebble_size))
+        self.background.texture.mag_filter = 'nearest'
 
 
 if __name__ == '__main__':
