@@ -32,7 +32,7 @@ MIRROR_ANGLES = [
 ]
 LIGHT_SOURCE_POS = Vector(700, 620)
 LIGHT_FOCUS_POS = Vector(600, 50)
-
+LIGHT_FOCUS_OFFSET = Vector(100, 100)
 
 @unique
 class Actions(Enum):

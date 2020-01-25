@@ -4,7 +4,8 @@ from typing import List, Optional
 
 from TLOA.core.constants import (
     Actions, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
-    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS, MIRROR_CANNON_RANGE)
+    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS, LIGHT_FOCUS_OFFSET,
+    MIRROR_CANNON_RANGE)
 from TLOA.entities import MirrorCannon, BrownShip, GoldenShip, LightRays
 
 from kivy import Logger
@@ -65,7 +66,7 @@ class Game(EventDispatcher):
         # Track the closest ship in the active lane
         if self.closestShip:
             # focus the Death Rays to the ship's X position.
-            death_rays_focus_x = self.closestShip.shape.x + 100
+            death_rays_focus_x = self.closestShip.shape.x + LIGHT_FOCUS_OFFSET.x
 
             # Deal damage to the ship.
             if self.closestShip.id == 'golden_ship':
@@ -78,7 +79,8 @@ class Game(EventDispatcher):
 
         # Trace Death rays onto the closest ship in the active lane.
         self.death_rays.trace(
-            point=Vector(death_rays_focus_x, 100+LANE_BOUNDS[self.mirror.state][1]),
+            point=Vector(death_rays_focus_x,
+                         LIGHT_FOCUS_OOFSET.y+LANE_BOUNDS[self.mirror.state][1]),
             surface=self.mirror.mirror_axis)
 
     # This property returns the closest ship in the active lane.
