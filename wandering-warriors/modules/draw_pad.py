@@ -2,6 +2,9 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Point, GraphicException, Rectangle
 from math import sqrt
 
+from .gesture import check_gesture
+from .gesture_db import load_gestures
+
 
 def calculate_points(x1, y1, x2, y2, steps=1):
     dx = x2 - x1
@@ -20,10 +23,11 @@ def calculate_points(x1, y1, x2, y2, steps=1):
 
 
 class DrawPad(FloatLayout):
-    def __init__(self, ** kwargs):
-        super(DrawPad, self).__init__(** kwargs)
+    def __init__(self, **kwargs):
+        super(DrawPad, self).__init__(**kwargs)
         self.in_pad = False
         self.lines = []
+        self.gdb = load_gestures()
 
         with self.canvas:
             self.border = []
@@ -54,9 +58,9 @@ class DrawPad(FloatLayout):
         super().on_touch_down(touch)
         self.ud = touch.ud
         if (touch.pos[0] > self.pos[0]
-           and touch.pos[0] < self.pos[0] + self.size[0]
-           and touch.pos[1] > self.pos[1]
-           and touch.pos[1] < self.pos[1] + self.size[1]):
+                and touch.pos[0] < self.pos[0] + self.size[0]
+                and touch.pos[1] > self.pos[1]
+                and touch.pos[1] < self.pos[1] + self.size[1]):
             self.in_pad = True
             self.ud['group'] = g = str(touch.uid)
             pointsize = 3
@@ -72,10 +76,10 @@ class DrawPad(FloatLayout):
 
     def on_touch_move(self, touch):
         super().on_touch_move(touch)
-        if(self.in_pad and touch.pos[0] > self.pos[0]
-           and touch.pos[0] < self.pos[0] + self.size[0]
-           and touch.pos[1] > self.pos[1]
-           and touch.pos[1] < self.pos[1] + self.size[1]):
+        if (self.in_pad and touch.pos[0] > self.pos[0]
+                and touch.pos[0] < self.pos[0] + self.size[0]
+                and touch.pos[1] > self.pos[1]
+                and touch.pos[1] < self.pos[1] + self.size[1]):
             self.ud = touch.ud
 
             points = self.ud['lines'][-1].points
@@ -91,11 +95,13 @@ class DrawPad(FloatLayout):
 
     def on_touch_up(self, touch):
         super().on_touch_up(touch)
-        # ud = touch.ud
         if self.in_pad:
             self.lines.append(self.ud['lines'])
             self.in_pad = False
-            # return (self.canvas.get_group(ud['group'])[1].points)
+
+            # check if line matches known gesture.
+            gesture = check_gesture(self.ud['lines'][0].points, self.gdb)
+            print(gesture)
 
     def click(self):
         for l in self.lines:
