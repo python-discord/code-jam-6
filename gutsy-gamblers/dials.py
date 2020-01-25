@@ -73,8 +73,10 @@ class DialWidget(FloatLayout):
         self.date = datetime.now()
 
         self.midnight = (self.date + timedelta(days=1))
-        self.midnight_delta = (datetime(year=self.midnight.year, month=self.midnight.month,
-                                        day=self.midnight.day, hour=0, minute=0, second=0) - self.date).seconds
+        self.midnight_delta = (datetime(year=self.midnight.year,
+                                        month=self.midnight.month,
+                                        day=self.midnight.day,
+                                        hour=0, minute=0, second=0) - self.date).seconds
 
         # Split suntime tuple into named variables
         self.sun_angles = self.sun_time()
@@ -157,7 +159,7 @@ class DialWidget(FloatLayout):
             today_sunrise = now - today_sunrise
             today_sunset = now - today_sunset
 
-            # Convert timedelta into minutes and rClock.schedule_interval(self.redraw, self.midnight_delta)ound
+            # Convert timedelta into minutes and round
             today_sunrise = round(today_sunrise.seconds / 60)
             today_sunset = round(today_sunset.seconds / 60)
 

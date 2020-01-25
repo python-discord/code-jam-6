@@ -3,33 +3,22 @@ import pickle
 
 import kivy
 import requests
-from kivy.animation import Animation
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.metrics import Metrics
-from kivy.properties import NumericProperty
-from kivy.uix.effectwidget import EffectWidget, EffectBase
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen, ScreenManager
 
-from suntime import Sun, SunTimeException
+from dials import (
+    DialWidget,
+    NowMarker
+)
 
 kivy.require('1.11.1')
 
-
-from dials import (
-    DialEffectWidget,
-    DialWidget,
-    DoubleVision,
-    SunShading,
-    SunRiseMarker,
-    SunSetMarker,
-    NowMarker
-)
 
 # Screens in the App #
 class MainScreen(Screen):
@@ -97,9 +86,13 @@ class TimeWizard(Popup):
             # self.parent.speedy_time = True
         else:
             midnight = datetime.now() + timedelta(days=1)
-            self.dial.midnight_delta = (datetime(year=midnight.year, month=midnight.month,
+            # Good thing flake8 isn't 78 chars huh?
+            self.dial.midnight_delta = (datetime(year=midnight.year,
+                                                 month=midnight.month,
                                                  day=midnight.day,
-                                                 hour=0, minute=0, second=0) - datetime.now()).seconds
+                                                 hour=0,
+                                                 minute=0,
+                                                 second=0) - datetime.now()).seconds
             self.dial.redraw()
             # self.parent.speedy_time = False
 
