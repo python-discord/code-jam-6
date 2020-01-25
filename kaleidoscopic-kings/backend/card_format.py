@@ -26,7 +26,6 @@ class GameVariable:
     For example if the _INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of
     type int, when updated, will never go over 1000 or below 0.
     """
-    # TODO implement limits
     INTEGER_RANGE_INCLUDING: ClassVar[Tuple[int, int]] = (0, 1000)
     FLOAT_RANGE_INCLUDING: ClassVar[Tuple[float, float]] = (0.0, 1.0)
 
