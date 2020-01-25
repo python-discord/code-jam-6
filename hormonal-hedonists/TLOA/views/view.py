@@ -16,6 +16,7 @@ from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.vector import Vector
+from kivy.uix.button import Button
 
 
 class GameView(Widget):
@@ -43,6 +44,13 @@ class GameView(Widget):
         self._hp_bar.size = self._hp_bar.texture_size
 
         self._score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
+        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
+                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
+                                border=(0, 0, 0, 0),
+                                pos=((WINDOW_WIDTH/3) + 80, WINDOW_HEIGHT - 70),
+                                width = 40,
+                                height = 40,
+                                on_release=self.show_pause_menu)
 
     def show_game(self, running):
         Animation.cancel_all(self)
@@ -52,7 +60,6 @@ class GameView(Widget):
             return
 
         self.add_widget(self._background)
-
         with self.canvas:
             birds = Image(
                 source=IMAGES_PATH.format('birds.zip'),
@@ -83,6 +90,10 @@ class GameView(Widget):
 
         self.add_widget(self._hp_bar)
         self.add_widget(self._score)
+        self.add_widget(self.pause_btn)
+
+    def show_pause_menu(self, *args):
+        print('Open menu...')
 
     def on_island_health_change(self, game, value):
         health = math.ceil(value / 10) * 10
