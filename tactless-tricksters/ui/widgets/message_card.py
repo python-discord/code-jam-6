@@ -1,13 +1,10 @@
-from kivy.uix.image import Image
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.app import App
 from kivy.metrics import dp
 from kivy.clock import Clock
 from kivy.factory import Factory
 
-from kivymd.cards import MDCardPost
-from kivymd.label import MDLabel
+from kivymd.uix.card import MDCardPost
 
 
 class LongpressButton(ButtonBehavior):

@@ -3,18 +3,16 @@ from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.lang import Builder
-# KivyMD imports
-from kivymd.button import MDRectangleFlatIconButton
 # Project imports
 from ui.widgets.nav_drawer import MyNavigationLayout
 
 
 Builder.load_string("""
 #:kivy 1.11.1
-#:import MDCard kivymd.cards
-#:import MDToolbar kivymd.toolbar
-#:import MDRectangleFlatIconButton kivymd.button
-#:import MDLabel kivymd.label
+#:import MDCard kivymd.uix.card
+#:import MDToolbar kivymd.uix.toolbar
+#:import MDRectangleFlatIconButton kivymd.uix.button
+#:import MDLabel kivymd.uix.label
 
 <WelcomeButton>
     elevation_normal: 10
@@ -105,23 +103,6 @@ Builder.load_string("""
                     # TODO: create exit function
                     root.manager.current = ''
 """)
-
-
-class WelcomeButton(MDRectangleFlatIconButton):
-    """Simple buttons"""
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_once(self._change_color)
-
-    def _change_color(self, _):
-        """Workaround to access children in this kivymd widget"""
-        # Set Label to White
-        self.children[0].children[0].text_color = [1, 1, 1, 1]
-        self.children[0].children[0].font_size = 20
-        # Set Icon to white
-        self.children[0].children[1].text_color = [1, 1, 1, 1]
-        self.children[0].children[1].font_size = 30
 
 
 class WelcomeScreen(Screen):

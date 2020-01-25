@@ -1,17 +1,14 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.app import App
-from kivy.core.window import Window
 from kivy.metrics import dp
-from kivy.graphics import Color, Rectangle
 from kivy.clock import Clock
 
 # kivymd imports
-from kivymd.button import MDFloatingActionButton
-from kivymd.toolbar import MDToolbar
-from kivymd.textfields import MDTextFieldRound
-from kivymd.label import MDLabel
-from kivymd.cards import MDCard
+from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.textfield import MDTextFieldRound
+from kivymd.uix.label import MDLabel
+from kivymd.uix.card import MDCard
 
 # Project imports
 from ui.widgets.audio_indicator import AudioIndicator

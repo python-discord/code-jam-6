@@ -6,10 +6,10 @@ from kivy.metrics import dp
 from kivy.clock import Clock
 
 # kivymd imports
-from kivymd.button import MDFloatingActionButton
-from kivymd.cards import MDCard
-from kivymd.label import MDLabel
-from kivymd.textfields import MDTextFieldRound
+from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextFieldRound
 
 # project imports
 from ui.widgets.audio_indicator import AudioIndicator

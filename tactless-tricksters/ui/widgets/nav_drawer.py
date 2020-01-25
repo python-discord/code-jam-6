@@ -1,9 +1,9 @@
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.app import App
 from kivy.clock import Clock
-from kivymd.navigationdrawer import MDNavigationDrawer, NavigationDrawerIconButton, \
+from kivymd.uix.navigationdrawer import MDNavigationDrawer, NavigationDrawerIconButton, \
                                      NavigationLayout
-from kivymd.toolbar import MDToolbar
+from kivymd.uix.toolbar import MDToolbar
 
 
 class ContentNavigationDrawer(MDNavigationDrawer):
