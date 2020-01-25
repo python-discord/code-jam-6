@@ -27,7 +27,8 @@ class Ledger(LedgerLayout):
 
 
 class OperationsBar(Widget):
-    pass
+    def buttonImage(self, operation: str) -> str:
+        return f'assets/graphics/{operation}.png'
 
 
 class CuneiformDrawingInput(DrawPad):
