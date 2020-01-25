@@ -2,11 +2,10 @@ import random
 
 from typing import List, Optional
 
-from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.core.constants import (
     Actions, TICK, NUMBER_OF_LANES, LANE_BOUNDS, SHIP_SPAWN_CHANCE,
-    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE
-)
+    SHIP_SPAWN_RATE, GOLD_SHIP_CHANCE, LIGHT_SOURCE_POS, LIGHT_FOCUS_OFFSET,
+    MIRROR_CANNON_RANGE)
 from TLOA.entities import MirrorCannon, BrownShip, GoldenShip, LightRays
 
 from kivy import Logger
@@ -31,7 +30,7 @@ class Game(EventDispatcher):
 
         # Create & initialize Mesh instance for Reflected Sun rays/Death Rays
         self.death_rays = LightRays(
-            point=Vector(600, LANE_BOUNDS[self.mirror.state][1]),
+            point=Vector(MIRROR_CANNON_RANGE, LANE_BOUNDS[self.mirror.state][1]),
             surface=self.mirror.mirror_axis)
 
         self.ship_lanes: List[List[BrownShip]] = [[] for _ in range(NUMBER_OF_LANES)]
@@ -50,13 +49,6 @@ class Game(EventDispatcher):
         if not self.running:
             return False
 
-        # Deal damage with mirror
-        # Simulating damage
-        if random.random() < 0.5:
-            lane = self.ship_lanes[random.randrange(6)]
-            if lane:
-                lane[random.randrange(len(lane))].health -= 2
-
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
             for ship in lane[:]:
@@ -67,6 +59,43 @@ class Game(EventDispatcher):
                     continue
 
                 ship.step(dt, self)
+
+        # Trace Sun rays onto the mirror
+        self.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self.mirror.mirror_axis)
+
+        # Track the closest ship in the active lane
+        if self.closestShip:
+            # focus the Death Rays to the ship's X position.
+            death_rays_focus_x = self.closestShip.shape.x + LIGHT_FOCUS_OFFSET.x
+
+            # Deal damage to the ship.
+            if self.closestShip.id == 'golden_ship':
+                self.closestShip.health -= 0.1    # Deal less Damage to Golden Ships
+
+            if self.closestShip.id == 'brown_ship':
+                self.closestShip.health -= 0.5    # Deal more Damage to Brown Ships.
+        else:
+            death_rays_focus_x = MIRROR_CANNON_RANGE
+
+        # Trace Death rays onto the closest ship in the active lane.
+        self.death_rays.trace(
+            point=Vector(death_rays_focus_x,
+                         LIGHT_FOCUS_OFFSET.y+LANE_BOUNDS[self.mirror.state][1]),
+            surface=self.mirror.mirror_axis)
+
+    # This property returns the closest ship in the active lane.
+    @property
+    def closestShip(self):
+        active_lane = self.mirror.state
+        closest_ship = None
+        for ship in self.ship_lanes[active_lane]:
+            if (ship.shape.x < MIRROR_CANNON_RANGE):
+                if closest_ship:
+                    if (closest_ship.shape.x > ship.shape.x):
+                        closest_ship = ship
+                else:
+                    closest_ship = ship
+        return closest_ship
 
     def spawn_ship(self, override=False):
         if not self.running:

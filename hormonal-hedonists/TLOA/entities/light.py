@@ -1,6 +1,8 @@
+from TLOA.core.constants import (
+    LIGHT_COLOR_MAX_RED, LIGHT_COLOR_MAX_GREEN, LIGHT_COLOR_MAX_BLUE,
+    LIGHT_COLOR_MAX_ALPHA)
 from kivy.graphics import Mesh, Color
 from kivy.vector import Vector
-
 from typing import List
 
 
@@ -8,7 +10,12 @@ class LightRays(Mesh):
 
     def __init__(self, point: Vector, surface: List[Vector], **kwargs):
         super(LightRays, self).__init__(**kwargs)
-        self.color = Color(01.0, 0.98, 0.1, 0.65)
+        #self.color = Color(01.0, 0.98, 0.1, 0.65)
+        self.color = Color(
+            LIGHT_COLOR_MAX_RED,
+            LIGHT_COLOR_MAX_GREEN,
+            LIGHT_COLOR_MAX_BLUE,
+            LIGHT_COLOR_MAX_ALPHA)
         self.vertices = []
         self.indices = []
         self.mode = 'traingle_fan'

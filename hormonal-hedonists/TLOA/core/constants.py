@@ -1,4 +1,5 @@
 from enum import Enum, unique
+from kivy.vector import Vector
 
 
 TITLE = "The Legend of Archimedes"
@@ -8,6 +9,7 @@ WINDOW_SIZE = WINDOW_WIDTH, WINDOW_HEIGHT
 
 ATLAS_PATH = "atlas://assets/world/{}"
 IMAGES_PATH = 'assets/images/{}'
+AUDIO_PATH = 'assets/sfx/{}'
 
 TICK = 1 / 30  # 30 FPS
 
@@ -20,6 +22,22 @@ SHIP_SPAWN_RATE = 1
 SHIP_SPAWN_CHANCE = 1 / 5
 MAX_SHIP_HEALTH = 100
 GOLD_SHIP_CHANCE = 1 / 10
+
+MIRROR_DIAMETER = 80
+MIRROR_CANNON_POS = Vector(150, 260)
+MIRROR_CANNON_RANGE = 900
+MIRROR_OFFSET = Vector(97, 78)
+MIRROR_ANGLES = [
+    75, 90, 105, 120, 135, 150
+]
+
+LIGHT_SOURCE_POS = Vector(700, 620)
+LIGHT_FOCUS_POS = Vector(600, 50)
+LIGHT_FOCUS_OFFSET = Vector(100, 100)
+LIGHT_COLOR_MAX_RED = 1.0
+LIGHT_COLOR_MAX_GREEN = 1.0
+LIGHT_COLOR_MAX_BLUE = 0
+LIGHT_COLOR_MAX_ALPHA = 0.65
 
 
 @unique

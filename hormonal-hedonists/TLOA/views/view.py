@@ -5,7 +5,6 @@ from random import randint
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH,
                                  WINDOW_HEIGHT, LANE_BOUNDS)
-from TLOA.entities.mirror_cannon import LIGHT_SOURCE_POS
 from TLOA.views import ShipView
 
 from kivy import Logger
@@ -15,7 +14,6 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-from kivy.vector import Vector
 
 
 class GameView(Widget):
@@ -54,6 +52,8 @@ class GameView(Widget):
         self.add_widget(self._background)
 
         with self.canvas:
+
+            # Load & configure the flock of bird animation frames
             birds = Image(
                 source=IMAGES_PATH.format('birds.zip'),
                 pos=(Window.width, 400),
@@ -61,31 +61,37 @@ class GameView(Widget):
             )
             birds.size = birds.texture_size
 
+            # Setup the flock of birds to move in wave pattern
             up_down = (Animation(y=375, d=5, t=self._sin_transition) +
                        Animation(y=425, d=5, t=self._sin_transition))
             up_down.repeat = True
             bird_animation = Animation(x=-birds.width, d=30) & up_down
             bird_animation.start(birds)
-
             bird_animation.bind(on_complete=self.on_birds_complete)
 
+            # Initialize and draw the Mirror Cannon onto the canvas based on its state
             self._game.mirror.shape = Image(
                 pos=(150, 260),
                 source=ATLAS_PATH.format(f'{self._game.mirror.id}-{self._game.mirror.state}')
             )
             self._game.mirror.shape.size = self._game.mirror.shape.texture_size
 
+            # Change the color and display the incident sun rays on the canvas
             self.canvas.add(self._game.sun_rays.color)
             self.canvas.add(self._game.sun_rays)
 
+            # Change the color and display the death sun rays on the canvas
             self.canvas.add(self._game.death_rays.color)
             self.canvas.add(self._game.death_rays)
 
+        # Add the Health Bar for the Castle/Island
         self.add_widget(self._hp_bar)
+
+        # Add the Score display
         self.add_widget(self._score)
 
     def on_island_health_change(self, game, value):
-        health = math.ceil(value / 10) * 10
+        health = math.ceil(value/10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
 
     def on_add_ship(self, game, ship):
@@ -122,8 +128,6 @@ class GameView(Widget):
 
     def on_mirror_state_change(self, obj, value):
         self._game.mirror.shape.source = ATLAS_PATH.format(f'{self._game.mirror.id}-{value}')
-        self._game.sun_rays.trace(point = LIGHT_SOURCE_POS, surface = self._game.mirror.mirror_axis)
-        self._game.death_rays.trace(point = Vector(600, LANE_BOUNDS[self._game.mirror.state][1]), surface = self._game.mirror.mirror_axis)
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)

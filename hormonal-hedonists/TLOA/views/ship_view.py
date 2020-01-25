@@ -13,7 +13,7 @@ class ShipView(Widget):
     def __init__(self, ship, source, pos, **kwargs):
         super().__init__(pos=pos, **kwargs)
 
-        health = math.ceil(ship.health / 10) * 10
+        health = round(ship.health / 10) * 10
         x, y = self.pos
         self._hp_bar = Image(pos=(x + HP_BAR_X_OFFSET, y + HP_BAR_Y_OFFSET),
                              source=ATLAS_PATH.format(health))
