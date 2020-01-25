@@ -1,4 +1,6 @@
 # Kivy imports
+import random
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.properties import StringProperty, ObjectProperty
@@ -16,6 +18,7 @@ Builder.load_string('''
 
 <TappingScreen>
     decode_input: decode_input
+    tapping_prompt_label: tapping_prompt_label
 
     MDCard:
         id: decode_card
@@ -27,19 +30,20 @@ Builder.load_string('''
         elevation: 15
         md_bg_color: app.theme_cls.accent_color
 
-        MDLabel:
-            id: decode_label
-            text: 'Decode Morse Code Audio'
-            font_style: 'Body1'
-            halign: 'center'
-            size_hint: 1, .05
-            theme_text_color: 'Custom'
-            text_color: [1, 1, 1, 1]
 
         Image: 
             size_hint: 1, 1
             source: 'ui\img\morse_code_alphabet.png' 
             
+        MDLabel:
+            id: tapping_prompt_label
+            text: root.prompt
+            font_style: 'Body1'
+            halign: 'center'
+            size_hint: 1, .05
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+        
         MDTextFieldRound:
             id: decode_input
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -53,10 +57,10 @@ Builder.load_string('''
             id: decode_input
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: 0.85, 0.5
-            icon_left: 'key-variant'
-            icon_left_dasabled: True
-            icon_right: 'database-export'
-            icon_callback: root.clear_input()
+            icon_left: 'format-clear'
+            icon_callback: root.update_text('1')
+            icon_right: 'dice-5'
+            icon_callback: root.new_prompt
             
         MDLabel:
             id: decode_output_label
@@ -73,88 +77,63 @@ Builder.load_string('''
             padding: [dp(25), dp(25), dp(25), dp(25)]
         
             Button:
-                id: record_button
+                id: tap_button
                 valign: 'center'
                 icon: 'record'
                 text: 'Tap Here'
                 size: [dp(56), dp(56)]
                 bg_color: app.theme_cls.primary_color
                 text_color: [1, 1, 1, 1]
-                on_press: root.decode_audio()
+                on_press: root.tapped()
 ''')
-
-training_difficulty_dict = {
-    'letter': list('abcdefghijklmnopqrstuvwxyz'),
-    'word': ['almost', 'already', 'benefit', 'between', 'book', 'born', 'capital', 'cause',
-             'central', 'certain', 'church', 'cold', 'color', 'current', 'current', 'death',
-             'deep', 'develop', 'develop', 'develop', 'door', 'dream', 'drive', 'drive', 'during',
-             'east', 'easy', 'exist', 'fact', 'fast', 'focus', 'good', 'hair', 'herself', 'improve',
-             'level', 'light', 'lose', 'lose', 'loss', 'matter', 'member', 'middle', 'middle',
-             'middle', 'moment', 'move', 'music', 'music', 'music', 'nature', 'nice', 'north',
-             'note', 'note', 'office', 'only', 'onto', 'other', 'perhaps', 'player', 'police',
-             'problem', 'process', 'program', 'rather', 'really', 'really', 'recent', 'relate',
-             'remain', 'rich', 'rise', 'risk', 'section', 'sense', 'shake', 'sister', 'society',
-             'soldier', 'some', 'space', 'spring', 'stage', 'start', 'street', 'surface', 'system',
-             'talk', 'throw', 'treat', 'trouble', 'various', 'walk', 'water', 'well', 'whether',
-             'wish', 'woman', 'worker'],
-    'sentence': ['a bullet she answered',
-                 'a sleepy voice answered',
-                 'come home right away',
-                 'have you got our keys handy',
-                 'he will allow a rare lie',
-                 'hey come back he shouted',
-                 'how do oysters make pearls',
-                 'it sounded silly why go on',
-                 'nobody likes snakes',
-                 'none should ask less',
-                 'now forget all this other',
-                 'perfect he thought',
-                 'shall we teach him some',
-                 'stoneware clay for tiles',
-                 'the hotel owner shrugged',
-                 'the oasis was a mirage',
-                 'turn shaker upside down']
-}
 
 
 class TappingScreen(Screen):
-    training_difficulty = StringProperty("")
+    prompt = StringProperty("")
     decode_input = ObjectProperty(None)
+    tapping_prompt_label = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(TappingScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
-        self.amr = self.util.auto_morse_recognizer
-        self.decode_output_label = self.ids.decode_output_label
-        self.record_button = None  # self.ids.record_button
-        self.audio_indicator = None  # self.ids.audio_indicator
+        Clock.schedule_once(self.init_tapping_screen, 0)
 
-    def update_text(self, morse_code):
+    def init_tapping_screen(self, dt):
+        self.tapping_prompt_label = self.ids.tapping_prompt_label
+        self.training_prompt_dict = self.util.training_prompt_dict
+        self.amr = self.util.auto_morse_recognizer
+        self.new_prompt()
+
+    def new_prompt(self, *args):
+        if self.util.training_difficulty == 'Easy':
+            training_level = 'letter'
+        elif self.util.training_difficulty == 'Medium':
+            training_level = 'word'
+        elif self.util.training_difficulty == 'Hard':
+            training_level = 'sentence'
+        else:
+            print(f"failed to load {self.util.training_difficulty}")
+            training_level = 'letter'
+
+        prompt = random.choice(self.util.training_prompt_dict[training_level])
+        self.tapping_prompt_label.text = f"Please Tap out the {training_level}: {prompt}"
+
+    def update_text_display(self):
+        try:
+            words = self.util.morse(self.decode_input.text)
+        except:
+            words = '???'
+        self.decode_input.text = words
+
+    def update_morse_display(self, morse_code):
         self.decode_input.text = self.decode_input.text + ''.join(morse_code)
+        self.update_text_display()
 
     def clear_input(self):
         self.decode_input.text = ''
 
     def tapped(self):
-
-        if self.record_button.md_bg_color == App.get_running_app().theme_cls.primary_color:
-            self.record_button.md_bg_color = App.get_running_app().theme_cls.error_color
-            self.decode_output_label.text = 'Recording Started'
-            print("Start audio recording thread")
-            self.amr.start()
-            Clock.schedule_interval(self.update_amr, self.amr.frame_rate)
-        else:
-            self.decode_output_label.text = 'Recording Stopped'
-            print("Stopped audio recording thread")
-            self.record_button.md_bg_color = App.get_running_app().theme_cls.primary_color
-            Clock.unschedule(self.update_amr)
-            self.amr.stop()
-            self.clear_input()
-
-    def update_amr(self, kargs):
-        print(kargs)
-        morse_code, bit_signal = self.amr.update()
-        self.update_text(morse_code)
+        print('pressed')
 
     def return_home(self):
         self.manager.current = 'welcome'

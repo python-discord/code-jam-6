@@ -54,21 +54,21 @@ Builder.load_string('''
                 text: 'letters'
                 icon: 'walk'
                 on_press:
-                    root.training_difficulty = "Easy"
+                    root.util.training_difficulty = "Easy"
                     root.manager.current = 'listening'
 
             WelcomeButton:
                 text: 'words'
                 icon: 'run'
                 on_press:
-                    root.training_difficulty = "Medium"
+                    root.util.training_difficulty = "Medium"
                     root.manager.current = 'listening'
 
             WelcomeButton:
                 text: 'sentences'
                 icon: 'bike'
                 on_press:
-                    root.training_difficulty = "Hard"
+                    root.util.training_difficulty = "Hard"
                     root.manager.current = 'listening'
 
         MDLabel:
@@ -88,21 +88,21 @@ Builder.load_string('''
                 text: 'letters'
                 icon: 'walk'
                 on_press:
-                    root.training_difficulty = "Easy"
+                    root.util.training_difficulty = "Easy"
                     root.manager.current = 'tapping'
 
             WelcomeButton:
                 text: 'words'
                 icon: 'run'
                 on_press:
-                    root.training_difficulty = "Medium"
+                    root.util.training_difficulty = "Medium"
                     root.manager.current = 'tapping'
 
             WelcomeButton:
                 text: 'sentences'
                 icon: 'bike'
                 on_press:
-                    root.training_difficulty = "Hard"
+                    root.util.training_difficulty = "Hard"
                     root.manager.current = 'tapping'
 ''')
 
