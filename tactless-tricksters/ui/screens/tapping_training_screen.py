@@ -3,6 +3,74 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.uix.screenmanager import Screen
+from kivy.lang import Builder
+
+
+Builder.load_string('''
+#:import MDCard kivymd.cards
+#:import MDToolbar kivymd.toolbar
+#:import MDRectangleFlatIconButton kivymd.button
+#:import MDFloatingActionButton kivymd.button
+#:import MDLabel kivymd.label
+#:import AudioIndicator ui.widgets.audio_indicator.AudioIndicator
+#:import WelcomeButton ui.widgets.welcome_button
+
+<TappingScreen>
+    decode_input: decode_input
+
+    AnchorLayout:
+        anchor_x:'center'
+        anchor_y:'bottom'
+        padding: [dp(25), dp(25), dp(25), dp(25)]
+
+        MDFloatingActionButton:
+            id: record_button
+            icon: 'record'
+            size: [dp(56), dp(56)]
+            md_bg_color: app.theme_cls.primary_color
+            text_color: [1, 1, 1, 1]
+            on_press: root.decode_audio()
+
+    MDTextFieldRound:
+        id: decode_input
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        size_hint: 0.85, 0.5
+        icon_left: 'key-variant'
+        icon_left_dasabled: True
+        icon_right: 'database-export'
+        icon_callback: root.clear_input()
+
+    MDCard:
+        id: decode_card
+        padding: dp(24)
+        spacing: dp(24)
+        orientation: 'vertical'
+        size_hint: 0.85, 0.7
+        pos_hint: {'top': 0.85, 'center_x': 0.5}
+        elevation: 15
+        md_bg_color: app.theme_cls.accent_color
+
+        MDLabel:
+            id: decode_label
+            text: 'Decode Morse Code Audio'
+            font_style: 'Body1'
+            halign: 'center'
+            size_hint: 1, .05
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+
+        AudioIndicator:
+            id: audio_indicator
+
+        MDLabel:
+            id: decode_output_label
+            text: 'Hit record or enter Morse Code below to start decoding'
+            font_style: 'Body1'
+            halign: 'center'
+            size_hint: 1, .05
+            theme_text_color: 'Custom'
+            text_color: [1, 1, 1, 1]
+''')
 
 
 class TappingScreen(Screen):
@@ -13,9 +81,9 @@ class TappingScreen(Screen):
         super(TappingScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
         self.amr = self.util.auto_morse_recognizer
-        self.decode_output_label = self.ids.decode_output_label
-        self.record_button = self.ids.record_button
-        self.audio_indicator = self.ids.audio_indicator
+        self.decode_output_label = '' # self.ids.decode_output_label
+        self.record_button = '' # self.ids.record_button
+        self.audio_indicator = '' #self.ids.audio_indicator
 
     def update_audio_indicator(self, dt):
         if hasattr(self.audio_indicator, 'stack_width'):

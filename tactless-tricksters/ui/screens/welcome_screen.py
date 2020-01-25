@@ -107,23 +107,6 @@ Builder.load_string("""
 """)
 
 
-class WelcomeButton(MDRectangleFlatIconButton):
-    """Simple buttons"""
-
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        Clock.schedule_once(self._change_color)
-
-    def _change_color(self, _):
-        """Workaround to access children in this kivymd widget"""
-        # Set Label to White
-        self.children[0].children[0].text_color = [1, 1, 1, 1]
-        self.children[0].children[0].font_size = 20
-        # Set Icon to white
-        self.children[0].children[1].text_color = [1, 1, 1, 1]
-        self.children[0].children[1].font_size = 30
-
-
 class WelcomeScreen(Screen):
     texture = ObjectProperty(None)
     tex_coords = ListProperty([0, 0, 1, 0, 1, 1, 0, 1])
