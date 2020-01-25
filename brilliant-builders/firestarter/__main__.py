@@ -1,5 +1,5 @@
 from firestarter.game_engine.engine import Engine
-from firestarter.game_engine.object import GenericSprite, PickUpCoin, Platform, Player
+from firestarter.game_engine.object import GenericObject, PickUpCoin, Platform, Player
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -20,7 +20,7 @@ class MyGame(Engine):
         self.platform_04.change_mode(3)
         self.platform_05 = Platform(self.assets['Untitled'], (50 + 60 * 4, 20))
         self.platform_05.change_mode(3)
-        self.platform_06 = GenericSprite('Untitled', (50 + 60 * 5, 20), True, 3, self)
+        self.platform_06 = GenericObject('Untitled', (50 + 60 * 5, 20), True, 3, self)
 
         self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
         self.coin.change_mode(2)
@@ -33,6 +33,9 @@ class MyGame(Engine):
              self.platform_05, self.platform_06
              ]
         )
+
+        self.unload_level([self.player, self.platform_01])
+        self.load_level(self.levels['testzone'])
 
         Clock.schedule_interval(lambda dt: self.player.change_mode(self.player.current_mode + 1), 1)
 
