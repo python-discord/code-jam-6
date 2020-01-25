@@ -15,7 +15,7 @@ FRICTION = .9
 DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .2
 
-DEFAULT_PEBBLE_IMAGE = 'assets/img/boulder.png'
+
 PEBBLE_COUNT = 7e3 # per layer.
 PEBBLE_IMAGE_SCALE = .75
 
@@ -26,12 +26,12 @@ CHISEL_POWER = 100
 BACKGROUND = 'assets/img/background.png'
 SOUND = 'assets/sounds/dig.wav'
 
-def get_image_and_aspect():
+def get_image_and_aspect(file):
     """
     Returns image and the correct ratio of pebbles per row and column from PEBBLE_COUNT and
     image height and width.
     """
-    with Image.open(DEFAULT_PEBBLE_IMAGE) as image:
+    with Image.open(file) as image:
         w, h = image.size
         image = np.frombuffer(image.tobytes(), dtype=np.uint8)
     image = image.reshape((h, w, 4))
@@ -41,27 +41,31 @@ def get_image_and_aspect():
 
     return image, int(pebbles_per_row), int(pebbles_per_column)
 
-PEBBLE_IMAGE, PEBBLES_PER_ROW, PEBBLES_PER_COLUMN = get_image_and_aspect()
+PEBBLE_IMAGES = tuple(f'assets/img/boulder{i}.png' for i in range(3))
+PEBBLE_IMAGES = tuple(get_image_and_aspect(image) for image in PEBBLE_IMAGES)
+CURRENT_IMAGE = list(choice(PEBBLE_IMAGES))
 
 def get_pebble_size(width, height):
     """Calculate the correct pebble size so we have no gaps in our stone."""
     scaled_w, scaled_h =  PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    return scaled_w / PEBBLES_PER_ROW, scaled_h / PEBBLES_PER_COLUMN
+    _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
+    return scaled_w / pebbles_per_row, scaled_h / pebbles_per_column
 
 def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
     """
-    x_scale, y_scale = 1 / PEBBLES_PER_ROW, 1 / PEBBLES_PER_COLUMN
+    image, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
+    x_scale, y_scale = 1 / pebbles_per_row, 1 / pebbles_per_column
     x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image.
-    h, w, _ = PEBBLE_IMAGE.shape
+    h, w, _ = image.shape
 
-    for x in range(PEBBLES_PER_ROW):
+    for x in range(pebbles_per_row):
         x = x_scale * x
-        for y in range(PEBBLES_PER_COLUMN):
+        for y in range(pebbles_per_column):
             y = y_scale * y
             sample_loc = int(y * h), int(x * w)
-            r, g, b, a = PEBBLE_IMAGE[sample_loc]
+            r, g, b, a = image[sample_loc]
             if not a:
                 continue
             pebble_x = x * PEBBLE_IMAGE_SCALE + x_offset
@@ -211,6 +215,7 @@ class Chisel(Widget):
         return True
 
     def reset(self):
+        CURRENT_IMAGE[:] = list(choice(PEBBLE_IMAGES))
         self.canvas.clear()
         self.setup_canvas()
 
