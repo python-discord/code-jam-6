@@ -69,9 +69,15 @@ class MyGame(Engine):
             self.player.acc_y = 20
 
         if 'a' in self.pressed_keys:
-            self.player.vel_x = -7.5
+            if self.player.is_standing:
+                self.player.vel_x = -5
+            else:
+                self.player.vel_x = -4.5
         if 'd' in self.pressed_keys:
-            self.player.vel_x = 7.5
+            if self.player.is_standing:
+                self.player.vel_x = 5
+            else:
+                self.player.vel_x = 4.5
 
 
 class Application(App):
