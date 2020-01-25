@@ -105,7 +105,6 @@ class Command:
     def _make_args(self) -> None:
         for entry in (self.__class__.__dict__):
             maybe_option = getattr(self, entry)
-            print(entry, maybe_option)
             if isinstance(maybe_option, Option):
                 maybe_option._expose_to(self._parser)
                 self._opt.append(maybe_option)
