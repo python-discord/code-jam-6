@@ -79,7 +79,7 @@ class PlugboardScreen(Screen):
             del self.all_plugged[-2:]
             self.plugs_in_screen -= 2
 
-    def remove_single_plug(self):
+    def remove_unpaired_plug(self):
         if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
             self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
             del self.plug_reference[-1]
@@ -105,12 +105,12 @@ class PlugboardScreen(Screen):
                             )
 
     def on_leave(self):
-        self.remove_single_plug()
+        self.remove_unpaired_plug()
         save_plugs(self.all_plugged)
 
     def clear_plugs(self):
         if self.plugs_in_screen % 2 != 0:
-            self.remove_single_plug()
+            self.remove_unpaired_plug()
         else:
             for _ in range(self.plugs_in_screen // 2):
                 self.remove_grouped_plugs()
