@@ -52,10 +52,10 @@ class Game(EventDispatcher):
         # Deal damage with mirror
 
         # Simulating damage
-        if random.random() < 0.5:
-            lane = self.ship_lanes[random.randrange(6)]
-            if lane:
-                lane[random.randrange(len(lane))].health -= 2
+        # if random.random() < 0.5:
+        #    lane = self.ship_lanes[random.randrange(6)]
+        #    if lane:
+        #        lane[random.randrange(len(lane))].health -= 2
 
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
@@ -73,7 +73,12 @@ class Game(EventDispatcher):
 
         # Track the closest ship in the active lane
         if self.closestShip:
+            # focus the Death Rays to the ship's X position.
             death_rays_focus_x = self.closestShip.shape.x + 100
+
+            # Deal damage to the ship.
+            self.closestShip.health -= 2
+
         else:
             death_rays_focus_x = 600
 
