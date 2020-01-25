@@ -90,7 +90,6 @@ class GameView(Widget):
         # Add the Score display
         self.add_widget(self._score)
 
-
     def on_island_health_change(self, game, value):
         health = math.ceil(value/10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
