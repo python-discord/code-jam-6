@@ -7,10 +7,10 @@ from kivy.metrics import dp
 from kivy.uix.widget import Widget
 
 # kivymd imports
-from kivymd.toolbar import MDToolbar
-from kivymd.cards import MDCard
-from kivymd.label import MDLabel
-from kivymd.slider import Slider
+from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+from kivymd.uix.slider import Slider
 
 
 class CalibrationScreen(Screen):

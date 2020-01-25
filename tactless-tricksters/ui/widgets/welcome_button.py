@@ -1,7 +1,7 @@
 from kivy.clock import Clock
 from kivy.app import App
 
-from kivymd.button import MDRectangleFlatIconButton
+from kivymd.uix.button import MDRectangleFlatIconButton
 
 
 class WelcomeButton(MDRectangleFlatIconButton):

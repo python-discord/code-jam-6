@@ -8,8 +8,8 @@ from kivy.metrics import dp
 from kivy.app import App
 
 # kivymd imports
-from kivymd.label import MDLabel
-from kivymd.button import MDFloatingActionButton
+from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDFloatingActionButton
 
 # project imports
 from ui.widgets.nav_drawer import MyNavigationLayout

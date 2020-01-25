@@ -6,16 +6,15 @@ from kivy.metrics import dp
 from kivy.clock import Clock
 
 # kivymd imports
-from kivymd.button import MDFloatingActionButton
-from kivymd.cards import MDCard
-from kivymd.label import MDLabel
-from kivymd.textfields import MDTextFieldRound
+from kivymd.uix.button import MDFloatingActionButton
+from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextFieldRound
 
 # project imports
 from ui.widgets.audio_indicator import AudioIndicator
 from ui.widgets.nav_drawer import MyNavigationLayout
-# For testing remove later
-import random
+
 
 
 class DecoderScreen(Screen):
@@ -55,7 +54,6 @@ class DecoderScreen(Screen):
                                            font_style='Body1', halign='center', size_hint=(1, 0.5))
         self.decode_output_label.theme_text_color = 'Custom'
         self.decode_output_label.text_color = [1, 1, 1, 1]
-        print(self.amr.bits_per_frame)
         self.audio_indicator = AudioIndicator(stack_width=self.amr.bits_per_frame)
         self.audio_indicator.size_hint = (1, 2)
 
@@ -74,12 +72,10 @@ class DecoderScreen(Screen):
         self.nav_bar_anchor.add_widget(self.nav_bar)
         self.add_widget(self.nav_bar_anchor)
 
-
     def update_audio_indicator(self, dt):
         if hasattr(self.audio_indicator, 'stack_width'):
-            level_array = [self.audio_indicator.stack_height + 1 if bit == 0 else 0 for bit in dt[-self.audio_indicator.stack_width:]]
-            # for columns in range(self.audio_indicator.stack_width):
-            #     level_array.append(random.randrange(0, self.audio_indicator.stack_height))
+            level_array = [self.audio_indicator.stack_height + 1 if bit == 0 else 0 for bit in
+                           dt[-self.audio_indicator.stack_width:]]
             self.audio_indicator.set_levels(level_array)
 
     def clear_text(self):

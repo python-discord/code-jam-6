@@ -7,11 +7,11 @@ from kivy.lang import Builder
 
 
 Builder.load_string('''
-#:import MDCard kivymd.cards
-#:import MDToolbar kivymd.toolbar
-#:import MDRectangleFlatIconButton kivymd.button
-#:import MDFloatingActionButton kivymd.button
-#:import MDLabel kivymd.label
+#:import MDCard kivymd.uix.card
+#:import MDToolbar kivymd.uix.toolbar
+#:import MDRectangleFlatIconButton kivymd.uix.button
+#:import MDFloatingActionButton kivymd.uix.button
+#:import MDLabel kivymd.uix.label
 #:import AudioIndicator ui.widgets.audio_indicator.AudioIndicator
 #:import WelcomeButton ui.widgets.welcome_button
 

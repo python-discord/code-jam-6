@@ -3,18 +3,16 @@ from kivy.uix.screenmanager import Screen
 from kivy.clock import Clock
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.lang import Builder
-# KivyMD imports
-from kivymd.button import MDRectangleFlatIconButton
 # Project imports
 from ui.widgets.nav_drawer import MyNavigationLayout
 
 
 Builder.load_string("""
 #:kivy 1.11.1
-#:import MDCard kivymd.cards
-#:import MDToolbar kivymd.toolbar
-#:import MDRectangleFlatIconButton kivymd.button
-#:import MDLabel kivymd.label
+#:import MDCard kivymd.uix.card
+#:import MDToolbar kivymd.uix.toolbar
+#:import MDRectangleFlatIconButton kivymd.uix.button
+#:import MDLabel kivymd.uix.label
 
 <WelcomeButton>
     elevation_normal: 10

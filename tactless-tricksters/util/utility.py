@@ -1,5 +1,11 @@
-from third_party.py_morse_code.morse import Morse, DotDash
-from auto_morse_recognizer.auto_morse_recognizer import AutoMorseRecognizer
+from kivy.utils import platform
+if platform not in ['ios', 'android']:
+    from third_party.py_morse_code.morse import Morse, DotDash
+    from auto_morse_recognizer.auto_morse_recognizer import AutoMorseRecognizer
+else:
+    # Add mobile support later
+    pass
+
 from threading import Thread
 
 message_dict ={'Bob': {
@@ -76,8 +82,10 @@ class Utility(object):
         # Temp debug data
         self.message_dict = message_dict
         self.contact_list = contact_list
-        self.morse = Morse()
-        self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=self.calibration)
+
+        if platform not in ['ios', 'android']:
+            self.morse = Morse()
+            self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=self.calibration)
 
     def morse_transmit_thread(self):
         morse_thread = Thread(target=self.morse.transmit)
