@@ -20,9 +20,9 @@ from PIL import Image as Im
 # Global Variables
 
 # Screen Dimensions
-SCREEN_WIDTH = 540
-SCREEN_HEIGHT = 720
-
+# SCREEN_WIDTH = 540
+# SCREEN_HEIGHT = 720
+SCREEN_WIDTH, SCREEN_HEIGHT = Window.size
 # Paper Dimensions
 STARTING_X = 50 # PAPER_WIDTH - 240
 STARTING_Y = 50 # PAPER_HEIGHT + 100
@@ -61,10 +61,11 @@ class TextPaper(Image):
         # Creating Blank Paper image to type on.
         # self.img = Im.open("paper.png")
         # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
+        self.colour = 255, 255, 255, 255
         self.txt = Im.new('RGBA', (int(SCREEN_WIDTH *.75), PAPER_HEIGHT), (200,200,200,255))
-        self.default_pos = PAPER_WIDTH//2,  - ((SCREEN_HEIGHT - PAPER_HEIGHT)//2 + STARTING_Y)
+        self.default_pos = PAPER_WIDTH//2,  - abs((SCREEN_HEIGHT - PAPER_HEIGHT)//2) + STARTING_Y
         # Type writer does not type from the top rather type from the bottom.
-        #self.txt = self.img.copy()
+        # self.txt = self.img.copy()
         self.head = {'x': STARTING_X, 'y': STARTING_Y}
         self.pos = self.default_pos
         self.size = [PAPER_WIDTH, PAPER_HEIGHT]
@@ -158,8 +159,6 @@ class PhoneButtons(Label):
 class JurassicJournalistApp(App):
     ''' App Class '''
     def build(self):
-        Window.size = SCREEN_WIDTH, SCREEN_HEIGHT
-        print(Window.size)
         Builder.load_file('buttons.kv')
         Builder.load_file('objects.kv')
         Window.borderless = True

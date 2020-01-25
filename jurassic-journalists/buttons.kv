@@ -1,16 +1,16 @@
 #:import Animation kivy.animation.Animation
 <TypeWriterButton@Button>:
-	width: self.parent.width * 1/17
-	height: self.parent.height * 1/23
+    width: self.parent.width * 1/17
+    height: self.parent.height * 1/23
     size_hint: None, None
-	txt: ''
-	background_normal: f'atlas://typewriter/{self.txt}' if self.txt else ''
-	background_down: self.background_normal
-	border: 0,0,0,0
-	on_press: Animation(anim_y =  self.anim_y - .005, d=.025, t='in_bounce').start(self); self.sound.play()
-	# canvas.before:
-	#    Color:
-	#	    rgba: (0,0,0,0) if self.state == 'normal' else (0,.7,.7,.1)
+    txt: ''
+    background_normal: f'atlas://typewriter/{self.txt}' if self.txt else ''
+    background_down: self.background_normal
+    border: 0,0,0,0
+    on_press: Animation(anim_y =  self.anim_y - .005, d=.025, t='in_bounce').start(self); self.sound.play()
+    # canvas.before:
+    #    Color:
+    #        rgba: (0,0,0,0) if self.state == 'normal' else (0,.7,.7,.1)
     #    RoundedRectangle:
     #        pos: self.pos
     #        size: self.size
@@ -30,6 +30,6 @@
 
 <PhoneButtons@Label>
     width: self.parent.width * 1/5
-	height: self.parent.height * 1/10
+    height: self.parent.height * 1/10
     size_hint: None, None
     
