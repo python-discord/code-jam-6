@@ -1,5 +1,6 @@
 <Gear@Image>:
-    source: "misc/gear.png"
+    index: 0
+    source: "misc/gear0.png"
 
 <RotorLabel@Label>:
     size_hint: 0.2, 0.2
@@ -49,7 +50,7 @@
             on_press:
                 app.root.get_screen("game_screen").rotor_turn()
             on_release:
-                setattr(rotor_value, "text", app.keys[::-1][app.keys[::-1].index(rotor_value.text) - 1])
+                app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
     RelativeLayout:
         RotorLabel:
             id: rotor_value
@@ -62,7 +63,7 @@
             on_press:
                 app.root.get_screen("game_screen").rotor_turn()
             on_release:
-                setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) - 1])
+                app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
 
 <Rotors@BoxLayout>:
     size_hint_y: 0.7
@@ -83,6 +84,7 @@
 <RotorScreen>:
     name: "rotor_screen"
     rotor_section: rotor_section
+    keys: app.keys
     AnchorLayout:
         anchor_x: "left"
         anchor_y: "top"
