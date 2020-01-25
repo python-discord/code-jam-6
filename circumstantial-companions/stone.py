@@ -187,12 +187,13 @@ class Chisel(Widget):
         Apply a poke to each pebble.
         """
         dislodged = {}
+
         for i, (x, y, z) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(touch, x, y))
-            if velocity and ((x, y) not in dislodged or dislodged[x, y]['z'] < z):
-                    dislodged[x, y] = dict(i=i, z=z, velocity=velocity)
-        for (x, y), info in dislodged.items():
-                i, z, velocity = info.values()
+            if velocity and ((x, y) not in dislodged or dislodged[x, y][1] < z):
+                    dislodged[x, y] = (i, z, velocity)
+
+        for (x, y), (i, z, velocity) in dislodged.items():
                 self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
 
     def on_touch_down(self, touch):
