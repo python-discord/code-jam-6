@@ -14,6 +14,9 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
+from kivy.vector import Vector
+from kivy.uix.button import Button
+from kivy.uix.popup import Popup
 
 
 class GameView(Widget):
@@ -41,6 +44,24 @@ class GameView(Widget):
         self._hp_bar.size = self._hp_bar.texture_size
 
         self._score = Label(pos=(950, 700), text=f'Score:   0', font_size=75)
+        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
+                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
+                                border=(0, 0, 0, 0),
+                                pos=((WINDOW_WIDTH / 3) + 80, WINDOW_HEIGHT - 70),
+                                width=40,
+                                height=40,
+                                on_release=self.show_pause_menu)
+        self.pause_menu = Popup(title='Pirate ship are on hold...',
+                                title_size='20sp',
+                                title_align='center',
+                                title_font='',
+                                content=Label(text="hello world"),
+                                separator_color=(0, 0, 0, 0),
+                                separator_height = 0,
+                                size_hint=(None, None),
+                                size=(300, 400),
+                                auto_dismiss=False,
+                                background=IMAGES_PATH.format('yellow_panel.png'))
 
     def show_game(self, running):
         Animation.cancel_all(self)
@@ -50,7 +71,6 @@ class GameView(Widget):
             return
 
         self.add_widget(self._background)
-
         with self.canvas:
 
             # Load & configure the flock of bird animation frames
@@ -89,6 +109,11 @@ class GameView(Widget):
 
         # Add the Score display
         self.add_widget(self._score)
+        self.add_widget(self.pause_btn)
+
+    def show_pause_menu(self, *args):
+        self.pause_menu.open()
+        print('Open menu...')
 
     def on_island_health_change(self, game, value):
         health = math.ceil(value/10) * 10
