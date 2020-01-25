@@ -1,239 +1,125 @@
 import random
 import logging
 from dataclasses import dataclass
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Dict, ClassVar
 
 logger = logging.getLogger(__name__)
 
 
+"""
+Changing attributes of any of these data classes requires changing saved json format.
+Purpose of them is to make sure there is no missing data in json aka it will error if json format
+and data class format differ.
+
+Also they are used for the Editor as they will produce the same output format as given input format.
+"""
+
+
 @dataclass
-class MainState:
-    value: Union[int, float, bool]
-    label: str
-    icon_asset: str
-
-
-class MainStatesHandler:
-    # TODO check typehint
-    def __init__(self, main_four_states):
-        if len(main_four_states) != 4:
-            raise Exception("4 main states are required.")
-
-        # keys are as they were while values are converted to MainState instead of being dict
-        self._mapping = {key: MainState(**sub_dict) for key, sub_dict in main_four_states.items()}
-
-    def is_one_of_main_game_states(self, game_state: str) -> bool:
-        return game_state in self._mapping
-
-    def get_state_by_index(self, index: int) -> MainState:
-        return tuple(self._mapping.values())[index]
-
-    def get_state_by_key(self, key: str):
-        return self._mapping[key]
-
-    def __getitem__(self, key: str) -> MainState:
-        return self._mapping[key].value
-
-    def __setitem__(self, key, value):
-        self._mapping[key].value = value
-
-    def __iter__(self):
-        for main_game_state in self._mapping:
-            yield main_game_state
-
-    def __repr__(self):
-        return str(self._mapping)
-
-
-class GameState:
+class GameVariable:
     """
-    Class that handles state interactions.
+    Can represent game state, condition or effect.
+
     Currently 3 type of states are supported: int, float and bool.
 
     The limits for int and float are defined by constants class attributes.
     For example if the _INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of
     type int, when updated, will never go over 1000 or below 0.
-
-    All possible states are passed as dictionary in init. One example of such dictionary:
-    {
-     "village_population": 80,
-     "world_encountered_dinosaur": false
-    }
-
-    Then these states can easily be called from cards json by using conditions/effects.
-    For example card can have key "conditions" with value {"village_population": 50} which will
-    make the card valid for the player to draw only if the village_population state is equal or
-    higher than 50. Integer and floats are always checked if state is equal or more than condition.
-
-    Same goes for effects for example "effects": {"village_population": -10} will reduce the
-    village_population state population by 10.
-
-    There are some special game states that are global no matter the json file and are not limited
-    by range. These cannot be modified by card conditions/effects. Currently these are:
-    game_turn
-
     """
-    _INTEGER_RANGE_INCLUDING = (0, 1000)
-    _FLOAT_RANGE_INCLUDING = (0.0, 1.0)
+    # TODO implement limits
+    INTEGER_RANGE_INCLUDING: ClassVar[Tuple[int, int]] = (0, 1000)
+    FLOAT_RANGE_INCLUDING: ClassVar[Tuple[float, float]] = (0.0, 1.0)
 
-    # TODO checkl typehint
-    def __init__(self, game_states: dict, main_game_states):
-        """
-        :param game_states: dict of all possible game states with their default state. Example:
-                            {
-                             "village_population": 80,
-                             "world_encountered_dinosaur": false
-                            }
-        """
-        self._main_game_states = MainStatesHandler(main_game_states)
-        self._game_states = game_states
-        self._game_turn = 0
+    state_name_key: str
+    value: [int, float, bool]
+
+    def __post_init__(self):
+        """Make sure that state is one of the allowed types."""
+        if type(self.value) not in (int, float, bool):
+            raise TypeError(f"Unknown state type {self.value}.")
+
+    def __eq__(self, other_state: "GameVariable"):
+        if isinstance(other_state, GameVariable):
+            return (isinstance(self.value, type(other_state.value)) and
+                    self.value == other_state.value)
+        return False
 
     def __repr__(self):
-        return f"{self._main_game_states} , {self._game_states}"
+        return str(self.value)
 
-    def get_main_state(self, state_index: int) -> MainState:
-        """
-        :param state_index: int 0,1,2 or 3 depending on which MainState you want.
-        :return: MainState
-        """
-        return self._main_game_states.get_state_by_index(state_index)
-
-    @property
-    def game_turn(self):
-        return self._game_turn
-
-    def increase_turn(self):
-        self._game_turn += 1
-
-    def update_state(self, effects: dict):
-        """
-        :param effects: dict or None representing changes that modify current game states. Example:
-                        {"village_population": -10}
-
-                        Where key represent name of state to be changed and value is either int,
-                        float or bool. The value types have to match between this dict and their
-                        state dict representation (self._game_states) for example if
-                        village_population state has a int value you can't pass effect
-                        {"village_population": 0.5}
-        :raise: Attribute error is going to be raised if any of the keys in effects is not found in
-                game states.
-        :raise: TypeError if effect value and it's game state value match are not the same type.
-        """
-        if effects is None:
-            return
-
-        for effect_state_key, effect_value in effects.items():
-            if self._main_game_states.is_one_of_main_game_states(effect_state_key):
-                self._update_game_state(self._main_game_states, effect_state_key, effect_value)
-            else:
-                self._update_game_state(self._game_states, effect_state_key, effect_value)
-
-    def _update_game_state(self,
-                           container_reference: Union[dict, MainStatesHandler],
-                           effect_state_key: str,
-                           effect_state_value: Union[int, float, bool]):
-
-        self._make_sure_game_states_are_same_type(container_reference[effect_state_key],
-                                                  effect_state_value)
-
-        if type(effect_state_value) is int:
-            container_reference[effect_state_key] += effect_state_value
-            # TODO CHECK
-            # self._make_sure_in_range(effect_state_key, self._INTEGER_RANGE_INCLUDING)
-        elif type(effect_state_value) is float:
-            container_reference[effect_state_key] += effect_state_value
-            # self._make_sure_in_range(effect_state_key, self._FLOAT_RANGE_INCLUDING)
-        elif type(effect_state_value) is bool:
-            container_reference[effect_state_key] = effect_state_value
+    def update(self, value: Union[int, float, bool]):
+        if type(value) is int:
+            self.value += value
+            self._make_sure_in_range(self.INTEGER_RANGE_INCLUDING)
+        elif type(value) is float:
+            self.value += value
+            self._make_sure_in_range(self.FLOAT_RANGE_INCLUDING)
+        elif type(value) is bool:
+            self.value = value
         else:
-            logger.critical(f"Can't update state, "
-                            f"unknown state type for {effect_state_key} {effect_state_value}")
+            logger.critical(f"Can't update state, unknown state type for {value}.")
 
-    @classmethod
-    def _make_sure_game_states_are_same_type(cls, current_game_state, applied_game_state):
-        if type(current_game_state) is not type(applied_game_state):
-            raise TypeError(f"Type value for applied game state value {applied_game_state} and "
-                            f"current game state {current_game_state} do no match.")
-
-    def _make_sure_in_range(self, key: str,
-                            value_range: Union[Tuple[int, int], Tuple[float, float]]):
+    def _make_sure_in_range(self, value_range: Union[Tuple[int, int], Tuple[float, float]]):
         min_including, max_including = value_range
-        if self._game_states[key] < min_including:
-            self._game_states[key] = min_including
-        elif self._game_states[key] > max_including:
-            self._game_states[key] = max_including
+        if self.value < min_including:
+            self.value = min_including
+        elif self.value > max_including:
+            self.value = max_including
 
-    def check_game_state(self,
-                         condition_state_key: str,
-                         condition_state_value: Union[int, float, bool]) -> bool:
+    def as_dict(self) -> dict:
         """
-        Check if passed state value is lower or equal to it's current game state value.
-        For example we have loaded these game states and this is their current values:
-        {
-         "village_population": 80,
-         "world_encountered_dinosaur": false
-        }
-
-        If we pass "village_population" as state_key and state_value 50 then this will return True.
-        :param condition_state_key: state name to check for example "village_population".
-        :param condition_state_value: Union[int, float, bool] state value to check
-        :return: bool whether the passed state value is lower or equal to it's current
-                 game state value. If passed state_key is not found in game states returns False.
-        :raise: TypeError if effect value and it's game state value match are not the same type.
+        Get's the format that is used for saving state/condition/effect in json.
         """
-        try:
-            game_state_value = self._main_game_states[condition_state_key]
-        except KeyError:
-            try:
-                game_state_value = self._game_states[condition_state_key]
-            except KeyError:
-                logger.critical(f"Unknown condition {condition_state_key}")
-                return False
-
-        if type(condition_state_value) is int:
-            self._make_sure_game_states_are_same_type(game_state_value, condition_state_value)
-            return condition_state_value <= game_state_value
-        elif type(condition_state_value) is float:
-            self._make_sure_game_states_are_same_type(game_state_value, condition_state_value)
-            return condition_state_value * game_state_value <= game_state_value
-        elif type(condition_state_value) is bool:
-            self._make_sure_game_states_are_same_type(game_state_value, condition_state_value)
-            return condition_state_value == game_state_value
-        else:
-            logger.warning("Unsupported type passed for check game state.")
-            return False
+        return {self.state_name_key: self.value}
 
 
-"""
-Changing attributes of any of these data classes requires changing json ones too.
-Purpose of them is to make sure there is no missing data in json aka it will error if json format
-and data class format differ.
-"""
+@dataclass
+class MainState(GameVariable):
+    """Represents one of the 4 main game states."""
+    label: str
+    icon_asset: str
+
+    def as_dict(self) -> dict:
+        """
+        Get's the format that is used for saving main state to json.
+        """
+        return {self.state_name_key: {self.value, self.label, self.icon_asset}}
+
+    def __repr__(self):
+        return str(self.value)
 
 
 @dataclass
 class OptionOutcome:
     """
     Represents one of outcomes of a option.
+
+    weight:      Weighted chance for this outcome to happen.
+    next_card:   Next card id the player will get if this outcome is chosen.
+                 If no specific card is chosen it will be string "random".
+    effects:     Passed as dictionary of effects where keys represent game state to alter
+                 and values by how much (as loaded from json). Example {"player_health": -0.3}
+                 This is then converted and saved to a list of GameVariable objects.
     """
-    # Weighted chance for this outcome to happen
     weight: float
-    # Next card the player will get if this outcome is chosen. String representing card id.
-    # If no specific card is chosen it will be string "random"
     next_card: str
-    # Dict of effects that will happen if this outcome is chosen. Keys are state names and values
-    # are values to change the state by. For example {"player_health": -30}
-    effects: dict = None
+    effects: Union[dict, List[GameVariable], None] = None
+
+    def __post_init__(self):
+        if self.effects is not None:
+            self.effects = [GameVariable(name, value) for name, value in self.effects.items()]
 
 
 @dataclass
 class Option:
     """
     Represents one of options the user is presented for each card.
+
+    text:       Text the player will be presented for this option.
+    outcomes:   Passed as dictionary which was loaded from json,
+                then it converted and saved as List of OptionOutcome objects.
     """
     text: str
-    # Passed in init as list of dicts then later saved as list of OptionOutcome objects
     outcomes: List[Union[dict, OptionOutcome]]
 
     def __post_init__(self):
@@ -248,29 +134,168 @@ class Option:
                               weights=[outcome.weight for outcome in self.outcomes])[0]
 
 
-@dataclass()
+class GameState:
+    """
+    Class that handles state interactions.
+
+    All possible states are passed as dictionary in init. One example of game_states:
+    {
+     "village_population": 80,
+     "world_encountered_dinosaur": false
+    }
+
+    Example of main_game_states:
+    {
+      "player_health": {"value": 1.0, "label": "Health", "icon_asset": "player_health.jpg"},
+      ... ,
+      ... ,
+      "player_something": {"value": 1.0, "label": "Something", "icon_asset": "player_something.jpg"}
+    }
+
+    Then these states can easily be called from cards json by using conditions/effects.
+    For example card can have key "conditions" with value {"village_population": 50} which will
+    make the card valid for the player to draw only if the village_population state is equal or
+    higher than 50. Integer and floats are always checked if state is equal or more than condition
+    while booleans are just compared.
+
+    Same goes for effects of outcome example outcome has "effects": {"village_population": -10}
+    then that outcome will reduce the village_population state by 10.
+
+    There are some special game states that are global no matter the json file and are not limited
+    by range. These cannot be modified by card conditions/effects. Currently these are:
+    game_turn
+
+    """
+    def __init__(self, game_states: dict, main_game_states: Dict[str, Dict]):
+        self._main_states_names = tuple(main_game_states.keys())
+        self._game_states = self._construct_game_states(game_states, main_game_states)
+        self._game_turn = 0
+
+    def __repr__(self):
+        return str(self._game_states)
+
+    @classmethod
+    def _construct_game_states(cls,
+                               game_states: dict,
+                               main_game_states
+                               ) -> Dict[str, Union[GameVariable, MainState]]:
+
+        if len(main_game_states) != 4:
+            raise Exception("4 main states are required.")
+
+        game_states_map = {name: GameVariable(name, value) for name, value in game_states.items()}
+        main_game_state_map = {name: MainState(name, **sub_dict) for name, sub_dict in
+                               main_game_states.items()}
+
+        if game_states_map.keys() & main_game_state_map.keys():
+            raise Exception("One of the main states is already present in "
+                            "game states or the other way around.")
+        game_states_map.update(main_game_state_map)
+        return game_states_map
+
+    def get_main_state(self, state_index: int) -> MainState:
+        """
+        :param state_index: int 0,1,2 or 3 depending on which MainState you want.
+        :return: MainState
+        """
+        return self._game_states[self._main_states_names[state_index]]
+
+    @property
+    def game_turn(self):
+        return self._game_turn
+
+    def increase_turn(self):
+        self._game_turn += 1
+
+    def update_state(self, effects: List[GameVariable]):
+        """
+        :param effects: List of GameVariable or None representing changes that modify current game
+                        states. If it None nothing is changed.
+        :raise: Attribute error is going to be raised if any of the keys in effects is not found in
+                game states.
+        :raise: TypeError if effect value and it's game state value match are not the same type.
+        """
+        if effects is None:
+            return
+
+        for effect in effects:
+            self._make_sure_same_type(effect.value, self._game_states[effect.state_name_key].value)
+            self._game_states[effect.state_name_key].update(effect.value)
+
+    @classmethod
+    def _make_sure_same_type(cls, variable_1, variable_2):
+        if type(variable_1) is not type(variable_2):
+            raise TypeError(f"Type value for  {variable_1} and {variable_2} do no match.")
+
+    def _make_sure_in_range(self, key: str,
+                            value_range: Union[Tuple[int, int], Tuple[float, float]]):
+        min_including, max_including = value_range
+        if self._game_states[key] < min_including:
+            self._game_states[key] = min_including
+        elif self._game_states[key] > max_including:
+            self._game_states[key] = max_including
+
+    def check_condition(self, condition: GameVariable) -> bool:
+        """
+        Check if passed state value is lower or equal to it's current game state value.
+        :param condition:
+        :return: bool whether the passed state value is lower or equal to it's current
+                 game state value. If passed state_key is not found in game states returns False.
+        :raise: TypeError if effect value and it's game state value match are not the same type.
+        """
+        try:
+            game_state_value = self._game_states[condition.state_name_key].value
+        except KeyError:
+            logger.critical(f"Unknown condition {condition}")
+            return False
+
+        self._make_sure_same_type(condition.value, game_state_value)
+
+        if type(condition.value) is int:
+            return condition.value <= game_state_value
+        elif type(condition.value) is float:
+            return condition.value <= game_state_value
+        elif type(condition.value) is bool:
+            return condition.value == game_state_value
+        else:
+            logger.critical("Unsupported type passed.")
+            return False
+
+
+@dataclass
 class Card:
-    """Represents a card to be presented to the user."""
+    """Represents a card to be presented to the user.
+
+    card_id:    Unique card name.
+    card_type:  Either "event" or "response".
+                Response cards only exist to follow up on event cards.
+    card_image: Image filename including extension.
+    text:
+    options:    Passed as dictionary which was loaded directly from json,
+                then it is converted and saved as list of Option objects.
+    conditions: Passed as dictionary loaded directly from json example
+                {"player_health": 0.5} and this card would only be  valid if player health is more
+                or equal than 50%
+                After init we convert it to list of GameVariable objects.
+
+    card_sound: Sound file filename including extension.
+    """
+    CARD_TYPES: ClassVar[Tuple[str, str]] = ("event", "response")
+
     card_id: str
-    # Either "event" or "response". Response cards only exist to follow up on event cards.
     card_type: str
-    # Image filename including extension
     card_image: str
     text: str
-    # List of Option objects
     options: Union[dict, List[Option]]
-    # Dict of conditions for example {"player_health": 0.5} and this card would only be  valid
-    # if player health is more or equal than 50% of it's total value.
-    conditions: dict = None
-    # Sound file filename including extension
+    conditions: Union[dict, List[GameVariable], None] = None
     card_sound: str = None
 
     def __post_init__(self):
-        """
-        Initialized options is list of dicts loaded directly from json.
-        After init we convert it to list of Option objects.
-        """
         self.options = [Option(**option) for option in self.options]
+        if self.conditions is not None:
+            self.conditions = [GameVariable(name, value) for name, value in self.conditions.items()]
+        if self.card_type not in Card.CARD_TYPES:
+            raise Exception(f"Invalid card type {self.card_type} for card {self.card_id}")
 
     def __hash__(self):
         return hash(self.card_id)
@@ -279,4 +304,4 @@ class Card:
         if self.conditions is None:
             return True
         else:
-            return all(game_state.check_game_state(k, v) for k, v in self.conditions.items())
+            return all(game_state.check_condition(condition) for condition in self.conditions)

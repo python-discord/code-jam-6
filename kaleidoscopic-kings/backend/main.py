@@ -57,10 +57,17 @@ class Deck:
         self._timeout_event_cards[event_card] = Deck.EVENT_CARD_TIMEOUT
 
     def _reduce_timeouts(self):
+        expired_timeouts = []
+
+        # Reduce it
         for event_card in self._timeout_event_cards:
             self._timeout_event_cards[event_card] -= 1
             if self._timeout_event_cards[event_card] <= 0:
-                del self._timeout_event_cards[event_card]
+                expired_timeouts.append(event_card)
+
+        # Remove any expired timeouts
+        for event_card in expired_timeouts:
+            del self._timeout_event_cards[event_card]
 
 
 class Game:
