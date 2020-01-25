@@ -104,6 +104,8 @@ class Player(RotatableSprite):
 
 class Item(Sprite):
     def __init__(self, name, player: Player, **kwargs):
+        self.equipped = False
+        self.inventory = False
         self.pos = Player.get_center()
         with open((self.resource_dir / "items.json").as_posix(), "r") as read_file:
             data = json.load(read_file)[name]
@@ -111,21 +113,13 @@ class Item(Sprite):
         self.rotate = Rotate(angle=player.get_rotation(), origin=player.get_center())
 
     def draw(self, canvas: Union[RenderContext, InstructionGroup]):
-        if self.equipped:
-            canvas.add(PushMatrix())
-            canvas.add(self.rotate)
-            canvas.add(self.bg_rect)
-            canvas.add(PopMatrix())
-        else:
-            canvas.add(PushMatrix())
-            canvas.add(self.bg_rect)
-            canvas.add(PopMatrix())
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
 
     def equip(self):
         self.equipped = True
 
     def unequip(self):
         self.equipped = False
-
-
-
