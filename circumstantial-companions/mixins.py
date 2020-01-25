@@ -1,5 +1,4 @@
 import math
-
 from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from kivy.graphics import BorderImage, Color, Rectangle
@@ -9,7 +8,6 @@ BORDER_IMAGE = "assets/img/sign-border-transparent.png"
 
 class RepeatingBackground:
     """Inherit this mixin to easily support repeating background in a widget."""
-
     def setup_background(self, bg_image, delay=0, color=(1, 1, 1, 1)):
         """Setup the repeating background.
 
@@ -60,7 +58,8 @@ class RepeatingBackground:
     def _delayed_resize(self, instance, value):
         if self.delay > 0:
             self.resize_event.cancel()
-            self.resize_event = Clock.schedule_once(lambda dt: self.resize(instance, value), self.delay)
+            self.resize_event = Clock.schedule_once(lambda dt: self.resize(instance, value),
+                                                    self.delay)
         else:
             self.resize(instance, value)
 
@@ -71,7 +70,6 @@ class RepeatingBackground:
 
 class SignBorder:
     """Inherit this mixin to add a sign border to the widget."""
-
     def setup_border(self):
         self.size_offset = 32
         with self.canvas.after:
@@ -80,17 +78,10 @@ class SignBorder:
                 size=(self.width + self.size_offset, self.height + self.size_offset),
                 pos=(self.x - self.size_offset / 2, self.y - self.size_offset / 2),
                 autoscale="both",
-                border=(30, 30, 30, 30),
-            )
+                border=(30, 30, 30, 30))
 
         self.bind(size=self._readjust_border, pos=self._readjust_border)
 
     def _readjust_border(self, instance, value):
-        self.border_img.size = (
-            self.width + self.size_offset,
-            self.height + self.size_offset,
-        )
-        self.border_img.pos = (
-            self.x - self.size_offset / 2,
-            self.y - self.size_offset / 2,
-        )
+        self.border_img.size = self.width + self.size_offset, self.height + self.size_offset
+        self.border_img.pos = self.x - self.size_offset / 2, self.y - self.size_offset / 2

@@ -15,10 +15,8 @@ from kivy.metrics import dp, sp
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button as KivyButton
-from kivy.uix.dropdown import DropDown
 from kivy.uix.filechooser import FileChooserListView
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.gridlayout import GridLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
@@ -271,15 +269,13 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
             animation.texture = next(images).texture
         Clock.schedule_interval(next_texture, .2)
 
-        widgets = [
-            title,
-            language_btn,
-            import_btn,
-            save_as_btn,
-            reset_btn,
-            src_btn,
-            animation
-        ]
+        widgets = [title,
+                   language_btn,
+                   import_btn,
+                   save_as_btn,
+                   reset_btn,
+                   src_btn,
+                   animation]
 
         for widget in widgets:
             self.add_widget(widget)

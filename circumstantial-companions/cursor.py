@@ -2,9 +2,9 @@ from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
-
 UP = "assets/img/cursor/up.png"
 DOWN = "assets/img/cursor/down.png"
+
 
 class CursorImage(Image):
     def __init__(self):

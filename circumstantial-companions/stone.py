@@ -53,7 +53,7 @@ def pebble_setup():
     Determines initial pebble color and placement from an image's non-transparent pixels.
     """
     x_scale, y_scale = 1 / PEBBLES_PER_ROW, 1 / PEBBLES_PER_COLUMN
-    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image
+    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image.
     h, w, _ = PEBBLE_IMAGE.shape
 
     for x in range(PEBBLES_PER_ROW):
@@ -82,6 +82,7 @@ def is_dislodged(velocity):
             x *= MAX_VELOCITY / magnitude
             y *= MAX_VELOCITY / magnitude
         return x, y
+
 
 class Pebble:
     """
