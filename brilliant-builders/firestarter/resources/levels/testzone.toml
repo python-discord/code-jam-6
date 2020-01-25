@@ -2,3 +2,8 @@
 class = 'GenericObject'
 args = {sprite = 'box', mode = 2, collide = true}
 pos = [350,20]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [200,20]
