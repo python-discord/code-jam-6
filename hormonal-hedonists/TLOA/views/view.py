@@ -14,7 +14,6 @@ from kivy.clock import Clock
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-from kivy.vector import Vector
 
 
 class GameView(Widget):
@@ -108,7 +107,6 @@ class GameView(Widget):
         for lane in self._game.ship_lanes[::-1]:
             for ship in lane:
                 self.add_widget(ship.shape)
-
 
     @staticmethod
     def _sin_transition(progress):
