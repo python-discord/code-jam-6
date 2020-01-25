@@ -1,0 +1,4 @@
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [350,20]
