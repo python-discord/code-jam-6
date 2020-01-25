@@ -65,7 +65,8 @@ class OrthographicCamera(Camera):
         projection = self.get_projection()
         x, y = pos
 
-        x, y, _ = projection.project(x, y, 0, Matrix(), projection, 0, 0, self.viewport_width, self.viewport_height)
+        x, y, _ = projection.project(x, y, 0, Matrix(), projection, 0, 0,
+                                     self.viewport_width, self.viewport_height)
         x -= self.viewport_width
         y -= self.viewport_height
 
