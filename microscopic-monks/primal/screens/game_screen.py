@@ -26,14 +26,16 @@ class GameScreen(Screen):
                     continue
                 while True and random.randint(0, 1) == 1:
                     s = random.randint(50, 500)
-                    temp_rock = Rock((i + random.randint(0, 1000), j + random.randint(0, 1000)), (s, s), random.randint(0, 359))
+                    temp_rock = Rock((i + random.randint(0, 1000), j + random.randint(0, 1000)),
+                                     (s, s), random.randint(0, 359))
                     self.rock.append(temp_rock)
 
                 if temp_terrain.type != 2:
                     continue
                 while True and random.randint(0, 1) == 1:
                     s = random.randint(50, 100)
-                    temp_tree = Tree((i + random.randint(0, 1000), j + random.randint(0, 1000)), (s, s), random.randint(0, 359))
+                    temp_tree = Tree((i + random.randint(0, 1000), j + random.randint(0, 1000)),
+                                     (s, s), random.randint(0, 359))
                     self.tree.append(temp_tree)
 
         for i in self.tree:
@@ -45,38 +47,6 @@ class GameScreen(Screen):
         self.player = Player('testimg.png', (0, 0), (100, 100))
         self.player.draw(self.canvas)
         self.camera.end_region()
-
-    # def generate_terrain(self):
-    #     tileObjects = []
-    #     objects = {}
-    #     for i in self.map:
-    #         for j in i:
-    #             if j < .25:
-    #                 continue
-    #             objects = {}
-    #             while True:
-    #                 rand = random.randint(1, 2)
-    #                 if rand == 1:
-    #                     while True:
-    #                         x = random.randint(85, 915)
-    #                         y = random.randint(85, 915)
-    #                         broken = False
-    #                         try:
-    #                             for obj in objects["rock"]:
-    #                                 if abs(obj[0] - x) < 80 or abs(obj[1] - y) < 80:
-    #                                     broken = True
-    #                                     break
-    #                             if broken:
-    #                                 continue
-    #                             else:
-    #                                 objects["rock"].append((x, y))
-    #                                 break
-    #                         except KeyError:
-    #                             objects["rock"] = [(x, y)]
-    #                 else:
-    #                     break
-    #             tileObjects.append(objects)
-    #     print(tileObjects)
 
     def update(self, delta: float):
         # Maybe move it to player update?

@@ -85,5 +85,3 @@ class Engine(Widget):
         :return: None
         """
         self.pressed_keys.discard(key_code[0])
-
-
