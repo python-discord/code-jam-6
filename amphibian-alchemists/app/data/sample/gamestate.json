@@ -23,11 +23,9 @@
       ]
     },
     "current_state": {
-      "rotors": {
-        "1": "A",
-        "2": "A",
-        "3": "A"
-      },
+      "rotors": [
+        "A", "A", "A", null, null
+      ],
       "plugs": [
         "AB",
         "CD",
@@ -42,11 +40,9 @@
       ]
     },
     "last_saved_state": {
-      "rotors": {
-        "1": "A",
-        "2": "A",
-        "3": "A"
-      },
+      "rotors": [
+        "A", "A", "A", null, null
+      ],
       "plugs": [
         "AB",
         "CD",

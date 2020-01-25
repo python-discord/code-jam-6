@@ -1,6 +1,16 @@
+import os
+
+from kivy.app import App
 from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
+from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
+
+from .save_game import save_plugs
+
+DATA_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
 
 
 class PlugboardScreen(Screen):
@@ -24,6 +34,7 @@ class PlugboardScreen(Screen):
         [1, 102 / 255, 0],
     )
 
+    # Adding the plug (which is the plughole instance)
     def get_plug(self, instance):
         if self.plugs_in_screen < self.property("plugs_in_screen").get_max(self):
             plug = Factory.Plug(
@@ -40,8 +51,10 @@ class PlugboardScreen(Screen):
                     *self.ids.plug_board.ids[self.all_plugged[-2]].center,
                     *self.ids.plug_board.ids[self.all_plugged[-1]].center,
                 ]
+                # Adding the wire
                 wire.plugs = "".join(self.all_plugged[-2:])
                 wire.color = self.wire_colors[int((len(self.all_plugged) / 2) % 13 - 1)]
+                # Configuring UI data
                 self.ids.floating_widgets.add_widget(wire)
                 self.wires.update({wire.plugs: wire})
                 self.ids.remove_plug.disabled = False
@@ -49,7 +62,9 @@ class PlugboardScreen(Screen):
                 self.ids.remove_plug.disabled = True
             self.plugs_in_screen += 1
 
+    # User clicks on the a button hole, which communicates to here
     def handle_plug_release(self, instance):
+        # Checks the there is no plug here
         if instance.name not in self.all_plugged:
             self.get_plug(instance)
 
@@ -63,6 +78,14 @@ class PlugboardScreen(Screen):
             del self.plug_reference[-2:]
             del self.all_plugged[-2:]
             self.plugs_in_screen -= 2
+
+    def remove_unpaired_plug(self):
+        if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
+            self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
+            del self.plug_reference[-1]
+            del self.all_plugged[-1]
+            self.plugs_in_screen -= 1
+            self.ids.remove_plug.disabled = False
 
     def on_plughole_recenter(self, instance, value):
         if self.manager.current == "plugboard_screen" and self.all_plugged:
@@ -81,13 +104,45 @@ class PlugboardScreen(Screen):
                                 *self.ids.plug_board.ids[item[1]].center,
                             )
 
-    def check_plugs(self):
+    def on_leave(self):
+        self.remove_unpaired_plug()
+        save_plugs(self.all_plugged)
+
+    def clear_plugs(self):
+        if self.plugs_in_screen % 2 != 0:
+            self.remove_unpaired_plug()
+        else:
+            for _ in range(self.plugs_in_screen // 2):
+                self.remove_grouped_plugs()
+
+    def load_plugs(self):
+        if self.all_plugged:
+            self.clear_plugs()
+        # Prepare data
+        store = JsonStore(DATA_DIR)
+        plugs = store.get(str(App.get_running_app().game_id))["current_state"]["plugs"]
+        # Assumes the data plugs are even. If game goes well
+        # If not, we pop the last one.
+        if len("".join(i for i in plugs)) % 2 != 0:
+            new_plugs = []
+            for x in plugs:
+                new_plugs.append(str(x)[0])
+                new_plugs.append(str(x)[1])
+            # save_plugs(new_plugs)
+            # Reset plugs to be the new even numbered length
+            plugs = store.get(str(App.get_running_app().game_id))["current_state"][
+                "plugs"
+            ]
+
         """
-        This method will check if there's an unpaired plug in the board.
-        If so, then the plug will be deleted
+        Begin creation of plugs
+        We have to use get_plug method.
+        We have to find all PlugHole instances
         """
-        if self.plugs_in_screen > 0 and self.plugs_in_screen % 2 != 0:
-            self.ids.floating_widgets.remove_widget(self.plug_reference[-1])
-            del self.plug_reference[-1]
-            del self.all_plugged[-1]
-            self.plugs_in_screen -= 1
+        plugholes_instances = self.ids.plug_board.ids
+        # Plugs prepared. Select instances. Adding in.
+        for x in plugs:
+            instance1 = plugholes_instances[str(x)[0]]
+            instance2 = plugholes_instances[str(x)[1]]
+            self.handle_plug_release(instance1)
+            self.handle_plug_release(instance2)
