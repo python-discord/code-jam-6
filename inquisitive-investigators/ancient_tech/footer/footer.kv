@@ -67,33 +67,25 @@
 
 <EditPopup>:
     title: 'Edit a file'
-
     FloatLayout:
-        
         Button:
             id: left
-
             canvas:
                 Color:
                     rgba: 0, 0, 0, 0
-
                 Rectangle:
                     pos: self.pos
                     size: self.size
-
             size_hint: .3,.1
             pos_hint: {'center_x': .3, 'center_y': .7}
             text: '[ Left Manager ]'
             color: 0.34,1,1,1
             on_press: root.edit('left')
-
         Button:
             id: right
-
             canvas:
                 Color:
                     rgba: 0, 0, 0, 0
-
                 Rectangle:
                     pos: self.pos
                     size: self.size
