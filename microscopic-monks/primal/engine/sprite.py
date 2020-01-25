@@ -13,14 +13,26 @@ import json
 class Sprite:
     resource_dir = Path('.', 'primal', 'resources').absolute()
 
-    def __init__(self, image: str, pos: Tuple[float, float],
+    def __init__(self, image: Union[str, None], pos: Tuple[float, float],
                  size: Tuple[float, float], **kwargs) -> None:
         super().__init__(**kwargs)
 
         self.size = size
         self.pos = pos
-        self.bg_rect = Rectangle(source=(self.resource_dir / image).as_posix(),
-                                 pos=self.pos, size=self.size)
+
+        if image is None:
+            self.bg_rect = Rectangle(pos=self.pos, size=self.size)
+        else:
+            self.bg_rect = Rectangle(source=(Sprite.resource_dir / image).as_posix(),
+                                     pos=self.pos, size=self.size)
+
+    def set_source(self, source: str):
+        image = (Sprite.resource_dir / source).as_posix()
+        if image != self.get_source():
+            self.bg_rect.source = (Sprite.resource_dir / source).as_posix()
+
+    def get_source(self) -> str:
+        return self.bg_rect.source
 
     def set_position(self, pos: Tuple[float, float]):
         self.pos = pos
@@ -57,7 +69,7 @@ class RotatableSprite(Sprite):
 
 
 class Player(RotatableSprite):
-    SPEED = 200
+    SPEED = 300
 
     def set_rotation(self, n: Tuple[float, float]):
         pos = self.pos
