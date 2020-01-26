@@ -1,10 +1,5 @@
 [[object]]
 class = 'GenericObject'
-args = {sprite = 'grass_platform', mode = 1, collide = true}
-pos = [-1200,-75]
-
-[[object]]
-class = 'GenericObject'
 args = {sprite = 'box', mode = 1, collide = true}
 pos = [200,20]
 

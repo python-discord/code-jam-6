@@ -6,6 +6,8 @@ from firestarter.game_engine.sprite import Sprite, SpriteConfig
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
 
+from simpleaudio import WaveObject
+
 
 class GenericObject(Sprite):
     def __init__(
@@ -28,11 +30,17 @@ class GenericObject(Sprite):
         self.collide = collide
         self.change_mode(mode)
 
+    def update(self, *args) -> None:
+        pass
+
     def on_collision(self, other: Sprite) -> bool:
         return self.collide
 
 
 class PlayerUiHeart(Sprite):
+
+    def update(self, *args) -> None:
+        pass
 
     def on_collision(self, other: Sprite) -> bool:
         return False
@@ -42,35 +50,23 @@ class Platform(Sprite):
     def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
         super().__init__(config, pos, **kwargs)
 
+    def update(self, other_sprites: List[Sprite]) -> None:
+        pass
+
 
 class PickUpCoin(Sprite):
-    def __init__(
-            self,
-            sprite: Union[SpriteConfig, str],
-            pos: Tuple[int, int],
-            collide: bool = False,
-            mode: int = 1,
-            engine: Engine = None,
-            **kwargs
-    ):
-        # Resolve sprite if needed
-        if isinstance(sprite, str):
-            if not engine:
-                raise ValueError('Argument engine required when searching for sprite')
-            sprite = engine.assets[sprite]
+    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
+        super().__init__(config, pos, **kwargs)
 
-        super().__init__(sprite, pos, **kwargs)
-
-        self.activated = False
-        self.collide = collide
-        self.change_mode(mode)
+    def update(self, other_sprites: List[Sprite]) -> None:
+        pass
 
     def on_collision(self, other: Sprite) -> bool:
         if isinstance(other, Player):
             print("coin +1!")
             other.score += 1
             self.kill()
-        return self.collide
+        return False
 
 
 class FirePlaceCheckpoint(Sprite):
@@ -119,56 +115,6 @@ class FirePlaceCheckpoint(Sprite):
         return self.collide
 
 
-class FlameBuddy(Sprite):
-
-    acc_x = NumericProperty(0)
-    acc_y = NumericProperty(0)
-    acc = ReferenceListProperty(acc_x, acc_y)
-    vel_x = NumericProperty(0)
-    vel_y = NumericProperty(0)
-    vel = ReferenceListProperty(vel_x, vel_y)
-
-    def __init__(
-            self,
-            sprite: Union[SpriteConfig, str],
-            pos: Tuple[int, int],
-            collide: bool = False,
-            mode: int = 1,
-            engine: Engine = None,
-            **kwargs
-    ):
-        # Resolve sprite if needed
-        if isinstance(sprite, str):
-            if not engine:
-                raise ValueError('Argument engine required when searching for sprite')
-            sprite = engine.assets[sprite]
-
-        super().__init__(sprite, pos, **kwargs)
-
-        self.activated = False
-        self.collide = collide
-        self.change_mode(mode)
-
-    def on_player_pos(self, new_pos: Tuple[float, float]) -> None:
-        distance_to_player = ((self.pos[0] - new_pos[0] + 10),
-                              (self.pos[1] - new_pos[1] - 55))
-
-        x_offset = -1 * distance_to_player[0] / 15
-
-        y_offset = -1 * distance_to_player[1] / 15
-
-        self.vel = (x_offset, y_offset)
-
-    def update(self, other_sprites: List[Sprite]) -> None:
-        self.vel = (self.vel_x + self.acc_x, self.vel_y + self.acc_y)
-        # self.vel = (min(self.vel_x, 5), min(self.vel_y, 5))
-        self.pos = (self.pos[0] + self.vel_x, self.pos[1] + self.vel_y)
-        self.acc = (0, 0)
-
-    def on_collision(self, other: Sprite) -> bool:
-        return self.collide
-
-
 class Player(Sprite):
     acc_x = NumericProperty(0)
     acc_y = NumericProperty(0)
@@ -180,11 +126,19 @@ class Player(Sprite):
     score = NumericProperty(0)
     lives = NumericProperty(5)
 
-    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs) -> None:
+    def __init__(
+            self,
+            config: SpriteConfig,
+            pos: Tuple[int, int] = (0, 0),
+            death_sound: WaveObject = None,
+            **kwargs
+    ) -> None:
         super().__init__(config, pos, **kwargs)
         self.is_standing: bool = False
         self.checkpoint: Tuple[int, int] = pos
         self.respawn: Tuple[int, int] = pos
+
+        self.death_sound = death_sound
 
     def set_lives(self, value: int) -> None:
         """Set the players lives."""
@@ -238,6 +192,8 @@ class Player(Sprite):
         if self.pos[1] < 0:
             # we fell out of the map!
             self.lives -= 1
+            if self.death_sound:
+                self.death_sound.play()
             if self.lives > 0:
                 # respawn at the checkpoint
                 self.pos = self.checkpoint
