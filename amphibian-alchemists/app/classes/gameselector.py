@@ -96,6 +96,11 @@ class GameSelectorScreen(Screen):
         self.manager.get_screen("plugboard_screen").load_plugs()
         self.manager.get_screen("game_screen").load_output_text()
 
-        self.manager.get_screen("game_screen").current_time = "100"
+        # Setting up timer
+        store = JsonStore(DATA_DIR)
+        game_id = App.get_running_app().game_id
+        current_timer = store.get(str(game_id))["current_state"]["timer"]
+        self.manager.get_screen("game_screen").current_time = str(current_timer) or "200"
 
+        # Switching to game screen with current config
         self.manager.current = "game_screen"

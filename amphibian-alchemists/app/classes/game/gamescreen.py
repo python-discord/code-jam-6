@@ -82,6 +82,17 @@ def setup_new_game_settings():
     rotors.append(None)
     text = get_wiki_summary()
     ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
+
+    # Check if auto input is on to decide timer based game
+    config_store = JsonStore(CONFIG_DIR)
+    timer = "100"  # Default for without
+    try:
+        if config_store.get("auto_input")["value"] == 0:
+            # Give more time for hardcore, no auto players
+            timer = "200"
+    except KeyError:
+        # Couldn't find setting. Set auto input enabled. Timer 100s
+        config_store.put("auto_input", value=1)
     store.put(
         game_id,
         game_title="Game {}".format(game_id),
@@ -96,11 +107,13 @@ def setup_new_game_settings():
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
             "plugs": [],
+            "timer": timer,
         },
         last_saved_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
             "plugs": [],
+            "timer": timer,
         },
     )
 
@@ -110,7 +123,6 @@ def auto_input_processor(char: str) -> str:
     Processes the next handled letter for auto-inputting
     if directed by user from settings
     """
-    print("Char", char)
     config_store = JsonStore(CONFIG_DIR)
     try:
         if config_store.get("auto_input")["value"] == 1:
@@ -130,7 +142,6 @@ def auto_input_processor(char: str) -> str:
     except IndexError:
         # Game won or messed up and passed len(ciphertext).
         # Nothing else to auto-input.
-        print("Index Error", char)
         return char
 
 
@@ -259,6 +270,7 @@ class GameScreen(Screen):
             Factory.WinPopup().open()
 
     def load_old_game(self):
+        """Loads old/saved (point) copy of game"""
         game_id = App.get_running_app().game_id
         store = JsonStore(DATA_DIR)
         game = store.get(str(game_id))
