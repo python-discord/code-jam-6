@@ -56,7 +56,7 @@ class TerminalInput(TextInput):
         """
         if keycode[0] in KEYS['enter']:
             self.validate_cursor_pos()
-            text = self.text[self._cursor_pos:]
+            text = self.text[self._cursor_pos - 1:]
 
             if text.strip():
                 Clock.schedule_once(partial(self._run_cmd, text))
@@ -109,7 +109,7 @@ class TerminalInput(TextInput):
                    f'{os.path.basename(str(self.current))}]>'
                    )
 
-        self._cursor_pos = self.cursor_index() + len(at_info)
+        self._cursor_pos = self.cursor_index() + len(at_info) + 1
         self.text += at_info
 
     def on_cwd_change(self, cwd: str) -> None:
