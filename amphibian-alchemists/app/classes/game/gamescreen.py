@@ -141,6 +141,7 @@ class EnigmaOutput(TextInput):
 
 class GameScreen(Screen):
     current_time = StringProperty("")
+    timer_clock = None
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
@@ -202,7 +203,8 @@ class GameScreen(Screen):
         else:
             on_config_change()
 
-        self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
+        if not self.timer_clock:
+            self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
