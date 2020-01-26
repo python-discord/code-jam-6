@@ -28,7 +28,6 @@
   {
     "card_id": "welcome_2",
     "card_type": "response",
-    "card_sound": "meow.wav",
     "card_image": "test.jpg",
     "text": "You've just discovered fire.",
     "options": [
@@ -54,7 +53,6 @@
   },
   {
     "card_id": "welcome_3",
-  "card_sound": "water.wav",
     "card_type": "response",
     "card_image": "test.jpg",
     "text": "This gives you some options. Maybe its time to start taking this whole evolution thing seriously?",
@@ -148,6 +146,8 @@
     "options": [
       {
         "text": "Take a trip to river.",
+
+
         "outcomes": [
           {
             "weight": 0.4,
@@ -179,6 +179,7 @@
   {
     "card_id": "river_dino_encounter",
     "card_type": "response",
+    "card_sound": "water.wav",
     "card_image": "test.jpg",
     "text": "Halfway trough your trip you see a T-Rex.",
     "options": [
