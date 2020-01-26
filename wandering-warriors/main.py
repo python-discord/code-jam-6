@@ -3,7 +3,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
 from modules import Abacus as AbacusBase
-from modules import DrawPad, LedgerLayout
+from modules import DrawPad
 
 
 class MainScreen(Screen):
@@ -19,10 +19,6 @@ class TopMenu(Widget):
 
 
 class Abacus(AbacusBase):
-    pass
-
-
-class Ledger(LedgerLayout):
     pass
 
 

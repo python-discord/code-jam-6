@@ -29,35 +29,61 @@
             size: self.size
             pos: self.pos
 
-<Ledger>:
-    #:set BORDER_W 6
+<LedgerRow@GridLayout>:
+    cols: 4
+    rows: 1
+    canvas.before:
+        Color:
+            rgba: 0.8, 0.8, 0.8, .3
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    test_x: 'X'
+    test_y: 'Y'
+    test_op: 'OP'
+    test_z: 'Z'
+    Label:
+        text: root.test_x
+    Label:
+        text: root.test_y
+    Label:
+        text: root.test_op
+    Label:
+        text: root.test_z
 
-    size_hint_x: 1.6
+<Ledger>:
+    size_hint_x: 1.8
     canvas:
         Color:
             rgba: 1, 1, 1, 1
         Rectangle:
-            pos: self.pos
             size: self.size
-            source: 'assets/graphics/sandstone.jpg'  # TODO: make this platform independent?
-        Color:
-            rgba: 0, 0, 0, 0.1
-        Rectangle:
             pos: self.pos
-            size: (self.width, BORDER_W)
-        Color:
-            rgba: 1, 1, 1, 0.3
-        Rectangle:
-            pos: (self.x, self.y + self.height - BORDER_W)
-            size: (self.width, BORDER_W)
-        Color:
-            rgba: 0.5, 0.5, 0.5, 0.3
-        Rectangle:
-            pos: (self.x, self.y + BORDER_W)
-            size: (BORDER_W, self.height - 2 * BORDER_W)
-        Rectangle:
-            pos: (self.x + self.width - BORDER_W, self.y + BORDER_W)
-            size: (BORDER_W, self.height - 2 * BORDER_W)
+            source: 'assets/graphics/sandstone.jpg'
+    rv: rv
+    orientation: 'vertical'
+    BoxLayout:
+        size_hint_y: None
+        height: dp(36)
+        padding: dp(8)
+        spacing: dp(8)
+        Button:
+            text: 'Test'
+            on_press: root.test()
+
+    RecycleView:
+        id: rv
+        scroll_type: ['bars', 'content']
+        scroll_wheel_distance: dp(114)
+        bar_width: dp(10)
+        viewclass: 'LedgerRow'
+        RecycleBoxLayout:
+            default_size: None, dp(56)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+            spacing: dp(2)
 
 <OperationsBar>:
     size_hint_x: None
