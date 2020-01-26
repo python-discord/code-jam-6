@@ -88,7 +88,10 @@ class ConversationScreen(Screen):
 
         self.text_input = MDTextFieldRound()
         # Hides left icon
-        self.text_input.children[2].children[2].size = (0, 0)
+        self.text_input.icon_left_dasabled = True
+        # Moves widget out of the field of view
+        self.text_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
+
         self.text_input.icon_right = 'send'
         self.text_input.children[2].children[0].bind(
             on_press=lambda x: self.send_message(self.text_input.text))
