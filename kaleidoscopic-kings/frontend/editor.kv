@@ -1,0 +1,152 @@
+WindowManager:
+    CardAddWindow:
+    GameStatesWindow:
+
+<CardAddWindow>:
+    name: "card_add"
+
+    GridLayout:
+        size: root.size
+        cols: 3
+        rows: 1
+
+        ScrollView:
+            height: root.height
+            size_hint_y: None
+            do_scroll_x: False
+            do_scroll_y: True
+
+            Label:
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 10, 10
+                text:
+                    'Placeholder card text\n' * 100
+
+        GridLayout:
+            cols: 2
+            rows: 5
+
+            TextInput:
+                id: card_id
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'card_id (use snake_case)'
+                multiline: False
+
+            TextInput:
+                id: card_sound
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'sound filename with extension (optional)'
+                multiline: False
+                on_double_tap:
+                    root.preview_sound(self.text)
+
+            TextInput:
+                id: card_type
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'type: event, response, start or game_over'
+                multiline: False
+
+            TextInput:
+                id: card_image
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'image filename with extension (double click preview)'
+                multiline: False
+                on_double_tap:
+                    root.preview_image(self.text)
+
+            TextInput:
+                id: card_options
+                hint_text: 'options json'
+                multiline: True
+
+            TextInput:
+                id: card_conditions
+                hint_text: 'conditions json'
+                hint_text: "(optional) Conditions json\nExample would be:\n{player_health:0.5}"
+                multiline: True
+
+            TextInput:
+                id: card_text
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'Card text'
+                multiline: False
+
+            Button:
+                size_hint_y: None
+                height: 30
+                text: 'Add card'
+                on_release:
+                    root.add_card()
+
+            Button:
+                size_hint_y: None
+                height: 30
+                text: 'Game states'
+                on_release:
+                    app.root.current = "game_states"
+                    root.manager.transition.direction = "right"
+
+<GameStatesWindow>:
+    name: "game_states"
+
+    GridLayout:
+        cols: 1
+        rows: 3
+
+        ScrollView:
+            id: game_states_scroll_list
+            height: root.height * 0.88
+            size_hint_y: None
+            do_scroll_x: False
+            do_scroll_y: True
+
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint_y: None
+            height: root.height * 0.06
+
+            TextInput:
+                id: state_name_key
+                size_hint_x: None
+                width: 600
+                hint_text: 'State key name (please use snake_case)'
+                multiline: False
+
+            Button:
+                text: 'Add state'
+                on_release:
+                    root.add_game_state(root.ids.state_name_key.text, root.ids.value.text)
+
+            Button:
+                text: 'Remove state'
+                on_release:
+                    root.remove_game_state(root.ids.state_name_key.text)
+
+        GridLayout:
+            cols: 2
+            rows: 1
+            size_hint_y: None
+            height: root.height * 0.06
+
+            TextInput:
+                id: value
+                hint_text: 'State value (int, float, bool)'
+                multiline: False
+
+            Button:
+                text: 'Back to card screen'
+                on_release:
+                    app.root.current = "card_add"
+                    root.manager.transition.direction = "left"
