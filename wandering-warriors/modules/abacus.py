@@ -1,5 +1,6 @@
 from collections import deque
 
+from kivy.app import App
 from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
 
@@ -143,7 +144,7 @@ class Abacus(FloatLayout):
             self.border = []
 
             for i in range(4):
-                self.border.append(Rectangle(source='assets/graphics/wood.png'))
+                self.border.append(Rectangle(source=App.get_running_app().TEXTURE))
 
             Color(1, 1, 1, 0.2)
 
@@ -151,7 +152,7 @@ class Abacus(FloatLayout):
 
             Color(1, 1, 1, 1)
 
-            self.divider = Rectangle(source='assets/graphics/wood.png')
+            self.divider = Rectangle(source=App.get_running_app().TEXTURE)
 
             Color(1, 1, 1, 0.2)
 
@@ -323,6 +324,33 @@ class Abacus(FloatLayout):
 
     def clear(self):
         Thread(target=self.reset()).start()
+
+    def reset_abacus(self):
+        for c in self.border + self.border_highlight + [self.divider]:
+            self.canvas.remove(c)
+
+        for c, d in self.bar_rects:
+            self.canvas.remove(c)
+            self.canvas.remove(d)
+
+        for col in self.top_beads + self.bottom_beads:
+            for bead in col.up + col.down:
+                self.canvas.remove(bead)
+
+        for w in self.top_beads + self.bottom_beads:
+            self.remove_widget(w)
+
+        self.__init__()        
+
+    def update_top_beads(self, n):
+        self.N_TOP_BEADS = n
+
+        self.reset_abacus()
+
+    def update_bottom_beads(self, n):
+        self.N_BOTTOM_BEADS = n
+
+        self.reset_abacus()
 
     def build_anim(self, anim):
         for col, n in anim.up_shifts:

@@ -2,8 +2,27 @@
     BoxLayout:
         orientation: 'vertical'
         TopMenu:
-            SettingsButton:
+            Button:
+                size: (32, 32)
+                pos: (self.parent.x + self.parent.width - 32, self.parent.y)
+                background_color: 1, 1, 1, 0
+
+                on_press:
+                    self.size = (30, 30)
+                    self.pos = (self.parent.x + self.parent.width - 32 + 1, self.parent.y + 1)
+
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'settings'
+                    self.size = (32, 32)
+                    self.pos = (self.parent.x + self.parent.width - 32, self.parent.y)
+
+                Image:
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    source: 'assets/graphics/settings.png'
         Abacus:
+            id: abacus
             HelpButton:
             ClearButton:
         BoxLayout:
@@ -13,6 +32,7 @@
                 ClearButton:
             OperationsBar:
             CuneiformDrawingInput:
+                id: drawpad
                 HelpButton:
                 ClearButton:
 
@@ -23,35 +43,151 @@
         Color:
             rgb: .8, .8, .8
         Rectangle:
-            source: 'assets/graphics/wood.png'
+            source: app.TEXTURE
             size: self.size
             pos: self.pos
 
-<SettingsButton>:
-    Button:
-        size: (32, 32)
-        pos: (self.parent.parent.x + self.parent.parent.width - 32, self.parent.parent.y)
-        background_color: 1, 1, 1, 0
+<Settings>:
+    canvas.before:
+        Color:
+            rgb: 0.4, 0.4, 0.4, 1
+        Rectangle:
+            source: app.TEXTURE
+            size: self.size
+            pos: self.pos
 
-        on_press:
-            self.size = (30, 30)
-            self.pos = (self.parent.parent.x + self.parent.parent.width - 32 + 1, self.parent.parent.y + 1)
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
 
-        on_release:
-            self.size = (32, 32)
-            self.pos = (self.parent.parent.x + self.parent.parent.width - 32, self.parent.parent.y)
+        Button:
+            size_hint_y: None
+            height: 32
+            text: 'Back'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'calculator'
 
-        Image:
-            pos: self.parent.pos
-            size: self.parent.size
-            source: 'assets/graphics/settings.png'
-            
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                padding: 10
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.3
+                    valign: 'center'
+                    halign: 'center'
+                    text: 'Abacus'
+                    text_size: self.size
+                    font_size: str(max(min(self.parent.width, self.parent.height) / 16, 8)) + 'sp'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Base: ' + str((topslider.value + 1) * (bottomslider.value + 1))
+                        halign: 'left'
+                        valign: 'center'
+                        text_size: self.size
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Button:
+                        text: 'Base 10'
+
+                        on_release:
+                            topslider.value = 1
+                            bottomslider.value = 4
+                    Button:
+                        text: 'Base 18'
+                        on_release:
+                            topslider.value = 2
+                            bottomslider.value = 5
+
+                    Button:
+                        text: 'Base 60'
+
+                        on_release:
+                            topslider.value = 5
+                            bottomslider.value = 9
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Top beads'
+                        halign: 'left'
+                        valign: 'center'
+                        text_size: self.size
+                    Slider:
+                        id: topslider
+                        min: 1
+                        max: 5
+                        step: 1
+                        orientation: 'horizontal'
+                        on_value: root.manager.get_screen('calculator').ids.abacus.update_top_beads(topslider.value)
+                    Label:
+                        size_hint_x: 0.1
+                        text: str(topslider.value)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Bottom beads'
+                        halign: 'left'
+                        valign: 'center'
+                        text_size: self.size
+                    Slider:
+                        id: bottomslider
+                        min: 4
+                        max: 9
+                        step: 1
+                        orientation: 'horizontal'
+                        on_value: root.manager.get_screen('calculator').ids.abacus.update_bottom_beads(bottomslider.value)
+                    Label:
+                        size_hint_x: 0.1
+                        text: str(bottomslider.value)
+            BoxLayout:
+                padding: 10
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.3
+                    valign: 'center'
+                    halign: 'center'
+                    text: 'Themes'
+                    text_size: self.size
+                    font_size: str(max(min(self.parent.width, self.parent.height) / 16, 8)) + 'sp'
+                GridLayout:
+                    cols: 2
+                    rows: 2
+
+                    Button:
+                        text: 'Default'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/wood.png'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+                    Button:
+                        text: 'Redwood'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/redwood.jpg'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+                    Button:
+                        text: 'Iron'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/iron.jpg'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+                    Button:
+                        text: 'Cherry'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/cherry.jpg'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+
 <Abacus>:
     canvas.before:
         Color:
             rgb: 0.4, 0.4, 0.4, 1
         Rectangle:
-            source: 'assets/graphics/wood.png'
+            source: app.TEXTURE
             size: self.size
             pos: self.pos
 
