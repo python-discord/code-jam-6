@@ -151,9 +151,16 @@ class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.upper() in App.get_running_app().keys:
             # Auto input processing
+
             letter = auto_input_processor(substring.upper())
             # Key press
             s = App.get_running_app().machine.key_press(letter)
+            # Save to avoid errors later on
+            game_id = App.get_running_app().game_id
+            store = JsonStore(DATA_DIR)
+            game = store.get(str(game_id))
+            current_output_text = game["current_output_text"]
+            store_put(current_output_text=current_output_text + s)
             return super().insert_text(s, from_undo=from_undo)
 
 
@@ -264,7 +271,6 @@ class GameScreen(Screen):
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
             board_output.insert_text(letter)
-        store_put(current_output_text=board_output.text)
 
         # Updating rotors
         new_rotors = App.get_running_app().machine.get_display()
