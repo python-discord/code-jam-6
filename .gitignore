@@ -110,5 +110,3 @@ venv.bak/
 .idea/
 *.db
 
-# Kivy
-.kivy
