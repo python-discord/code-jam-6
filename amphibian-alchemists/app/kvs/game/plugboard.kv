@@ -43,7 +43,7 @@
             pos_hint: {"center_x": 0.5}
             Button:
                 text: "Close"
-                on_press: app.root.get_screen("game_screen").button_press_negative()
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
                 on_release: root.dismiss()
 
 <Plug@Image>:
@@ -314,7 +314,7 @@
             BoxLayout:
                 size_hint_y: 0.1
                 Button:
-                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                     size_hint_x: 0.5
                     text: "< Go back"
                     on_release: root.manager.current = "game_screen"
@@ -325,7 +325,7 @@
                     id: remove_plug
                     text: "Remove the last pair of plugs"
                     disabled: True
-                    on_press: app.root.get_screen("game_screen").plug_remove_pop()
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("pop")
                     on_release: root.remove_grouped_plugs()
 
         AnchorLayout:

@@ -6,18 +6,21 @@ from string import ascii_uppercase
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
 from requests import get
-from kivy.core.audio import SoundLoader
 
 from .save_game import on_config_change, save_rotors, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
+CONFIG_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gameconfig.json")
 )
 
 
@@ -115,26 +118,31 @@ class GameScreen(Screen):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
 
-    def plug_remove_pop(self):
-        SoundLoader.load("misc/pop.wav").play()
+    def play_effect_sound(self, sound):
+        sound_names = {
+            "pop",
+            "plug_in",
+            "keyboard_click",
+            "paper",
+            "button_1",
+            "swoosh",
+            "button_2",
+            "rotor",
+        }
+        if sound not in sound_names:
+            return
 
-    def key_click(self):
-        SoundLoader.load("misc/keyboard_click.wav").play()
+        settings = JsonStore(CONFIG_DIR)
 
-    def paper_wrinkle(self):
-        SoundLoader.load("misc/paper.wav").play()
+        if settings.exists("effects_volume"):
+            if settings.get("effects_volume")["value"] == 0:
+                return
 
-    def button_press_positive(self):
-        SoundLoader.load("misc/button_1.wav").play()
-
-    def button_press_swoosh(self):
-        SoundLoader.load("misc/swoosh.mp3").play()
-
-    def button_press_negative(self):
-        SoundLoader.load("misc/button_2.wav").play()
-
-    def rotor_turn(self):
-        SoundLoader.load("misc/rotor.wav").play()
+            sound = SoundLoader.load(
+                "misc/" + sound + (".wav" if sound != "swoosh" else ".mp3")
+            )
+            sound.volume = settings.get("effects_volume")["value"]
+            sound.play()
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
@@ -164,7 +172,7 @@ class GameScreen(Screen):
         Here goes what we're gonna do whenever a key in the machine is pressed
         """
 
-        self.key_click()
+        self.play_effect_sound("keyboard_click")
 
         anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
             _color=[1, 1, 1], duration=0.2
