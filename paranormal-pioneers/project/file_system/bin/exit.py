@@ -3,7 +3,6 @@ from os import _exit
 from typing import NoReturn
 
 from project.core import command
-from project.core.log import log
 from project.core.parser import Parser
 from project.core.terminal import Terminal
 
@@ -20,7 +19,6 @@ class Exit(command.Command):
         self.code = ns.code
 
     def main(self, ns: Namespace, term: Terminal) -> NoReturn:
-        log.critical(f'exit: {self.code}')
         _exit(self.code)
 
 

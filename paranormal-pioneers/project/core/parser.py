@@ -2,7 +2,7 @@ import importlib
 from typing import Dict, List, Optional
 
 from project.core.command import Command
-from project.core.log import log
+from project.core.utils import OSException
 
 BIN_PATH = 'project.file_system.bin'
 Terminal = 'project.terminal.Terminal'
@@ -26,12 +26,10 @@ class Parser:
         try:
             module = importlib.import_module(path)  # type: ignore
         except ImportError:
-            log.warning(f'Could not load command: {module!r}.')
-            return
+            return print(f'Could not load command: {module!r}.')
 
         if not hasattr(module, 'setup'):
-            log.warning(f'Command module does not have setup function: {module!r}.')
-            return
+            return print(f'Command module does not have setup function: {module!r}.')
 
         module.setup(self)
 
@@ -46,7 +44,7 @@ class Parser:
         if command_name in commands:
             return commands.get(command_name).execute(term=term, args=args)
 
-        log.warning(f'error: could not execute string: {string!r}')
+        raise OSException(f'error: could not execute string: {string!r}')
 
 
 def make_path(module: str) -> str:

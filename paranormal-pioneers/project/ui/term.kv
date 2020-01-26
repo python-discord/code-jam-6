@@ -1,20 +1,25 @@
+#:import effect kivy.uix.effectwidget
+
 <KivyConsole>:
     console_input: console_input
     scroll_view: scroll_view
 
-    ScrollView:
-        id: scroll_view
-        scroll_y: 0
+    EffectWidget:
+        effects: effect.ScanlinesEffect(), effect.HorizontalBlurEffect(size=1.5)
 
-        ConsoleInput:
-            id: console_input
-            focus: True
-            shell: root
-            size_hint: (1, None)
-            font_name: root.font_name
-            font_size: root.font_size
-            foreground_color: root.foreground_color
-            background_color: root.background_color
-            cursor_color: self.foreground_color
-            cursor_width: self.font_size / 2
-            height: max(self.parent.height, self.minimum_height)
+        ScrollView:
+            id: scroll_view
+            scroll_y: 0
+
+            ConsoleInput:
+                id: console_input
+                focus: True
+                shell: root
+                size_hint: (1, None)
+                font_name: root.font_name
+                font_size: root.font_size
+                foreground_color: root.foreground_color
+                background_color: root.background_color
+                cursor_color: self.foreground_color
+                cursor_width: self.font_size / 2
+                height: max(self.parent.height, self.minimum_height)

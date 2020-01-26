@@ -99,11 +99,11 @@ class KivyConsole(BoxLayout, Shell):
     console_input = ObjectProperty(None)
     scroll_view = ObjectProperty(None)
 
-    foreground_color = ListProperty((1, 0.5, 0, 1))
+    foreground_color = ListProperty((1, 1, 0, 1))
     background_color = ListProperty((0, 0, 0, 0.1))
 
     font_name = StringProperty(font)
-    font_size = NumericProperty(14)
+    font_size = NumericProperty(16)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
