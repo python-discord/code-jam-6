@@ -1,8 +1,7 @@
 from typing import Union
-
 from kivy.graphics.instructions import RenderContext, InstructionGroup
-
 from primal.engine.sprite import ColorSprite
+
 
 
 class HealthBar:
@@ -36,3 +35,12 @@ class HealthBar:
     def set_alpha(self, alpha: float):
         self.bg.set_alpha(alpha / 4)
         self.bar.set_alpha(alpha)
+
+
+
+        
+
+
+
+
+
