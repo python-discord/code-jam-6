@@ -34,7 +34,7 @@ class MyGame(Engine):
         self.flameBuddy = FlameBuddy('flame', (40, 100), collide=False, engine=self, mode=0)
 
         # Player
-        self.player = Player(self.assets['player'], (50, 90))
+        self.player = Player(self.assets['player'], (50, 90), death_sound=self.sounds['death'])
         self.player.bind(lives=self.update_hearts,
                          pos=lambda _, v: self.flameBuddy.on_player_pos(v))
         self.add_player(self.player)
