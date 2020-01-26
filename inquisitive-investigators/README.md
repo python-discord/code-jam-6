@@ -8,13 +8,15 @@ Hello and thanks for using Rex-Explorer! Made over the course of a week for Code
 #### Features
 - Be able to experience what it was like to browse files and directories on your computer from the old days!
 
-- A built in terminal? yeah we were suprised too! be able to change directories and even commit your own project to github!
+- A built in terminal? Yeah we were suprised too! Be able to change directories and even commit your own project to github!
 
 - A built in editor too! What, did you just want to look at your files. See what it was like to edit files back in the old'n days!
 
+- A built in photo viewer!? We added this in at the absolute last minute, and it's a great addition to the program.
+
 - Create files and directories to utilize with the built in editor, terminal and file explorer.
 
-- Rename and Copy files across your browser
+- Rename and Copy files and directories across your browser
 
 ## Installation
 
@@ -22,6 +24,7 @@ Hello and thanks for using Rex-Explorer! Made over the course of a week for Code
 
 - Install pipenv: `pip install pipenv`
 - Install dependencies: `pipenv sync`
+- Run the program: `python -m rex_explorer`
 
 #### Developers
 
