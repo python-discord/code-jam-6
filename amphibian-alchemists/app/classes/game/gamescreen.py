@@ -258,7 +258,8 @@ class GameScreen(Screen):
         store = JsonStore(DATA_DIR)
         plaintext = store.get(str(game_id))["unciphered_text"]
         if self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text == plaintext:
-            self.manager.current = "win_screen"
+            self.timer_clock.cancel()
+            Factory.WinPopup().open()
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id

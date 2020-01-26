@@ -30,9 +30,6 @@ Builder.load_file("kvs/game/rotor.kv")
 Factory.register("Paper", module="classes.game.paper")
 Builder.load_file("kvs/game/paper.kv")
 
-Factory.register("WinScreen", module="classes.game.winscreen")
-Builder.load_file("kvs/game/winscreen.kv")
-
 
 class UIManager(ScreenManager):
     def __init__(self, **kwargs):

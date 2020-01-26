@@ -19,6 +19,29 @@
                     app.root.current = "main_screen"
                     root.dismiss()
 
+<WinPopup@Popup>:
+    title: "Winner!"
+    size_hint: 0.5, 0.5
+    auto_dismiss: False
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Congratulations!"
+        Label:
+            text: "It took you" + app.root.get_screen("game_screen").current_time + "s!"
+        BoxLayout:
+            size_hint_y: 0.2
+            Button:
+                text: "New game"
+                on_release:
+                    app.root.current = "game_selector_screen"
+                    root.dismiss()
+            Button:
+                text: "Back to main menu"
+                on_release:
+                    app.root.current = "main_screen"
+                    root.dismiss()
+
 <GameTitlePopup@Popup>:
     title: "There is already a default"
     size_hint: 0.5, 0.25
