@@ -48,7 +48,7 @@
             text: "+"
             pos_hint: {"center_x": 0.5, "top": 0.62}
             on_press:
-                app.root.get_screen("game_screen").rotor_turn()
+                app.root.get_screen("game_screen").play_effect_sound("rotor")
             on_release:
                 app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
     RelativeLayout:
@@ -61,7 +61,7 @@
             text: "-"
             pos_hint: {"center_x": 0.5, "top": 0.575}
             on_press:
-                app.root.get_screen("game_screen").rotor_turn()
+                app.root.get_screen("game_screen").play_effect_sound("rotor")
             on_release:
                 app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
 
@@ -91,7 +91,7 @@
         BoxLayout:
             size_hint: 0.20, 0.1
             Button:
-                on_press: app.root.get_screen("game_screen").button_press_swoosh()
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                 text: "Go back!"
                 on_release: root.manager.current = "game_screen"
     AnchorLayout:

@@ -13,13 +13,13 @@
         BoxLayout:
             Button:
                 text: "Save game title"
-                on_press: app.root.get_screen("game_screen").button_press_positive()
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
                 on_release:
                     app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
                     root.dismiss()
             Button:
                 text: "Cancel"
-                on_press: app.root.get_screen("game_screen").button_press_negative()
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
                 on_release: root.dismiss()
 
 <GameMenuPopup@Popup>:
@@ -29,28 +29,28 @@
         orientation: "vertical"
         Button:
             text: "Give this current game a title"
-            on_press: app.root.get_screen("game_screen").button_press_positive()
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
             on_release: Factory.GameTitlePopup().open()
         Button:
             text: "Save a copy of current progress"
-            on_press: app.root.get_screen("game_screen").button_press_positive()
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
             on_release:
                 app.root.get_screen("game_screen").save_game()
                 root.dismiss()
         Button:
             text: "Load old copy (WARNING: Overrides current progress!)"
-            on_press: app.root.get_screen("game_screen").button_press_positive()
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
             on_release:
                 app.root.get_screen("game_screen").load_old_game()
                 root.dismiss()
         Button:
             text: "Close"
-            on_press: app.root.get_screen("game_screen").button_press_negative()
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
             on_release:
                 root.dismiss()
         Button:
             text: "Exit to Main Menu"
-            on_press: app.root.get_screen("game_screen").button_press_negative()
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
             on_release:
                 app.root.current = "main_screen"
                 root.dismiss()
@@ -81,7 +81,7 @@
                 size_hint: 1, 0.575
                 RotorDisplay:
                 Button:
-                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                     background_color: 0, 0, 0, 0
                     on_release: root.manager.current = "rotor_screen"
             BoxLayout
@@ -90,7 +90,7 @@
                     id: enigma_keyboard
             AnchorLayout:
                 Button:
-                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                     background_color: 0, 0, 0, 0
                     on_release: root.manager.current = "plugboard_screen"
                 PlugBoardModified:
@@ -100,7 +100,7 @@
         Button:
             text: "Menu"
             size_hint: 0.1, 0.1
-            on_press: app.root.get_screen("game_screen").button_press_positive()
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
             on_release: Factory.GameMenuPopup().open()
     Timer:
         id: timer
