@@ -1,6 +1,6 @@
 from kivy import Config
 
-Config.set('kivy', 'window_icon', 'ancient_tech/static/icon.ico')
+Config.set('kivy', 'window_icon', 'rex_explorer/static/icon.ico')
 Config.set('input', 'mouse', 'mouse,multitouch_on_demand')
 Config.set('kivy', 'exit_on_escape', '0')
 Config.set('graphics', 'minimum_width', '1300')
