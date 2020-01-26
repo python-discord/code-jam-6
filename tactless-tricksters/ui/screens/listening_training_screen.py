@@ -99,6 +99,7 @@ Builder.load_string('''
         Image: 
             id: morse_alphabet
             size_hint: 1, 1
+            source: 'ui/img/morse_code_alphabet.png'
 
         MDLabel:
             id: tapping_prompt_label
@@ -167,7 +168,6 @@ class ListeningScreen(Screen):
         self.cur_sound = None
 
     def init_listening_screen(self, dt):
-        self.ids.morse_alphabet.source = os.path.join('ui', 'img', 'morse_code_alphabet.png')
         self.tapping_prompt_label = self.ids.tapping_prompt_label
         self.user_text_field.children[2].children[2].disabled = False
         self.user_text_field.children[2].children[2].bind(on_press=lambda x: self.clear_input())

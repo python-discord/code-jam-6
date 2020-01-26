@@ -78,5 +78,3 @@ class MorseHelper:
     def get_letter_as_morse_sound(self, letter):
         sound_path = os.path.join('data', 'morse_alphabets', f'{letter}.wav')
         return SoundLoader.load(sound_path)
-
-

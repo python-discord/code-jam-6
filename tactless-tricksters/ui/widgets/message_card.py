@@ -29,14 +29,14 @@ class LongPressButton(ButtonBehavior):
 
 class MessageCard(LongPressButton, MDCardPost):
     def __init__(self, **kwargs):
+        path_to_avatar = str(os.path.join('ui', 'img', 'default_avatar.png'))
         super(MessageCard, self).__init__(orientation='horizontal',
                                           size_hint=(1, None),
                                           pos_hint={'center_x': 0.5},
                                           text_post=kwargs.get('text_post'),
                                           name_data=kwargs.get('name_data'),
                                           swipe=kwargs.get('swipe'),
-                                          path_to_avatar=str(os.path.join('ui', 'img', 'default_avatar.png')),
-                                          )
+                                          path_to_avatar=path_to_avatar)
 
         self.util = kwargs.get('util')
         self.height = 150
@@ -60,4 +60,3 @@ class MessageCard(LongPressButton, MDCardPost):
     def on_long_press(self):
         print('long press!')
         self.long_press = True
-

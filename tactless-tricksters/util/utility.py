@@ -1,7 +1,12 @@
+import json
+import os
+from threading import Thread
+
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.utils import platform
 
+from util.morse_app_api import MorseAppApi
 from .morse_helper import MorseHelper
 
 if platform not in ['ios', 'android']:
@@ -12,21 +17,14 @@ else:
     class Morse:
         pass
 
-
     class DotDash:
         pass
-
 
     class AutoMorseRecognizer:
         bits_per_frame = 20
 
         def __init__(self, **kwargs):
             pass
-
-from util.morse_app_api import MorseAppApi
-from threading import Thread
-import os
-import json
 
 # message_dict = {
 #     'Bob': {
