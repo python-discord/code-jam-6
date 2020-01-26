@@ -18,3 +18,6 @@ Your location can either be specified in settings or gathered by IP geolocation.
 ## License
 
 All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+
+## Judges
+It's all tits up if you start messing with the time controller. It works realtime, but not for you.
