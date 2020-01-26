@@ -172,25 +172,32 @@ class Chunk:
             rock.feature.set_angle(random.randint(0, 360))
             self.chunk_features.add(rock)
 
-        if self.type != 2:
-            return
+        if self.type == 1:
+            while random.randint(0, 1) != 1:
+                s = 65
+                angle = random.randint(0, 359)
+                type = 'cacti'
+                sprite = 'Cacti.png'
 
-        bushes = ['bushBB.png', 'bushBO.png', 'bushBP.png', 'bushBR.png', 'bushBY.png']
-        while random.randint(0, 1) != 1:
-            s = 65
-            angle = random.randint(0, 359)
-            sprite = random.choice(bushes)
-            type = sprite.replace('.png', '')
-            self.chunk_features.add(
-                Feature(sprite, Chunk.get_random_position(self.pos, s), 1.0, (s, s), angle, type))
+                self.chunk_features.add(Feature(sprite, Chunk.get_random_position(self.pos, s),
+                                                1.0, (s, s), angle, type, True))
+        elif self.type == 2:
+            bushes = ['bushBB.png', 'bushBO.png', 'bushBP.png', 'bushBR.png', 'bushBY.png']
+            while random.randint(0, 1) != 1:
+                s = 65
+                angle = random.randint(0, 359)
+                sprite = random.choice(bushes)
+                type = sprite.replace('.png', '')
+                self.chunk_features.add(Feature(sprite, Chunk.get_random_position(self.pos, s),
+                                                1.0, (s, s), angle, type))
 
-        while random.randint(0, 3) != 1:
-            s = random.randint(150, 280)
-            angle = random.randint(0, 359)
-            sprite = 'topOfTree.png'
+            while random.randint(0, 3) != 1:
+                s = random.randint(150, 280)
+                angle = random.randint(0, 359)
+                sprite = 'topOfTree.png'
 
-            self.chunk_features.add(
-                Feature(sprite, Chunk.get_random_position(self.pos, s), 2.0, (s, s), angle, 'tree'))
+                self.chunk_features.add(Feature(sprite, Chunk.get_random_position(self.pos, s),
+                                                2.0, (s, s), angle, 'tree'))
 
     def draw(self, terrain: Sprite):
         terrain.set_position(self.pos)

@@ -72,10 +72,3 @@ class Feature:
     def draw(self, canvas: InstructionGroup):
         self.feature.draw(canvas)
         self.health_bar.draw(canvas)
-
-    # def broken(self):
-    #     if self.get_health() < 0:
-    #         self.store.put(sprite=3)
-    #     else:
-    #         pass
-    #         # Not broken

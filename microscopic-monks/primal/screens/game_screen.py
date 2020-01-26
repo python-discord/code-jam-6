@@ -39,7 +39,8 @@ class GameScreen(Screen):
         self.gui_camera = OrthographicCamera(self.canvas, self.VP_WIDTH, self.VP_HEIGHT)
         self.gui_camera.start_region()
 
-        self.overlay = ColorSprite('overlay.png', (0, 0), (self.VP_WIDTH, self.VP_HEIGHT), (1, 1, 1, .3))
+        self.overlay = ColorSprite('overlay.png', (0, 0),
+                                   (self.VP_WIDTH, self.VP_HEIGHT), (1, 1, 1, .3))
         self.overlay.draw(self.canvas)
 
         self.health_bar = HealthBar((20, 680), (250, 20), 100.0)
@@ -69,7 +70,7 @@ class GameScreen(Screen):
         if dx != 0.0 or dy != 0.0:
             px, py = self.player.get_center()
 
-            dx, dy = self.process_player_position_deltas(px, py, dx, dy)
+            dx, dy = self.process_player_position_deltas(px, py, dx, dy, delta)
 
         # Check for clicked features
         self.last_clicked -= delta
@@ -78,6 +79,9 @@ class GameScreen(Screen):
 
         self.player.set_position((pos_x + dx, pos_y + dy))
         self.player.set_rotation(self.get_mouse_position())
+
+        cx, cy = self.player.get_center()
+        self.process_player_nearby(cx, cy, delta)
 
         if self.last_clicked == 0:
             if 'left' in self.engine.mouse_keys:
@@ -121,7 +125,17 @@ class GameScreen(Screen):
         self.camera.set_position(*self.player.get_center())  # Updates the position
         self.camera.update()
 
-    def process_player_position_deltas(self, px, py, dx, dy):
+    def process_player_nearby(self, px, py, delta):
+        chunk = self.world.get_chunk_from_coords((px, py))
+        for feature in chunk.get_features():
+            if feature.does_collide():
+                dst = 40 + feature.get_size()[0]
+                dst = (dst * dst) / 4
+                if feature.distance_to((px, py)) <= dst + 2_000:
+                    self.health_bar.set_health(self.health_bar.get_health() - delta * 3)
+                    return
+
+    def process_player_position_deltas(self, px, py, dx, dy, delta):
         chunk = self.world.get_chunk_from_coords((px + dx, py + dy))
         for feature in chunk.get_features():
             if feature.does_collide():
