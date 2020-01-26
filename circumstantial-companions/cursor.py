@@ -5,8 +5,8 @@ from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
 CURSOR_PATH = Path("assets", "img", "cursor")
-UP = str(CURSOR_PATH.joinpath("up.png"))
-DOWN = str(CURSOR_PATH.joinpath("down.png"))
+UP = str(CURSOR_PATH/"up.png")
+DOWN = str(CURSOR_PATH/"down.png")
 
 
 class CursorImage(Image):
