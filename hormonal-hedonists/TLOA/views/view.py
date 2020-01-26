@@ -4,7 +4,7 @@ from random import randint
 
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
-                                 WINDOW_HEIGHT, LANE_BOUNDS, NUMBER_OF_LANES)
+                                 WINDOW_HEIGHT, LANE_BOUNDS)
 from TLOA.entities import BrownShip
 from TLOA.views import ShipView, PauseMenuView
 
@@ -160,19 +160,19 @@ class GameView(Widget):
             pos=(WINDOW_WIDTH, LANE_BOUNDS[ship.lane_id][1])
         )
         self.add_widget(ship.shape)
-        self.redraw_ships(redraw_from=ship.lane_id)
+        self.redraw_ships(redraw_to=ship.lane_id)
 
     def on_remove_ship(self, game: Game, ship: ShipView):
         ship.shape.clear_widgets()
         self.remove_widget(ship.shape)
         game.score += 1
 
-    def redraw_ships(self, redraw_from=NUMBER_OF_LANES):
-        for lane in self._game.ship_lanes[:redraw_from]:
+    def redraw_ships(self, redraw_to=0):
+        for lane in self._game.ship_lanes[:redraw_to]:
             for ship in lane:
                 self.remove_widget(ship.shape)
 
-        for lane in self._game.ship_lanes[:redraw_from]:
+        for lane in self._game.ship_lanes[:redraw_to][::-1]:
             for ship in lane:
                 self.add_widget(ship.shape)
 
