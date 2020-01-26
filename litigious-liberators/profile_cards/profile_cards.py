@@ -16,6 +16,7 @@ from kivy.properties import StringProperty, DictProperty
 from yaml import safe_load
 from kivy.core.window import Window
 from collections import Counter
+from kivy.uix.label import Label
 from kivy.core.audio import SoundLoader
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
@@ -102,6 +103,14 @@ class ProfileList(ScreenManager):
         self.profile_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "../profiles/write-ups"
         )
+        help = Label(
+            text="""Your goal is to maximize all three attributes: Knowledge, Welfare,Energy:
+        Use left/right arrowkeys to swipe the cards: each decision will influence your attributes!
+        Press on each card image if you want to learn more about it ;)""",
+            text_size=(self.width * 3, None),
+        )
+        self.help = Popup(title="Help", content=help, size_hint=(0.5, 0.7))
+        # self.help.content.button.bind(on_press=self.help.dismiss)
         self.static_profile_list = listdir(self.profile_dir)
         self.profile_list = deepcopy(self.static_profile_list)
         self.cycler = self.r_cycle(self.profile_list)
@@ -165,6 +174,8 @@ class ProfileList(ScreenManager):
 
         elif keycode[1] == "left":
             self.card_swipe("left")
+        elif keycode[1] == "h":
+            self.help.open()
         return True
 
 

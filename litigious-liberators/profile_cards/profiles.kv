@@ -45,6 +45,11 @@ BoxLayout:
         ProfileList:
             id: profile_list
             size_hint_y: 0.8
+    Label:
+        text: "Press <h> for help"
+        pos_hint: {"center_x": 0.10, "center_y": 0.025}
+        color: 0,0,0,0.5
+
 
 <ScrollableLabel>:
     Label:
@@ -68,6 +73,8 @@ BoxLayout:
             Button:
                 text: 'Close'
                 on_release: pop.dismiss()
+
+
 
 <ProfileCard>:
     canvas:
