@@ -61,16 +61,19 @@ class AddContactScreen(Screen):
         self.manager.current = screen
 
     def check_name(self, user_name):
-        print("Send user name to data base and check if exits")
-        import random
-        num = random.randint(0, 1)
-        if num:
-            self.contact_input.text = ''
-            self.info_text.text = ''
-            self.util.contact_list.append(user_name)
-            for screen in App.get_running_app().root.content.screens:
-                if screen.name == 'contact':
-                    screen.ui_layout()
-            self.manager.current = 'contact'
+        self.util.morse_app_api.query_user_req(self.check_name_cb, user_name)
+
+    def check_name_cb(self, request, result):
+        if request.resp_status == 200:
+            if self.contact_input.text in self.util.user_data['contacts']:
+                self.info_text.text = 'User Already in contacts!'
+            else:
+                self.util.save_contact(self.contact_input.text)
+                self.contact_input.text = ''
+                self.info_text.text = ''
+                for screen in App.get_running_app().root.content.screens:
+                    if screen.name == 'contact':
+                        screen.ui_layout()
+                self.manager.current = 'contact'
         else:
-            self.info_text.text = 'User Not found!'
+            self.info_text.text = 'User Not found! Do you not have any friends? :('

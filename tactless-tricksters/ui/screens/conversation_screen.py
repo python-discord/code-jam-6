@@ -20,9 +20,11 @@ class ConversationScreen(Screen):
     def __init__(self, **kwargs):
         super(ConversationScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
+        self.contact = ''
         self.ui_layout('')
 
     def ui_layout(self, contact):
+        self.contact = contact
         self.clear_widgets()
 
         layout = BoxLayout(orientation='vertical')
@@ -35,9 +37,9 @@ class ConversationScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' '))
         scroll_box.add_widget(MDLabel(text=' ', size_hint=(1, 5)))
 
-        if contact != '':
-            for message in self.util.message_dict[contact]['messages']:
-                if self.util.user_name == message['author']:
+        if contact != '' and contact in self.util.message_dict.keys():
+            for message in self.util.message_dict[contact]:
+                if self.util.username == message['sender']:
                     pos_hint = {'center_x': 0.3}
                     md_bg_color = [0.698, 0.875, 0.859, 1]
                     text_color = [0, 0, 0, 1]
@@ -45,7 +47,7 @@ class ConversationScreen(Screen):
                     pos_hint = {'center_x': 0.7}
                     md_bg_color = [1, 1, 1, 0.6]
                     text_color = [0, 0, 0, 1]
-                message_label = MDLabel(text=message['text'], font_style='Caption', size_hint=(1, None))
+                message_label = MDLabel(text=message['message'], font_style='Caption', size_hint=(1, None))
 
                 message_card = ConversationBubble(util=self.util,
                                                   size=message_label.size,
@@ -80,7 +82,23 @@ class ConversationScreen(Screen):
 
     def send_message(self, msg):
         print("Sending message:%s" % msg)
-        self.text_input.text = ''
+        self.util.morse_app_api.send_message_req(self.send_message_cb,
+                                                 self.util.username,
+                                                 self.contact,
+                                                 self.text_input.text)
+
+    def send_message_cb(self, request, result):
+        if request.resp_status == 200:
+            if result['receiver'] in self.util.message_dict.keys():
+                self.util.message_dict[result['receiver']].append(result)
+            else:
+                self.util.message_dict[result['receiver']] = [result]
+            self.util.save_message_dict(self.util.message_dict)
+            self.ui_layout(result['receiver'])
+            self.util.reload_screen_layout('message')
+            self.text_input.text = ''
+        else:
+            self.text_input.text = 'Error Sending Message'
 
     def return_screen(self):
         self.manager.current = 'message'

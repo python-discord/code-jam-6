@@ -1,5 +1,6 @@
 from kivy.utils import platform
 from kivy.clock import Clock
+from kivy.app import App
 if platform not in ['ios', 'android']:
     from third_party.py_morse_code.morse import Morse, DotDash
     from auto_morse_recognizer.auto_morse_recognizer import AutoMorseRecognizer
@@ -10,6 +11,7 @@ from util.morse_app_api import MorseAppApi
 from threading import Thread
 import os
 import json
+from functools import partial
 # message_dict ={'Bob': {
 #                                 'messages': [
 #                                             {
@@ -77,8 +79,9 @@ import json
 
 base_file_json = {
     'username': '',
-    'auth_token': '',
-    'contacts': []
+    'token': '',
+    'contacts': [],
+    'message_dict': {}
 }
 
 class Utility(object):
@@ -90,8 +93,9 @@ class Utility(object):
         with open(self.user_data_json, 'r') as fp:
             self.user_data = json.load(fp)
         self.username = self.user_data['username']
-        self.auth_token = self.user_data['auth_token']
+        self.auth_token = self.user_data['token']
         self.contact_list = self.user_data['contacts']
+        self.message_dict = self.user_data['message_dict']
         self.calibration = 0.5
         self.morse_app_api = MorseAppApi(self, self.auth_token)
         self.morse = Morse()
@@ -102,6 +106,11 @@ class Utility(object):
         if platform not in ['ios', 'android']:
             self.morse = Morse()
             self.auto_morse_recognizer = AutoMorseRecognizer(active_threshold=self.calibration)
+
+    def save_contact(self, contact):
+        self.user_data['contacts'].append(contact)
+        with open(self.user_data_json, 'w') as fp:
+            json.dump(self.user_data, fp)
 
     def save_token(self, token):
         self.user_data['token'] = token
@@ -115,22 +124,47 @@ class Utility(object):
         with open(self.user_data_json, 'w') as fp:
             json.dump(self.user_data, fp)
 
+    def save_message_dict(self, msg_dict):
+        self.user_data['message_dict'] = msg_dict
+        with open(self.user_data_json, 'w') as fp:
+            json.dump(self.user_data, fp)
+
     def remove_user_data(self):
         with open(self.user_data_json, 'w') as fp:
             json.dump(base_file_json, fp)
+
+    def reload_screen_layout(self, screen_name):
+        for screen in App.get_running_app().root.content.screens:
+            if screen.name == screen_name:
+                screen.ui_layout()
 
     # This runs through out the entire app waiting to add more messages
     def update_messages(self, dt):
         if self.contact_list and self.username and self.auth_token:
             for contact in self.contact_list:
-                self.morse_app_api.get_message(self.update_message_cb, self.user_name, contact)
-                self.morse_app_api.get_message(self.update_message_cb, contact, self.user_name)
+                self.morse_app_api.get_message_req(self.update_message_cb, self.username, contact)
+                self.morse_app_api.get_message_req(self.update_message_cb, contact, self.username)
 
-    def update_message_cb(self, message):
-        if message['sender'] == self.username:
-            self.message_dict[message['receiver']].append(message)
-        else:
-            self.message_dict[message['sender']].append(message)
+    def update_message_cb(self, request, result):
+        if request.resp_status != 200:
+            print('No data')
+            return
+        if result:
+            for res in result:
+                if res['sender'] == self.username:
+                    if res['receiver'] in self.message_dict.keys():
+                        if res not in self.message_dict[res['receiver']]:
+                            self.message_dict[res['receiver']].append(res)
+                    else:
+                        self.message_dict[res['receiver']] = [res]
+                else:
+                    if res['receiver'] in self.message_dict.keys():
+                        if res not in self.message_dict[res['sender']]:
+                            self.message_dict[res['sender']].append(res)
+                    else:
+                        self.message_dict[res['sender']] = [res]
+            self.save_message_dict(self.message_dict)
+
 
     def morse_transmit_thread(self):
         morse_thread = Thread(target=self.morse.transmit)

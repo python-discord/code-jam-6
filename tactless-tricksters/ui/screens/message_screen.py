@@ -35,13 +35,13 @@ class MessageScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' ', size_hint=(1, 5)))
 
         for key in self.util.message_dict:
-            temp_dict = self.util.message_dict[key]
-            print(temp_dict['messages'][-1:])
-            message_card = MessageCard(text_post=temp_dict['messages'][-1:][0]['text'],
+            temp_dict = self.util.message_dict[key][-1:][0]
+            print(temp_dict)
+            message_card = MessageCard(text_post=temp_dict['message'],
                                        name=key,
-                                       name_data=(key + '\n' + temp_dict['messages'][-1:][0]['date']),
+                                       name_data=(key + '\n' + temp_dict['timestamp']),
                                        swipe=True,
-                                       source=temp_dict['img_source'],)
+                                       source='ui/img/default_avatar.png',)
             scroll_box.add_widget(message_card)
 
         self.scroll.add_widget(scroll_box)

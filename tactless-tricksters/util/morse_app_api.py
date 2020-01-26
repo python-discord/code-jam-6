@@ -8,8 +8,7 @@ class MorseAppApi(object):
         self.auth_token = auth_token
         self.logged_in = True if auth_token else False
         self.header = {'Authorization': 'Token %s' % self.auth_token,
-                       'Content-type': 'application/json',
-                       'Accept': 'text/plain'}
+                       'Content-type': 'application/json'}
         self.base_url = 'https://yangpinkhats2020.com/'
 
         # Create User
@@ -30,28 +29,28 @@ class MorseAppApi(object):
         # header required {'Authorization: 'access_token #########'}
         # returns error's 'Must Supply User Name' (no user name given)
         # and 'User not found'
-        self.query_user = 'api/user/%s'
+        self.query_user = 'api/user/'
 
         # Send message
         # POST request only
         # data format dict {'sender': <user name>,'receiver': <user name>, 'message': <text>}
         # header required {'Authorization: 'access_token #########'}
         # return value {'sender':<>,'receiver':<>, 'message':<> 'time_stamp':<>}
-        self.send_message = 'api/message'
+        self.send_message = 'api/messages'
 
         # Receive message
         # GET request only
         # must add user to api url like api/message/Blue42/Red87 to receive conversations
         # header required {'Authorization: 'access_token #########'}
         # return value {'sender':<>,'receiver':<>, 'message':<> 'time_stamp':<>}
-        self.get_message = 'api/message/%s/%s' # sender/receiver
+        self.get_message = 'api/messages/'  # /sender/receiver
 
     def update_header(self, token):
         self.auth_token = token
         self.logged_in = True if token else False
         self.header = {'Authorization': 'Token %s' % self.auth_token,
-                       'Content-type': 'application/json',
-                       'Accept': 'text/plain'}
+                       'Content-type': 'application/json'}
+        print('Token %s' % token)
 
     def create_user_req(self, callback, username, password):
         data = json.dumps({'username': username, 'password': password})
@@ -67,18 +66,18 @@ class MorseAppApi(object):
 
     def query_user_req(self, callback, username):
         header = self.header
-        url = self.query_user % username
+        url = self.base_url + self.query_user + username
         self._handle_get_req(callback, url=url, header=header)
 
     def send_message_req(self, callback, sender, receiver, message):
         header = self.header
-        data = urllib.parse.urlencode({'sender': sender, 'receiver': receiver, 'message': message})
-        url = self.send_message
-        self._handle_get_req(callback, url=url, header=header, data=data)
+        data = json.dumps({'sender': sender, 'receiver': receiver, 'message': message})
+        url = self.base_url + self.send_message
+        self._handle_post_req(callback, url=url, header=header, data=data)
 
     def get_message_req(self, callback, sender, receiver):
         header = self.header
-        url = self.get_message % (sender, receiver)
+        url = self.base_url + self.get_message + sender + '/' + receiver
         self._handle_get_req(callback, url=url, header=header)
 
     def _handle_get_req(self, callback, url, header=None, data=None):
