@@ -20,7 +20,7 @@ class ConversationScreen(Screen):
     def __init__(self, **kwargs):
         super(ConversationScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
-        self.ui_layout('Bob')
+        self.ui_layout('')
 
     def ui_layout(self, contact):
         self.clear_widgets()
@@ -35,24 +35,25 @@ class ConversationScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' '))
         scroll_box.add_widget(MDLabel(text=' ', size_hint=(1, 5)))
 
-        for message in self.util.message_dict[contact]['messages']:
-            if self.util.user_name == message['author']:
-                pos_hint = {'center_x': 0.3}
-                md_bg_color = [0.698, 0.875, 0.859, 1]
-                text_color = [0, 0, 0, 1]
-            else:
-                pos_hint = {'center_x': 0.7}
-                md_bg_color = [1, 1, 1, 0.6]
-                text_color = [0, 0, 0, 1]
-            message_label = MDLabel(text=message['text'], font_style='Caption', size_hint=(1, None))
+        if contact != '':
+            for message in self.util.message_dict[contact]['messages']:
+                if self.util.user_name == message['author']:
+                    pos_hint = {'center_x': 0.3}
+                    md_bg_color = [0.698, 0.875, 0.859, 1]
+                    text_color = [0, 0, 0, 1]
+                else:
+                    pos_hint = {'center_x': 0.7}
+                    md_bg_color = [1, 1, 1, 0.6]
+                    text_color = [0, 0, 0, 1]
+                message_label = MDLabel(text=message['text'], font_style='Caption', size_hint=(1, None))
 
-            message_card = ConversationBubble(util=self.util,
-                                              size=message_label.size,
-                                              message=message_label,
-                                              pos_hint=pos_hint,
-                                              md_bg_color=md_bg_color,
-                                              text_color=text_color)
-            scroll_box.add_widget(message_card)
+                message_card = ConversationBubble(util=self.util,
+                                                  size=message_label.size,
+                                                  message=message_label,
+                                                  pos_hint=pos_hint,
+                                                  md_bg_color=md_bg_color,
+                                                  text_color=text_color)
+                scroll_box.add_widget(message_card)
 
         scroll.add_widget(scroll_box)
         layout.add_widget(scroll)

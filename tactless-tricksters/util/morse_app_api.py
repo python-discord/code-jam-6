@@ -1,12 +1,15 @@
 from kivy.network.urlrequest import UrlRequest
 import urllib
+import json
 
 class MorseAppApi(object):
     def __init__(self, util, auth_token=None):
         self.util = util
         self.auth_token = auth_token
         self.logged_in = True if auth_token else False
-        self.header = {'Authorization': 'Token %s'} % self.auth_token
+        self.header = {'Authorization': 'Token %s' % self.auth_token,
+                       'Content-type': 'application/json',
+                       'Accept': 'text/plain'}
         self.base_url = 'https://yangpinkhats2020.com/'
 
         # Create User
@@ -44,19 +47,23 @@ class MorseAppApi(object):
         self.get_message = 'api/message/%s/%s' # sender/receiver
 
     def update_header(self, token):
-        self.auth_token = token['token']
+        self.auth_token = token
         self.logged_in = True if token else False
-        self.header = {'Authorization': 'Token %s'} % self.auth_token
+        self.header = {'Authorization': 'Token %s' % self.auth_token,
+                       'Content-type': 'application/json',
+                       'Accept': 'text/plain'}
 
     def create_user_req(self, callback, username, password):
-        data = urllib.urlencode({'username': username, 'password': password})
+        data = json.dumps({'username': username, 'password': password})
         url = self.base_url + self.create_user
-        self._handle_post_req(callback, url=url, data=data)
+        header = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        self._handle_post_req(callback, url=url, header=header, data=data)
 
-    def retrieve_token_req(self, username, password):
-        data = urllib.urlencode({'username': username, 'password': password})
+    def retrieve_token_req(self, callback, username, password):
+        data = json.dumps({'username': username, 'password': password})
         url = self.base_url + self.retrieve_token
-        self._handle_post_req(self.update_header, url=url, data=data)
+        header = {'Content-type': 'application/json'}
+        self._handle_post_req(callback, url=url, header=header, data=data)
 
     def query_user_req(self, callback, username):
         header = self.header
@@ -65,18 +72,18 @@ class MorseAppApi(object):
 
     def send_message_req(self, callback, sender, receiver, message):
         header = self.header
-        data = urllib.urlencode({'sender': sender, 'receiver': receiver, 'message': message})
+        data = urllib.parse.urlencode({'sender': sender, 'receiver': receiver, 'message': message})
         url = self.send_message
         self._handle_get_req(callback, url=url, header=header, data=data)
 
     def get_message_req(self, callback, sender, receiver):
         header = self.header
         url = self.get_message % (sender, receiver)
-        self._handle_get_req(callback, url=url, header=header, data=data)
+        self._handle_get_req(callback, url=url, header=header)
 
     def _handle_get_req(self, callback, url, header=None, data=None):
-        UrlRequest(url, method='GET', req_headers=header, req_body=data, on_success=callback)
+        UrlRequest(url, method='GET', req_headers=header, req_body=data, on_success=callback, on_error=callback, on_failure=callback)
 
-    def _handle_post_request(self, callback, url, header=None, data=None):
-        UrlRequest(url, method='POST', req_headers=header, req_body=data, on_success=callback)
+    def _handle_post_req(self, callback, url, header=None, data=None):
+        UrlRequest(url, req_headers=header, req_body=data, on_success=callback, on_error=callback, on_failure=callback)
 
