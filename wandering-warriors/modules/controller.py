@@ -14,8 +14,9 @@ test_data = [
 
 class Controller:
     def __init__(self):
-        print('INIT CONTROLLER')
-        self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
+        print('[ INIT CONTROLLER ]')
+        # self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
+        self.df = pd.DataFrame(test_data)
         self.ledger = Ledger()
         self.col = 'x'
         self.row = 1
@@ -29,7 +30,7 @@ class Controller:
         else:
             self.col = col
 
-    def update(self, n: int, op: str = '+'):
+    def update(self, n: int, op: str = '='):
         """update active cell"""
         if op == '+':
             self.df.at[self.row, self.col] += n
@@ -56,7 +57,7 @@ class Controller:
         """update ledger view with current data"""
         rows = self.df.values
         print(f"ROWS: {rows}")
-        self.ledger.refresh(rows)
+        self.ledger.refresh()
 
 
 controller = Controller()

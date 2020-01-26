@@ -1,3 +1,5 @@
+#:kivy 1.11.1
+
 <MainScreen>:
     BoxLayout:
         orientation: 'vertical'
@@ -38,18 +40,15 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    test_x: 'X'
-    test_y: 'Y'
-    test_op: 'OP'
-    test_z: 'Z'
+    data: ['x', 'y', 'op', 'z']
     Label:
-        text: root.test_x
+        text: root.data[0]
     Label:
-        text: root.test_y
+        text: root.data[1]
     Label:
-        text: root.test_op
+        text: root.data[2]
     Label:
-        text: root.test_z
+        text: root.data[3]
 
 <Ledger>:
     size_hint_x: 1.8
@@ -60,7 +59,7 @@
             size: self.size
             pos: self.pos
             source: 'assets/graphics/sandstone.jpg'
-    rv: rv
+    display_rows: rv
     orientation: 'vertical'
     BoxLayout:
         size_hint_y: None
@@ -143,14 +142,14 @@
     #:set offset 10
     Button:
         size: self.parent.size_hint
-        background_color: .5, .5, .5, 1 
+        background_color: .5, .5, .5, 1
         x: self.parent.parent.x + self.parent.parent.size[0] - self.size[0] - offset
         y: self.parent.parent.y + self.parent.parent.size[1] - self.size[1] - offset
         on_press:
             self.background_color = 0, 0, 0.055
             self.parent.parent.click()
         on_release:
-            self.background_color = .5, .5, .5, 1 
+            self.background_color = .5, .5, .5, 1
         canvas.before:
             Color:
                 rgba: self.background_color
