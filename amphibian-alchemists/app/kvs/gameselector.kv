@@ -18,10 +18,13 @@
             Button:
                 text: "Load game"
                 disabled: not root.last_selected
+                on_press: app.root.get_screen('game_screen').play_effect_sound('swoosh')
                 on_release: if root.last_selected: root.load_game(root.last_selected.index)
             Button:
                 text: "New game"
-                on_release: root.new_game()
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('swoosh')
+                    root.new_game()
 
     AnchorLayout:
         RecycleView:
