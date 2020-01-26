@@ -1,5 +1,6 @@
 import os
 
+from kivy.config import Config
 from kivy.app import App
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
@@ -55,6 +56,9 @@ class SettingsScreen(Screen):
             self.store.put(to_save, value=new_value)
             if to_save == "background_volume":
                 self.manager.get_screen("main_screen").music.volume = new_value
+            elif to_save == "allow_fullscreen":
+                Config.set("graphics", "fullscreen", new_value)
+                Config.write()
 
     def delete_saved_games(self, popup):
         JsonStore(DATA_DIR).clear()
