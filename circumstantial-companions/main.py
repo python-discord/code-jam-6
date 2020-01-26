@@ -11,7 +11,6 @@ import os
 from pathlib import Path
 import webbrowser
 
-
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
