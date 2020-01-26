@@ -1,5 +1,5 @@
 #:import Animation kivy.animation.Animation
-<TypeWriterButton@Button>:
+<TypeWriterButton>:
     width: self.parent.width * 1/17
     height: self.parent.height * 1/23
     size_hint: None, None
@@ -21,7 +21,12 @@
     default_y: .08
     anim_y: .08
 
-<PhoneButtons@Label>
+<PhoneButtons>
     width: self.parent.width * 1/5
     height: self.parent.height * 1/10
     size_hint: None, None
+
+<AutoButton>:
+    size_hint: None, None
+    pos_hint: {'x': 0, 'y': .9}
+    background_color: 0,0,0,0

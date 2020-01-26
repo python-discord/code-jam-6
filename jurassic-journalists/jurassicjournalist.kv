@@ -28,7 +28,7 @@
         on_release: F.TypeWriter().open()
 
 
-<MainScreen@ScreenManager>:
+<MainScreen>:
     RoomScreen
     PhoneScreen
 
@@ -40,9 +40,9 @@
         size_hint: None, None
         background_color: 0,0,0,.2
         on_release: root.manager.current = 'RoomScreen'
-    TextInput: #CodeInput
+    TextInput:
         id: typw2
-        background_color: .95,.93,.8,.8 # 0,0,0,0
+        background_color: .95,.93,.8,.8
         padding: 12,12,12,12
         font_name: 'assets/1942.ttf'
         pos_hint: {'x': 0.2, 'y':.5}

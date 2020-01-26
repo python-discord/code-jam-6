@@ -10,13 +10,15 @@ from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
+# from kivy.clock import Clock
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty # noqa
 from kivy.core.window import Window
 from kivy.animation import Animation
 from kivy.core.audio import SoundLoader
 from PIL import ImageDraw
 from PIL import Image as Im
-from string import ascii_lowercase
+from time import sleep
+from threading import Thread
 
 # Screen Dimensions
 SCREEN_WIDTH, SCREEN_HEIGHT = Window.size
@@ -47,19 +49,32 @@ class TypeWriter(Popup):
         self.keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self.keyboard.bind(on_key_down=self._key_down)
 
-    def _key_down(self, keyboard, keycode, mod, arg):
-        punctuation = {'spacebar': 'space', ';': 'semicolon', ':': 'colon'}
-        if keycode[1] in ascii_lowercase:
+    def _key_down(self, keyboard, keycode, *arg):
+        punctuation = {';': 'semicolon', ':': 'colon', '#': 'enter', ' ': 'spacebar'}
+        if keycode[1] in self.ids:
             self.ids[keycode[1]].trigger_action()
         elif keycode[1] in punctuation:
             self.ids[punctuation[keycode[1]]].trigger_action()
         else:
             return False
-            print(keycode[1])
+            print(keycode[1])  # for debug
 
     def _keyboard_closed(self):
         self.keyboard.unbind(on_key_down=self._key_down)
         self.keyboard = None
+
+
+class AutoButton(Button):
+    def on_release(self):
+        # Clock.schedule_once(Thread(None, self._auto_text).start)
+        # not sure if using Clock would work / be better here
+        Thread(None, self._auto_text).start()
+
+    def _auto_text(self):
+        for i in 'all work and no play makes joe a dull boy ':
+            # there's got to be a shorter way to get to the method needed
+            self.parent.parent.parent.parent._key_down(self, ('auto', i))
+            sleep(.1)
 
 
 class TypeWriterButton(Button):

@@ -1,6 +1,6 @@
-<TextPaper@GestureSurface>
+<TextPaper>
 
-<TypeWriter@Popup>
+<TypeWriter>
     canvas.before:
         Color:
             rgba: 0,0,0,1
@@ -30,7 +30,7 @@
             pos: self.pos
             size: self.size
             letters: []
-            fontsize: 24
+            fontsize: 11
             text: ''
             on_text: 
                 self.letters.append(Letter(self.text[-1], self.fontsize, 'assets/1942.ttf', self.colour)) if '_' not in self.text[-2:] else self.escaped()
@@ -152,7 +152,7 @@
             txt: ':'
             pos_hint: {'x': .797, 'y': self.anim_y}
         TypeWriterButton:
-		    id: space
+		    id: spacebar
             anim_y: .025
             default_y: .025
             pos_hint: {'x': .2, 'y': self.anim_y}
@@ -179,8 +179,9 @@
             background_normal: 'assets/color_wheel.png'
             background_down: 'assets/color_wheel.png'
             on_release: F.Pick(root.typw).open() # on_double_tap
+        AutoButton
 
-<Pick@Popup>
+<Pick>
     size: 540,300
     size_hint: None, None
     title: ''
