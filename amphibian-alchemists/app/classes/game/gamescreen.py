@@ -130,7 +130,7 @@ def auto_input_processor(char: str) -> str:
         if config_store.get("auto_input")["value"] == 1:
             game_id = App.get_running_app().game_id
             store = JsonStore(DATA_DIR)
-            game = store.get(game_id)
+            game = store.get(str(game_id))
             current_output_text = game["current_output_text"]
             ciphered_text = game["ciphered_text"]
             output = str(ciphered_text)[len(current_output_text)]
