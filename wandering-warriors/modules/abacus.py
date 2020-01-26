@@ -3,6 +3,8 @@ from collections import deque
 from kivy.app import App
 from kivy.graphics import Color, Rectangle
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 
 from math import floor
 
@@ -320,7 +322,12 @@ class Abacus(FloatLayout):
         return v
 
     def set_value(self, v):
-        Thread(target=self.preset(v)).start()
+        if self.get_value() > 0:
+            self.enqueue_anim(lambda : self.reset())
+
+        self.enqueue_anim(lambda : self.preset(v))
+
+        self.play_anims_from_queue()
 
     def clear(self):
         Thread(target=self.reset()).start()
@@ -351,6 +358,18 @@ class Abacus(FloatLayout):
         self.N_BOTTOM_BEADS = n
 
         self.reset_abacus()
+
+    def open_help(self):
+        TEXT = 'Tap a bead on the abacus to move it.'
+
+        p = Popup(
+            title='Abacus Help',
+            size_hint=(None, None),
+            size=(len(TEXT) * 10, 160),
+            content=Label(text=TEXT)
+        )
+
+        p.open()
 
     def build_anim(self, anim):
         for col, n in anim.up_shifts:

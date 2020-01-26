@@ -1,5 +1,7 @@
 from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.graphics import Color, Point, GraphicException, Rectangle
 from math import sqrt
 
@@ -62,6 +64,22 @@ class DrawPad(FloatLayout):
             self.border[i].source = App.get_running_app().TEXTURE
 
         self.update()
+
+    def open_help(self):
+        TEXT = '''
+            Draw a digit in cuneiform with your cursor to tabulate the current number on the ledger:
+            - Draw a | gesture (from top to bottom) to add 1.
+            - Draw a < gesture (from top to bottom) to add 10.
+        '''
+
+        p = Popup(
+            title='Draw Pad Help',
+            size_hint_y=None,
+            height=200,
+            content=Label(text=TEXT)
+        )
+
+        p.open()
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)

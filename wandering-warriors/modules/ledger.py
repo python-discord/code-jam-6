@@ -1,4 +1,7 @@
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+
 import pandas as pd
 
 
@@ -40,6 +43,21 @@ class Ledger(BoxLayout):
         if op == '=':
             self.df.at[self.row, self.col] = n
         self.refresh_ledger()
+
+    def open_help(self):
+        TEXT = '''
+            Input digits in the sandbox to tabulate numbers on the ledger.
+            You can perform operations on numbers using the operations buttons immediately to the right.
+        '''
+
+        p = Popup(
+            title='Ledger Help',
+            size_hint_y=None,
+            height=200,
+            content=Label(text=TEXT)
+        )
+
+        p.open()
 
     def operation(self, op: str):
         """update operator column of current row and advance selection"""
