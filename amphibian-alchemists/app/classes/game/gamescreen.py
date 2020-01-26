@@ -6,9 +6,12 @@ from string import ascii_uppercase
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
+from kivy.factory import Factory
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
@@ -124,7 +127,7 @@ class EnigmaOutput(TextInput):
 
 
 class GameScreen(Screen):
-    """Do we automatically assume new game or should we save?"""
+    current_time = StringProperty("")
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
@@ -185,6 +188,8 @@ class GameScreen(Screen):
             setup_new_game_settings()
         else:
             on_config_change()
+
+        self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
@@ -259,3 +264,10 @@ class GameScreen(Screen):
     def change_game_title(self, btn, title):
         if title != "" or title is not None:
             store_put(game_title=title)
+
+    def handle_timer(self, dt):
+        if int(self.current_time) == 0:
+            self.timer_clock.cancel()
+            Factory.TimesUp().open()
+        else:
+            self.current_time = str(int(self.current_time) - 1)
