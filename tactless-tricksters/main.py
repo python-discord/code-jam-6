@@ -37,10 +37,10 @@ class MainBox(FloatLayout):
         self.content.transition = NoTransition()
 
         # Place screens here
+        self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(WelcomeScreen(name='welcome', util=self.util))
         self.content.add_widget(EncoderScreen(name='encode', util=self.util))
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
-        self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
         self.content.add_widget(ContactScreen(name='contact', util=self.util))
         self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
@@ -49,6 +49,7 @@ class MainBox(FloatLayout):
         self.content.add_widget(TappingScreen(name='tapping', util=self.util))
         self.content.add_widget(CalibrationScreen(name='calibration', util=self.util))
         self.content.add_widget(SignInScreen(name='sign_in', util=self.util))
+        self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
         # # Place screens here
 
         self.screens.add_widget(self.content)
