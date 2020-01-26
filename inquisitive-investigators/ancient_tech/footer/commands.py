@@ -172,7 +172,7 @@ class CopyPopup(BasePopup):
             try:
                 from_obj = Path(from_.ids.rv.selected.txt)
 
-            except TypeError:
+            except AttributeError:
                 Logger.info('Copy: Select a file/directory to copy')
             
             else:
