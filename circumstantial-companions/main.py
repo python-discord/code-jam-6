@@ -61,8 +61,11 @@ class Button(SignBorder, KivyButton):
                          font_name=FONT.get(),
                          outline_color=(0, 0, 0),
                          outline_width=2,
+                         halign="center",
+                         valign="middle",
                          **kwargs)
         self.setup_border()
+        self.bind(size=self._on_size)
         Window.bind(mouse_pos=self._on_mouse_pos)
         self.background_normal = BUTTON_NORMAL
         self.background_down = BUTTON_PRESSED
@@ -72,6 +75,9 @@ class Button(SignBorder, KivyButton):
             self.background_normal = BUTTON_HOVER
         else:
             self.background_normal = BUTTON_NORMAL
+
+    def _on_size(self, *args):
+        self.text_size = self.size
 
 
 class BurgerButton(ButtonBehavior, Image):
@@ -205,8 +211,6 @@ class ImportPopup(Popup):
 
     def _change_title(self, *args):
         path = self.file_chooser.path
-        if path == ".":
-            path = Path.cwd()
         self.title = _("Import from {path}").format(path=path)
 
     def _change_btn_name(self, *args):
@@ -295,8 +299,8 @@ class SaveAsPopup(Popup):
         return (filename.endswith(PROJECT_EXTENSION)
                 or filename.endswith(".png"))
 
-    @staticmethod
-    def _maybe_shorten(string):
+    def get_maybe_shortened_filename(self):
+        string = self.get_resolved_filename()
         if len(string) > 24:
             parts = string.rsplit(".", 1)
             if len(parts) > 1:
@@ -305,7 +309,8 @@ class SaveAsPopup(Popup):
             return parts[0][:6] + "..." + parts[0][-5:]
         return string
 
-    def _resolve_filename(self, string):
+    def get_resolved_filename(self):
+        string = self.text_input.text
         ext = self._get_file_extension()
         if ext is None:
             return string
@@ -315,8 +320,6 @@ class SaveAsPopup(Popup):
 
     def _change_title(self, *args):
         path = self.file_chooser.path
-        if path == ".":
-            path = Path.cwd
         self.title = _("Save to {path}").format(path=path)
 
     def _set_text(self, *args):
@@ -346,8 +349,8 @@ class SaveAsPopup(Popup):
     def _change_btn_name(self, *args):
         if self.save_type is None:
             return
-        filename = self._resolve_filename(self.text_input.text)
-        self.save_btn.text = _('Save as "{filename}"').format(filename=self._maybe_shorten(filename))
+        self.save_btn.text = _('Save as "{filename}"').format(
+            filename=self.get_maybe_shortened_filename())
 
     def _save_file(self, *args):
         try:
@@ -386,7 +389,7 @@ class SaveAsPopup(Popup):
         return extensions[self.save_type]
 
     def _do_saves(self):
-        filename = self._resolve_filename(self.text_input.text)
+        filename = self.get_resolved_filename()
         path = Path(self.file_chooser.path)
         ext = self._get_file_extension()
         if ext is None:
@@ -417,7 +420,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
     def __init__(self, chisel):
         self.chisel = chisel
         super().__init__(orientation="vertical",
-                         spacing=dp(32),
+                         spacing=dp(31),
                          padding=(dp(20), dp(30), dp(20), dp(15)),
                          opacity=0)  # set opacity when side panel is opened
         self.setup_background(OPTIONS_BACKGROUND)
@@ -444,35 +447,35 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         language_btn = Button(_("Select language"),
                            font_size=sp(18),
                            size_hint=(1, None),
-                           height=dp(42))
+                           height=dp(44))
         language_btn.bind(on_release=self.open_language_popup)
 
         # Import
         import_btn = Button(_("Import..."),
                          font_size=sp(18),
                          size_hint=(1, None),
-                         height=dp(42))
+                         height=dp(44))
         import_btn.bind(on_release=lambda btn: ImportPopup(self.chisel).open(btn))
 
         # Save as
         save_as_btn = Button(_("Save as..."),
                          font_size=sp(18),
                          size_hint=(1, None),
-                         height=dp(42))
+                         height=dp(44))
         save_as_btn.bind(on_release=lambda btn: SaveAsPopup(self.chisel).open(btn))
 
         # Reset
         reset_btn = Button(_("Reset"),
                            font_size=sp(18),
                            size_hint=(1, None),
-                           height=dp(42))
+                           height=dp(44))
         reset_btn.bind(on_release=self.reset_chisel)
 
         # Source code
         src_btn = Button(_("Source code"),
                          font_size=sp(18),
                          size_hint=(1, None),
-                         height=dp(42))
+                         height=dp(44))
         src_btn.bind(on_release=lambda btn: webbrowser.open(GITHUB_URL))
 
         # Animation - Normal loading of an animation won't apply desired mag_filter to each
