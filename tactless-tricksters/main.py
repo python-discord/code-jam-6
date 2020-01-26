@@ -21,6 +21,11 @@ from ui.screens.tapping_training_screen import TappingScreen
 # Project imports
 from ui.screens.training_menu_screen import TrainingMenuScreen
 from ui.screens.welcome_screen import WelcomeScreen
+from ui.screens.listening_training_screen import ListeningScreen
+from ui.screens.contacts_screen import ContactScreen
+from ui.screens.add_contact_screen import AddContactScreen
+from ui.screens.calibration_screen import CalibrationScreen
+from ui.screens.sign_in_screen import SignInScreen
 from util.utility import Utility
 
 gc.disable()
@@ -38,7 +43,6 @@ class MainBox(FloatLayout):
         self.content.add_widget(WelcomeScreen(name='welcome', util=self.util))
         self.content.add_widget(EncoderScreen(name='encode', util=self.util))
         self.content.add_widget(DecoderScreen(name='decode', util=self.util))
-        self.content.add_widget(MessageScreen(name='message', util=self.util))
         self.content.add_widget(ConversationScreen(name='conversation', util=self.util))
         self.content.add_widget(ContactScreen(name='contact', util=self.util))
         self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
@@ -46,7 +50,9 @@ class MainBox(FloatLayout):
         self.content.add_widget(ListeningScreen(name='listening', util=self.util))
         self.content.add_widget(TappingScreen(name='tapping', util=self.util))
         self.content.add_widget(CalibrationScreen(name='calibration', util=self.util))
-        # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
+        self.content.add_widget(SignInScreen(name='sign_in', util=self.util))
+        self.content.add_widget(AddContactScreen(name='add_contact', util=self.util))
+        self.content.add_widget(MessageScreen(name='message', util=self.util))
         # # Place screens here
 
         self.screens.add_widget(self.content)

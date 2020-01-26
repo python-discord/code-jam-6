@@ -76,7 +76,7 @@ Builder.load_string("""
                 text: 'Sign In'
                 icon: 'login-variant'
                 on_press:
-                    root.manager.current = ''
+                    root.manager.current = 'sign_in'
 
             BlankLabel:
 
@@ -95,6 +95,13 @@ Builder.load_string("""
                     root.manager.current = 'training'
 
             BlankLabel:
+
+            WelcomeButton:
+                text: 'Message'
+                icon: 'message'
+                on_press:
+                    # TODO: create exit function
+                    root.manager.current = 'message'
 
             WelcomeButton:
                 text: 'Exit'

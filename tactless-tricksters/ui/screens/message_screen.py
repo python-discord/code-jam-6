@@ -23,6 +23,7 @@ class MessageScreen(Screen):
         self.ui_layout()
 
     def ui_layout(self):
+        self.clear_widgets()
         layout = BoxLayout(orientation='vertical')
 
         self.scroll = ScrollView(do_scroll_x=False, size_hint=(1, None),
@@ -36,15 +37,15 @@ class MessageScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' '))
         scroll_box.add_widget(MDLabel(text=' ', size_hint=(1, 5)))
 
-        for key in self.util.message_dict:
-            temp_dict = self.util.message_dict[key]
-            print(temp_dict['messages'][-1:])
-            message_card = MessageCard(text_post=temp_dict['messages'][-1:][0]['text'],
+        for key in self.util.user_data['message_dict']:
+            message_aray = self.util.user_data['message_dict'][key]
+            temp_dict = self.util.user_data['message_dict'][key][-1:][0]
+            print(temp_dict)
+            message_card = MessageCard(text_post=temp_dict['message'],
                                        name=key,
-                                       name_data=(key + '\n' +
-                                                  temp_dict['messages'][-1:][0]['date']),
+                                       name_data=(key + '\n' + temp_dict['timestamp']),
                                        swipe=True,
-                                       source=temp_dict['img_source'], )
+                                       source='ui/img/default_avatar.png',)
             scroll_box.add_widget(message_card)
 
         self.scroll.add_widget(scroll_box)
@@ -68,6 +69,7 @@ class MessageScreen(Screen):
         self.nav_bar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
         self.nav_bar_anchor.add_widget(self.nav_bar)
         self.add_widget(self.nav_bar_anchor)
+        self.do_layout()
 
     def switch_screens(self):
         self.manager.current = 'contact'
