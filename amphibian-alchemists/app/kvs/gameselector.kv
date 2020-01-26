@@ -1,0 +1,44 @@
+<SelectableButton>:
+    group: "saves"
+
+<GameSelectorScreen>:
+    name: "game_selector_screen"
+    canvas:
+        Color:
+            rgba: 135 / 255, 73 / 255, 31 / 255, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    rv: rv
+    AnchorLayout:
+        anchor_y: "top"
+        BoxLayout:
+            size_hint_y: 0.1
+            padding: dp(8)
+            spacing: dp(16)
+            Button:
+                text: "Go back"
+                on_release: root.manager.current = "main_screen"
+            Button:
+                text: "Load game"
+                disabled: not root.last_selected
+                on_release: if root.last_selected: root.load_game(root.last_selected.index)
+            Button:
+                text: "New game"
+                on_release: root.new_game()
+
+    AnchorLayout:
+        RecycleView:
+            id: rv
+            size_hint: 0.8, 0.5
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(114)
+            bar_width: dp(12)
+            viewclass: "SelectableButton"
+            RecycleBoxLayout:
+                orientation: "vertical"
+                default_size: None, dp(70)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(2)

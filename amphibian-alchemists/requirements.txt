@@ -1,0 +1,10 @@
+certifi==2019.11.28
+chardet==3.0.4
+docutils==0.16
+idna==2.8
+Kivy==1.11.1
+Kivy-Garden==0.1.4
+py-enigma==0.1
+Pygments==2.5.2
+requests==2.22.0
+urllib3==1.25.7
