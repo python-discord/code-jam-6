@@ -209,7 +209,8 @@ class GameScreen(Screen):
         sound.volume = volume
         sound.play()
         if os.environ["KIVY_AUDIO"] != "sdl2":
-            Clock.schedule_once(lambda dt: sound.unload(), sound.length)
+            return
+        Clock.schedule_once(lambda dt: sound.unload(), sound.length)
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
