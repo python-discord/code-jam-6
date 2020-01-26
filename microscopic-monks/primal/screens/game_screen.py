@@ -56,10 +56,7 @@ class GameScreen(Screen):
         self.timer = 0
         self.timerValue = 0
 
-        selected = self.inventory.get_active()
-        if len(selected) != 0:
-            sprite = self.inventory.get_sprite(selected[0])
-            self.player.change_item(sprite)
+        self.update_sected_item()
 
     def update(self, delta: float):
         if self.disable:
@@ -170,17 +167,19 @@ class GameScreen(Screen):
                     return 0.0, 0.0
         return dx, dy
 
+    def update_sected_item(self):
+        selected = self.inventory.get_active()
+        if len(selected) != 0:
+            sprite = self.inventory.get_sprite(selected[0])
+            self.player.change_item(sprite)
+        else:
+            self.player.change_item(None)
+
     def update_inventory(self):
         for i in range(len(keys.NUMERIC_KEYS)):
             if self.is_key_just_pressed(keys.NUMERIC_KEYS[i]):
                 self.inventory.set_ative(i)
-
-                selected = self.inventory.get_active()
-                if len(selected) != 0:
-                    sprite = self.inventory.get_sprite(selected[0])
-                    self.player.change_item(sprite)
-                else:
-                    self.player.change_item(None)
+                self.update_sected_item()
                 return
 
     def process_left_click(self):
@@ -193,6 +192,7 @@ class GameScreen(Screen):
         if active[0] in can_eat:
             self.inventory.remove_item(active[0], 1)
             self.health_bar.set_health(self.health_bar.get_health() + 5)
+            self.update_sected_item()
 
     def process_click(self):
         mx, my = self.engine.mouse_position
@@ -229,10 +229,7 @@ class GameScreen(Screen):
                         else:
                             self.inventory.add_item(feature.type)
 
-                        selected = self.inventory.get_active()
-                        if len(selected) != 0:
-                            sprite = self.inventory.get_sprite(selected[0])
-                            self.player.change_item(sprite)
+                        self.update_sected_item()
                         if feature in self.clicked_features:
                             del self.clicked_features[feature]
                     else:
