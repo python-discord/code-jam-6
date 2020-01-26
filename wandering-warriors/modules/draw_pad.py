@@ -1,3 +1,4 @@
+from kivy.app import App
 from kivy.uix.floatlayout import FloatLayout
 from kivy.graphics import Color, Point, GraphicException, Rectangle
 from math import sqrt
@@ -35,7 +36,7 @@ class DrawPad(FloatLayout):
             Color(1, 1, 1, 1)
 
             for i in range(4):
-                self.border.append(Rectangle(source='assets/graphics/wood.png'))
+                self.border.append(Rectangle(source=App.get_running_app().TEXTURE))
 
         self.clear_button_src = 'assets/graphics/clear_sandbox.png'
 
@@ -55,6 +56,12 @@ class DrawPad(FloatLayout):
 
         self.border[3].pos = (self.x + self.width - 16, self.y)
         self.border[3].size = (16, self.height)
+
+    def reborder(self):
+        for i in range(4):
+            self.border[i].source = App.get_running_app().TEXTURE
+
+        self.update()
 
     def on_touch_down(self, touch):
         super().on_touch_down(touch)
