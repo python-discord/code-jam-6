@@ -27,7 +27,7 @@ The current configuration is intended to be incorporated with the Discord Postal
 ### Background
 To gain the full experience, it's best to understand how the machine works. 
 - https://en.wikipedia.org/wiki/Enigma_machine
-- [In-depth YouTube guide and technical details](https://www.youtube.com/watch?v=GcI-YlFSGYo)
+- [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
 
 A diagram of the machine's internal functionality:
 ![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
