@@ -1,0 +1,19 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+flake8 = "*"
+pre-commit = "*"
+pillow = "*"
+
+[packages]
+kivy = "*"
+pandas = "*"
+
+[requires]
+python_version = "3.7"
+
+[scripts]
+generate_gfx = "python scripts/generate_gfx.py"

@@ -1,0 +1,368 @@
+#:kivy 1.11.1
+
+<Calculator>:
+    BoxLayout:
+        orientation: 'vertical'
+        TopMenu:
+            Button:
+                size: (32, 32)
+                pos: (self.parent.x + self.parent.width - 32, self.parent.y)
+                background_color: 1, 1, 1, 0
+
+                on_press:
+                    self.size = (30, 30)
+                    self.pos = (self.parent.x + self.parent.width - 32 + 1, self.parent.y + 1)
+
+                on_release:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'settings'
+                    self.size = (32, 32)
+                    self.pos = (self.parent.x + self.parent.width - 32, self.parent.y)
+
+                Image:
+                    pos: self.parent.pos
+                    size: self.parent.size
+                    source: 'assets/graphics/settings.png'
+        Abacus:
+            id: abacus
+            HelpButton:
+            ClearButton:
+        BoxLayout:
+            orientation: 'horizontal'
+            Ledger:
+                HelpButton:
+                ClearButton:
+            OperationsBar:
+            CuneiformDrawingInput:
+                id: drawpad
+                HelpButton:
+                ClearButton:
+
+<TopMenu>:
+    size_hint_y: None
+    height: 32
+    canvas.before:
+        Color:
+            rgb: .8, .8, .8
+        Rectangle:
+            source: app.TEXTURE
+            size: self.size
+            pos: self.pos
+
+<Settings>:
+    canvas.before:
+        Color:
+            rgb: 0.4, 0.4, 0.4, 1
+        Rectangle:
+            source: app.TEXTURE
+            size: self.size
+            pos: self.pos
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+
+        Button:
+            size_hint_y: None
+            height: 32
+            text: 'Back'
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'calculator'
+
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                padding: 10
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.3
+                    valign: 'center'
+                    halign: 'center'
+                    text: 'Abacus'
+                    text_size: self.size
+                    font_size: str(max(min(self.parent.width, self.parent.height) / 16, 8)) + 'sp'
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Base: ' + str((topslider.value + 1) * (bottomslider.value + 1))
+                        halign: 'left'
+                        valign: 'center'
+                        text_size: self.size
+                BoxLayout:
+                    orientation: 'horizontal'
+                    spacing: 10
+                    Button:
+                        text: 'Base 10'
+
+                        on_release:
+                            topslider.value = 1
+                            bottomslider.value = 4
+                    Button:
+                        text: 'Base 18'
+                        on_release:
+                            topslider.value = 2
+                            bottomslider.value = 5
+
+                    Button:
+                        text: 'Base 60'
+
+                        on_release:
+                            topslider.value = 5
+                            bottomslider.value = 9
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Top beads'
+                        halign: 'left'
+                        valign: 'center'
+                        text_size: self.size
+                    Slider:
+                        id: topslider
+                        min: 1
+                        max: 5
+                        step: 1
+                        orientation: 'horizontal'
+                        on_value: root.manager.get_screen('calculator').ids.abacus.update_top_beads(topslider.value)
+                    Label:
+                        size_hint_x: 0.1
+                        text: str(topslider.value)
+                BoxLayout:
+                    orientation: 'horizontal'
+                    Label:
+                        text: 'Bottom beads'
+                        halign: 'left'
+                        valign: 'center'
+                        text_size: self.size
+                    Slider:
+                        id: bottomslider
+                        min: 4
+                        max: 9
+                        step: 1
+                        orientation: 'horizontal'
+                        on_value: root.manager.get_screen('calculator').ids.abacus.update_bottom_beads(bottomslider.value)
+                    Label:
+                        size_hint_x: 0.1
+                        text: str(bottomslider.value)
+            BoxLayout:
+                padding: 10
+                orientation: 'vertical'
+                Label:
+                    size_hint_y: 0.3
+                    valign: 'center'
+                    halign: 'center'
+                    text: 'Themes'
+                    text_size: self.size
+                    font_size: str(max(min(self.parent.width, self.parent.height) / 16, 8)) + 'sp'
+                GridLayout:
+                    cols: 2
+                    rows: 2
+
+                    Button:
+                        text: 'Default'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/wood.png'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+                    Button:
+                        text: 'Redwood'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/redwood.jpg'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+                    Button:
+                        text: 'Iron'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/iron.jpg'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+                    Button:
+                        text: 'Cherry'
+                        on_press:
+                            app.TEXTURE = 'assets/graphics/cherry.jpg'
+                            root.manager.get_screen('calculator').ids.abacus.reset_abacus()
+                            root.manager.get_screen('calculator').ids.drawpad.reborder()
+
+<Abacus>:
+    canvas.before:
+        Color:
+            rgb: 0.4, 0.4, 0.4, 1
+        Rectangle:
+            source: app.TEXTURE
+            size: self.size
+            pos: self.pos
+
+<LedgerRow@GridLayout>:
+    cols: 4
+    rows: 1
+    canvas.before:
+        Color:
+            rgba: 0.8, 0.8, 0.8, .3
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    value: ['x', 'y', 'op', 'z']
+    Label:
+        text: root.value[0]
+        color: .1,.1,.1,1
+    Label:
+        text: root.value[2]
+        color: .1,.1,.1,1
+    Label:
+        text: root.value[1]
+        color: .1,.1,.1,1
+    Label:
+        text: root.value[3]
+        color: .1,.1,.1,1
+
+
+
+
+<Ledger>:
+    size_hint_x: 1.8
+    padding: (0, 0, 100, 0)
+    canvas:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            source: 'assets/graphics/sandstone.jpg'
+    rv: rv
+    orientation: 'vertical'
+    size_hint_y: 1
+    RecycleView:
+        id: rv
+        size_hint_y: 1
+        scroll_type: ['bars', 'content']
+        scroll_wheel_distance: dp(114)
+        bar_width: dp(10)
+        viewclass: 'LedgerRow'
+        RecycleBoxLayout:
+            default_size: None, dp(48)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+            spacing: dp(2)
+
+<OperationsBar>:
+    size_hint_x: None
+    width: 48
+    canvas.before:
+        Color:
+            rgb: .5, .5, .5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/graphics/sandbox.jpg'
+    BoxLayout:
+        orientation: 'vertical'
+        pos: self.parent.pos
+        size: self.parent.size
+        Button:
+            pos_hint: {'x': 0, 'top': 1}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('+')
+            Image:
+                pos: self.parent.pos
+                size: self.parent.size
+                allow_stretch: True
+                source: self.parent.parent.parent.button_image('plus')
+        Button:
+            pos_hint:  {'x': 0, 'top':4/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('-')
+            Image:
+                pos: self.parent.pos
+                size: self.parent.size
+                allow_stretch: True
+                source: self.parent.parent.parent.button_image('minus')
+        Button:
+            pos_hint: {'x': 0, 'top': 3/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('*')
+            Image:
+                pos: self.parent.pos
+                size: self.parent.size
+                allow_stretch: True
+                source: self.parent.parent.parent.button_image('times')
+        Button:
+            pos_hint: {'x': 0, 'top': 2/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('/')
+            Image:
+                pos: self.parent.pos
+                size: self.parent.size
+                allow_stretch: True
+                source: self.parent.parent.parent.button_image('divide')
+        Button:
+            pos_hint: {'x': 0, 'top': 1/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].submit_row()
+            Image:
+                pos: self.parent.pos
+                size: self.parent.size
+                allow_stretch: True
+                source: self.parent.parent.parent.button_image('equals')
+
+
+<CuneiformDrawingInput>:
+    canvas.before:
+        Color:
+            rgb: 1, 1, 1, 1
+        Rectangle:
+            source: 'assets/graphics/sandbox.jpg'
+            size: self.size
+            pos: self.pos
+
+
+<ClearButton>:
+    Button:
+        size: [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+        x: self.parent.parent.x + self.parent.parent.width - self.width
+        y: self.parent.parent.y + self.parent.parent.height - self.height
+        background_color: 1, 1, 1, 0
+
+        on_press:
+            self.size = [max(min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96) - 2, 1)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - self.width - 1
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height - 1
+
+        on_release:
+            self.size = [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - self.width
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height
+
+            self.parent.parent.clear()
+
+        Image:
+            pos: self.parent.pos
+            size: self.parent.size
+            source: self.parent.parent.parent.clear_button_src
+
+
+<HelpButton>:
+    Button:
+        size: [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+        x: self.parent.parent.x + self.parent.parent.width - 2 * self.width
+        y: self.parent.parent.y + self.parent.parent.height - self.height
+        background_color: 1, 1, 1, 0
+
+        on_press:
+            self.size = [max(min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96) - 2, 1)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width - 3
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height - 1
+
+        on_release:
+            self.size = [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height
+
+            self.parent.parent.open_help()
+
+        Image:
+            pos: self.parent.pos
+            size: self.parent.size
+            source: 'assets/graphics/help.png'
