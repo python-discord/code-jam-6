@@ -130,7 +130,8 @@
             "weight": 1,
             "next_card": "random",
             "effects": {
-              "player_food": 0.2
+              "player_food": 0.2,
+              "world_fought_dinosaur": true
             }
           }
         ]
@@ -142,9 +143,6 @@
     "card_type": "event",
     "card_image": "test.jpg",
     "card_sound": "water.wav",
-    "conditions": {
-      "world_found_tribe": true
-    },
     "text": "You stretch your arms and almost faint from your smell.",
     "options": [
       {
@@ -182,7 +180,7 @@
     "card_type": "response",
     "card_sound": "water.wav",
     "card_image": "test.jpg",
-    "text": "Halfway trough your trip you see a T-Rex.",
+    "text": "Halfway trough your trip you see a dinosaur.",
     "options": [
       {
         "text": "Pretend to be dead.",
@@ -199,11 +197,100 @@
     ]
   },
   {
+    "card_id": "low_food",
+    "card_type": "event",
+    "card_image": "test.jpg",
+    "conditions": {"player_food":  0.33},
+    "text": "You feel hungry.",
+    "options": [
+      {
+        "text": "Some sleep would be just fine.",
+        "outcomes": [
+          {
+            "weight": 1.0,
+            "next_card": "random",
+            "effects": {"player_food":  -0.1}
+          }
+        ]
+      },
+      {
+        "text": "Go for some fishing.",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "fishing"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "fishing",
+    "card_type": "response",
+    "card_image": "river.png",
+    "text": "On your way to get the fishing stick you see there's one pufferfish left in the bucket.",
+    "options": [
+      {
+        "text": "Food is food, eat it.",
+        "outcomes": [
+          {
+            "weight": 1.0,
+            "next_card": "pufferfish_sick"
+          }
+        ]
+      },
+      {
+        "text": "Go for some fishing.",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "fishing_river"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "pufferfish_sick",
+    "card_type": "response",
+    "card_image": "river.png",
+    "text": "Perhaps it would have been better to cook that week old pufferfish before eating.",
+    "options": [
+      {
+        "text": "Barf",
+        "outcomes": [
+          {
+            "weight": 1.0,
+            "next_card": "random",
+            "effects": {"player_food":  0.2, "player_health":  -0.2}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "fishing_river",
+    "card_type": "response",
+    "card_image": "river.jpg",
+    "text": "You got to river safely.",
+    "options": [
+      {
+        "text": "Catch some fish",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "card_id": "tribe_encounter_event",
     "card_type": "event",
     "card_image": "test.jpg",
     "conditions": {
-      "world_found_tribe": false
+      "world_found_another_tribe": false
     },
     "text": "When out for a lovely little wander, you hear some remarkably Greg-like sounds a little way away",
     "options": [
@@ -248,7 +335,7 @@
             "weight": 1,
             "next_card": "random",
             "effects": {
-              "world_found_tribe": true
+              "world_found_another_tribe": true
             }
           }
         ]
@@ -268,7 +355,7 @@
             "weight": 1,
             "next_card": "random",
             "effects": {
-              "world_found_tribe": true
+              "world_found_another_tribe": true
             }
           }
         ]
@@ -282,7 +369,7 @@
     "text": "When out hunting, you see an odd looking dinosaur in the distance. This isn't just a run of the mill Rex",
     "conditions": {
       "world_encountered_dinosaur": true,
-      "world_found_tribe": true
+      "world_found_another_tribe": true
     },
     "options": [
       {
@@ -347,7 +434,7 @@
     "card_image": "dodo.png",
     "text": "A friendly dodo comes and says hello. His mistake",
     "conditions": {
-      "world_found_tribe": true
+      "world_found_another_tribe": true
     },
     "options": [
       {
@@ -412,7 +499,7 @@
     ]
   },
   {
-    "card_id": "tribe_discovery_intentional",
+    "card_id": "game_over_card",
     "card_type": "game_over",
     "card_sound": "death.wav",
     "card_image": "test.jpg",
