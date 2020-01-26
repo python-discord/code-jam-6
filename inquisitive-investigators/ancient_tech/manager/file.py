@@ -36,19 +36,26 @@ class NewFile(Label):
             path = Path(self.txt)
 
         if path.is_dir():
-            self.ctx.data = [self.ctx.generate('<-')]
-            self.ctx.dirs = path.iterdir()
+            dirs = path.iterdir()
 
-            data = [self.ctx.generate(file_name) for file_name in self.ctx.dirs]
+            try:
+                data = [self.ctx.generate(file_name) for file_name in dirs]
+            
+            except PermissionError:
+                Logger.info('Directory: No permission')
 
-            if len(path.parts) > 1:
-                self.ctx.prev_dir = str(path.parent)
-                self.ctx.update(state=1, file=data)
-            else:
-                self.ctx.update(state=2, file=data)
+            else:                
+                self.ctx.data = [self.ctx.generate('<-')]
+                self.ctx.dirs = dirs
 
-            self.parent.parent.parent.ids.header.dir_name = short_path(str(path))
-            self.parent.parent.parent.ids.header.current_dir = str(path)
+                if len(path.parts) > 1:
+                    self.ctx.prev_dir = str(path.parent)
+                    self.ctx.update(state=1, file=data)
+                else:
+                    self.ctx.update(state=2, file=data)
+
+                self.parent.parent.parent.ids.header.dir_name = short_path(str(path))
+                self.parent.parent.parent.ids.header.current_dir = str(path)
 
         else:
             Logger.info('FileBrowser: Not a directory!')
