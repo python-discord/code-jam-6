@@ -230,12 +230,6 @@ class Chisel(Widget):
         with open(path_to_file, 'w') as file:
             json.dump(pebble_dict, file)
 
-    def export_png(self, path_to_file, transparent=False):
-        if transparent:
-            self.background_color.a = 0
-        self.export_to_png(path_to_file)
-        self.background_color.a = 1
-
     def load(self, path_to_file):
         with open(path_to_file, 'r') as file:
             pebble_dict = json.load(file)
@@ -255,6 +249,12 @@ class Chisel(Widget):
                 scaled_y = y * self.height
                 self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
         self.background.texture.mag_filter = 'nearest'
+
+    def export_png(self, path_to_file, transparent=False):
+        if transparent:
+            self.background_color.a = 0
+        self.export_to_png(path_to_file)
+        self.background_color.a = 1
 
 
 if __name__ == '__main__':
