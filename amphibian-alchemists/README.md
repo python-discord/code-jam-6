@@ -23,7 +23,7 @@ Table of Contents:
 python -m pip install docutils pygments pypiwin32 kivy_deps.sdl2==0.1.* kivy_deps.glew==0.1.*
 python -m pip install kivy_deps.gstreamer==0.1.*
 ```
-7. If you are in Linux or MacOS, install ffpyplayer for audio: `pip install ffpyplayer`
+7. If you are in Linux, make sure you have the [SLD2 dependencies installed](https://kivy.org/doc/stable/installation/installation-linux-venvs.html?highlight=from%20source#dependencies-with-sdl2) and then install Kivy with: `pip install https://github.com/kivy/kivy/archive/stable.zip`
 8. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
 9. In terminal, run main.py by doing `python main.py` or `python3 main.py`
 
@@ -60,11 +60,11 @@ Note: If you have Autoinput off and mistype once, move the rotors back one input
 - Fullscreen: Off
 - Autoinput: On
 - Musics: On
-- Sound effects: On 
+- Sound effects: On
 
 ---
 ### Background
-To gain the full experience, it's best to understand how the machine works. 
+To gain the full experience, it's best to understand how the machine works.
 - https://en.wikipedia.org/wiki/Enigma_machine
 - [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
 
