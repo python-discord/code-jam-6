@@ -41,14 +41,6 @@ Builder.load_string("""
         	size_hint: .8, .8
         	orientation: 'vertical'
         	pos_hint: {'center_x': 0.5, 'center_y': .5}
-        	
-        	#MDLabel:
-            #	text: 'Welcome!'
-            #	font_style: 'H4'
-            #	halign: 'center'
-            #	theme_text_color: 'Custom'
-            #	text_color: [1, 1, 1, 1]
-            #	size_hint_y: .3
             
             Image:
             	source: 'ui/img/welcome_morse_code.png'
