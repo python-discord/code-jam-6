@@ -6,6 +6,7 @@ from string import ascii_uppercase
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.storage.jsonstore import JsonStore
@@ -17,6 +18,9 @@ from .save_game import on_config_change, save_rotors, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
+CONFIG_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gameconfig.json")
 )
 
 
@@ -114,6 +118,36 @@ class GameScreen(Screen):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
 
+    def play_effect_sound(self, sound):
+        sound_names = {
+            "pop",
+            "plug_in",
+            "keyboard_click",
+            "paper",
+            "button_1",
+            "swoosh",
+            "button_2",
+            "rotor",
+        }
+        if sound not in sound_names:
+            return
+
+        settings = JsonStore(CONFIG_DIR)
+
+        volume = 1.0
+
+        if settings.exists("effects_volume"):
+            if settings.get("effects_volume")["value"] == 0:
+                return
+            else:
+                volume = settings.get("effects_volume")["value"]
+
+        sound = SoundLoader.load(
+            "misc/" + sound + (".wav" if sound != "swoosh" else ".mp3")
+        )
+        sound.volume = volume
+        sound.play()
+
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
         store.put("latest_game_id", id=None)
@@ -141,6 +175,8 @@ class GameScreen(Screen):
         """
         Here goes what we're gonna do whenever a key in the machine is pressed
         """
+
+        self.play_effect_sound("keyboard_click")
 
         anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
             _color=[1, 1, 1], duration=0.2

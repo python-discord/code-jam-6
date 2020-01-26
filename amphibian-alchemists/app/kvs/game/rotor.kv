@@ -1,5 +1,6 @@
 <Gear@Image>:
-    source: "misc/gear.png"
+    index: 0
+    source: "misc/gear0.png"
 
 <RotorLabel@Label>:
     size_hint: 0.2, 0.2
@@ -46,24 +47,23 @@
             id: up
             text: "+"
             pos_hint: {"center_x": 0.5, "top": 0.62}
+            on_press:
+                app.root.get_screen("game_screen").play_effect_sound("rotor")
             on_release:
-                setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) + 1])
+                app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
     RelativeLayout:
         RotorLabel:
             id: rotor_value
             text: app.machine.get_display()[root.rotor_number - 1]
-            on_text:
-                if self.text == "Z": setattr(up, "disabled", True)
-                elif self.text == "A": setattr(down, "disabled", True)
-                else: setattr(up, "disabled", False), setattr(down, "disabled", False)
     RelativeLayout:
         RotorButton:
             id: down
             text: "-"
-            disabled: True
             pos_hint: {"center_x": 0.5, "top": 0.575}
+            on_press:
+                app.root.get_screen("game_screen").play_effect_sound("rotor")
             on_release:
-                setattr(rotor_value, "text", app.keys[app.keys.index(rotor_value.text) - 1])
+                app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
 
 <Rotors@BoxLayout>:
     size_hint_y: 0.7
@@ -84,12 +84,14 @@
 <RotorScreen>:
     name: "rotor_screen"
     rotor_section: rotor_section
+    keys: app.keys
     AnchorLayout:
         anchor_x: "left"
         anchor_y: "top"
         BoxLayout:
-            size_hint: 0.1, 0.1
+            size_hint: 0.20, 0.1
             Button:
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                 text: "Go back!"
                 on_release: root.manager.current = "game_screen"
     AnchorLayout:
@@ -98,7 +100,7 @@
             size_hint: 0.8, 0.8
             canvas:
                 Color:
-                    rgba: 47 / 255, 43 / 255, 37 / 255, 1
+                    rgba: 14 / 255, 14 / 255, 14 / 255, 1
                 RoundedRectangle:
                     size: self.size
                     pos: self.pos
@@ -106,3 +108,55 @@
                 id: rotor_section
                 pos_hint: {"center_y": 0.5}
     CheckPaper:
+
+# For display in gamescreen
+<RotorDisplay@AnchorLayout>
+    BoxLayout:
+        padding: dp(80), 0, dp(70), 0
+        canvas:
+            Color:
+                rgba: 16 / 255, 16 / 255, 16 / 255, 1
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+        BoxLayout:
+            RotorModified:
+            Gear:
+            RotorModified
+            Gear:
+            RotorModified
+            Gear:
+
+<RotorModified@BoxLayout>:
+    orientation: "vertical"
+    screen: root.parent.parent.parent.parent
+    canvas:
+        Color:
+            rgb: 165 / 255, 165 / 255, 165 / 255
+        Rectangle:
+            source: "misc/rotor.png"
+            size: self.size
+            pos: self.pos
+    RelativeLayout:
+        RotorButton:
+            id: up
+            text: "+"
+            pos_hint: {"center_x": 0.5, "top": 0.62}
+            on_release:
+                if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
+    RelativeLayout:
+        RotorLabel:
+            id: rotor_value
+            index: 0
+            text: ""
+            on_index:
+                if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
+                elif self.index == 0: setattr(down, "disabled", True)
+    RelativeLayout:
+        RotorButton:
+            id: down
+            text: "-"
+            disabled: True
+            pos_hint: {"center_x": 0.5, "top": 0.575}
+            on_release:
+                if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
