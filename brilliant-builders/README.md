@@ -1,5 +1,5 @@
 # Brilliant Builders
-![CI badge](https://github.com/Leterax/code-jam-6/workflows/Lint/badge.svg) ![CI badge](https://github.com/Leterax/code-jam-6/workflows/Test/badge.svg) 
+![CI badge](https://github.com/Leterax/code-jam-6/workflows/Lint/badge.svg) 
 
 This is our awesome README, lets be sure to add stuff here later!
 
