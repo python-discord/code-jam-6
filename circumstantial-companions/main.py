@@ -17,7 +17,9 @@ from kivy.metrics import dp, sp
 from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button as KivyButton
+from kivy.uix.button import ButtonBehavior
 from kivy.uix.filechooser import FileChooserListView
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup as KivyPopup
@@ -36,6 +38,9 @@ CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(4))
 BUTTON_NORMAL = "assets/img/button_normal.png"
 BUTTON_HOVER = "assets/img/button_hover.png"
 BUTTON_PRESSED = "assets/img/button_pressed.png"
+BURGER_NORMAL = "assets/img/burger/normal.png"
+BURGER_HOVER = "assets/img/burger/hover.png"
+BURGER_PRESSED = "assets/img/burger/pressed.png"
 FILE_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128  # actually (n - 1)
 GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
@@ -54,12 +59,33 @@ class Button(SignBorder, KivyButton):
         self.background_normal = BUTTON_NORMAL
         self.background_down = BUTTON_PRESSED
 
-    def _on_mouse_pos(self, window, pos):
-        if self.collide_point(*self.to_widget(*pos)):
+    def _on_mouse_pos(self, *args):
+        if self.collide_point(*self.to_widget(*Window.mouse_pos)):
             self.background_normal = BUTTON_HOVER
         else:
             self.background_normal = BUTTON_NORMAL
 
+
+class BurgerButton(ButtonBehavior, Image):
+    def __init__(self):
+        super().__init__(source=BURGER_NORMAL, size_hint=(None, None))
+        Window.bind(mouse_pos=self._on_mouse_pos)
+        self.bind(state=self._on_state, pos=self._on_mouse_pos)
+
+    def _on_mouse_pos(self, *args, override=False):
+        if self.state == "down" and not override:
+            return
+        if self.collide_point(*self.to_widget(*Window.mouse_pos)):
+            self.source = BURGER_HOVER
+        else:
+            self.source = BURGER_NORMAL
+
+    def _on_state(self, *args):
+        if self.state == "down":
+            self.source = BURGER_PRESSED
+        else:
+            self._on_mouse_pos(override=True)
+        
 
 class Popup(SignBorder, KivyPopup):
     def __init__(self, title, content, **kwargs):
@@ -372,9 +398,14 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                                         or Window.add_widget(CURSOR, "after")),
                             0.1)
 
+    def bind_to_burger(self, burger):
+        def _reposition(*args):
+            burger.pos = (self.right + dp(10), self.top - burger.height - dp(10))
+        self.bind(pos=_reposition, size=_reposition)
 
 class ChiselApp(App):
     def build(self):
+        root = FloatLayout()
         navdrawer = NavigationDrawer()
         navdrawer.toggle_state()
         navdrawer.anim_type = "slide_above_anim"
@@ -386,15 +417,21 @@ class ChiselApp(App):
         options_panel = OptionsPanel(chisel)
         navdrawer.add_widget(options_panel)
 
+        burger = BurgerButton()
+        burger.bind(on_release=navdrawer.toggle_state)
+
         rel_layout = RelativeLayout()
         rel_layout.add_widget(chisel)  # To push it when side panel is opened.
         navdrawer.add_widget(rel_layout)
         options_panel.build()
+        options_panel.bind_to_burger(burger)
         navdrawer.bind(_anim_progress=self._set_side_panel_opacity)
         navdrawer.bind(_anim_progress=self.disable_chisel)
 
-        Window.add_widget(CURSOR, "after")
-        return navdrawer
+        root.add_widget(navdrawer)
+        root.add_widget(burger)
+        Window.add_widget(CURSOR, canvas="after")
+        return root
 
     def _set_side_panel_opacity(self, instance, value):
         instance.side_panel.opacity = math.ceil(instance._anim_progress)
