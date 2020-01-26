@@ -2,7 +2,7 @@
   {
     "card_id": "welcome",
     "card_type": "start",
-    "card_image": "test.jpg",
+    "card_image": "greg_the_caveman.png",
     "text": "You are greg",
     "options": [
       {
@@ -57,7 +57,7 @@
   {
     "card_id": "welcome_3",
     "card_type": "response",
-    "card_image": "test.jpg",
+    "card_image": "greg_the_caveman.png",
     "text": "This gives you some options. Maybe its time to start taking this whole evolution thing seriously?",
     "options": [
       {
