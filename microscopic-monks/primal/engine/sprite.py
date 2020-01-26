@@ -51,6 +51,7 @@ class Sprite:
     resource_dir = Path('.', 'primal', 'resources').absolute()
     try:
         f = open(resource_dir / "testimg.png")
+        f.close()
     except FileNotFoundError:
         resource_dir = Path('.', 'resources').absolute()
 

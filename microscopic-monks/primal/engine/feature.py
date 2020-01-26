@@ -53,11 +53,10 @@ class Feature:
         self.alpha = alpha
         self.health_bar.set_alpha(self.alpha)
 
-    def hit(self):
+    def hit(self, damage: int):
         self.set_alpha(1)
         health = self.health_bar.get_health()
-        health = max(.0, health - 1)
-        self.health_bar.set_health(health)
+        self.health_bar.set_health(health - damage)
 
     def collide_with(self, pos, size) -> bool:
         sx, sy = self.get_position()
