@@ -5,7 +5,7 @@
 
 Hello and thanks for using Rex-Explorer! Made over the course of a week for CodeJam VI, Rex-Explorer is a TUI file explorer with a built in terminal and many other features!
 
-Features
+#### Features
 - Be able to experience what it was like to browse files and directories on your computer from the old days!
 
 - A built in terminal? yeah we were suprised too! be able to change directories and even commit your own project to github!
@@ -14,7 +14,7 @@ Features
 
 - Create files and directories to utilize with the built in editor, terminal and file explorer.
 
-![icon](./rex_explorer/static/icon.ico)
+- Rename and Copy files across your browser
 
 ## Installation
 
