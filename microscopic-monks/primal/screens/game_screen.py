@@ -82,7 +82,6 @@ class GameScreen(Screen):
         while self.timer > 1:
             self.timer -= 1
             self.timerValue += 1
-            print(self.timerValue)
             self.health_drop()
 
         if 'scrolldown' in self.engine.mouse_keys:
@@ -172,5 +171,5 @@ class GameScreen(Screen):
 
     def health_drop(self):
         if self.timerValue % 10 == 0:
-            self.remove = 1
-            self.health_bar.set_health(self.health_bar.get_health() - self.remove)
+            remove = 1
+            self.health_bar.set_health(self.health_bar.get_health() - remove)
