@@ -71,9 +71,12 @@ assets
 - `background.png`, `cursor/*.png` and `caveman/*.png` are original works by salt-die.
 
 [boulder-dir]: ./assets/img/boulder
+[sound-dir]: ./assests/sounds
 [pixabay-url]: https://pixabay.com/
 [pixabay-license-url]: https://pixabay.com/service/license/
+[zapsplat-url]: https://www.zapsplat.com/
+[zapsplat-license-url]: https://www.zapsplat.com/license-type/standard-license/
 
 ### Sounds
 
-- `dig.wav` is an original work by salt-die.
+- [`sounds/*.png`][sound-dir] from [zapsplat][zapsplat-url] are under the [Zapsplat License][zapsplat-license-url].
