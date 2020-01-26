@@ -184,6 +184,7 @@ class GameScreen(Screen):
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
         # Auto-input invading key
+        letter = key.name  # Saving in case auto-input disabled
         config_store = JsonStore(CONFIG_DIR)
         try:
             if config_store.get("autoinput")["value"] == 1:
@@ -192,12 +193,12 @@ class GameScreen(Screen):
                 game = store.get(str(game_id))
                 current_output_text = game["current_output_text"]
                 ciphered_text = game["ciphered_text"]
-                key.name = str(ciphered_text)[len(current_output_text) - 1]
+                letter = str(ciphered_text)[len(current_output_text) - 1]
         except KeyError:
             config_store.put("autoinput", value=1)
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
-            board_output.insert_text(key.name)
+            board_output.insert_text(letter)
         store_put(current_output_text=board_output.text)
         # Updating rotors
         new_rotors = App.get_running_app().machine.get_display()
