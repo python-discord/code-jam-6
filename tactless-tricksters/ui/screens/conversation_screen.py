@@ -39,7 +39,7 @@ class ConversationScreen(Screen):
 
         if contact != '' and contact in self.util.user_data['message_dict'].keys():
             for message in self.util.user_data['message_dict'][contact]:
-                if self.util.username == message['sender']:
+                if self.util.username != message['sender']:
                     pos_hint = {'center_x': 0.3}
                     md_bg_color = [0.698, 0.875, 0.859, 1]
                     text_color = [0, 0, 0, 1]
@@ -48,8 +48,9 @@ class ConversationScreen(Screen):
                     md_bg_color = [1, 1, 1, 0.6]
                     text_color = [0, 0, 0, 1]
                 message_label = MDLabel(text=message['message'], font_style='Caption', size_hint=(1, None))
-                self.util.morse.read(words=str(message_label.text))
-                message_label.text = self.util.morse.morse
+                if '_' not in message_label.text:
+                    self.util.morse.read(words=str(message_label.text))
+                    message_label.text = self.util.morse.morse
                 message_card = ConversationBubble(util=self.util,
                                                   size=message_label.size,
                                                   message=message_label,
@@ -94,7 +95,7 @@ class ConversationScreen(Screen):
                 self.util.message_dict[result['receiver']].append(result)
             else:
                 self.util.message_dict[result['receiver']] = [result]
-            self.util.save_message_dict(result['receiver'], self.util.message_dict)
+            self.util.save_message_dict('receiver', self.util.message_dict)
             self.ui_layout(result['receiver'])
             self.util.reload_screen_layout('message')
             self.text_input.text = ''
