@@ -3,10 +3,6 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 
-class MainWindow(Screen):
-    pass
-
-
 class CardAddWindow(Screen):
     pass
 

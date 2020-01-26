@@ -1,26 +1,6 @@
 WindowManager:
-    MainWindow:
     CardAddWindow:
     GameStatesWindow:
-
-<MainWindow>:
-    name: "main"
-
-    GridLayout:
-        cols:2
-        rows: 1
-
-        Button:
-            text: "Add game state"
-            on_release:
-                app.root.current = "game_states"
-                root.manager.transition.direction = "left"
-
-        Button:
-            text: "Add card"
-            on_release:
-                app.root.current = "card_add"
-                root.manager.transition.direction = "right"
 
 <CardAddWindow>:
     name: "card_add"
@@ -103,7 +83,7 @@ WindowManager:
                 height: 30
                 text: 'Game states'
                 on_release:
-                    app.root.current = "main"
+                    app.root.current = "game_states"
                     root.manager.transition.direction = "right"
 
 <GameStatesWindow>:
@@ -153,7 +133,7 @@ WindowManager:
             multiline: False
 
         Button:
-            text: 'Back'
+            text: 'Back to card screen'
             on_release:
                 app.root.current = "card_add"
                 root.manager.transition.direction = "left"
