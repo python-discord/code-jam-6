@@ -55,14 +55,12 @@ class Ledger(BoxLayout):
         return self.df.loc[self.row].to_dict()
 
     def submit_row(self):
-        """add and select new row at bottom of ledger"""
+        """calculate result, update ledger, new row"""
         row = self.get_row()
 
         x = self.df.at[self.row, 'x']
         y = self.df.at[self.row, 'y']
 
-        if row['op'] is None:
-            result = x
         if row['op'] == '+':
             result = x + y
         if row['op'] == '-':
@@ -71,6 +69,8 @@ class Ledger(BoxLayout):
             result = x * y
         if row['op'] == '/':
             result = x / y
+        else:
+            result = x
 
         self.df.at[self.row, 'z'] = result
         self.parent.parent.children[1].set_value(result)

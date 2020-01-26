@@ -70,9 +70,9 @@
     Label:
         text: root.value[0]
     Label:
-        text: root.value[1]
-    Label:
         text: root.value[2]
+    Label:
+        text: root.value[1]
     Label:
         text: root.value[3]
 
@@ -87,8 +87,10 @@
             source: 'assets/graphics/sandstone.jpg'
     rv: rv
     orientation: 'vertical'
+    size_hint_y: 1
     RecycleView:
         id: rv
+        size_hint_y: 1
         scroll_type: ['bars', 'content']
         scroll_wheel_distance: dp(114)
         bar_width: dp(10)
