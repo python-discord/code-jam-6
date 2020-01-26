@@ -18,14 +18,15 @@ class SettingsScreen(Screen):
     store = JsonStore(CONFIG_DIR)
 
     def on_enter(self):
-        if Config.get("graphics", "fullscreen") not in {0, 1, "0", "1"}:
-            Config.set("graphics", "fullscreen", 0)
+        if Config.get("graphics", "borderless") not in {0, 1, "0", "1"}:
+            Config.set("graphics", "borderless", 0)
+            Config.set("graphics", "resizable", 1)
             Config.write()
 
         for config_name in self.ids.keys():
             if config_name == "allow_fullscreen":
                 self.ids.allow_fullscreen.state = (
-                    "down" if Config.get("graphics", "fullscreen") == "1" else "normal"
+                    "down" if Config.get("graphics", "borderless") == "1" else "normal"
                 )
                 continue
             if not self.store.exists(config_name):
@@ -60,7 +61,9 @@ class SettingsScreen(Screen):
             if to_save == "background_volume":
                 self.manager.get_screen("main_screen").music.volume = new_value
             elif to_save == "allow_fullscreen":
-                Config.set("graphics", "fullscreen", new_value)
+                Config.set("graphics", "borderless", new_value)
+                Config.set("graphics", "resizable", 0 if new_value == 1 else 1)
+                print(Config.get("graphics", "resizable"))
                 Config.write()
                 return
 

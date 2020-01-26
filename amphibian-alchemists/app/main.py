@@ -6,8 +6,10 @@ from kivy.app import App
 from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.uix.screenmanager import FadeTransition, ScreenManager
+from kivy.core.window import Window
 
 kivy.require("1.11.1")
+Window.maximize()
 
 Factory.register("MainScreen", module="classes.mainscreen")
 Builder.load_file("kvs/mainscreen.kv")
