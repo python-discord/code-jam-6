@@ -3,7 +3,7 @@ By: Amphibian Alchemists
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The WWII Enigma Machine is the most famous encryption device of the 20th Century, used by the Germans to send messages. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths before the Allies capture you.
+Used by the Germans to send covert messages, the WWII Enigma Machine is the most famous encryption device of the 20th Century. As the role of a code receiver for the Germans, you must decipher the message given to you before the Allies capture you!
 
 Table of Contents:
 - Setup
@@ -20,7 +20,7 @@ Table of Contents:
 4. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
 5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
 
-The current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup o=your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
+The current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
 
 ---
 ### Short Tutorial: Gist of the game
