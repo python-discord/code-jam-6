@@ -12,7 +12,9 @@
             spacing: dp(16)
             Button:
                 text: "Go back"
-                on_release: root.manager.current = "main_screen"
+                on_release:
+                    root.manager.current = "main_screen"
+                    app.root.get_screen('game_screen').button_press_swoosh()
             Button:
                 text: "Load game"
                 disabled: not root.last_selected

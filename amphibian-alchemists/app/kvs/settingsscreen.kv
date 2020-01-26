@@ -64,6 +64,7 @@
             size_hint: 0.7, 0.7
             do_default_tab: False
             TabbedPanelItem:
+                on_press: app.root.get_screen('game_screen').plug_remove_pop()
                 text: "General"
                 SettingTabLayout:
                     BoxLayout:
@@ -90,6 +91,7 @@
                                 on_release: Factory.DeleteSaves().open()
             TabbedPanelItem:
                 text: "Sound"
+                on_press: app.root.get_screen('game_screen').plug_remove_pop()
                 SettingTabLayout:
                     BoxLayout:
                         orientation: "vertical"
