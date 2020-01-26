@@ -32,7 +32,7 @@ class MainBox(FloatLayout):
     def __init__(self, **kwargs):
         super(MainBox, self).__init__()
         self.screens = AnchorLayout(anchor_x='center', anchor_y='center')
-        self.util = Utility()
+        self.util = kwargs.get('util')
         self.content = ScreenManager()
         self.content.transition = NoTransition()
 
@@ -68,7 +68,8 @@ class MainApp(App):
     accent_color = [255/255, 64/255, 129/255, 1]
 
     def build(self):
-        return MainBox()
+        self.util = Utility()
+        return MainBox(util=self.util)
 
 
 if __name__ == "__main__":

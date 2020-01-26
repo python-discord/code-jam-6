@@ -33,7 +33,10 @@ class ContentNavigationDrawer(MDNavigationDrawer):
         # I have to manually reset the color back to white
         # because it's not doing it on its own
         nav_item._active_color = [1, 1, 1, 1]
-        App.get_running_app().root.content.current = screen
+        if screen == 'message' and App.get_running_app().util.auth_token == '':
+            App.get_running_app().root.content.current = 'sign_in'
+        else:
+            App.get_running_app().root.content.current = screen
 
 
 class MyNavigationLayout(NavigationLayout):

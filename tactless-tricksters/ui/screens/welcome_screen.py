@@ -101,8 +101,10 @@ Builder.load_string("""
                 text: 'Message'
                 icon: 'message'
                 on_press:
-                    # TODO: create exit function
                     root.manager.current = 'message'
+                    if app.util.auth_token == '': \ 
+                    root.manager.current = 'sign_in'
+
 """)
 
 
