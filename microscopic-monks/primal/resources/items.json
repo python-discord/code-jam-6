@@ -8,6 +8,8 @@
   "bushBP": {"health": 0, "range": 0, "recipe": {}, "source": "bushBP.png", "damage": 0},
   "bushBR": {"health": 0, "range": 0, "recipe": {}, "source": "bushBR.png", "damage": 0},
   "bushBY": {"health": 0, "range": 0, "recipe": {}, "source": "bushBY.png", "damage": 0},
-  "cacti": {"health": 0, "range": 0, "recipe": {}, "source": "Cacti.png", "damage": 0}
-  
+  "cacti": {"health": 0, "range": 0, "recipe": {}, "source": "Cacti.png", "damage": 0},
+  "spear": {"health":0, "range:0", "recipe:{}", "source": "spear_maybe.png", "damge": 0},
+  "shovel": {"health":0, "range:0", "recipe:{}", "source": "shovel.png", "damge": 0}
+
 }
