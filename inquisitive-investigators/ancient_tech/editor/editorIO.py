@@ -52,7 +52,7 @@ class EditorIO(TextInput):
         elif keycode[0] in KEYS['del', 'backspace']:
             self.cancel_selection()
 
-        elif keycode[0] in KEYS['+'] and 'ctrl' in modifiers:
+        elif keycode[0] in KEYS['='] and 'ctrl' in modifiers:
             print(f'Zoom in:{self.font_size}')
             self.font_size += 1
 
