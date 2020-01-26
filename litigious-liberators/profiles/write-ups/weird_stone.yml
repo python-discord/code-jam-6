@@ -4,15 +4,11 @@ Biography: >
   Never seen a stone with a weird yet a perfectly shaped rectangular orifice.
   Might be of some importance if it belonged to the ancient walkers.
 Choices:
-  right: >
-    Leave it there.
-  left: >
-    Take it to DJ Mammo for further investigation.
+  right: Leave it there.
+  left: Take it to DJ Mammo for further investigation.
 Results:
-  right: >
-    Just an ordinary stone
-  left: >
-    An interesting find!
+  right: Just an ordinary stone
+  left: An interesting find!
 Deltas:
   right:
     Knowledge: 0

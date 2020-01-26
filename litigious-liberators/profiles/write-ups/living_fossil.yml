@@ -1,20 +1,14 @@
 Name: Living Fossil
 Picture: living_fossil.png
 Biography: >
-  Somesay it re-evolved to spite God.
-  Others say it just happened to survive somehow.
-  Few treat it as holy, few want its exotic.
-  But one thing everyone agrees, its mere existence is paradoxical.
+  Some say it re-evolved to spite God. Others say it just happened to survive somehow. Few treat it
+  as holy, but all agree its mere existence is paradoxical.
 Choices:
-  right: >
-    Kill and eat it.
-  left: >
-    Learn more about it.
+  right: Kill and eat it.
+  left: Learn more about it.
 Results:
-  right: >
-    Smells weird but tastes good
-  left: >
-    Such wisdom!
+  right: Smells weird but tastes good
+  left: Such wisdom!
 Deltas:
   right:
     Knowledge: 0

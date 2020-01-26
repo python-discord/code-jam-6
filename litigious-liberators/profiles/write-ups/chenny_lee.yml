@@ -6,15 +6,11 @@ Biography: >
   Pro: not afraid of spiders
   Con: afraid of moths
 Choices:
-  right: >
-    Attend Chenny's cake party.
-  left: >
-    Explore a cave with Chenny.
+  right: Attend Chenny's cake party.
+  left: Explore a cave with Chenny.
 Results:
-  right: >
-    Yummy!
-  left: >
-    Hope they aren't any moths.
+  right: Yummy!
+  left: Hope there aren't any moths.
 Deltas:
   right:
     Knowledge: 0

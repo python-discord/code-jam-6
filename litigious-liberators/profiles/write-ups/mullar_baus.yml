@@ -6,12 +6,12 @@ Biography: >
   recipe to invigorate everybody who'll be eating my food.
 Choices:
   right: >
-    Tell her Chenny's taste better.
+    Tell her Chenny's tastes better.
   left: >
-    Tell her shes better than Chenny's
+    Tell her she's better than Chenny
 Results:
   right: >
-    Oops! sorry Mullar.
+    Oops! Sorry Mullar.
   left: >
     Hope Chenny won't kill me!
 Deltas:

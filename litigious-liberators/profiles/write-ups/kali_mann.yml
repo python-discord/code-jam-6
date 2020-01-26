@@ -6,15 +6,11 @@ Biography: >
   participate in most territory-expansion campaigns, and am considered a very valuable member
   of our Air Force.
 Choices:
-    right: >
-      Join Kali's clan.
-    left: >
-      Group with other clans to defeat Kali's
+    right: Join Kali's clan.
+    left: Group with the other clans to defeat Kali's
 Results:
-    right: >
-      Welcome to the clan.
-    left: >
-      Not today kali.
+    right: Welcome to the clan.
+    left: Not today Kali.
 Deltas:
     right:
         Knowledge: 0

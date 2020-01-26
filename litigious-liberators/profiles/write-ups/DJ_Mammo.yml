@@ -1,20 +1,16 @@
 Name: DJ Mammo
-Picture: dj_mammo.png
+Picture: DJ_Mammo.png
 Biography: >
-  Yo its yo boi DJ Mammo!
+  Yo it's yo boi DJ Mammo!
   Yo friendly cyborg mammoth.
   Come to my party yo and enjoy my newest drug Elesdi.
-  This will boost ya creativity son.
+  This will boost ya creativity ma son.
 Choices:
-  right: >
-    Mind my own business
-  left: >
-    Go to his party.
+  right: Mind my own business
+  left: Go to his party.
 Results:
-  right: >
-    Drugs aint good man
-  left: >
-    Vibe Check!
+  right: Drugs aint good man
+  left: Vibe Check!
 Deltas:
   right:
     Knowledge: 0

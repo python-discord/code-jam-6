@@ -5,15 +5,11 @@ Biography: >
   couple good spots to hide in when the apocalypse happens. I also enjoy reading, and am updated
   on most of the well-known authors.
 Choices:
-  right: >
-    Join her clan.
-  left: >
-    Show her some of your ancient book collection.
+  right: Join her clan.
+  left: Show her some of your ancient book collection.
 Results:
-  right: >
-    Safer than ever!
-  left: >
-    Always nice to have smart friends!
+  right: Safer than ever!
+  left: Always nice to have friends with resources!
 Deltas:
   right:
     Knowledge: 0

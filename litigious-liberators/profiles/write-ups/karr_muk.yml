@@ -6,15 +6,11 @@ Biography: >
   non-vegetarian, so mind that - hey, don't blame me, vegans - it's not my fault T-Rexs are
   carnivores...
 Choices:
-  right: >
-    Attend Karr's concert.
-  left: >
-    Sabotage his concert.
+  right: Attend Karr's concert.
+  left: Sabotage his concert.
 Results:
-  right: >
-    Cool music!
-  left: >
-    Not my music taste.
+  right: Cool music!
+  left: Not my music taste.
 Deltas:
   right:
     Knowledge: 0
