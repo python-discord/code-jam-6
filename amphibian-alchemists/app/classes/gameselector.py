@@ -76,9 +76,9 @@ class GameSelectorScreen(Screen):
         ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
         self.manager.get_screen("plugboard_screen").clear_plugs()
 
-        configs = JsonStore(CONFIG_DIR)
+        config_store = JsonStore(CONFIG_DIR)
 
-        if configs.exists("auto_input") and configs.get("auto_input")["value"] == 0:
+        if config_store.exists("auto_input") and config_store.get("auto_input")["value"] == 0:
             self.manager.get_screen("game_screen").current_time = "200"
         else:
             self.manager.get_screen("game_screen").current_time = "100"
