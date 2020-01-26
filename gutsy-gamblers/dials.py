@@ -1,4 +1,4 @@
-from datetime import timedelta, datetime
+from datetime import timedelta, datetime, date
 
 from geopy import Point
 from kivy.animation import Animation
@@ -105,15 +105,13 @@ class DialWidget(FloatLayout):
 
         # Shading widget
         self.dial_shading = DialEffectWidget((self.sunrise, self.sunset))
-
-        # Add icons that can be arbitrarily rotated on canvas.
-        self.sun_rise_marker = SunRiseMarker(self.sunrise)
-        self.sun_set_marker = SunSetMarker(self.sunset)
-
-        # Add widgets
         self.add_widget(self.dial_shading)
-        self.add_widget(self.sun_rise_marker)
-        self.add_widget(self.sun_set_marker)
+
+        if self.sun_angles not in [[0, 0], [0, 360]]:
+            self.sun_rise_marker = SunRiseMarker(self.sunrise)
+            self.sun_set_marker = SunSetMarker(self.sunset)
+            self.add_widget(self.sun_rise_marker)
+            self.add_widget(self.sun_set_marker)
 
         self.animate_dial()
         self.clock = Clock.schedule_interval(self.redraw, self.midnight_delta)
@@ -130,20 +128,22 @@ class DialWidget(FloatLayout):
 
         # Remove widgets
         self.remove_widget(self.dial_shading)
-        self.remove_widget(self.sun_rise_marker)
-        self.remove_widget(self.sun_set_marker)
+        try:
+            self.remove_widget(self.sun_rise_marker)
+            self.remove_widget(self.sun_set_marker)
+        except AttributeError:
+            # Previous day had no sunrise/sunset, no widgets to remove
+            pass
 
         # Shading widget
         self.dial_shading = DialEffectWidget((self.sunrise, self.sunset))
-
-        # Add icons that can be arbitrarily rotated on canvas.
-        self.sun_rise_marker = SunRiseMarker(self.sunrise)
-        self.sun_set_marker = SunSetMarker(self.sunset)
-
-        # Add widgets
         self.add_widget(self.dial_shading)
-        self.add_widget(self.sun_rise_marker)
-        self.add_widget(self.sun_set_marker)
+
+        if self.sun_angles not in [[0, 0], [0, 360]]:
+            self.sun_rise_marker = SunRiseMarker(self.sunrise)
+            self.sun_set_marker = SunSetMarker(self.sunset)
+            self.add_widget(self.sun_rise_marker)
+            self.add_widget(self.sun_set_marker)
 
         # Restart the clock!
         self.clock.cancel()
@@ -158,12 +158,16 @@ class DialWidget(FloatLayout):
         try:
             today_sunrise = sun_time.get_sunrise_time(self.date)
         except SunTimeException:
-            raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
+            if date(year=self.date.year, month=3, day=21) < self.date.date() < date(year=self.date.year, month=9, day=22):
+                return 0, 360
+            return 0, 0
 
         try:
             today_sunset = sun_time.get_sunset_time(self.date)
         except SunTimeException:
-            raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
+            if date(year=self.date.year, month=3, day=21) < self.date.date() < date(year=self.date.year, month=9, day=22):
+                return 0, 360
+            return 0, 0
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
         now = datetime.utcnow() - timedelta(hours=0)
@@ -254,8 +258,15 @@ class SunShading(FloatLayout):
         sun_colour = (0.9, 0.9, 0.08, 1)
         shade_colour = (0.0, 0.2, 0.4, 1)
 
-        # More of bisks brutally ugly work
-        if rise_angle < set_angle:
+        if angles == (0, 360):
+            self.sun_one_angle_start = 0
+            self.sun_one_angle_stop = 360
+            self.sun_one_color = sun_colour
+        elif angles == (0, 0):
+            self.shade_one_angle_start = 0
+            self.shade_one_angle_stop = 360
+            self.shade_one_color = shade_colour
+        elif rise_angle < set_angle:
             self.shade_one_angle_start = 360 - set_angle
             self.shade_one_angle_stop = 360 - rise_angle
             self.shade_one_color = shade_colour
