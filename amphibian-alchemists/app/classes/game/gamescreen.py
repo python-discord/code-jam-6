@@ -52,6 +52,8 @@ def setup_new_game_settings():
     else:
         store.put("latest_game_id", id=int(current_game_id) + 1)
     # Setting up data
+    time_remaning = 60
+    start_time = datetime.now().isoformat()
     game_id = store.get("latest_game_id")["id"]
     App.get_running_app().game_id = game_id
     plug_array = sample(ascii_uppercase, 20)
