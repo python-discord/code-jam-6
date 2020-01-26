@@ -1,6 +1,38 @@
-# Tactless Tricksters
+# Morse Code Jam (Tactless Tricksters)
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+Morse Code Jam is an app that brings morse code technology to the 21st century!  
+Have you ever wanted to send a friend a morse code message but can't because AT&T 
+stopped servicing telegram lines in the 1930s?  Well Morse Code Jam has you covered!
+Morse code utilizes the power of the internet to digitiz morse code and send it over
+the internet to friends and family! 
+
+Some features include:
+- messaging functionality that allows you to connect and communicate via morse
+
+- training exercises that helps you listen to morse code
+
+- training exercises that helps you tap out morse code
+
+- a decoding screen that converts audio of morse code to text (Desktop only)
+
+- an encoder screen that converts speech to morse code
+
+## Requirements
+python 3.7+
+
+This app uses pyAudio a wrapper for portAudio a library used for audio playback and recording.
+
+To install pyAudio on windows use:
+> pip install pipwin
+> pipwin install pyaudio
+
+for other platform
+> pip install pyaudio
+
+- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+
+- **KivyMD:** [https://github.com/HeaTTheatR/KivyMD](KivyMD, Version 0.100.2)
+
 
 ## Useful links
 
