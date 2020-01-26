@@ -128,7 +128,7 @@ class GameScreen(Screen):
     def process_player_nearby(self, px, py, delta):
         chunk = self.world.get_chunk_from_coords((px, py))
         for feature in chunk.get_features():
-            if feature.does_collide():
+            if feature.does_collide() and feature.type == 'cacti':
                 dst = 40 + feature.get_size()[0]
                 dst = (dst * dst) / 4
                 if feature.distance_to((px, py)) <= dst + 2_000:
