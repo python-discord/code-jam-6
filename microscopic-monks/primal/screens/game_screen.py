@@ -216,7 +216,13 @@ class GameScreen(Screen):
 
                 if feature.distance_to((pos_x, pos_y)) < dst \
                         and feature.collide_with((mx, my), (1, 1)):
-                    feature.hit()
+
+                    item = self.inventory.get_active()
+                    damage = 1
+                    if len(item) != 0 and item[0] in ['shovel', 'spear']:
+                        damage = 2
+
+                    feature.hit(damage)
                     if feature.get_health() == 0:
                         remove_features.add(feature)
 
