@@ -158,8 +158,8 @@ class UpdateLocationButton(Button):
             feedback.text = 'Failed to find location, try again!'
             return
 
-        self.latlon = f'{resp.latitude},{resp.longitude}'
         self.friendlyname = resp.address
+        self.latlon = f'{resp.latitude},{resp.longitude}'
         feedback.text = f'Successfully set location to {resp.address}'
 
 
