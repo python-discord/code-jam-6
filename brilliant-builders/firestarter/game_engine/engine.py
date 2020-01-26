@@ -17,7 +17,7 @@ IMAGE_EXTENSIONS = ['png']
 class Engine(Widget):
     resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
     X_PLAYER_OFFSET = -200  # how far from the center of the screen we want the player
-    Y_PLAYER_OFFSET = -50  # how far from the center of the screen we want the player
+    Y_PLAYER_OFFSET = -250  # how far from the center of the screen we want the player
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -104,7 +104,7 @@ class Engine(Widget):
                 )
             )
             obj_num += 1
-        self.add_sprites(objs.values())
+        self.add_sprites(objs.values(), static=(obj['static'] if 'static' in obj else False))
         return objs
 
     def _animate(self, dt: float) -> None:
