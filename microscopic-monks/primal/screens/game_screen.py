@@ -181,7 +181,7 @@ class GameScreen(Screen):
             if clicked:
                 return
     def health_drop(self):
-        if self.timerValue % 20 == 0:
+        if self.timerValue % 10 == 0:
             self.remove = 1
             self.health_bar.set_health(self.health_bar.get_health() - self.remove)
 
