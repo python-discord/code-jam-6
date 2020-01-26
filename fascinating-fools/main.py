@@ -1,3 +1,5 @@
+from functools import partial
+
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from kivy.uix.image import Image
@@ -8,6 +10,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.core.audio import SoundLoader
 from kivy.uix.textinput import TextInput
+from kivy.clock import Clock
 
 from question import Question, connection
 
@@ -23,7 +26,7 @@ class FullWindowImage(Image):
 
 
 class ButtonWithSound(Button):
-    def __init__(self, sound_file, **kwargs):
+    def __init__(self, sound_file='sounds/tech-whoosh.wav', **kwargs):
         super(ButtonWithSound, self).__init__(**kwargs)
         self.button_press_sound = SoundLoader.load(sound_file)
         self.category = self.text
@@ -71,7 +74,7 @@ class SecondGridRow(BoxLayout):
         self.add_widget(self.category_one)
 
     def handle_category_selection(self, pressed):
-        print(f"Inside Second Grid :: Pressed button :> {pressed.text}")
+        # print(f"Inside Second Grid :: Pressed button :> {pressed.text}")
         pressed.button_press_sound.play()
         self.parent.parent.manager.current = 'home_screen'
         self.parent.parent.manager.get_screen(
@@ -81,12 +84,9 @@ class SecondGridRow(BoxLayout):
 class ThirdGridRow(BoxLayout):
     def __init__(self, **kwargs):
         super(ThirdGridRow, self).__init__(**kwargs)
-        self.category_two = ButtonWithSound(
-            text="Medicine", sound_file="sounds/tech-whoosh.wav")
-        self.category_three = ButtonWithSound(
-            text="Automobiles", sound_file='sounds/tech-whoosh.wav')
-        self.category_four = ButtonWithSound(
-            text="Music", sound_file='sounds/tech-whoosh.wav')
+        self.category_two = ButtonWithSound(text="Medicine", )
+        self.category_three = ButtonWithSound(text="Automobiles", )
+        self.category_four = ButtonWithSound(text="Music", )
         self.add_widget(self.category_three)
         self.add_widget(self.category_two)
         self.add_widget(self.category_four)
@@ -96,7 +96,7 @@ class ThirdGridRow(BoxLayout):
         self.category_four.bind(on_press=self.handle_category_selection)
 
     def handle_category_selection(self, pressed):
-        print(f"Inside Third Grid :: Pressed button :> {pressed.text}")
+        # print(f"Inside Third Grid :: Pressed button :> {pressed.text}")
         pressed.button_press_sound.play()
         self.parent.parent.manager.current = 'home_screen'
         self.parent.parent.manager.get_screen(
@@ -106,24 +106,41 @@ class ThirdGridRow(BoxLayout):
 class FourthGridRow(BoxLayout):
     def __init__(self, **kwargs):
         super(FourthGridRow, self).__init__(**kwargs)
-        self.category_five = Button(text="Food")
-        self.category_six = Button(text="Construction")
-        self.category_seven = Button(text="Telecommunications")
+        self.category_five = ButtonWithSound(
+            text="Food", sound_file='sounds/button-press-whoosh.wav')
+        self.category_six = ButtonWithSound(
+            text="Construction", sound_file='sounds/button-press-whoosh.wav')
+        self.category_seven = ButtonWithSound(
+            text="Telecommunications",
+            sound_file='sounds/button-press-whoosh.wav')
         self.add_widget(self.category_five)
         self.add_widget(self.category_six)
         self.add_widget(self.category_seven)
+        # Bind the buttons actions to move screens
+        self.category_five.bind(on_press=self.handle_category_selection)
+        self.category_six.bind(on_press=self.handle_category_selection)
+        self.category_seven.bind(on_press=self.handle_category_selection)
+
+    def handle_category_selection(self, pressed):
+        # print(f"Inside Fourth Grid :: Pressed button :> {pressed.text}")
+        pressed.button_press_sound.play()
+        self.parent.parent.manager.current = 'home_screen'
+        self.parent.parent.manager.get_screen(
+            'home_screen').category = pressed.text
 
 
 class StartTriviaHomeLayout(Screen):
     def __init__(self, **kwargs):
         super(StartTriviaHomeLayout, self).__init__(**kwargs)
         self.layout = GridLayout()
-        self.layout.rows = 4
+        self.layout.rows = 5
         self.layout.padding = (200, 0, 200, 100)
         self.layout.spacing = [20, 10]
         # add the background TODO: for some reason distorts the grid
-        # self.background = Background(source='background.jpg')
-        # self.layout.add_widget(self.background)
+        self.background = Background(source='images/background.jpg',
+                                     pos=self.pos,
+                                     size=self.size)
+        self.layout.add_widget(self.background)
         # first row
         self.first_grid = FirstGridRow()
         self.layout.add_widget(self.first_grid)
@@ -165,32 +182,34 @@ class TriviaCategoryScreen(Screen):
         self.category_questions = None
 
     def press_start_button(self, pressed):
-        print(
-            f"Inside TriviaCategoryScreen :: Pressed button :> {pressed.text}")
-        self.manager.current = 'play_screen'
-        self.manager.get_screen('play_screen').category = self.category
-        self.category_questions = Question(self.category).get_questions()
-        # Set the question to start , the choices and the correct answer
-        self.manager.get_screen(
-            'play_screen').question = self.category_questions[0].get(
-                'question')
-        self.manager.get_screen(
-            'play_screen').category_questions = self.category_questions
-        self.manager.get_screen(
-            'play_screen').choices = self.category_questions[0].get(
-                'choices').split(',')
-        self.manager.get_screen(
-            'play_screen').answer = self.category_questions[0].get('answer')
+        # print( f"Inside TriviaCategoryScreen :: Pressed button :> {pressed.text}")
+        try:
+            self.manager.current = 'play_screen'
+            self.manager.get_screen('play_screen').category = self.category
+            self.category_questions = Question(self.category).get_questions()
+            # Set the question to start , the choices and the correct answer
+            self.manager.get_screen(
+                'play_screen').question = self.category_questions[0].get(
+                    'question')
+            self.manager.get_screen(
+                'play_screen').category_questions = self.category_questions
+            self.manager.get_screen(
+                'play_screen').choices = self.category_questions[0].get(
+                    'choices').split(',')
+            self.manager.get_screen(
+                'play_screen').answer = self.category_questions[0].get(
+                    'answer')
+        except IndexError as e:
+            print(f" Error {e}")
+            self.manager.current = 'start_page'
 
     def process_go_back_home(self, pressed):
-        print(
-            f"Inside TriviaCategoryScreen :: Pressed button :> {pressed.text}")
+        # print( f"Inside TriviaCategoryScreen :: Pressed button :> {pressed.text}")
         self.manager.current = 'start_page'
 
     def on_enter(self):
-        print(
-            f"Inside TriviaCategoryScreen :: on_enter() method The selected category is {self.category}"
-        )
+        pass
+        # print( f"Inside TriviaCategoryScreen :: on_enter() method The selected category is {self.category}")
 
 
 class PlayScreen(Screen):
@@ -230,22 +249,28 @@ class PlayScreen(Screen):
         # Add the above layout to this screen
         self.add_widget(self.layout)
 
+    def change_screen(self, screen_to, *args, **kwargs):
+        self.manager.current = screen_to
+
     def check_answer(self, pressed):
-        print(
-            f" Selected answer {pressed.text}, The category is {self.category} Checking question number {self.question_number}, The length of the category questions :> {len(self.category_questions)}"
-        )
+        # print(
+        #     f" Selected answer {pressed.text}, when split {pressed.text.split(' ', 1)}, The category is {self.category} Checking question number {self.question_number}, The length of the category questions :> {len(self.category_questions)}"
+        # )
 
         if self.question_number == len(self.category_questions):
             # Also check answer for categories with 1 question or last question for others
-            if pressed.text.split()[1] == self.answer:
-                print("Correctly answered the question !")
+            if pressed.text.split(' ', 1)[1] == self.answer:
+                # print("Correctly answered the question !")
+                # pressed.background_color = (0, 1, 0, .5)
                 self.runnig_score += 1
                 correct_sound.play()
             else:
-                print("Wrongly answered the question !")
+                # print("Wrongly answered the question !")
+                # pressed.background_color = (1, 0.45, 0, .5)
                 error_sound.play()
-            # Move to the results screen
-            self.manager.current = 'results_screen'
+            # Move to the results screen, dela by 1 second
+            Clock.schedule_once(partial(self.change_screen, 'results_screen'),
+                                1)
             # Pass the score the results screen
             self.manager.get_screen('results_screen').score = self.runnig_score
             self.manager.get_screen('results_screen').quiz_length = len(
@@ -258,11 +283,11 @@ class PlayScreen(Screen):
         else:
             # Move to this screen again with refreshed data
             if pressed.text.split()[1] == self.answer:
-                print("Correctly answered the question !")
+                # print("Correctly answered the question !")
                 self.runnig_score += 1
                 correct_sound.play()
             else:
-                print("Wrongly answered the question !")
+                # print("Wrongly answered the question !")
                 error_sound.play()
 
             # Move to the next question
@@ -273,23 +298,21 @@ class PlayScreen(Screen):
             self.answer = self.current_question.get('answer')
 
             self.question_label.text = self.question
-            self.first_answer.text = self.choices[0]
-            self.second_answer.text = self.choices[1]
-            self.third_answer.text = self.choices[2]
-            self.fourth_answer.text = self.choices[3]
+            self.first_answer.text = self.choices[0].strip()
+            self.second_answer.text = self.choices[1].strip()
+            self.third_answer.text = self.choices[2].strip()
+            self.fourth_answer.text = self.choices[3].strip()
 
             # Increment the nth question we are at
             self.question_number += 1
 
     def on_enter(self):
-        print(
-            f"Inside PlayScreen():: on_enter() method: The current question is {self.question}, {self.choices}, {self.answer}"
-        )
+        # print( f"Inside PlayScreen():: on_enter() method: The current question is {self.question}, {self.choices}, {self.answer}")
         self.question_label.text = self.question
-        self.first_answer.text = self.choices[0]
-        self.second_answer.text = self.choices[1]
-        self.third_answer.text = self.choices[2]
-        self.fourth_answer.text = self.choices[3]
+        self.first_answer.text = self.choices[0].strip()
+        self.second_answer.text = self.choices[1].strip()
+        self.third_answer.text = self.choices[2].strip()
+        self.fourth_answer.text = self.choices[3].strip()
 
 
 class ResultsScreen(Screen):
@@ -328,12 +351,12 @@ class ResultsScreen(Screen):
         self.add_widget(self.layout)
 
     def handle_restart(self, press):
-        print(f"Press {press}")
+        # print(f"Press {press}")
         # Go back to the initial screen
         self.manager.current = 'home_screen'
 
     def on_enter(self, ):
-        print(f"The current score :> {self.score}")
+        # print(f"The current score :> {self.score}")
         self.score_label.text = f"Score is {self.score}/ {self.quiz_length}"
         # Update the leaderboard stats
         self.total_players = self.get_total_players(self.category)
@@ -371,26 +394,20 @@ class ResultsScreen(Screen):
 
         current_score = results[0].get('score')
         if new_score > current_score:
-            print(
-                f"Updating imporoved score for {user_name} in Category {category} to {new_score}"
-            )
+            # print( f"Updating imporoved score for {user_name} in Category {category} to {new_score}")
             sql = 'UPDATE leaderboard SET score = ? WHERE username = ? AND Category = ?;'
             params = (new_score, user_name, self.category)
             cursor.execute(sql, params)
 
     def user_name_entered(self, user_name_input_event):
         try:
-            print(
-                f"{user_name_input_event}, Current player is {self.playing_username}"
-            )
+            # print( f"{user_name_input_event}, Current player is {self.playing_username}")
             user_name = user_name_input_event.text
             rank = self.get_rank(user_name, self.category)
             self.total_players = self.get_total_players(self.category)
             if self.total_players == 0:
                 self.total_players = 1  # First player on this category
-            print(
-                f"Current rank is {rank}, and total players are {self.total_players}"
-            )
+            # print( f"Current rank is {rank}, and total players are {self.total_players}")
 
             if not rank:
                 # First time for this user
@@ -401,7 +418,7 @@ class ResultsScreen(Screen):
                 self.rank = self.total_players
             else:
                 # This is a returning player update the score
-                print(f"New score is {self.score}")
+                # print(f"New score is {self.score}")
                 self.update_user_leaderboard_score(user_name, self.category,
                                                    self.score)
                 # refresh rank
