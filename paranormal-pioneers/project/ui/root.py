@@ -21,11 +21,10 @@ class Shell(EventDispatcher):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.term = Terminal()
-        self.term._prepare()
 
     def run_command(self, command, show_output=True, *args):
         try:
-            result = self.term.parser.execute(command, self.term)
+            result = self.term.run_cmd(command)
         except Exception as exc:
             result = str(exc)
 
