@@ -4,6 +4,7 @@ from math import sqrt
 
 from .gesture import check_gesture
 from .gesture_db import load_gestures
+from .ledger_df import calculator
 
 
 def calculate_points(x1, y1, x2, y2, steps=1):
@@ -103,8 +104,8 @@ class DrawPad(FloatLayout):
             value = check_gesture(self.ud['lines'][0].points, self.gdb)
 
             if value:
-                print(f"Gesture value: {value}")
-
+                print(f"Gesture recognized: {value}")
+                calculator.update(value, '+')
                 # TODO: fade line out
                 self.click()
 

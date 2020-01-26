@@ -4,10 +4,15 @@ Backend data frame to be displayed by the ledger.
 
 import pandas as pd
 
-test_data = [
-    {'val1': 3, 'op': '*', 'val2': 2, 'res': 6},
-    {'val1': 4, 'op': '+', 'val2': 8, 'res': 12},
-    {'val1': 0, 'op': None, 'val2': 0, 'res': 0}
-]
+from .calculator import Calculator
 
-df = pd.DataFrame(test_data)
+# test_data = [
+#     {'x': 3, 'y': 2, 'op': '*', 'z': 6},
+#     {'x': 4, 'y': 8, 'op': '+', 'z': 12},
+#     {'x': 0, 'y': 0, 'op': None, 'z': 0}
+# ]
+# ledger_df = pd.DataFrame(test_data)
+
+ledger_df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
+
+calculator = Calculator(df=ledger_df)

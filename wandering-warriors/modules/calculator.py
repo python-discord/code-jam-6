@@ -2,25 +2,34 @@
 Backend calculator for storing values and communicating operations b/w widgets
 """
 
+import pandas as pd
+
 
 class Calculator:
-    def __init__(self):
-        self.active_value = 0
-        self.active_operator = None
-        self.tab_value = 0
+    def __init__(self, df: pd.DataFrame):
+        self.df = df
+        self.col = 'x'
+        self.row = 1
+        self.new_row()
+        print(f"Active Cell: {self.df.at[self.row, self.col]}")
 
-    def add(self, x: int):
-        self.active_value = self.active_value + x
+    def update(self, n: int, op: str = '+'):
+        """Update active cell"""
+        if op == '+':
+            self.df.at[self.row, self.col] += n
+        if op == '-':
+            self.df.at[self.row, self.col] -= n
+        if op == '*':
+            self.df.at[self.row, self.col] *= n
+        if op == '/':
+            self.df.at[self.row, self.col] /= n
+        if op == '=':
+            self.df.at[self.row, self.col] = n
+        print(self.df)
 
-    def subtract(self, x: int):
-        self.active_value = self.active_value - x
-
-    def multiply(self, x: int):
-        self.active_value = self.active_value * x
-
-    def divide(self, x: int):
-        self.active_value = self.active_value / x
-
-    def tabulate(self, x: int):
-        # For tabulating growing base-60 values from drawpad
-        self.tab_value = self.tab_value + x
+    def new_row(self):
+        index = len(self.df.index) + 1
+        self.df.loc[index] = {'x': 0, 'y': 0, 'op': None, 'z': 0}
+        self.row = index
+        self.col = 'x'
+        print(self.df)
