@@ -16,7 +16,7 @@ Hello and thanks for using Rex-Explorer! Made over the course of a week for Code
 
 - Create files and directories to utilize with the built in editor, terminal and file explorer.
 
-- Rename and Copy files and directories across your browser
+- Rename and Copy files and directories across your browser.
 
 ## Installation
 
