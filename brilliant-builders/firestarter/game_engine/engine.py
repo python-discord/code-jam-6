@@ -17,7 +17,7 @@ IMAGE_EXTENSIONS = ['png']
 class Engine(Widget):
     resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
     X_PLAYER_OFFSET = -200  # how far from the center of the screen we want the player
-    Y_PLAYER_OFFSET = -50  # how far from the center of the screen we want the player
+    Y_PLAYER_OFFSET = -250  # how far from the center of the screen we want the player
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -30,14 +30,14 @@ class Engine(Widget):
         self.pressed_keys = set()
 
         # list of sprites
-        self.sprites: List[Sprite] = []  # TODO: make this only accept sprite classes
+        self.sprites: List[Sprite] = []
         # list of elements that shouldn't be moved
         self.static_sprites: List[Sprite] = []
         # Object the camera should follow
         self.cam_target: Optional[Sprite] = None
 
         # dict of assets
-        self.assets, self.levels, self.sounds = load_resources()
+        self.assets, self.levels = load_resources()
 
         self.sprite_classes = {cls.__name__: cls for cls in get_all_subclasses(Sprite)}
 
@@ -104,7 +104,7 @@ class Engine(Widget):
                 )
             )
             obj_num += 1
-        self.add_sprites(objs.values())
+        self.add_sprites(objs.values(), static=(obj['static'] if 'static' in obj else False))
         return objs
 
     def _animate(self, dt: float) -> None:

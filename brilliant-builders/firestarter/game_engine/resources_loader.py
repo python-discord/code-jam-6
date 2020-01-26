@@ -7,16 +7,10 @@ from firestarter.game_engine.sprite import SpriteConfig
 from kivy.core.image import Image as CoreImage
 from kivy.logger import Logger
 
-from simpleaudio import WaveObject
-
 import toml
 
 RESOURCE_DIR = (Path('.') / 'firestarter' / 'resources').absolute()
-RESOURCE_TYPES = ['sprites', 'levels', 'sounds']
-
-
-def load_sound(folder_path: Path, snd: str) -> WaveObject:
-    return WaveObject.from_wave_file((folder_path / snd).as_posix())
+RESOURCE_TYPES = ['sprites', 'levels']
 
 
 def load_level(folder_path: Path, lv: str) -> Dict:
@@ -77,6 +71,5 @@ def load_resources() -> List[Dict[str, Any]]:
 
 LOADER_MAPPING = {
     'sprites': load_sprite,
-    'levels': load_level,
-    'sounds': load_sound
+    'levels': load_level
 }
