@@ -7,7 +7,7 @@ from kivy.factory import Factory
 from kivymd.uix.card import MDCardPost
 
 
-class LongpressButton(ButtonBehavior):
+class LongPressButton(ButtonBehavior):
     __events__ = ('on_long_press',)
 
     long_press_time = Factory.NumericProperty(0.5)
@@ -26,11 +26,10 @@ class LongpressButton(ButtonBehavior):
         pass
 
 
-class MessageCard(LongpressButton, MDCardPost):
+class MessageCard(LongPressButton, MDCardPost):
     def __init__(self, **kwargs):
         super(MessageCard, self).__init__(orientation='horizontal',
-                                          size_hint=(1.1, None),
-                                          height=dp(90),
+                                          size_hint=(1, None),
                                           pos_hint={'center_x': 0.5},
                                           text_post=kwargs.get('text_post'),
                                           name_data=kwargs.get('name_data'),
@@ -39,6 +38,7 @@ class MessageCard(LongpressButton, MDCardPost):
                                           )
 
         self.util = kwargs.get('util')
+        self.height = 150
         self.long_press = False
         self.children[0].children[0].children[0].bind(on_press=lambda x: self.delete_message())
         self.name = kwargs.get('name')
@@ -59,3 +59,4 @@ class MessageCard(LongpressButton, MDCardPost):
     def on_long_press(self):
         print('long press!')
         self.long_press = True
+

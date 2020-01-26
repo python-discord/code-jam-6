@@ -74,8 +74,17 @@ Builder.load_string('''
     user_text_field: user_text_field
     tapping_prompt_label: tapping_prompt_label
     decode_output_label: decode_output_label
-    play_button: play_button
-
+    tap_button: play_button
+    
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'top'
+        
+        MDToolbar:
+            title: 'Listening Training'
+            anchor_title: 'center'
+            md_bg_color: app.theme_cls.primary_color
+            left_action_items: [["arrow-left", lambda x: root.return_menu()]]
     MDCard:
         id: decode_card
         padding: dp(24)
@@ -223,6 +232,9 @@ class ListeningScreen(Screen):
     def clear_input(self):
         self.user_text_field.text = ''
         self.decode_output_label.text = ""
+
+    def return_menu(self):
+        self.manager.current = 'training'
 
     def return_home(self):
         self.manager.current = 'welcome'

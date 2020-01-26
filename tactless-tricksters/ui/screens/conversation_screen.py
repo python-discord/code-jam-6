@@ -14,6 +14,7 @@ from kivymd.uix.textfield import MDTextFieldRound
 
 # project imports
 from ui.widgets.conversation_bubble import ConversationBubble
+from ui.widgets.long_press_button import LongpressButton
 
 
 class ConversationScreen(Screen):
@@ -44,7 +45,7 @@ class ConversationScreen(Screen):
 
         if contact != '' and contact in self.util.user_data['message_dict'].keys():
             for message in self.util.user_data['message_dict'][contact]:
-                if self.util.username == message['sender']:
+                if self.util.username != message['sender']:
                     pos_hint = {'center_x': 0.3}
                     md_bg_color = [0.698, 0.875, 0.859, 1]
                     text_color = [0, 0, 0, 1]
@@ -53,7 +54,9 @@ class ConversationScreen(Screen):
                     md_bg_color = [1, 1, 1, 0.6]
                     text_color = [0, 0, 0, 1]
                 message_label = MDLabel(text=message['message'], font_style='Caption', size_hint=(1, None))
-
+                if '_' not in message_label.text:
+                    self.util.morse.read(words=str(message_label.text))
+                    message_label.text = self.util.morse.morse
                 message_card = ConversationBubble(util=self.util,
                                                   size=message_label.size,
                                                   message=message_label,
@@ -62,17 +65,46 @@ class ConversationScreen(Screen):
                                                   text_color=text_color)
                 scroll_box.add_widget(message_card)
 
+        # This is disgusting but its late and I'm running out of time
+        # keeps the text off of the text input
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+        scroll_box.add_widget(MDLabel(text=' '))
+
         scroll.add_widget(scroll_box)
         layout.add_widget(scroll)
 
-        text_input_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom')
+
         self.text_input = MDTextFieldRound()
         # Hides left icon
         self.text_input.children[2].children[2].size = (0, 0)
         self.text_input.icon_right = 'send'
         self.text_input.children[2].children[0].bind(
             on_press=lambda x: self.send_message(self.text_input.text))
+
+        self.long_press_btn = LongpressButton(text_input_cb=self.text_input_cb, size=(dp(50), dp(1)), size_hint=(3, None))
+
+        input_box_horz = BoxLayout(orientation='horizontal')
+        input_box_horz.add_widget(MDLabel(text='', size_hint=(0.05, None)))
+        input_box_horz.add_widget(self.long_press_btn)
+        input_box_horz.add_widget(MDLabel(text='', size_hint=(0.05, None)))
+
+        text_input_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom', padding=dp(65))
         text_input_anchor.add_widget(self.text_input)
+
+        tap_input_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom', size_hint=(1, 0.1), padding=dp(15))
+        tap_input_anchor.add_widget(input_box_horz)
 
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
         toolbar = MDToolbar(title=contact, anchor_title='center')
@@ -82,9 +114,14 @@ class ConversationScreen(Screen):
 
         self.add_widget(layout)
         self.add_widget(text_input_anchor)
+        self.add_widget(tap_input_anchor)
         self.add_widget(toolbar_anchor)
         self.do_layout()
         scroll.scroll_y = 0
+
+    def text_input_cb(self, morse_char):
+        for char in morse_char:
+            self.text_input.text = self.text_input.text + char
 
     def send_message(self, msg):
         print("Sending message:%s" % msg)
@@ -99,7 +136,7 @@ class ConversationScreen(Screen):
                 self.util.message_dict[result['receiver']].append(result)
             else:
                 self.util.message_dict[result['receiver']] = [result]
-            self.util.save_message_dict(result['receiver'], self.util.message_dict)
+            self.util.save_message_dict('receiver', self.util.message_dict)
             self.ui_layout(result['receiver'])
             self.util.reload_screen_layout('message')
             self.text_input.text = ''

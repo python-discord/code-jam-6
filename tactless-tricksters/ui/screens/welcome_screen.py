@@ -8,7 +8,6 @@ from ui.widgets.nav_drawer import MyNavigationLayout
 
 
 Builder.load_string("""
-#:kivy 1.11.1
 #:import MDCard kivymd.uix.card
 #:import MDToolbar kivymd.uix.toolbar
 #:import MDRectangleFlatIconButton kivymd.uix.button
@@ -18,11 +17,6 @@ Builder.load_string("""
     elevation_normal: 10
     md_bg_color: app.theme_cls.primary_color
     md_border_color: app.theme_cls.primary_color
-    pos_hint: {'center_y': 1.5, 'center_x': 0.5}
-
-<BlankLabel@MDLabel>
-    text: ''
-#    font_style: 'H6'
 
 <WelcomeScreen>
     canvas.before:
@@ -31,84 +25,82 @@ Builder.load_string("""
             size: self.size
             source: 'ui/img/morse_code_bg.jpg'
             tex_coords: root.tex_coords
-
-    MDCard:
-        padding: dp(24)
-        spacing: dp(24)
-        orientation: 'vertical'
+        
+    FloatLayout:
         size_hint: .65, .65
-        pos_hint: {'center_x': 0.5, 'top': 0.8}
-        md_bg_color: app.theme_cls.accent_color
+        pos_hint: {'center_x': 0.5, 'center_y': .5}
+		canvas.before:
+			Color:
+				rgba: app.theme_cls.accent_color
+			RoundedRectangle:
+				size: self.size
+				pos: self.pos
+				radius: [dp(10)]
+        
+        BoxLayout:
+        	size_hint: .8, .8
+        	orientation: 'vertical'
+        	pos_hint: {'center_x': 0.5, 'center_y': .5}
+        	
+        	MDLabel:
+            	text: 'Welcome!'
+            	font_style: 'H4'
+            	halign: 'center'
+            	theme_text_color: 'Custom'
+            	text_color: [1, 1, 1, 1]
+            	size_hint_y: .3
+            	
+            Widget:
+            	size_hint_y: .1
 
-        MDLabel:
-            text: 'Welcome!'
-            font_style: 'H4'
-            halign: 'center'
-            theme_text_color: 'Custom'
-            text_color: [1, 1, 1, 1]
-            size_hint: 1, .3
+        	GridLayout:
+            	spacing: dp(20)
+            	cols: 2
 
-        GridLayout:
-            spacing: dp(24)
-            cols: 5
-            pos_hint: {'center_x': 0.5}
+            	WelcomeButton:
+                	text: 'Decode'
+                	size_hint_x: 1
+                	icon: 'database-export'
+                	on_press:
+                    	root.manager.current = 'decode'
 
-            BlankLabel:
-
-            WelcomeButton:
-                text: 'Decode'
-                icon: 'database-export'
-                on_press:
-                    root.manager.current = 'decode'
-
-            BlankLabel:
-
-            WelcomeButton:
-                text: 'Encode'
-                icon: 'database-import'
-                on_press:
-                    root.manager.current = 'encode'
-
-            BlankLabel:
-            BlankLabel:
+            	WelcomeButton:
+                	text: 'Encode'
+                	icon: 'database-import'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'encode'
             
-            WelcomeButton:
-                text: 'Train'
-                icon: 'dumbbell'
-                on_press:
-                    root.manager.current = 'training'
+            	WelcomeButton:
+                	text: 'Train'
+                	icon: 'dumbbell'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'training'
 
+            	WelcomeButton:
+                	text: 'Calibrate'
+                	icon: 'cogs'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'calibration'
 
-            BlankLabel:
+            	WelcomeButton:
+                	text: 'Sign In'
+                	icon: 'login-variant'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'sign_in'
 
-            WelcomeButton:
-                text: 'Calibrate'
-                icon: 'cogs'
-                # TODO: create calibration screen
+            	WelcomeButton:
+                	text: 'Message'
+                	icon: 'message'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'message'
+                    	if app.util.auth_token == '': \ 
+                    	root.manager.current = 'sign_in'
 
-            BlankLabel:
-            BlankLabel:
-
-            WelcomeButton:
-                text: 'Sign In'
-                icon: 'login-variant'
-                on_press:
-                    root.manager.current = 'sign_in'
-
-            BlankLabel:
-
-            WelcomeButton:
-                text: 'Message'
-                icon: 'message'
-                on_press:
-                    # TODO: create exit function
-                    root.manager.current = 'message'
-
-            # WelcomeButton:
-            #     text: 'Exit'
-            #     icon: 'close'
-            #     on_press:
-            #         app.stop()
 """)
 
 
