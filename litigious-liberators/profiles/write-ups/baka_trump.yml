@@ -1,0 +1,22 @@
+Name: Baka Trump
+Picture: baka_trump.png
+Biography: >
+  I spend most of my free time sleeping. I also like building stuff, and help out with construction
+  of living spaces during territory expansion campaigns. I like my eggs fried with extra oil.
+Choices:
+  right: Protest against Baka for destroying ecosystems.
+  left: Join his company -  a nice career; you can live comfortably.
+Results:
+  right: >
+    Not making the same mistake as some others have!
+  left: >
+    Welcome to Baka and Co.
+Deltas:
+  right:
+    Knowledge: 1
+    Welfare: -1
+    Energy: -3
+  left:
+    Knowledge: 3
+    Welfare: 2
+    Energy: 1

@@ -1,0 +1,26 @@
+Name: Icky Joo
+Picture: icky_joo.jpg
+Sound: icky_joo.mp3
+Biography: >
+  Uhh-huh, You heard the beat now lets break the dance floor my friend. I perfect my fortnite
+  moves. It is a great illusion for confusing T-Rexes. They just freeze and have their
+  jaw-dropped by seeing these sexy moves uh-huh.
+Choices:
+  right: >
+    Learn some dance moves.
+  left: >
+    You suspect that he is trying to lure you so he can kill you.
+Results:
+  right: >
+    Lets show some moves!
+  left: >
+    I Ain't becoming food this early.
+Deltas:
+  right:
+    Knowledge: 3
+    Welfare: 3
+    Energy: -1
+  left:
+    Knowledge: 0
+    Welfare: -1
+    Energy: 1
