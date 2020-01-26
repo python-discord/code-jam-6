@@ -112,6 +112,8 @@ Pipfile.lock
 # JetBrains IDE
 .idea/
 *.db
+.DS_Store
+tags
 
 #Jess
 microscopic-monks/primal/resources/bushBase.png
