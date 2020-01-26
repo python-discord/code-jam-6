@@ -148,18 +148,11 @@ class GameView(Widget):
             self.canvas.add(self._game.sun_rays)
 
             # Change the color and display the death sun rays on the canvas
-            if self._game.death_rays.target:
-                self.canvas.add(Color(
-                    LIGHT_COLOR_MAX_RED,
-                    LIGHT_COLOR_MAX_GREEN,
-                    LIGHT_COLOR_MAX_BLUE,
-                    LIGHT_COLOR_MAX_ALPHA*1.50))
-            else:
-                self.canvas.add(Color(
-                    LIGHT_COLOR_MAX_RED,
-                    LIGHT_COLOR_MAX_GREEN,
-                    LIGHT_COLOR_MAX_BLUE,
-                    LIGHT_COLOR_MAX_ALPHA*0.5))
+            self.canvas.add(Color(
+                LIGHT_COLOR_MAX_RED,
+                LIGHT_COLOR_MAX_GREEN,
+                LIGHT_COLOR_MAX_BLUE,
+                0.7))
             self.canvas.add(self._game.death_rays)
 
         # Add the Health Bar for the Castle/Island
