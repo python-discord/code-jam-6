@@ -93,3 +93,6 @@ class LedgerLayout(FloatLayout):
             self.m_pos = ''
             self.r_pos = ''
             self.next_line()
+
+    def clear(self):
+        pass

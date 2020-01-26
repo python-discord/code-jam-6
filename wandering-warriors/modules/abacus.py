@@ -125,7 +125,7 @@ class Abacus(FloatLayout):
 
     N_BARS = 12
     N_TOP_BEADS = 1
-    N_BOTTOM_BEADS = 5
+    N_BOTTOM_BEADS = 4
 
     TOP_V = N_BOTTOM_BEADS + 1
     PLACE = (N_TOP_BEADS + 1) * TOP_V
@@ -319,7 +319,10 @@ class Abacus(FloatLayout):
         return v
 
     def set_value(self, v):
-        Thread(target=(self.preset(v))).start()
+        Thread(target=self.preset(v)).start()
+
+    def clear(self):
+        Thread(target=self.reset()).start()
 
     def build_anim(self, anim):
         for col, n in anim.up_shifts:

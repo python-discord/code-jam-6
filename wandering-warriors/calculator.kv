@@ -156,12 +156,12 @@
             self.x = self.parent.parent.x + self.parent.parent.width - self.width
             self.y = self.parent.parent.y + self.parent.parent.height - self.height
 
-            #self.parent.clear()
+            self.parent.parent.clear()
         
         Image:
             pos: self.parent.pos
             size: self.parent.size
-            source: 'assets/graphics/clear.png'#self.parent.parent.parent.clear_button_src
+            source: self.parent.parent.parent.clear_button_src
 
 
 <HelpButton>:

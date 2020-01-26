@@ -110,9 +110,6 @@ class DrawPad(FloatLayout):
                 # TODO: fade line out
                 self.click()
 
-    def click(self):
+    def clear(self):
         for l in self.lines:
             l[0].points = []
-
-    def buttonImage(self):
-        return 'assets/graphics/clear1.png'
