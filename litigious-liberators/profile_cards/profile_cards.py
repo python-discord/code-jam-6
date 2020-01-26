@@ -74,11 +74,7 @@ class ProfileCard(Screen):
         pic_addr = f"../profiles/pictures/{profile['Picture']}"
         sound_addr = f"../profiles/sounds/{profile.get('Sound')}"
         self.ids.picture.source = os.path.join(dir_path, pic_addr)
-        sound = SoundLoader.load(os.path.join(dir_path, sound_addr))
-        if sound:
-            print("Sound found at %s" % sound.source)
-            print("Sound is %.3f seconds" % sound.length)
-            sound.play()
+        self.sound = SoundLoader.load(os.path.join(dir_path, sound_addr))
         self.deltas = Counter(profile["Deltas"])
         self.ids.name.text = profile["Name"]
         self.ids.right_choice.text += profile["Choices"]["right"]
@@ -91,6 +87,11 @@ class ProfileCard(Screen):
         self.ids.name.font_name = os.path.join(
             os.path.dirname(os.path.abspath(__file__)), "../fonts/Oldenburg/Oldenburg-Regular.ttf"
         )
+
+    def on_enter(self, *args):
+        if self.sound:
+            self.sound.play()
+        return super().on_enter(*args)
 
 
 class ProfileList(ScreenManager):
