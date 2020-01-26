@@ -6,7 +6,7 @@ from profile_creation.createprofile import CreateProfile
 from kivy.lang import Builder
 
 
-class TindosaurApp(App):
+class ResurgenceApp(App):
     def build(self):
         Builder.load_file("onboarding/onboarding.kv")
         Builder.load_file("profile_creation/createprofile.kv")
@@ -24,4 +24,4 @@ class TindosaurApp(App):
 if __name__ == "__main__":
     # calling run method of the application will build the widget tree,
     # and start the event loop.
-    TindosaurApp().run()
+    ResurgenceApp().run()
