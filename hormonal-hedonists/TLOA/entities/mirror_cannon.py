@@ -36,4 +36,7 @@ class MirrorCannon(Entity):
             round(0.5*MIRROR_DIAMETER*math.sin(math.radians(self.angle)))
         )
 
-        return p0, p1, p2
+        p3 = p1 - p0
+        p4 = p2 - p0
+
+        return p0, p1, p2, p3, p4

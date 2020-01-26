@@ -39,7 +39,8 @@ class Game(EventDispatcher):
         # Create & initialize Mesh instance for Reflected Sun rays/Death Rays
         self.death_rays = LightRays(
             point=Vector(MIRROR_CANNON_RANGE, LANE_BOUNDS[self.mirror.state][1]),
-            surface=self.mirror.mirror_axis)
+            surface=self.mirror.mirror_axis,
+            angle=self.mirror.angle)
 
         self.ship_lanes: List[List[BrownShip]] = [[] for _ in range(NUMBER_OF_LANES)]
 
@@ -79,20 +80,23 @@ class Game(EventDispatcher):
 
         # Trace Sun rays onto the mirror
         self.sun_rays.trace(point=LIGHT_SOURCE_POS, surface=self.mirror.mirror_axis)
+        self.sun_rays.target = False
 
         # Track the closest ship in the active lane
         if self.closest_ship:
             # focus the Death Rays to the ship's X position.
             death_rays_focus_x = self.closest_ship.shape.x + LIGHT_FOCUS_OFFSET.x
+            self.death_rays.target = True
 
             # Deal damage to the ship.
             if self.closest_ship.id == GoldenShip.id:
-                self.closest_ship.health -= 0.1    # Deal less Damage to Golden Ships
+                self.closest_ship.health -= 0.25    # Deal less Damage to Golden Ships
 
             if self.closest_ship.id == BrownShip.id:
-                self.closest_ship.health -= 0.5    # Deal more Damage to Brown Ships.
+                self.closest_ship.health -= 0.75    # Deal more Damage to Brown Ships.
         else:
             death_rays_focus_x = MIRROR_CANNON_RANGE
+            self.death_rays.target = False
 
         # Trace Death rays onto the closest ship in the active lane.
         self.death_rays.trace(
