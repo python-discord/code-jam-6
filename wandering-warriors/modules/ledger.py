@@ -80,13 +80,15 @@ class Ledger(BoxLayout):
         x = self.df.at[self.row, 'x']
         y = self.df.at[self.row, 'y']
 
+        print(row['op'])
+
         if row['op'] == '+':
             result = x + y
-        if row['op'] == '-':
+        elif row['op'] == '-':
             result = x - y
-        if row['op'] == '*':
+        elif row['op'] == '*':
             result = x * y
-        if row['op'] == '/':
+        elif row['op'] == '/':
             result = x / y
         else:
             result = x
