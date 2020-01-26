@@ -9,24 +9,16 @@ Table of Contents:
 - Setup
 - Tutorial
 - Settings (Defaults)
-- Guides
+- Background
+- Sources
 
 ---
 ### Setup
 1. Clone or download this repository.
-2. Ensure you have pip, wheel setuptools and virtualenv in the latest version: `python3 -m pip install --upgrade pip wheel setuptools virtualenv`
-3. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
-5. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`.
-6. If you're in Windows, install the Kivy dependencies:
-```
-python -m pip install docutils pygments pypiwin32 kivy_deps.sdl2==0.1.* kivy_deps.glew==0.1.*
-python -m pip install kivy_deps.gstreamer==0.1.*
-```
-7. If you are in Linux or MacOS, install ffpyplayer for audio: `pip install ffpyplayer`
-8. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
-9. In terminal, run main.py by doing `python main.py` or `python3 main.py`
-
-Troubles during setup? Check the installation instructions in the [Kivy website](https://kivy.org/doc/stable/gettingstarted/installation.html)
+2. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
+3. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`. 
+4. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
+5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
 
 ---
 ### Tutorial
@@ -57,18 +49,27 @@ Note: If you have Autoinput off and mistype once, move the rotors back one input
 ---
 ### Settings (Defaults)
 - Fullscreen: Off
-- Autoinput the next, correct ciphertext letter: On
+- Autoinput: On
 - Musics: On
-- Sound effects: On
+- Sound effects: On 
 
 ---
 ### Background
-To gain the full experience, it's best to understand how the machine works.
+To gain the full experience, it's best to understand how the machine works. 
 - https://en.wikipedia.org/wiki/Enigma_machine
 - [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
 
 A diagram of the machine's internal functionality:
 ![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
+
+---
+### Sources
+- [02246 key type shot strike typewriter.wav by Robinhood76](https://freesound.org/people/nebyoolae/sounds/318067/) [License](https://creativecommons.org/licenses/by/3.0/)
+- [Gear Clink by nebyoolae](https://freesound.org/people/nebyoolae/sounds/318067/) [License](https://creativecommons.org/licenses/by/3.0/)
+- [Pop, High, A (H1).wav by InspectorJ](https://freesound.org/people/InspectorJ/sounds/411642/) [License](https://creativecommons.org/licenses/by/3.0/)
+- [plug in.wav by caseymoura](https://freesound.org/people/caseymoura/sounds/445493/) [License](https://creativecommons.org/licenses/by/3.0/)
+- [Sneaky Snooper by Jason Shaw](https://audionautix.com/) [License](https://creativecommons.org/licenses/by/4.0/)
+- [Swooshing by man](http://soundbible.com/670-Swooshing.html) [License](https://creativecommons.org/licenses/sampling+/1.0/)
 
 ---
 ### LICENSE
