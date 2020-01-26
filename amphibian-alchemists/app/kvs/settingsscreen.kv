@@ -72,17 +72,12 @@
                             markup: True
                             text: "Allow Fullscreen\n[color=000000][b](Restart required)[/b][/color]"
                         Label:
-                            text: "Auto save when closing the game"
-                        Label:
                             text: "Saved games:"
                     BoxLayout:
                         orientation: "vertical"
                         CheckBox:
                             id: allow_fullscreen
                             on_state: root.save_settings("allow_fullscreen")
-                        CheckBox:
-                            id: auto_save
-                            on_state: root.save_settings("auto_save")
                         RelativeLayout:
                             Button:
                                 size_hint: 0.4, 0.4
