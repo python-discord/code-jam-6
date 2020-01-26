@@ -3,10 +3,62 @@
     "card_id": "welcome",
     "card_type": "start",
     "card_image": "test.jpg",
-    "text": "Welcome hollaa!?",
+    "text": "You are greg",
     "options": [
       {
-        "text": "Swipe left to choose me!",
+        "text": "Click here to choose this option",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_2"
+          }
+        ]
+      },
+      {
+        "text": "No, click here to choose me!",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "welcome_2",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "You've just discovered fire.",
+    "options": [
+      {
+        "text": "Clicky click!",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_3"
+          }
+        ]
+      },
+      {
+        "text": "Click clicky",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_3"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "welcome_3",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "This gives you some options. Maybe its time to start taking this whole evolution thing seriously?",
+    "options": [
+      {
+        "text": "I shall found the everlasting dynasty of Greg, my line shall survive for eons.",
         "outcomes": [
           {
             "weight": 1,
@@ -15,7 +67,7 @@
         ]
       },
       {
-        "text": "No swipe right and choose me!",
+        "text": "I'll just try and not get eaten.",
         "outcomes": [
           {
             "weight": 1,
@@ -37,7 +89,9 @@
           {
             "weight": 0.5,
             "next_card": "random",
-            "effects": {"player_health": -0.3}
+            "effects": {
+              "player_health": -0.3
+            }
           },
           {
             "weight": 0.5,
@@ -51,7 +105,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"player_food": -0.1}
+            "effects": {
+              "player_food": -0.1
+            }
           }
         ]
       }
@@ -70,7 +126,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"player_food": 0.2}
+            "effects": {
+              "player_food": 0.2
+            }
           }
         ]
       }
@@ -80,7 +138,9 @@
     "card_id": "natural_smell",
     "card_type": "event",
     "card_image": "test.jpg",
-    "conditions": {"world_encountered_dinosaur": false},
+    "conditions": {
+      "world_encountered_dinosaur": false
+    },
     "text": "You stretch your arms and almost faint from your smell.",
     "options": [
       {
@@ -93,7 +153,9 @@
           {
             "weight": 0.6,
             "next_card": "random",
-            "effects": {"village_love": 0.1}
+            "effects": {
+              "village_love": 0.1
+            }
           }
         ]
       },
@@ -103,7 +165,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"village_love": -0.1}
+            "effects": {
+              "village_love": -0.1
+            }
           }
         ]
       }
@@ -121,7 +185,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"world_encountered_dinosaur": true}
+            "effects": {
+              "world_encountered_dinosaur": true
+            }
           }
         ]
       }
