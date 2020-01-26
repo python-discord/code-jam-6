@@ -1,3 +1,7 @@
+import os
+
+from kivy.core.audio import SoundLoader
+
 RATE = 16000
 CHUNK = 4000  # number of audio samples per frame of test_data
 DATA_RATE = 400  # sampling rate of signal activity in audio
@@ -62,13 +66,17 @@ class MorseHelper:
         return text.strip().strip('/')
 
     def text_to_morse(self, text):
-        morse_code = []
+        morse_code = ''
+        text = text.lower()
         for letter in text:
             if letter in self.__letter_to_morse:
-                text += self.__morse_to_letter[letter] + ' '
+                morse_code += self.__letter_to_morse[letter] + ' '
             else:
-                text += '? '
+                morse_code += '/?/ '
         return morse_code
 
-    def signal_to_morse(self, signal):
-        pass
+    def get_letter_as_morse_sound(self, letter):
+        sound_path = os.path.join('data', 'morse_alphabets', f'{letter}.wav')
+        return SoundLoader.load(sound_path)
+
+
