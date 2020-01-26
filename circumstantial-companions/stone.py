@@ -1,8 +1,7 @@
 import io
 import json
-import math
 from pathlib import Path
-from random import choice, random
+from random import choice
 
 import numpy as np
 import simpleaudio as sa # sdl2_mixer non-functional for me so I resorted to this --salt-die
@@ -70,18 +69,18 @@ def pebble_setup():
             yield pebble_x, pebble_y, normalized_color
 
 def is_dislodged(velocity):
-        """
-        Return False if velocity isn't enough to dislodge a pebble, else return the clipped
-        velocity vector.
-        """
-        x, y = velocity
-        magnitude = (x**2 + y**2)**.5
-        if magnitude < DISLODGE_VELOCITY:
-            return False
-        if magnitude > MAX_VELOCITY:
-            x *= MAX_VELOCITY / magnitude
-            y *= MAX_VELOCITY / magnitude
-        return x, y
+    """
+    Return False if velocity isn't enough to dislodge a pebble, else return the clipped
+    velocity vector.
+    """
+    x, y = velocity
+    magnitude = (x**2 + y**2)**.5
+    if magnitude < DISLODGE_VELOCITY:
+        return False
+    if magnitude > MAX_VELOCITY:
+        x *= MAX_VELOCITY / magnitude
+        y *= MAX_VELOCITY / magnitude
+    return x, y
 
 
 class Pebble:
@@ -178,7 +177,7 @@ class Chisel(Widget):
         self.background.pos = self.pos
         self.background.size = self.size
         self.pebble_size = size = self.get_pebble_size()
-        for pixel, (x, y, z) in zip(self.pixels, self.positions):
+        for pixel, (x, y, _) in zip(self.pixels, self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
             pixel.pos = scaled_x, scaled_y
@@ -211,10 +210,10 @@ class Chisel(Widget):
         for i, (x, y, z) in enumerate(self.positions):
             velocity = is_dislodged(self.poke_power(tx, ty, touch_velocity, x, y))
             if velocity and ((x, y) not in dislodged or dislodged[x, y][0] < z):
-                    dislodged[x, y] = (z, i, velocity)
+                dislodged[x, y] = (z, i, velocity)
 
         for (x, y), (z, i, velocity) in dislodged.items():
-                self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
+            self.pebbles[i] = Pebble(i, self, x, y, z, velocity)
 
     def on_touch_down(self, touch):
         self.poke(touch)
@@ -262,7 +261,7 @@ class Chisel(Widget):
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            for (x, y, z), color in zip(self.positions, self.rgba):
+            for (x, y, _), color in zip(self.positions, self.rgba):
                 self.colors.append(Color(*color))
                 scaled_x = x * self.width
                 scaled_y = y * self.height
@@ -272,7 +271,7 @@ class Chisel(Widget):
     def export_png(self, path_to_file, transparent=False):
         colors = [] # We won't save pebbles on the floor.
         for color, pixel in zip(self.colors, self.pixels):
-            x, y = pixel.pos
+            _, y = pixel.pos
             if not y:
                 colors.append((color, color.a))
                 color.a = 0
