@@ -18,6 +18,9 @@
         "text": "No, click here to choose me!",
         "outcomes": [
           {
+            "effects": {
+              "player_health": -1.0
+            },
             "weight": 1,
             "next_card": "welcome_2"
           }
@@ -81,7 +84,6 @@
     "card_id": "dino_kick",
     "card_type": "event",
     "card_image": "kickable_dino.png",
-    "card_sound": "dino_roar.wav",
     "text": "You're minding your own business, and whats this? There's a dinosaur, do you kick it?",
     "options": [
       {
@@ -117,7 +119,7 @@
   {
     "card_id": "dino_kick_friendly",
     "card_type": "response",
-    "card_image": "kickable_dino.png",
+    "card_image": "test.jpg",
     "card_sound": "kick.mp3",
     "text": "Turns out the dinosaur wasn't so scary after all. She ran away and left you some lovely eggs for breakfast",
     "options": [
@@ -176,8 +178,8 @@
   {
     "card_id": "river_dino_encounter",
     "card_type": "response",
-    "card_image": "dino.png",
-    "card_sound": "dino_roar.wav",
+    "card_sound": "water.wav",
+    "card_image": "river.png",
     "text": "Halfway trough your trip you see a dinosaur.",
     "options": [
       {
@@ -197,7 +199,7 @@
   {
     "card_id": "low_food",
     "card_type": "event",
-    "card_image": "test.jpg",
+    "card_image": "forest.png",
     "conditions": {"player_food":  0.33},
     "text": "You feel hungry.",
     "options": [
@@ -225,7 +227,7 @@
   {
     "card_id": "fishing",
     "card_type": "response",
-    "card_image": "pufferfish.png",
+    "card_image": "river.png",
     "text": "On your way to get the fishing stick you see there's one pufferfish left in the bucket.",
     "options": [
       {
@@ -251,7 +253,7 @@
   {
     "card_id": "pufferfish_sick",
     "card_type": "response",
-    "card_image": "pufferfish.png",
+    "card_image": "river.png",
     "text": "Perhaps it would have been better to cook that week old pufferfish before eating.",
     "options": [
       {
@@ -286,7 +288,7 @@
   {
     "card_id": "tribe_encounter_event",
     "card_type": "event",
-    "card_image": "test.jpg",
+    "card_image": "river.png",
     "conditions": {
       "world_found_another_tribe": false
     },
@@ -323,7 +325,7 @@
   {
     "card_id": "tribe_discovery_intentional",
     "card_type": "response",
-    "card_image": "test.jpg",
+    "card_image": "river.png",
     "text": "When investigating, you find a whole tribe of Greg-likes beings. \"people\" they call themselves. Maybe you weren't the first to find fire...",
     "options": [
       {
@@ -343,7 +345,7 @@
   {
     "card_id": "tribe_discovery_run",
     "card_type": "response",
-    "card_image": "test.jpg",
+    "card_image": "forest.png",
     "text": "Despite your best efforts, you stumble into a group of Greg-likes beings. \"people\" they call themselves.",
     "options": [
       {
@@ -442,7 +444,7 @@
             "next_card": "random",
             "weight": 1,
             "effects": {
-              "player_hunger": -0.05,
+              "player_food": -0.05,
               "player_civility": 0.08
             }
           }
@@ -455,7 +457,7 @@
             "next_card": "random",
             "weight": 1,
             "effects": {
-              "player_hunger": 0.1,
+              "player_food": 0.1,
               "player_civility": -0.1
             }
           }
@@ -499,6 +501,7 @@
   {
     "card_id": "game_over_card",
     "card_type": "game_over",
+    "card_sound": "death.wav",
     "card_image": "test.jpg",
     "text": "Well. It seems you're dead.",
     "options": [
@@ -508,6 +511,75 @@
           {
             "weight": 1,
             "next_card": "random"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "cave_painting",
+    "card_type": "event",
+    "card_image": "cave.png",
+    "text": "This looks like the perfect place for a spot of painting",
+    "options": [
+      {
+        "text": "How about a hunting scene?",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_food": 0.2,
+              "player_water": -0.2
+            }
+          }
+        ]
+      },
+      {
+        "text": "No, no. A beautiful river.",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_food": -0.2,
+              "player_water": 0.2
+            }
+          }
+        ]
+      }
+    ]
+  },
+
+      {
+    "card_id": "strange_fruit",
+    "card_type": "event",
+    "card_image": "strange_fruit.png",
+    "text": "Ah - a completely bizarre looking fruit. Breakfast.",
+    "options": [
+      {
+        "text": "What's the worst that can happen?",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_food": 0.2
+            }
+          }
+        ]
+      },
+      {
+        "text": "Om nom nom",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_food": 0.2,
+              "player_water": -0.1,
+              "player_health": -0.1
+            }
           }
         ]
       }
