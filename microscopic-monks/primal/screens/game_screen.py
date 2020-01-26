@@ -26,6 +26,8 @@ class GameScreen(Screen):
         self.player = Player('player.png', (0, 0), (100, 100), 0)
         self.player.draw(self.canvas)
 
+        self.world.draw_top(self.canvas)
+
         self.camera.end_region()
 
         # render gui

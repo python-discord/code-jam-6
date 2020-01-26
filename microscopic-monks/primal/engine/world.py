@@ -4,7 +4,7 @@ from typing import Tuple, Set
 from kivy.graphics.instructions import RenderContext, InstructionGroup
 
 from primal.engine.perlin import sample
-from primal.engine.sprite import Sprite, RotatableSprite
+from primal.engine.sprite import Sprite
 from primal.engine.feature import Feature
 
 
@@ -15,6 +15,7 @@ class World:
 
     def __init__(self, pos: Tuple[float, float]):
         self.world_group = InstructionGroup()
+        self.top_group = InstructionGroup()
 
         chunk_pos = World.get_chunk_coords_from_pos(pos)
 
@@ -35,6 +36,11 @@ class World:
         ]
 
         self.features_chunk_instructions = [
+            [InstructionGroup() for _ in World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
+            for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
+        ]
+
+        self.top_features_chunk_instructions = [
             [InstructionGroup() for _ in World.get_loaded_range(chunk_pos[0], World.RADIUS_WIDTH)]
             for _ in World.get_loaded_range(chunk_pos[1], World.RADIUS_HEIGHT)
         ]
@@ -75,14 +81,23 @@ class World:
 
         canvas.add(self.world_group)
 
+    def draw_top(self, canvas: RenderContext):
+        canvas.add(self.top_group)
+
     def render_chunk_at(self, x: int, y: int):
         instruction_group = self.features_chunk_instructions[y][x]
         self.world_group.remove(instruction_group)
+        top_instruction_group = self.top_features_chunk_instructions[y][x]
+        self.top_group.remove(top_instruction_group)
 
         instruction_group = InstructionGroup()
         self.features_chunk_instructions[y][x] = instruction_group
         self.world_group.add(instruction_group)
-        self.loaded_chunks[y][x].draw_features(instruction_group)
+
+        top_instruction_group = InstructionGroup()
+        self.top_features_chunk_instructions[y][x] = top_instruction_group
+        self.top_group.add(top_instruction_group)
+        self.loaded_chunks[y][x].draw_features(instruction_group, top_instruction_group)
 
     def render_chunk(self, chunk):
         for y in range(len(self.loaded_chunks)):
@@ -178,11 +193,14 @@ class Chunk:
     def sort_key(self, f: Feature):
         return f.get_z()
 
-    def draw_features(self, group: InstructionGroup):
+    def draw_features(self, group: InstructionGroup, top_group: InstructionGroup):
         list = sorted(self.chunk_features, key=self.sort_key)
 
         for feature in list:
-            feature.draw(group)
+            if feature.get_z() >= 2.0:
+                feature.draw(top_group)
+            else:
+                feature.draw(group)
 
     def get_features(self) -> Set[Feature]:
         return self.chunk_features
