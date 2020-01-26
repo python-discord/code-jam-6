@@ -14,7 +14,6 @@ from kivy.clock import Clock
 
 from question import Question, connection
 
-#sounds
 error_sound = SoundLoader.load('sounds/error.wav')
 correct_sound = SoundLoader.load('sounds/correct.wav')
 
@@ -209,7 +208,6 @@ class TriviaCategoryScreen(Screen):
 
     def on_enter(self):
         pass
-        # print( f"Inside TriviaCategoryScreen :: on_enter() method The selected category is {self.category}")
 
 
 class PlayScreen(Screen):
@@ -305,7 +303,6 @@ class PlayScreen(Screen):
             self.question_number += 1
 
     def on_enter(self):
-        # print( f"Inside PlayScreen():: on_enter() method: The current question is {self.question}, {self.choices}, {self.answer}")
         self.question_label.text = self.question
         self.first_answer.text = self.choices[0].strip()
         self.second_answer.text = self.choices[1].strip()
@@ -323,7 +320,7 @@ class ResultsScreen(Screen):
         self.layout.spacing = [20, 10]
         # Initiliaze scores
         self.score = 0
-        #Initilaise the current player
+        # Initilaise the current player
         self.playing_username = None
         self.rank = None
         self.total_players = None
@@ -361,12 +358,15 @@ class ResultsScreen(Screen):
         self.rank = self.get_rank(self.playing_username, self.category)
         if self.rank == 0:
             self.rank = self.total_players
-        self.leader_board_label.text = f"Hey {self.playing_username} ! Your rank on the leaderboard is {self.rank} out of {self.total_players}"
+        self.leader_board_label.text = f"""
+        Hey {self.playing_username} !
+        Your rank on the leaderboard is {self.rank} out of {self.total_players}"""
 
     def get_rank(self, user_name, category):
         rank = 0
         cursor = connection.cursor()
-        sql = 'SELECT *, RANK() OVER (ORDER BY score DESC) output_rank FROM leaderboard WHERE Category = ? ;'
+        sql = """SELECT *, RANK() OVER (ORDER BY score DESC)
+        output_rank FROM leaderboard WHERE Category = ? ;"""
         params = (category, )
         cursor.execute(sql, params)
         results = [dict(row) for row in cursor.fetchall()]
@@ -392,7 +392,6 @@ class ResultsScreen(Screen):
 
         current_score = results[0].get('score')
         if new_score > current_score:
-            # print( f"Updating imporoved score for {user_name} in Category {category} to {new_score}")
             sql = 'UPDATE leaderboard SET score = ? WHERE username = ? AND Category = ?;'
             params = (new_score, user_name, self.category)
             cursor.execute(sql, params)
@@ -427,7 +426,9 @@ class ResultsScreen(Screen):
             # If the app is not stopped, continue using the current username
             self.playing_username = user_name
             # Add the leaderboard label
-            self.leader_board_label.text = f"Hey {self.playing_username} ! Your rank on the leaderboard is {self.rank} out of {self.total_players}"
+            self.leader_board_label.text = f"""
+                Hey {self.playing_username} !
+            Your rank on the leaderboard is {self.rank} out of {self.total_players}"""
             self.layout.add_widget(self.leader_board_label)
             # Commit current transactions
             connection.commit()
