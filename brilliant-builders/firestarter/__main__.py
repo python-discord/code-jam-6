@@ -42,19 +42,7 @@ class MyGame(Engine):
         self.musics = [self.sounds['music_01']]
         self.playing_music = self.play_music()
 
-        # Platforms, Items, etc.
-        # self.platform_06 = GenericObject('box', (50, 20), True, 3, self)
-
-        # self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
-        # self.coin.change_mode(2)
-
-        self.add_sprites(
-            [
-                self.flameBuddy
-                # self.coin,
-                # self.platform_06
-            ]
-        )
+        self.add_sprite(self.flameBuddy)
 
         self.unload_level([self.player, self.hearts, self.flameBuddy])
         self.load_level(self.levels['level_01'])
@@ -96,7 +84,6 @@ class Application(App):
 
     def build(self) -> MyGame:
         """Return the root widget."""
-        # Window.clearcolor = (51 / 255, 51 / 255, 51 / 255, 1)
         Window.clearcolor = (25 / 255, 51 / 255, 51 / 255, 1)
         self.title = 'FireStarter'
         game = MyGame()
