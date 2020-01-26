@@ -36,9 +36,14 @@ class SettingsScreen(Screen):
         value_to_set = {
             "background_volume": self.store.get(config_name)["value"],
             "effects_volume": self.store.get(config_name)["value"],
+            "auto_input": "down"
+            if self.store.get(config_name)["value"] == 1
+            else "normal",
         }.get(config_name)
 
-        if type(value_to_set) in {float, int} and (
+        if value_to_set in {"down", "normal"}:
+            self.ids[config_name].state = value_to_set
+        elif type(value_to_set) in {float, int} and (
             value_to_set >= 0 or value_to_set <= 1
         ):
             self.ids[config_name].value_normalized = value_to_set
@@ -48,6 +53,7 @@ class SettingsScreen(Screen):
             "allow_fullscreen": 1 if self.ids.allow_fullscreen.state == "down" else 0,
             "background_volume": self.ids.background_volume.value_normalized,
             "effects_volume": self.ids.effects_volume.value_normalized,
+            "auto_input": 1 if self.ids.auto_input.state == "down" else 0,
         }.get(to_save)
 
         if type(new_value) in {int, float} and (new_value >= 0 or new_value <= 1):
