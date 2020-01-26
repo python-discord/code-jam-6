@@ -169,7 +169,25 @@ class CopyPopup(BasePopup):
                 from_ = self.ctx.parent.ids.right
                 to = self.ctx.parent.ids.left
 
-            # if from_.ids.rv.selected
+            try:
+                print(self.from_)
+                from_obj = Path(from_.ids.rv.selected)
+
+            except TypeError:
+                Logger.info('Copy: Select a file/directory to copy')
+            
+            else:
+                to_obj = Path(to.ids.header.ids.directory.current_dir)
+
+                if from_obj.is_dir():
+                    copytree(from_obj, to_obj)
+                else:
+                    copy(from_obj, to_obj)
+
+                Logger.info(f'Copy: Copied {str(from_obj)} to {str(to_obj)}')
+
+                self.update('left', from_.ids.header.ids.directory.current_dir)
+                self.update('right', str(to_obj))
 
         self.dismiss()
 
