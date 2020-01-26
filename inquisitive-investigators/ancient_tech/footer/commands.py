@@ -395,16 +395,24 @@ class RenamePopup(BasePopup):
             dir_check = Path(current) / rename_text
 
             if not dir_check.is_file():
-                Path(select.txt).rename(dir_check)
+                try:
+                    Path(select.txt).rename(dir_check)
 
-                self.update(self.filemanager, current)
-                self.dismiss()
+                except AttributeError:
+                    Logger.info('Rename: Please select a file/directory')
+
+                except FileExistsError:
+                    Logger.info('Rename: Directory name already exists')
+
+                else:
+                    self.update(self.filemanager, current)
+                    self.dismiss()
 
             else:
-                Logger.info('Create: File already exists')
+                Logger.info('Rename: File name already exists')
 
         else:
-            Logger.info('Create: Enter a File name')
+            Logger.info('Rename: Enter a File name')
 
 
 class QuitPopup(BasePopup):
