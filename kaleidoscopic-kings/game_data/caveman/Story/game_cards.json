@@ -18,6 +18,9 @@
         "text": "No, click here to choose me!",
         "outcomes": [
           {
+            "effects": {
+              "player_health": -1.0
+            },
             "weight": 1,
             "next_card": "welcome_2"
           }
@@ -411,6 +414,7 @@
   {
     "card_id": "tribe_discovery_intentional",
     "card_type": "game_over",
+    "card_sound": "death.wav",
     "card_image": "test.jpg",
     "text": "Well. It seems you're dead.",
     "options": [

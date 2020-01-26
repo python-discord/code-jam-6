@@ -41,6 +41,8 @@ class DataController(EventDispatcher):
         if self.active_card.card_type == "game_over":
             self.game = game = load_game(self.story_name)
             self.active_card = game.start_game()
+            self.set_game_state()
+            return
         if choice == "1" or len(self.active_card.options) == 1:
             outcome = self.active_card.options[0].get_outcome()
         else:
