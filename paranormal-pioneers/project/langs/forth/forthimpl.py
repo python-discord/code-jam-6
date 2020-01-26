@@ -207,8 +207,6 @@ DEFAULT_ENTRIES = {
     'ALLOT': ForthEntry(wordimpl.allot),
     ".X": ForthEntry(pops(1, returns=0)(lambda a: print(hex(a), end=' '))),
     '0X': ForthEntry(wordimpl.hex_literal),
-    'KEY': ForthEntry(pops(0)(lambda: ord(sys.stdin.read(1)))),
-    'ACCEPT': ForthEntry(wordimpl.accept),
 
 }
 

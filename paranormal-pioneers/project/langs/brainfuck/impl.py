@@ -38,6 +38,7 @@ def brainfuck(code: str) -> None:
             print(chr(cells[cellptr]), end='')
 
         elif char == ',':
+            raise ValueError(", is not supported")
             cells[cellptr] = ord(getch.getch())
 
         codeptr += 1

@@ -14,16 +14,15 @@ class Forth(command.Command):
     """
     Forth launcher
     examples:
-        forth ( starts the forth repl )
-        forth -f source.forth ( evaluates the source.forth file )
-        forth -if source.forth ( evaluates the source.forth file and starts the repl )
+        forth ." Hello World" ( prints hello world)
+        forth -f source.forth ( evaluates the source.forth file)
+        forth ." Hello world" -f source.forth ( evaluates the source.forth file and then prints hello world)
     """
-
 
     def __init__(self) -> None:
         super().__init__(name='forth')
 
-    @command.option('file', nargs='?', default=None,
+    @command.option('-f', '--file', nargs='?', default=None,
                     help="the file passed will be evaluated and no repl will start, unless the i flag is present")
     def handle_file(self, ns: Namespace, term: Terminal) -> None:
         if ns.file:
@@ -31,18 +30,21 @@ class Forth(command.Command):
         else:
             self.file = None
 
-    @command.option('-i', '--interactive', action='store_true', default=False,
-                    help="regardless of whether a file was passed, start the repl  after loading the file")
+    @command.option('command', nargs='*', default='',
+                    help="the forth line to execute")
     def handle_n(self, ns: Namespace, term: Terminal):
-        self.i = ns.interactive
+        self.i = ' '.join( ns.command )
 
     def main(self, ns: Namespace, term: Terminal) -> None:
         from project.langs.forth import forthimpl
+        import sys
+        import io
+        og = sys.stdout
+        new = sys.stdout = io.StringIO()
+        env: forthimpl.ForthEnv = forthimpl.create_forth()
         if self.file:
             with self.file.open() as f:
-                env: forthimpl.ForthEnv = forthimpl.create_forth()
                 env.eval(f.read())
-                if self.i:
-                    forthimpl.launch_repl(env)
-        else:
-            forthimpl.launch_repl()
+        env.eval(self.i)
+        sys.stdout = og
+        return new.getvalue()

@@ -21,10 +21,11 @@ class Shell(EventDispatcher):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.term = Terminal()
+        self.term._prepare()
 
     def run_command(self, command, show_output=True, *args):
         try:
-            result = self.term.run_cmd(command)
+            result = self.term.parser.execute(command, self.term)
         except Exception as exc:
             result = str(exc)
 
@@ -42,11 +43,15 @@ class ConsoleInput(TextInput):
         super().__init__(**kwargs)
         self._cursor_pos = 0
         # trick kivy, hehe ~ nekit
+        self.prompt_pos = 0
         self.keyboard_on_key_down(None, (13, 'enter'), None, list())
 
     def keyboard_on_key_down(self, window, keycode, text, modifiers):
         code, key = keycode
-
+        if (code not in (276, 273) and self.cursor_index() < self.prompt_pos) and \
+                (code == 8 and self.cursor_index() == self.prompt_pos) and False:
+            self.cursor = self.get_cursor_from_index(self.prompt_pos)
+            return
         if code == 13:
             self.validate_cursor_pos()
             text = self.text[self._cursor_pos:]
@@ -62,13 +67,10 @@ class ConsoleInput(TextInput):
 
             else:
                 Clock.schedule_once(self.prompt)
-
         elif code in [8, 127]:
             self.cancel_selection()
-
         elif code == 99 and modifiers == ['ctrl']:
             self.cancel_selection()
-
         return super().keyboard_on_key_down(window, keycode, text, modifiers)
 
     def _run_cmd(self, cmd, *args):
@@ -81,12 +83,12 @@ class ConsoleInput(TextInput):
     def prompt(self, *args):
         ps = self.shell.term.format_ps()
         self._cursor_pos = self.cursor_index() + len(ps)
+        self.prompt_pos = self._cursor_pos
         self.text += ps
 
     def on_output(self, output):
         if not self.text.endswith('\n'):
             self.text += '\n'
-
         self.text += output
 
         self.text += '\n'
