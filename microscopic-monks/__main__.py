@@ -1,5 +1,5 @@
 from primal.engine.engine import Engine
-from primal.screens.game_screen import GameScreen
+from primal.screens.splash_screen import SplashScreen
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.config import Config
@@ -17,11 +17,11 @@ class Application(App):
 
     def build(self):
         """Return the root widget."""
-        Window.clearcolor = (51 / 255, 51 / 255, 51 / 255, 1)
+        Window.clearcolor = (0, 0, 0, 1)
         Window.fullscreen = "auto"
         self.title = "Primal"
         game = PrimalGame()
-        game.add_screen(GameScreen())
+        game.set_screen(SplashScreen())
 
         return game
 

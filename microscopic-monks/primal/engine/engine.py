@@ -1,5 +1,3 @@
-from typing import List
-
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
@@ -31,7 +29,7 @@ class Engine(Widget):
         self.mouse_position = 0, 0
 
         # list of screens to update
-        self.screens: List[Screen] = []  # TODO: make this only accept screen classes
+        self.screen = None
 
         # call the update method every frame
         Clock.schedule_interval(self.update, 1.0 / 60.0)
@@ -49,18 +47,19 @@ class Engine(Widget):
         self.mouse_keys.discard(touch.button)
         print(touch.button)
 
-    def add_screen(self, screen: Screen) -> None:
+    def set_screen(self, screen: Screen) -> None:
         """Add the sprite to the internal list and add the widget."""
-        if screen not in self.screens:
-            screen.set_engine(self)
+        if self.screen is not None:
+            self.remove_widget(self.screen)
 
-            self.screens.append(screen)
-            self.add_widget(screen)
+        screen.set_engine(self)
+        self.screen = screen
+        self.add_widget(screen)
 
     def update(self, dt: float) -> None:
         """Call update and render on each screen """
-        for screen in self.screens:
-            screen.update(dt)
+        if self.screen is not None:
+            self.screen.update(dt)
         self.just_pressed_keys = set()
 
     def on_keyboard_closed(self) -> None:
