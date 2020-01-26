@@ -138,6 +138,7 @@
     "card_id": "natural_smell",
     "card_type": "event",
     "card_image": "test.jpg",
+    "card_sound": "water.wav",
     "conditions": {
       "world_found_tribe": true
     },
@@ -192,78 +193,82 @@
         ]
       }
     ]
-  },{
-  "card_id": "tribe_encounter_event",
-  "card_type": "event",
-  "card_image": "test.jpg",
-  "conditions": {
-    "world_found_tribe": false
   },
-  "text": "When out for a lovely little wander, you hear some remarkably Greg-like sounds a little way away",
-  "options": [
-    {
-      "text": "Investigate",
-      "outcomes": [
-        {
-          "weight": 1,
-          "next_card": "tribe_discovery_intentional",
-          "effects": {
-            "village_love": 0.1
-          }
-        }
-      ]
+  {
+    "card_id": "tribe_encounter_event",
+    "card_type": "event",
+    "card_image": "test.jpg",
+    "conditions": {
+      "world_found_tribe": false
     },
-    {
-      "text": "Nothing good can come from anything Greg-like. Run away",
-      "outcomes": [
-        {
-          "weight": 1,
-          "next_card": "tribe_discovery_run",
-          "effects": {
-            "village_love": -0.1
+    "text": "When out for a lovely little wander, you hear some remarkably Greg-like sounds a little way away",
+    "options": [
+      {
+        "text": "Investigate",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "tribe_discovery_intentional",
+            "effects": {
+              "village_love": -0.1,
+              "player_civility": 0.15
+            }
           }
-        }
-      ]
-    }
-  ]
-},
-{
-  "card_id": "tribe_discovery_intentional",
-  "card_type": "response",
-  "card_image": "test.jpg",
-  "text": "When investigating, you find a whole tribe of Greg-likes beings. \"people\" they call themselves. Maybe you weren't the first to find fire...",
-  "options": [
-    {
-      "text": "They made it pretty clear that joining wasn't optional",
-      "outcomes": [
-        {
-          "weight": 1,
-          "next_card": "random",
-          "effects": {
-            "world_found_tribe": true
+        ]
+      },
+      {
+        "text": "Nothing good can come from anything Greg-like. Run away",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "tribe_discovery_run",
+            "effects": {
+              "village_love": -0.1,
+              "player_civility": -0.1
+            }
           }
-        }
-      ]
-    }
-  ]
-},{
-  "card_id": "tribe_discovery_run",
-  "card_type": "response",
-  "card_image": "test.jpg",
-  "text": "Despite your best efforts, you stumble into a group of Greg-likes beings. \"people\" they call themselves.",
-  "options": [
-    {
-      "text": "They made it pretty clear that joining wasn't optional",
-      "outcomes": [
-        {
-          "weight": 1,
-          "next_card": "random",
-          "effects": {
-            "world_found_tribe": true
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "tribe_discovery_intentional",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "When investigating, you find a whole tribe of Greg-likes beings. \"people\" they call themselves. Maybe you weren't the first to find fire...",
+    "options": [
+      {
+        "text": "They made it pretty clear that joining wasn't optional",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random",
+            "effects": {
+              "world_found_tribe": true
+            }
           }
-        }
-      ]
-    }
-  ]
-}
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "tribe_discovery_run",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "Despite your best efforts, you stumble into a group of Greg-likes beings. \"people\" they call themselves.",
+    "options": [
+      {
+        "text": "They made it pretty clear that joining wasn't optional",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random",
+            "effects": {
+              "world_found_tribe": true
+            }
+          }
+        ]
+      }
+    ]
+  }
 ]
