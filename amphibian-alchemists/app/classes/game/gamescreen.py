@@ -134,15 +134,19 @@ class GameScreen(Screen):
 
         settings = JsonStore(CONFIG_DIR)
 
+        volume = 1.0
+
         if settings.exists("effects_volume"):
             if settings.get("effects_volume")["value"] == 0:
                 return
+            else:
+                volume = settings.get("effects_volume")["value"]
 
-            sound = SoundLoader.load(
-                "misc/" + sound + (".wav" if sound != "swoosh" else ".mp3")
-            )
-            sound.volume = settings.get("effects_volume")["value"]
-            sound.play()
+        sound = SoundLoader.load(
+            "misc/" + sound + (".wav" if sound != "swoosh" else ".mp3")
+        )
+        sound.volume = volume
+        sound.play()
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
