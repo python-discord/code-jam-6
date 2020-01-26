@@ -1,3 +1,4 @@
+import random
 from typing import Any
 
 from firestarter.game_engine.engine import Engine
@@ -11,6 +12,7 @@ from firestarter.game_engine.object import (
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.uix.image import Image
 
 
 class MyGame(Engine):
@@ -47,6 +49,26 @@ class MyGame(Engine):
         #     lambda dt: self.player.change_mode(self.player.current_mode + 1),
         #     1
         # )
+
+        for x in range(100):
+            img = Image(source='resources/background/Tree.png',
+                        keep_ratio=True,
+                        allow_stretch=False,
+                        size_hint=(0.5, 0.5),
+                        pos_hint={'center_x': random.uniform(0, 1),
+                                  'top': random.uniform(0.36, 0.38)})
+
+            self.background.add_widget(img, index=6)
+
+        for x in range(5):
+            img = Image(source='resources/background/dino.png',
+                        keep_ratio=True,
+                        allow_stretch=False,
+                        size_hint=(random.uniform(0.45, 0.5), random.uniform(0.45, 0.5)),
+                        pos_hint={'center_x': random.uniform(0, 1),
+                                  'top': random.uniform(0.36, 0.38)})
+
+            self.background.add_widget(img, index=random.randrange(10, 30))
 
     def update_hearts(self, _: Any, value: int) -> None:
         self.hearts.change_mode(value)
