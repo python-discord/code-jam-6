@@ -141,7 +141,7 @@
                     a = Animation(x=900, y=50, duration=.7, t='out_bounce')
                     a += Animation(x=550, y=-900, duration=.01)
                     a += Animation(x=-1500, duration=.01)
-                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.5, t='linear')
+                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.1, t='linear')
                     a.start(card_and_art)
                     audio = data.active_card.card_sound if data.active_card.card_sound is not None else "default_card_switch.wav"
                     s = SoundLoader.load(sound_assets + "default_card_switch.wav")
