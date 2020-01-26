@@ -160,6 +160,8 @@ class GameScreen(Screen):
                     feature.hit()
                     if feature.get_health() == 0:
                         remove_features.add(feature)
+                        self.inventory.add_item(feature)
+
                         if feature in self.clicked_features:
                             del self.clicked_features[feature]
                     else:
