@@ -173,6 +173,8 @@ class GameView(Widget):
         ship.shape.clear_widgets()
         self.remove_widget(ship.shape)
         game.score += 1
+        if self.store.get('hi-score')['score'] < game.score:
+            self.store.put('hi-score', score=game.score)
 
     def redraw_ships(self, redraw_to=0):
         for lane in self._game.ship_lanes[:redraw_to]:
@@ -215,6 +217,11 @@ class GameView(Widget):
     def on_cannon_ball_complete(self, animation, image):
         self.remove_widget(image)
         self._game.health -= 10
+        if self._game.health <= 0:
+            self.pause_menu.title = 'Is the mirror working right?'
+            self.pause_menu_content.game_over = True
+            self.pause_menu_content.remove_widget(self.pause_menu_content.button_resume)
+            self.open_pause_menu()
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)
@@ -224,7 +231,7 @@ class GameView(Widget):
         action = KEY_MAPPING.get(key_code[1])
         if key_code[1] == 'escape' and not self.pause_menu_opened:
             self.open_pause_menu()
-        elif key_code[1] == 'escape' and self.pause_menu_opened:
+        elif key_code[1] == 'escape' and self.pause_menu_opened and self.pause_menu_content.game_over == False:
             self.close_pause_menu()
 
         if action is None:
@@ -236,5 +243,3 @@ class GameView(Widget):
         Logger.debug(f'New score: {score}')
         self._score.text = f'Score: {score:3}'
 
-        if self.store.get('hi-score')['score'] < score:
-            self.store.put('hi-score', score=score)

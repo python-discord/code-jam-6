@@ -13,9 +13,10 @@ class PauseMenuView(GridLayout):
         self.cols = 1
         self.padding = [0, 20]
         self.spacing = [0, 8]
+        self.game_over = False
 
         self.hi_score = Label(
-            text="[color=ffffff]High Score: [/color][color=faff00]" +
+            text="[color=ffffff]High Score: [/color][color=724800]" +
                  str(self.store.get('hi-score')['score']) + "[/color]",
             font_size='20sp',
             font_name=FONT_PATH.format('Pacifico-Regular.ttf'),
