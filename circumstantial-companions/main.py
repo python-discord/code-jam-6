@@ -34,6 +34,7 @@ from stone import Chisel
 FONT = contextvars.ContextVar("font")
 
 IMAGE_PATH = Path("assets", "img")
+ICON = str(IMAGE_PATH / "icon.png")
 OPTIONS_BACKGROUND = str(IMAGE_PATH / "options_background.png")
 CAVEMAN = tuple(str(IMAGE_PATH / "caveman" / f"{i}.png") for i in range(4))
 BUTTON_NORMAL = str(IMAGE_PATH / "button" / "normal.png")
@@ -536,6 +537,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
 class ChiselApp(App):
     def build(self):
+        self.icon = ICON
         Window.minimum_width, Window.minimum_height = Window.size
         root = FloatLayout()
         navdrawer = NavigationDrawer()

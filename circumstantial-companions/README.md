@@ -73,7 +73,7 @@ assets
 
 - [`options_background.png`][img-dir], [`sign_border.png`][img-dir] and [`burger/*.png`][burger-dir] from [PureBDcraft ResourcePack][bdcraft-url] are licensed under their Terms of Use. The latter two are altered by [MusicOnline][musiconline-github].
 
-- [`background.png`][img-dir], [`cursor/*.png`][cursor-dir] and [`caveman/*.png`][caveman-dir] are original works by [salt-die][salt-die-github].
+- [`background.png`][img-dir], [`icon.png`][img-dir], [`cursor/*.png`][cursor-dir] and [`caveman/*.png`][caveman-dir] are original works by [salt-die][salt-die-github].
 
 - [`button/*.png`][button-dir] are just a hundred pixels of the same color (of unknown [trademark][trademark-url]).
 
