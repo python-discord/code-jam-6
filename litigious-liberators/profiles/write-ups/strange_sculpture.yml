@@ -8,8 +8,10 @@ Choices:
   right: Take one as home decoration.
   left: Use it as a container.
 Results:
-  right: Looks Good!
-  left: Nice idea!
+  right: >
+    Looks Good!
+  left: >
+    Nice idea!
 Deltas:
   right:
     Knowledge: 0

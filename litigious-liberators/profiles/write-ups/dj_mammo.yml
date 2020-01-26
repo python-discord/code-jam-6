@@ -9,8 +9,10 @@ Choices:
   right: Mind my own business
   left: Go to his party.
 Results:
-  right: Drugs aint good man
-  left: Vibe Check!
+  right: >
+    Drugs aint good man
+  left: >
+    Vibe Check!
 Deltas:
   right:
     Knowledge: 0

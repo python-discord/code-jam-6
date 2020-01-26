@@ -8,8 +8,10 @@ Choices:
   right: Go on your own path
   left: Hike with N'attan.
 Results:
-  right: I'm not an adventure guy.
-  left: Adventure time!
+  right: >
+    I'm not an adventure guy.
+  left: >
+    Adventure time!
 Deltas:
   right:
     Knowledge: 0

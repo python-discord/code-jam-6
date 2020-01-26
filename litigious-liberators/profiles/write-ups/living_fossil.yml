@@ -7,8 +7,10 @@ Choices:
   right: Kill and eat it.
   left: Learn more about it.
 Results:
-  right: Smells weird but tastes good
-  left: Such wisdom!
+  right: >
+    Smells weird but tastes good
+  left: >
+    Such wisdom!
 Deltas:
   right:
     Knowledge: 0

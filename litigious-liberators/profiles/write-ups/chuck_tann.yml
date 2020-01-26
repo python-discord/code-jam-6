@@ -7,8 +7,10 @@ Choices:
   right: Become chuck's hommie
   left: Let's have some fried chicken tomorrow.
 Results:
-  right: I better learn some moves.
-  left: Nothing better than fried chicken!
+  right: >
+    I better learn some moves.
+  left: >
+    Nothing better than fried chicken!
 Deltas:
   right:
     Knowledge: 3

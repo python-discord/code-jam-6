@@ -9,8 +9,10 @@ Choices:
     right: Join Kali's clan.
     left: Group with the other clans to defeat Kali's
 Results:
-    right: Welcome to the clan.
-    left: Not today Kali.
+    right: >
+      Welcome to the clan.
+    left: >
+      Not today Kali.
 Deltas:
     right:
         Knowledge: 0

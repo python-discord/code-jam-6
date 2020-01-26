@@ -9,8 +9,10 @@ Choices:
   right: Explore and find something useful
   left: Come back later.
 Results:
-  right: Treasures... Here I come..
-  left: Meh... Not so interesting
+  right: >
+    Treasures... Here I come..
+  left: >
+    Meh... Not so interesting
 Deltas:
   right:
     Knowledge: 2

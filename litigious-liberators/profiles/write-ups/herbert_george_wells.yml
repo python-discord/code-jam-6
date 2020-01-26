@@ -9,8 +9,10 @@ Choices:
   right: Attend his lecture.
   left: Report this creature.
 Results:
-  right: +10 iq
-  left: Seems dangerous!
+  right: >
+    +10 iq
+  left: >
+    Seems dangerous!
 Deltas:
   right:
     Knowledge: 2

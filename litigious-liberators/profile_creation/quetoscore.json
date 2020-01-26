@@ -1,22 +1,22 @@
 {
   "Q1": {
     "A1": {
-      "Knowledge": 1,
+      "Knowledge": 4,
       "Welfare": 0,
       "Energy": 0
     },
     "A2": {
-      "Knowledge": 2,
-      "Welfare": 0,
-      "Energy": 0
-    },
-    "A3": {
       "Knowledge": 3,
       "Welfare": 0,
       "Energy": 0
     },
+    "A3": {
+      "Knowledge": 2,
+      "Welfare": 0,
+      "Energy": 0
+    },
     "A4": {
-      "Knowledge": 4,
+      "Knowledge": 1,
       "Welfare": 0,
       "Energy": 0
     }
@@ -24,22 +24,22 @@
   "Q2": {
     "A1": {
       "Knowledge": 0,
-      "Welfare": 1,
+      "Welfare": 4,
       "Energy": 0
     },
     "A2": {
       "Knowledge": 0,
-      "Welfare": 2,
+      "Welfare": 3,
       "Energy": 0
     },
     "A3": {
       "Knowledge": 0,
-      "Welfare": 3,
+      "Welfare": 2,
       "Energy": 0
     },
     "A4": {
       "Knowledge": 0,
-      "Welfare": 4,
+      "Welfare": 1,
       "Energy": 0
     }
   },
@@ -47,22 +47,22 @@
     "A1": {
       "Knowledge": 0,
       "Welfare": 0,
-      "Energy": 1
+      "Energy": 4
     },
     "A2": {
       "Knowledge": 0,
       "Welfare": 0,
-      "Energy": 2
+      "Energy": 3
     },
     "A3": {
       "Knowledge": 0,
       "Welfare": 0,
-      "Energy": 3
+      "Energy": 2
     },
     "A4": {
       "Knowledge": 0,
       "Welfare": 0,
-      "Energy": 4
+      "Energy": 1
     }
   }
 }

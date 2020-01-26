@@ -36,8 +36,9 @@ class CreateProfile(Screen):
                         attributes = que_to_score[toggle_btn.group][f"A{idx+1}"]
                         self.profile_data["attributes"].update(attributes)
 
-        # self.manager.get_screen("profile_selection").ids["profile_list"]._attributes =
-        # self.manager.get_screen("create_profile").profile_data["attributes"]
+        self.manager.get_screen("profile_selection").ids[
+            "profile_list"
+        ].attributes = self.manager.get_screen("create_profile").profile_data["attributes"]
         print(self.manager.get_screen("profile_selection").ids["profile_list"]._attributes)
         # TODO: Fix the initial stats caclulations before uncommenting following lines
         # print(self.profile_data["attributes"])

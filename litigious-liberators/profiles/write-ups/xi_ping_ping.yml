@@ -8,8 +8,10 @@ Choices:
   right: Join her clan.
   left: Show her some of your ancient book collection.
 Results:
-  right: Safer than ever!
-  left: Always nice to have friends with resources!
+  right: >
+    Safer than ever!
+  left: >
+    Always nice to have friends with resources!
 Deltas:
   right:
     Knowledge: 0
