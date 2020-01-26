@@ -1,26 +1,15 @@
-# Litigious Liberators
+# Resurgence 
+### by Litigious Liberators
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
 
 ## Contents
 
-- [Dev](#dev)
-  * [Project Management](#project-management)
-  * [Code organisation](#code-organisation)
-  * [Setting up your repo](#setting-up-your-repo)
+- [Setting up your repo](#setting-up-your-repo)
+- [Running the App](#running-the-app)
+- [Using the App](#using-the-app)
 - [Useful links](#useful-links)
 - [License](#license)
 
-## Dev
-
-### Project Management
-
-- **Trello Board**: [https://trello.com/b/OUo1YWft](https://trello.com/b/OUo1YWft)
-
-### Code organisation
-
-- Dev dependencies go in `dev-requirements.txt`
-- Normal dependencies go in `requirements.txt`
 
 ### Setting up your repo
 
@@ -49,20 +38,15 @@ Install dependencies
 (env) $ pip install -r requirements.txt # install normal requirements
 (env) $ pip install -r requirements-dev.txt # install dev as well
 ```
-
-Set up pre-commit hooks
-
-```bash
-(env) $ pre-commit --version # make sure this outputs something
-(env) $ pre-commit install 
-```
-
-Now it should run before your commit :) 
-
 ## Running the App:
 ```bash
-python main.py -m screen:phone_iphone_6_plus,portrait,scale=0.40
+python main.py 
 ```
+## Using the App
+* Once you open the app, the game's backstory will be presented. You can __single-click__ to move to the next part of the story or __double-click__ to skip the entire story. 
+* After that, you need to create your profile. Enter your name and answer few simple questions to determine your initial stats to move on to the next screen.
+* Here you will be playing the actual game. You will be presented a scenario/individual where you have to press __right/left (keyboard)__ based on the choices displayed on the screen. To know more about the card, you can __click on the picture__.
+* Your goal is to maximise all the three stats without any of them going empty. These stats might increase or decrease based on your choices
 
 ## Useful links
 
