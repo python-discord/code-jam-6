@@ -1,0 +1,122 @@
+<MainContainer>:
+    command_console: command_console
+    text_display_label: text_display_label
+    orientation: 'vertical'
+    padding: 10
+    canvas:
+        Rectangle:
+            size: self.width, self.height
+            pos: self.pos
+            source: 'images/cave_background.png'
+        Color:
+            rgba: 0, 0, 0, 0.65
+        Rectangle:
+            size: self.width, self.height
+            pos: self.pos
+
+    BoxLayout:
+        size_hint: 1, None
+        height: root.height/4
+        padding: 10
+        canvas:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 0.0
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+
+        NavContainer:
+            id: nav_container
+            size_hint: None, 1
+            width: self.height
+            pos: 10, self.y
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    size: self.width/3, self.width/3
+                    pos: self.height/2-(self.width/3)/2, self.width/2-(self.width/3)/2
+                    source: 'images/log_nav.png'
+                Triangle:
+                    group: 's'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2,0]
+                    source: 'images/nav_arrow_ns.png'
+                Triangle:
+                    group: 'w'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [0,self.width/2]
+                    source: 'images/nav_arrow_w.png'
+                Triangle:
+                    group: 'n'
+                    points: [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2,self.width]
+                    source: 'images/nav_arrow_ns.png'
+                Triangle:
+                    group: 'e'
+                    points: [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width, self.width/2]
+                    source: 'images/nav_arrow_e.png'
+
+        LookContainer:
+            id: look_container
+            size_hint: None, 1
+            width: self.height
+            pos: root.right-self.width-10, self.y
+            canvas:
+                Color:
+                    rgba: 1, 1, 1, 1
+                Rectangle:
+                    size: self.width/3, self.width/3
+                    pos: self.height/2-(self.width/3)/2, self.width/2-(self.width/3)/2
+                    source: 'images/log_look.png'
+                Triangle:
+                    group: 's'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2,0]
+                    source: 'images/look_arrow_ns.png'
+                Triangle:
+                    group: 'w'
+                    points: [self.width/2-(self.width/3)/2,self.width/3] + [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [0,self.width/2]
+                    source: 'images/look_arrow_w.png'
+                Triangle:
+                    group: 'n'
+                    points: [self.width/2-(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width/2,self.width]
+                    source: 'images/look_arrow_ns.png'
+                Triangle:
+                    group: 'e'
+                    points: [self.width/2+(self.width/3)/2,self.width/3] + [self.width/2+(self.width/3)/2,self.width/2+(self.width/3)/2] + [self.width, self.width/2]
+                    source: 'images/look_arrow_e.png'
+
+    BoxLayout:
+        size_hint: 1, None
+        height: 10
+
+
+    TextDisplayContainer:
+        orientation: 'vertical'
+        id: text_display_console
+        size_hint: 1, 1
+        font_size: root.font_size
+        foreground_color: root.foreground_color
+        background_color: root.background_color
+        do_scroll_y: True
+
+        TextDisplayLabel:
+            id: text_display_label
+            size_hint: None, None
+            size: self.texture_size
+            line_height: 1.5
+            text_size: self.parent.width, None
+            font_size: root.font_size
+            font_name: root.font_name
+            markup: True
+
+    BoxLayout:
+        size_hint: 1, None
+        height: root.font_size*2
+        CommandInput:
+            id: command_console
+            shell: root
+            multiline: False
+            focus: True
+            font_size: root.font_size
+            font_name: root.font_name
+            foreground_color: root.foreground_color
+            background_color: root.background_color
+            cursor_color: root.foreground_color
