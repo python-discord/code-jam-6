@@ -91,7 +91,7 @@ WindowManager:
 
     GridLayout:
         cols: 1
-        rows: 4
+        rows: 3
 
         ScrollView:
             height: 400
@@ -125,15 +125,23 @@ WindowManager:
             Button:
                 text: 'Remove state'
 
-        TextInput:
+        GridLayout:
+            cols: 2
+            rows: 1
             size_hint_y: None
             height: 40
-            padding: 10, 10
-            hint_text: 'State value (int, float, bool)'
-            multiline: False
 
-        Button:
-            text: 'Back to card screen'
-            on_release:
-                app.root.current = "card_add"
-                root.manager.transition.direction = "left"
+            TextInput:
+                size_hint_y: None
+                height: 40
+                padding: 10, 10
+                hint_text: 'State value (int, float, bool)'
+                multiline: False
+
+            Button:
+                text: 'Back to card screen'
+                size_hint_y: None
+                height: 40
+                on_release:
+                    app.root.current = "card_add"
+                    root.manager.transition.direction = "left"

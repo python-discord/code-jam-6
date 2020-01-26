@@ -1,6 +1,9 @@
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.config import Config
+Config.set("graphics", "width", "1000")
+Config.set("graphics", "height", "600")
 
 
 class CardAddWindow(Screen):
