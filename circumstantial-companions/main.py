@@ -5,7 +5,6 @@ simulation! A caveman workout routine guaranteed to give you chiseled slabs fast
 """
 import contextvars
 from itertools import cycle
-import json
 import math
 from pathlib import Path
 import webbrowser
@@ -45,7 +44,7 @@ BURGER_HOVER = str(IMAGE_PATH / "burger" / "hover.png")
 BURGER_PRESSED = str(IMAGE_PATH / "burger" / "pressed.png")
 PROJECT_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128
-GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
+GITHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
 CURSOR = Cursor()
 
 
@@ -110,12 +109,22 @@ class Popup(SignBorder, KivyPopup):
 
 class InfoPopup(Popup):
     def __init__(self, title, text, *, dismissable=True, size_hint):
-        layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-        self.label = Label(text=text, font_name=FONT.get(), font_size=sp(20), halign="center", valign="middle")
+        layout = BoxLayout(orientation="vertical",
+                           spacing=dp(34),
+                           padding=(dp(20),
+                           dp(15)))
+        self.label = Label(text=text,
+                           font_name=FONT.get(),
+                           font_size=sp(20),
+                           halign="center",
+                           valign="middle")
         layout.add_widget(self.label)
         self.label.bind(size=self._resize_label)
 
-        super().__init__(title, layout, size_hint=size_hint, auto_dismiss=dismissable)
+        super().__init__(title,
+                         layout,
+                         size_hint=size_hint,
+                         auto_dismiss=dismissable)
         self._resize_label()
 
         if dismissable:
@@ -134,7 +143,10 @@ def open_error_popup(text):
 
 
 def open_loading_popup(text):
-    popup = InfoPopup(_("Loading..."), text, dismissable=False, size_hint=(0.6, 0.3))
+    popup = InfoPopup(_("Loading..."),
+                      text,
+                      dismissable=False,
+                      size_hint=(0.6, 0.3))
     popup.open()
     return popup
 
@@ -143,7 +155,9 @@ class SelectionPopup(Popup):
     choice = StringProperty()
 
     def __init__(self, title, choices):
-        layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
+        layout = BoxLayout(orientation="vertical",
+                           spacing=dp(34),
+                           padding=(dp(20), dp(15)))
         for key, string in choices.items():
             btn = Button(string, font_size=sp(16))
 
@@ -163,13 +177,19 @@ class SelectionPopup(Popup):
 class ImportPopup(Popup):
     def __init__(self, chisel):
         self.chisel = chisel
-        layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-        self.file_chooser = FileChooserListView(path=get_saves_path(), filters=[self._filter_file],
+        layout = BoxLayout(orientation="vertical",
+                           spacing=dp(34),
+                           padding=(dp(20), dp(15)))
+        self.file_chooser = FileChooserListView(path=get_saves_path(),
+                                                filters=[self._filter_file],
                                                 size_hint=(1, 0.85))
-        self.btn = Button(_("Please select a file."), disabled=True, font_size=sp(16),
+        self.btn = Button(_("Please select a file."),
+                          disabled=True,
+                          font_size=sp(16),
                           size_hint=(1, 0.15))
 
-        self.file_chooser.bind(path=self._change_title, selection=self._change_btn_name)
+        self.file_chooser.bind(path=self._change_title,
+                               selection=self._change_btn_name)
         self.btn.bind(on_release=self._select_file)
 
         layout.add_widget(self.file_chooser)
@@ -237,20 +257,29 @@ class SaveAsPopup(Popup):
                                                 filters=[self._filter_file],
                                                 size_hint=(1, 0.75))
 
-        sublayout = BoxLayout(orientation="horizontal", spacing=dp(10), size_hint=(1, 0.1))
+        sublayout = BoxLayout(orientation="horizontal",
+                              spacing=dp(10),
+                              size_hint=(1, 0.1))
         self.text_input = TextInput(text="Untitled",
                                     multiline=False,
                                     font_name=FONT.get(),
                                     font_size=sp(16),
                                     size_hint_x=0.6)
-        self.save_type_btn = KivyButton(text=_("Select file type"), font_name=FONT.get(), size_hint_x=0.4)
+        self.save_type_btn = KivyButton(text=_("Select file type"),
+                                        font_name=FONT.get(),
+                                        size_hint_x=0.4)
         sublayout.add_widget(self.text_input)
         sublayout.add_widget(self.save_type_btn)
 
-        self.save_btn = Button(_("Please select a file type."), disabled=True, font_size=sp(16), size_hint=(1, 0.15))
+        self.save_btn = Button(_("Please select a file type."),
+                               disabled=True,
+                               font_size=sp(16),
+                               size_hint=(1, 0.15))
 
-        self.file_chooser.bind(path=self._change_title, selection=self._set_text)
-        self.text_input.bind(text=self._on_text_input, on_text_validate=self._save_file)
+        self.file_chooser.bind(path=self._change_title,
+                               selection=self._set_text)
+        self.text_input.bind(text=self._on_text_input,
+                             on_text_validate=self._save_file)
         self.save_type_btn.bind(on_release=self.open_save_type_popup)
         self.save_btn.bind(on_release=self._save_file)
 
@@ -262,7 +291,8 @@ class SaveAsPopup(Popup):
 
     @staticmethod
     def _filter_file(folder, filename):
-        return filename.endswith(PROJECT_EXTENSION) or filename.endswith(".png")
+        return (filename.endswith(PROJECT_EXTENSION)
+                or filename.endswith(".png"))
 
     @staticmethod
     def _maybe_shorten(string):
@@ -299,9 +329,11 @@ class SaveAsPopup(Popup):
             self.text_input.text = text[:MAX_FILENAME_LENGTH]
         if self.save_type:
             current_ext = self._get_file_extension()
-            if current_ext == ".png" and self.text_input.text.endswith(PROJECT_EXTENSION):
+            if (current_ext == ".png"
+                    and self.text_input.text.endswith(PROJECT_EXTENSION)):
                 self._set_save_type(None, "project")
-            elif current_ext == PROJECT_EXTENSION and self.text_input.text.endswith(".png"):
+            elif (current_ext == PROJECT_EXTENSION
+                    and self.text_input.text.endswith(".png")):
                 self._set_save_type(None, "background")
         else:
             if self.text_input.text.endswith(PROJECT_EXTENSION):
@@ -364,7 +396,8 @@ class SaveAsPopup(Popup):
             bg_path = trans_path = project_path = path / filename
 
         bg_func = lambda: self.chisel.export_png(bg_path, transparent=False)
-        trans_func = lambda: self.chisel.export_png(trans_path, transparent=True)
+        trans_func = lambda: self.chisel.export_png(trans_path,
+                                                    transparent=True)
         project_func = lambda: self.chisel.save(project_path)
         all_func = lambda: bg_func() or trans_func() or project_func()
         functions = {
@@ -385,7 +418,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         super().__init__(orientation="vertical",
                          spacing=dp(32),
                          padding=(dp(20), dp(30), dp(20), dp(15)),
-                         opacity=0)  # opacity is set when side panel is opened
+                         opacity=0)  # set opacity when side panel is opened
         self.setup_background(OPTIONS_BACKGROUND)
 
     def build(self, locale=SYSTEM_LOCALE):
@@ -439,7 +472,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                          font_size=sp(18),
                          size_hint=(1, None),
                          height=dp(42))
-        src_btn.bind(on_release=lambda btn: webbrowser.open(GTIHUB_URL))
+        src_btn.bind(on_release=lambda btn: webbrowser.open(GITHUB_URL))
 
         # Animation - Normal loading of an animation won't apply desired mag_filter to each
         # individual texture, so we load each frame and cycle through the textures 'by-hand'.
@@ -450,7 +483,9 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
             images.append(image)
         images = cycle(images)
 
-        animation = Image(source=CAVEMAN[0], size_hint=(1, 1), allow_stretch=True)
+        animation = Image(source=CAVEMAN[0],
+                          size_hint=(1, 1),
+                          allow_stretch=True)
         animation.texture.mag_filter = 'nearest'
 
         def next_texture(*args):
@@ -478,20 +513,21 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
     def open_language_popup(self, *args):
         locales = {code: info["name"] for code, info in LOCALES.items()}
-        language_popup = SelectionPopup(_("Select language"), locales)
-        language_popup.bind(choice=lambda instance, choice: self.build(choice))
-        language_popup.open()
+        popup = SelectionPopup(_("Select language"), locales)
+        popup.bind(choice=lambda instance, choice: self.build(choice))
+        popup.open()
 
     def reset_chisel(self, *args):
         Window.remove_widget(CURSOR)
         popup = open_loading_popup(_("Resetting the canvas."))
-        Clock.schedule_once(lambda dt:  self.chisel.reset()
-                                        or popup.dismiss()
-                                        or Window.add_widget(CURSOR, "after"), 0.1)
+        Clock.schedule_once(lambda dt: self.chisel.reset()
+                                       or popup.dismiss()
+                                       or Window.add_widget(CURSOR, "after"), 0.1)
 
     def bind_to_burger(self, burger):
         def _reposition(*args):
-            burger.pos = (self.right + dp(10), self.top - burger.height - dp(10))
+            burger.pos = (self.right + dp(10),
+                          self.top - burger.height - dp(10))
         self.bind(pos=_reposition, size=_reposition)
 
 class ChiselApp(App):
