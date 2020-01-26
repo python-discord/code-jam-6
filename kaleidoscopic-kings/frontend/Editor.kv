@@ -1,0 +1,159 @@
+WindowManager:
+    MainWindow:
+    CardAddWindow:
+    GameStatesWindow:
+
+<MainWindow>:
+    name: "main"
+
+    GridLayout:
+        cols:2
+        rows: 1
+
+        Button:
+            text: "Add game state"
+            on_release:
+                app.root.current = "game_states"
+                root.manager.transition.direction = "left"
+
+        Button:
+            text: "Add card"
+            on_release:
+                app.root.current = "card_add"
+                root.manager.transition.direction = "right"
+
+<CardAddWindow>:
+    name: "card_add"
+
+    GridLayout:
+        size: root.size
+        cols: 3
+        rows: 1
+
+        ScrollView:
+            height: 600
+            size_hint_y: None
+            do_scroll_x: False
+            do_scroll_y: True
+
+            Label:
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 10, 10
+                text:
+                    'Placeholder card text\n' * 100
+
+
+
+        GridLayout:
+            cols: 2
+            rows: 5
+
+            TextInput:
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'card_id (use snake_case)'
+                multiline: False
+
+            TextInput:
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'sound filename with extension (optional)'
+                multiline: False
+
+            TextInput:
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'type: event, response, start or game_over'
+                multiline: False
+
+            TextInput:
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'image filename with extension (right click preview)'
+                multiline: False
+
+            TextInput:
+                hint_text: 'options json'
+                multiline: True
+
+            TextInput:
+                hint_text: 'conditions json'
+                hint_text: "(optional) Conditions json\nExample would be:\n{player_health:0.5}"
+                multiline: True
+
+            TextInput:
+                size_hint_y: None
+                height: 30
+                font_size: 12
+                hint_text: 'Card text'
+                multiline: False
+
+            Button:
+                size_hint_y: None
+                height: 30
+                text: 'Add card'
+
+            Button:
+                size_hint_y: None
+                height: 30
+                text: 'Game states'
+                on_release:
+                    app.root.current = "main"
+                    root.manager.transition.direction = "right"
+
+<GameStatesWindow>:
+    name: "game_states"
+
+    GridLayout:
+        cols: 1
+        rows: 4
+
+        ScrollView:
+            height: 400
+            size_hint_y: None
+            do_scroll_x: False
+            do_scroll_y: True
+
+            Label:
+                size_hint_y: None
+                height: self.texture_size[1]
+                padding: 10, 10
+                text:
+                    'Placeholder text\n' * 100
+
+        GridLayout:
+            cols: 3
+            rows: 1
+            size_hint_y: None
+            height: 40
+
+            TextInput:
+                size_hint_x: None
+                width: 600
+                padding: 10, 10
+                hint_text: 'State key name (please use snake_case)'
+                multiline: False
+
+            Button:
+                text: 'Add state'
+
+            Button:
+                text: 'Remove state'
+
+        TextInput:
+            size_hint_y: None
+            height: 40
+            padding: 10, 10
+            hint_text: 'State value (int, float, bool)'
+            multiline: False
+
+        Button:
+            text: 'Back'
+            on_release:
+                app.root.current = "card_add"
+                root.manager.transition.direction = "left"
