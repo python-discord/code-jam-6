@@ -40,15 +40,10 @@ class DataController(EventDispatcher):
         """Used to update state for the app when the user makes a choice"""
         if choice == "1" or len(self.active_card.options) == 1:
             outcome = self.active_card.options[0].get_outcome()
-            print(outcome)
-            self.active_card = self.game.take_turn(outcome)
         else:
             card_choice = 1 if len(self.active_card.options) > 0 else 0
             outcome = self.active_card.options[card_choice].get_outcome()
-            print(outcome)
-            self.active_card = self.game.take_turn(outcome)
-        print(self.game.game_state)
-
+        self.active_card = self.game.take_turn(outcome)
         self.set_game_state()
 
     def set_game_state(self):
