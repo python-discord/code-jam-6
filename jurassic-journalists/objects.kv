@@ -1,0 +1,250 @@
+<TextPaper>
+<WhiteOut>
+<TypeWriter>
+    canvas.before:
+        Color:
+            rgba: 0,0,0,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    canvas.after:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'atlas://assets/typewriter/typewriter_base'
+    title: ''
+	typw: typw
+    separator_color: 0,0,0,0
+	on_dismiss: typw.save()
+    FloatLayout:
+	    id: writer
+        typw: typw
+        TextPaper:
+            canvas.after:
+                Color:
+                    rgba: (.59,.29,0,1)
+                Rectangle:
+                    size: root.width, self.height // 2 - 40
+                    pos: 0,0
+            id: typw
+            source: 'assets/blank.png'
+            pos: self.pos
+            size: self.size
+            letters: []
+            fontsize: 20
+            text: ''
+            on_text: 
+                self.letters.append(Letter(self.text[-1], self.fontsize, 'assets/1942.ttf', self.colour)) if '_' not in self.text[-2:] else self.escaped()
+            on_letters: self.update()
+        WhiteOut:
+            size: self.size
+            pos: self.pos
+        Row1:
+            id: q
+			txt: 'q'
+            pos_hint: {'x': .16, 'y': self.anim_y}
+        Row1:
+            id: w
+			txt: 'w'
+            pos_hint: {'x': .235, 'y': self.anim_y}
+        Row1:
+            id: e
+			txt: 'e'
+            pos_hint: {'x': .31, 'y': self.anim_y}
+        Row1:
+            id: r
+			txt: 'r'
+            pos_hint: {'x': .383, 'y': self.anim_y}
+        Row1:
+            id: t
+			txt: 't'
+            pos_hint: {'x': .458, 'y': self.anim_y}
+        Row1:
+            id: y
+			txt: 'y'
+            pos_hint: {'x': .533, 'y': self.anim_y}
+        Row1:
+            id: u
+			txt: 'u'
+            pos_hint: {'x': .608, 'y': self.anim_y}
+        Row1:
+            id: i
+			txt: 'i'
+            pos_hint: {'x': .683, 'y': self.anim_y}
+        Row1:
+            id: o
+			txt: 'o'
+            pos_hint: {'x': .758, 'y': self.anim_y}
+        Row1:
+            id: p
+			txt: 'p'
+            pos_hint: {'x': .832, 'y': self.anim_y}
+        Row2:
+		    id: a
+            txt: 'a'
+            pos_hint: {'x': .191, 'y':self.anim_y}
+        Row2:
+		    id: s
+            txt: 's'
+            pos_hint: {'x': .265, 'y':self.anim_y}
+        Row2:
+		    id: d
+            txt: 'd'
+            pos_hint: {'x': .34, 'y': self.anim_y}
+        Row2:
+		    id: f
+            txt: 'f'
+            pos_hint: {'x': .416, 'y': self.anim_y}
+        Row2:
+		    id: g
+            txt: 'g'
+            pos_hint: {'x': .489, 'y': self.anim_y}
+        Row2:
+		    id: h
+            txt: 'h'
+            pos_hint: {'x': .566, 'y': self.anim_y}
+        Row2:
+		    id: j
+            txt: 'j'
+            pos_hint: {'x': .641, 'y': self.anim_y}
+        Row2:
+		    id: k
+            txt: 'k'
+            pos_hint: {'x': .715, 'y': self.anim_y}
+        Row2:
+		    id: l
+            txt: 'l'
+            pos_hint: {'x': .791, 'y': self.anim_y}
+        Row3:
+		    id: z
+            txt: 'z'
+            pos_hint: {'x': .198, 'y': self.anim_y}
+        Row3:
+		    id: x
+            txt: 'x'
+            pos_hint: {'x': .272, 'y': self.anim_y}
+        Row3:
+		    id: c
+            txt: 'c'
+            pos_hint: {'x': .348, 'y': self.anim_y}
+        Row3:
+		    id: v
+            txt: 'v'
+            pos_hint: {'x': .422, 'y': self.anim_y}
+        Row3:
+		    id: b
+            txt: 'b'
+            pos_hint: {'x': .498, 'y': self.anim_y}
+        Row3:
+		    id: n
+            txt: 'n'
+            pos_hint: {'x': .571, 'y': self.anim_y}
+        Row3:
+		    id: m
+            txt: 'm'
+            pos_hint: {'x': .648, 'y': self.anim_y}
+        Row3:
+		    id: semicolon
+            txt: ';'
+            pos_hint: {'x': .723, 'y': self.anim_y}
+        Row3:
+		    id: colon
+            txt: ':'
+            pos_hint: {'x': .797, 'y': self.anim_y}
+        TypeWriterButton:
+		    id: spacebar
+            anim_y: .025
+            default_y: .025
+            pos_hint: {'x': .2, 'y': self.anim_y}
+            size_hint: .66, None
+            height: self.parent.height * 1/20
+            txt: ' '
+        TypeWriterButton:
+		    id: enter
+            anim_y: .435
+            default_y: .435
+            pos_hint: {'x': 0, 'y': self.anim_y}
+            size_hint: .10, .10
+            txt: '_n'
+        TypeWriterButton:
+		    id: backspace
+            anim_y: .285
+            default_y: .285
+            pos_hint: {'x': 0.832, 'y': self.anim_y}
+            size_hint: .08, .105
+            txt: '_b'
+        Button:
+            size_hint: None, None
+            pos_hint: {'x': 0, 'y': .3}
+            background_normal: 'assets/color_wheel.png'
+            background_down: 'assets/color_wheel.png'
+            on_release: F.Pick(root.typw).open() # on_double_tap
+        AutoButton
+
+<Pick>
+    size: 540,300
+    size_hint: None, None
+    title: ''
+    separator_color: 0,0,0,0    
+    ColorPicker:
+        on_color: root.typw.colour = tuple(map(lambda i: int(i*255), self.color))
+
+<PhoneScreen>:
+    name: 'PhoneScreen'
+    typw2: typw2
+    Button:
+        pos_hint : {'x': 0, 'y': 0}
+        size_hint: None, None
+        background_color: 0,0,0,.2
+        on_release: root.manager.current = 'RoomScreen'
+    TextInput:
+        id: typw2
+        background_color: .95,.93,.8,.8
+        padding: 12,12,12,12
+        font_name: 'assets/1942.ttf'
+        pos_hint: {'x': 0.2, 'y':.5}
+        size_hint: .6, .5
+        readonly: True
+        cursor_blink: False
+        cursor_color: 0,0,0,1
+        cursor_width: 10
+        text: ''
+    PhoneButtons:
+        text: ''
+        pos_hint: {'x': .2, 'y':.3}
+        disabled: True
+    PhoneButtons:
+        text: 'abc'
+        pos_hint: {'x': .4, 'y':.3}
+    PhoneButtons:
+        text: 'def'
+        pos_hint: {'x': .6, 'y':.3}
+    PhoneButtons:
+        text: 'ghi'
+        pos_hint: {'x': .2, 'y':.2}
+    PhoneButtons:
+        text: 'jkl'
+        pos_hint: {'x': .4, 'y':.2}
+    PhoneButtons:
+        text: 'mno'
+        pos_hint: {'x': .6, 'y':.2}
+    PhoneButtons:
+        text: 'pqrs'
+        pos_hint: {'x': .2, 'y':.1}
+    PhoneButtons:
+        text: 'tuv'
+        pos_hint: {'x': .4, 'y':.1}
+    PhoneButtons:
+        text: 'wxyz'
+        pos_hint: {'x': .6, 'y':.1}
+    PhoneButtons:
+        text: ''
+        pos_hint: {'x': .2, 'y':0}
+        disabled: True
+    PhoneButtons:
+        text: '+'
+        pos_hint: {'x': .4, 'y':0}
+    PhoneButtons:
+        text: ''
+        pos_hint: {'x': .6, 'y':0}
+        disabled: True
