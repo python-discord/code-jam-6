@@ -15,6 +15,8 @@ class GameScreen(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.remove = 1
+    
 
         self.dividend = 10
 
@@ -219,6 +221,21 @@ class GameScreen(Screen):
                 return
 
     def health_drop(self):
-        if self.timerValue % 10 == 0:
-            remove = 1
-            self.health_bar.set_health(self.health_bar.get_health() - remove)
+
+
+        
+        if self.timerValue % 9 == 0:
+            self.remove += 1 
+            self.health_bar.set_health(self.health_bar.get_health() - self.remove)
+
+
+        elif self.timerValue % 10 == 0:
+            self.health_bar.set_health(self.health_bar.get_health() - 1)
+
+            
+
+        else:
+            pass
+
+        
+        
