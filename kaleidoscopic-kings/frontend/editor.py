@@ -68,6 +68,9 @@ class GameStatesWindow(Screen):
         self.ids.game_states_scroll_list.add_widget(layout)
 
     def add_game_state(self, state_name_key: str, value: str):
+        int_range_min, int_range_max = card_format.GameVariable.INTEGER_RANGE_INCLUDING
+        float_range_min, float_range_max = card_format.GameVariable.FLOAT_RANGE_INCLUDING
+
         if not state_name_key or not value:
             print("Can't be empty!")
             return
@@ -85,11 +88,17 @@ class GameStatesWindow(Screen):
         elif "." in value:
             try:
                 value = float(value)
+                if not float_range_min <= value <= float_range_max:
+                    print(f"Float out of range for {state_name_key}.")
+                    return
             except ValueError:
                 pass
         else:
             try:
                 value = int(value)
+                if not int_range_min <= value <= int_range_max:
+                    print(f"Int out of range for {state_name_key}.")
+                    return
             except ValueError:
                 print("Unknown value type.")
                 return

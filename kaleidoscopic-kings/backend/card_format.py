@@ -37,12 +37,6 @@ class GameVariable:
         """Make sure that state is one of the allowed types."""
         if type(self.value) not in (int, float, bool):
             raise TypeError(f"Unknown state type {self.value}.")
-        elif (type(self.value) is int and
-              not self.INTEGER_RANGE_INCLUDING[0] <= self.value <= self.INTEGER_RANGE_INCLUDING[1]):
-            raise ValueError("Int out of range.")
-        elif (type(self.value) is float and
-              not self.FLOAT_RANGE_INCLUDING[0] <= self.value <= self.FLOAT_RANGE_INCLUDING[1]):
-            raise ValueError("Float out of range.")
 
     def __eq__(self, other_state: "GameVariable"):
         if isinstance(other_state, GameVariable):
