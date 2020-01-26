@@ -178,7 +178,7 @@ class Utility(object):
 
         # Temp debug data
         self.message_dict = {}
-        Clock.schedule_interval(self.update_messages, 1)
+        Clock.schedule_interval(self.update_messages, 10)
 
         if platform not in ['ios', 'android']:
             self.morse = Morse()
@@ -203,12 +203,20 @@ class Utility(object):
             json.dump(self.user_data, fp)
 
     def save_message_dict(self, user, msg_dict):
-        if user in self.user_data['message_dict'].keys():
-            self.user_data['message_dict'][user].append(msg_dict[user][0])
+        if msg_dict[user] in self.user_data['message_dict'].keys():
+            self.user_data['message_dict'][msg_dict[user]].append(msg_dict)
         else:
-            self.user_data['message_dict'][user] = msg_dict[user]
+            self.user_data['message_dict'][msg_dict[user]] = [msg_dict]
+            # New messeges need to update the message screen
+            self.reload_screen_layout('message')
         with open(self.user_data_json, 'w') as fp:
             json.dump(self.user_data, fp)
+        # update conversation screen IF the current
+        if App.get_running_app().root.content.current_screen == 'conversation':
+            for screen in App.get_running_app().root.content.screens:
+                if screen.name == 'conversation':
+                    if screen.contact == msg_dict[user]:
+                        screen.ui_layout(msg_dict[user])
 
     def remove_user_data(self):
         with open(self.user_data_json, 'w') as fp:
@@ -236,19 +244,15 @@ class Utility(object):
                 if res['sender'] == self.username:
                     if res['receiver'] in self.user_data['message_dict'].keys():
                         if res not in self.user_data['message_dict'][res['receiver']]:
-                            self.message_dict[res['receiver']].append(res)
-                            self.save_message_dict(res['receiver'], res)
+                            self.save_message_dict('receiver', res)
                     else:
-                        self.user_data['message_dict'][res['receiver']] = res
-                        self.save_message_dict(res['receiver'], res)
+                        self.save_message_dict('receiver', res)
                 else:
-                    if res['receiver'] in self.user_data['message_dict'].keys():
+                    if res['sender'] in self.user_data['message_dict'].keys():
                         if res not in self.user_data['message_dict'][res['sender']]:
-                            self.user_data['message_dict'][res['sender']].append(res)
-                            self.save_message_dict(res['receiver'], res)
+                            self.save_message_dict('sender', res)
                     else:
-                        self.user_data['message_dict'][res['sender']] = [res]
-                        self.save_message_dict(res['receiver'], res)
+                        self.save_message_dict('sender', res)
 
     def morse_transmit_thread(self):
         morse_thread = Thread(target=self.morse.transmit)

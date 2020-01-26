@@ -39,8 +39,12 @@ class MessageScreen(Screen):
 
         for key in self.util.user_data['message_dict']:
             temp_dict = self.util.user_data['message_dict'][key][-1:][0]
-            self.util.morse.read(words=str(temp_dict['message']))
-            morse_code = self.util.morse.morse
+            if '_' not in temp_dict['message']:
+                self.util.morse.read(words=str(temp_dict['message']))
+                morse_code = self.util.morse.morse
+            else:
+                morse_code = str(temp_dict['message'])
+
             message_card = MessageCard(text_post=morse_code,
                                        name=key,
                                        name_data=(key + '\n' + temp_dict['timestamp']),

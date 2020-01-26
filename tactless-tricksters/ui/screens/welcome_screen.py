@@ -36,7 +36,7 @@ Builder.load_string("""
         padding: dp(24)
         spacing: dp(24)
         orientation: 'vertical'
-        size_hint: .65, .35
+        size_hint: .65, .65
         pos_hint: {'center_x': 0.5, 'top': 0.8}
         md_bg_color: app.theme_cls.accent_color
 
@@ -84,7 +84,8 @@ Builder.load_string("""
             WelcomeButton:
                 text: 'Calibrate'
                 icon: 'cogs'
-                # TODO: create calibration screen
+                on_press:
+                    root.manager.current = 'calibration'
 
             BlankLabel:
             BlankLabel:
