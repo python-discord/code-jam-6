@@ -93,7 +93,7 @@ class BurgerButton(ButtonBehavior, Image):
             self.source = BURGER_PRESSED
         else:
             self._on_mouse_pos(override=True)
-        
+
 
 class Popup(SignBorder, KivyPopup):
     def __init__(self, title, content, **kwargs):
