@@ -12,6 +12,7 @@
 : 2- 2 - ;
 : 2* 2 * ;
 : 2/ 2 / ;
+: 0<> 0 <> ;
 : */ ROT ROT * SWAP / ;
 : /MOD 2DUP MOD ROT ROT / ;
 : */MOD ROT ROT * SWAP /MOD ;
@@ -21,5 +22,8 @@
 : ? @ . ;
 : +! DUP @ ROT + SWAP ! ;
 : CREATE HERE 1+ VALUE ; \ probably not correct, but it works
-: , 1 ALLOT HERE C! ;
-: C, , ;
+: , 1 ALLOT HERE ! ;
+: C, and 255 , ;
+: FALSE 0 ;
+: CELL+ 1+ ;
+: BL 32 ;

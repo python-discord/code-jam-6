@@ -113,14 +113,14 @@ def forth_str_literal(env: ForthEnv) -> int:
 def ptr_set(env: ForthEnv) -> int:
     ptr = env.data.pop()
     val = env.data.pop()
-    ptr.set(val)
+    ptr.set(val & 255)
     return 0
 
 
 # C@
 def ptr_get(env: ForthEnv) -> int:
     ptr = env.data.pop()
-    env.data.append(ptr.resolve())
+    env.data.append(ptr.resolve() & 255)
     return 0
 
 
@@ -140,7 +140,8 @@ def forth_def(env: ForthEnv) -> int:
 # VARIABLE
 def forth_var(env: ForthEnv) -> int:
     name = env.words[env.index + 1]
-    env.var_dict.update({name: None})
+    from project.langs.forth.forthimpl import Pointer
+    env.var_dict.update({name: Pointer(0, [0])})
     return 1
 
 
@@ -154,16 +155,16 @@ def forth_const(env: ForthEnv) -> int:
 
 # !
 def vset(env: ForthEnv) -> int:
-    token = env.data.pop()
+    addr = env.data.pop()
     newval = env.data.pop()
-    env.var_dict[token.name] = newval
+    addr.set(newval)
     return 0
 
 
 # @
 def vget(env: ForthEnv) -> int:
-    token = env.data.pop()
-    env.data.append(token.val)
+    addr = env.data.pop()
+    env.data.append(addr.resolve())
     return 0
 
 
@@ -259,7 +260,7 @@ def accept(env: ForthEnv) -> int:
     max_count = env.data.pop()
     addr = env.data.pop()
     data = sys.stdin.readline(max_count).rstrip('\n')
-    datalen = min(len(data),max_count)
-    addr.arr[addr.idx:addr.idx+datalen] = data
+    datalen = min(len(data), max_count)
+    addr.arr[addr.idx:addr.idx + datalen] = data
     env.data.append(datalen)
     return 0

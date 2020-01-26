@@ -58,12 +58,6 @@ class ForthEntry:
         return f'Word: {self.code}'
 
 
-class VarToken:
-    def __init__(self, name, val):
-        self.name = name
-        self.val = val
-
-
 class ExecToken:
     def __init__(self, name):
         self.name = name
@@ -133,7 +127,7 @@ class ForthEnv:
             elif word in self.val_dict:
                 self.data.append(self.val_dict[word])
             elif word in self.var_dict:
-                self.data.append(VarToken(word, self.var_dict[word]))
+                self.data.append(self.var_dict[word])
 
             elif isinstance(word, str) and ' ' not in word:
                 try:
