@@ -15,15 +15,33 @@ BoxLayout:
         BoxLayout
             size_hint_y: None
             spacing: 20
-            ProgressBar:
-                max: 10
-                value: profile_list._attributes["Knowledge"]
-            ProgressBar:
-                max: 10
-                value: profile_list._attributes["Welfare"]
-            ProgressBar:
-                max: 10
-                value: profile_list._attributes["Energy"]
+            BoxLayout
+                orientation: 'vertical'
+                Label:
+                    text: "Knowledge"
+                    font_size: sp(20)
+                    font_name: "fonts/Oldenburg/Oldenburg-Regular.ttf"
+                ProgressBar:
+                    max: 10
+                    value: profile_list._attributes["Knowledge"]
+            BoxLayout
+                orientation: 'vertical'
+                Label:
+                    text: "Welfare"
+                    font_size: sp(20)
+                    font_name: "fonts/Oldenburg/Oldenburg-Regular.ttf"
+                ProgressBar:
+                    max: 10
+                    value: profile_list._attributes["Welfare"]
+            BoxLayout
+                orientation: 'vertical'
+                Label:
+                    text: "Energy"
+                    font_size: sp(20)
+                    font_name: "fonts/Oldenburg/Oldenburg-Regular.ttf"
+                ProgressBar:
+                    max: 10
+                    value: profile_list._attributes["Energy"]
         ProfileList:
             id: profile_list
             size_hint_y: 0.8
