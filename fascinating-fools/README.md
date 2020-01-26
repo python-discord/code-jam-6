@@ -20,7 +20,7 @@ Then select a category and proceed.
 
 ## How to add more questions
 
-Follow the format of the questions in the `question` table in the database `storage/app.db`, and add a question with for an existing category.
+Follow the format of the questions in the `question` table in the database `storage/app.db`, and add a question for an existing category.
 
 ## Useful links
 
