@@ -1,6 +1,11 @@
 from typing import Any, Union
 from pathlib import Path
-from shutil import copy, copytree, rmtree
+from shutil import (
+    copy, 
+    copytree, 
+    rmtree,
+    SameFileError
+)
 
 from kivy.uix.popup import Popup
 from kivy.logger import Logger
@@ -178,15 +183,23 @@ class CopyPopup(BasePopup):
             else:
                 to_obj = Path(to.ids.header.ids.directory.current_dir)
 
-                if from_obj.is_dir():
-                    copytree(from_obj, to_obj)
+                try:
+                    if from_obj.is_dir():
+                        copytree(from_obj, to_obj)
+                    else:
+                        copy(from_obj, to_obj)
+
+                except SameFileError:
+                    Logger.info('Copy: File already exists in this directory')
+
+                except FileExistsError:
+                    Logger.info('Copy: Directory already exists in this directory')
+
                 else:
-                    copy(from_obj, to_obj)
+                    Logger.info(f'Copy: Copied {str(from_obj)} to {str(to_obj)}')
 
-                Logger.info(f'Copy: Copied {str(from_obj)} to {str(to_obj)}')
-
-                self.update('left', from_.ids.header.ids.directory.current_dir)
-                self.update('right', str(to_obj))
+                    self.update('left', from_.ids.header.ids.directory.current_dir)
+                    self.update('right', str(to_obj))
 
         self.dismiss()
 
