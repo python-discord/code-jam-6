@@ -17,7 +17,7 @@ IMAGE_EXTENSIONS = ['png']
 class Engine(Widget):
     resource_dir = (Path('.') / 'firestarter' / 'resources').absolute()
     X_PLAYER_OFFSET = -200  # how far from the center of the screen we want the player
-    Y_PLAYER_OFFSET = -250  # how far from the center of the screen we want the player
+    Y_PLAYER_OFFSET = -200  # how far from the center of the screen we want the player
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -120,10 +120,10 @@ class Engine(Widget):
                               (self.cam_target.pos[1] - self.center_y - self.Y_PLAYER_OFFSET))
 
         x_offset = -1 * distance_to_center[0] / (self.width / 2) * 5
-        x_offset = x_offset * 2 if abs(x_offset) > .75 else 0
+        x_offset = x_offset * 2 if abs(x_offset) > .5 else 0
 
-        y_offset = -1 * distance_to_center[1] / self.height * 5
-        y_offset = y_offset if abs(y_offset) > .75 else 0
+        y_offset = -1 * distance_to_center[1] / self.height * 10
+        y_offset = y_offset if abs(y_offset) > .25 else 0
 
         return x_offset, y_offset
 

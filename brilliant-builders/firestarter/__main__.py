@@ -5,7 +5,6 @@ from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.object import (
     FlameBuddy,
     GenericObject,
-    PickUpCoin,
     Player,
     PlayerUiHeart,
 )
@@ -44,21 +43,21 @@ class MyGame(Engine):
         self.playing_music = self.play_music()
 
         # Platforms, Items, etc.
-        self.platform_06 = GenericObject('box', (50, 20), True, 3, self)
+        # self.platform_06 = GenericObject('box', (50, 20), True, 3, self)
 
-        self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
-        self.coin.change_mode(2)
+        # self.coin = PickUpCoin(self.assets['Untitled'], (60 + 32 * 5, 80 + 40))
+        # self.coin.change_mode(2)
 
         self.add_sprites(
             [
-                self.flameBuddy,
-                self.coin,
-                self.platform_06
+                self.flameBuddy
+                # self.coin,
+                # self.platform_06
             ]
         )
 
-        self.unload_level([self.player, self.hearts, self.platform_06, self.flameBuddy])
-        self.load_level(self.levels['testzone'])
+        self.unload_level([self.player, self.hearts, self.flameBuddy])
+        self.load_level(self.levels['level_01'])
 
     def update_hearts(self, _: Any, value: int) -> None:
         self.hearts.change_mode(value)
@@ -79,17 +78,17 @@ class MyGame(Engine):
 
         # Player update
         if 'spacebar' in self.pressed_keys and self.player.is_standing:
-            self.player.acc_y = 20
+            self.player.acc_y = 25
         if 'a' in self.pressed_keys:
-            if self.player.is_standing:
-                self.player.vel_x = -5
-            else:
-                self.player.vel_x = -4.5
+            self.player.vel_x = -7
+
         if 'd' in self.pressed_keys:
-            if self.player.is_standing:
-                self.player.vel_x = 5
-            else:
-                self.player.vel_x = 4.5
+            self.player.vel_x = 7
+
+        if 'shift' in self.pressed_keys:
+            self.player.wall_boost = True
+        else:
+            self.player.wall_boost = False
 
 
 class Application(App):

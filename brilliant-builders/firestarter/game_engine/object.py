@@ -1,4 +1,4 @@
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
 
 from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.sprite import Sprite, SpriteConfig
@@ -114,15 +114,21 @@ class FirePlaceCheckpoint(Sprite):
             return self.collide
 
         if isinstance(other, Player):
+            if other.checkpoint is not None:
+                print('deactivating')
+                other.checkpoint.deactivate()
             self.activated = True
             print("Checkpoint set!")
-            other.checkpoint = (self.pos[0], self.pos[1] + 70)
+            other.checkpoint = self
 
         return self.collide
 
+    def deactivate(self) -> None:
+        self.activated = False
+        self.change_mode(2)
+
 
 class FlameBuddy(Sprite):
-
     acc_x = NumericProperty(0)
     acc_y = NumericProperty(0)
     acc = ReferenceListProperty(acc_x, acc_y)
@@ -191,8 +197,12 @@ class Player(Sprite):
     ) -> None:
         super().__init__(config, pos, **kwargs)
         self.is_standing: bool = False
-        self.checkpoint: Tuple[int, int] = pos
+        self.checkpoint: Optional[Sprite] = None
         self.respawn: Tuple[int, int] = pos
+
+        self.wall_boost = False
+
+        self.death_threshold = 0
 
         self.death_sound = death_sound
 
@@ -202,8 +212,9 @@ class Player(Sprite):
 
     def on_cam_move(self, offset: Tuple[float, float]) -> None:
         super().on_cam_move(offset)
+        self.death_threshold += offset[1]
         self.respawn = (self.respawn[0] + offset[0], self.respawn[1] + offset[1])
-        self.checkpoint = (self.checkpoint[0] + offset[0], self.checkpoint[1] + offset[1])
+        # self.checkpoint = (self.checkpoint[0] + offset[0], self.checkpoint[1] + offset[1])
 
     def update(self, other_sprites: List[Sprite]) -> None:
         """Update the players position and handle collisions (very inefficiently!!)"""
@@ -223,6 +234,8 @@ class Player(Sprite):
             if self.collides_with(other_sprites):  # colliding in x
                 self.vel_x = 0
                 self.pos = (old_pos[0], old_pos[1])
+                if not self.wall_boost:
+                    self.is_standing = False
 
             old_pos = (self.pos[0], self.pos[1])
             self.pos = (old_pos[0], old_pos[1] + self.vel_y)
@@ -237,7 +250,7 @@ class Player(Sprite):
 
         # dampen the velocity to come to a stop
         if self.is_standing:
-            self.vel_x *= .5
+            self.vel_x *= .25
             self.vel_y *= .5
         else:
             self.vel_x *= .75
@@ -245,15 +258,20 @@ class Player(Sprite):
         # apply some downwards acceleration (gravity)
         self.acc_y = -1
 
-        if self.pos[1] < 0:
+        if self.pos[1] < self.death_threshold:
             # we fell out of the map!
             self.lives -= 1
             if self.death_sound:
                 self.death_sound.play()
             if self.lives > 0:
                 # respawn at the checkpoint
-                self.pos = self.checkpoint
+                if self.checkpoint:
+                    self.pos = (self.checkpoint.pos[0], self.checkpoint.pos[1] + 70)
+                else:
+                    self.pos = self.respawn
             else:
+                self.checkpoint.deactivate()
+                self.checkpoint = None
                 self.pos = self.respawn
 
     def collides_with(self, other_sprites: List[Sprite]) -> bool:

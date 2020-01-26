@@ -1,0 +1,95 @@
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [50, 20]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [114,20]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [178,20]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [242,20]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [242,84]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [500,100]
+
+[[object]]
+class = 'FirePlaceCheckpoint'
+args = {sprite = 'fireplace', mode=2, collide=false}
+pos = [500, 162]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [650,224]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [800,200]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 1, collide = true}
+pos = [950,240]
+
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1014,100]
+[[object]]
+class = 'FirePlaceCheckpoint'
+args = {sprite = 'fireplace', mode=2, collide=false}
+pos = [1014, 162]
+
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1236,140]
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1300,140]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1300,204]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1300,268]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1300,332]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1300,396]
+
+
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1836,140]
+[[object]]
+class = 'GenericObject'
+args = {sprite = 'box', mode = 2, collide = true}
+pos = [1900,140]
+
+
