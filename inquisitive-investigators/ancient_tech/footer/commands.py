@@ -91,6 +91,23 @@ class BasePopup(Popup):
             self.opp_update = False
 
 
+class DIRChoice(BasePopup):
+    left = NumericProperty()
+    right = NumericProperty()
+
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
+        super().__init__(ctx, *args, **kwargs)
+        self.filemanager = 0
+
+    def buttonselect(self, manager):
+        self.left = self.right = 0
+        self.filemanager = manager
+        if manager == 1:
+            self.left = .2
+        else:
+            self.right = .2
+
+
 class AboutPopup(BasePopup):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
@@ -227,27 +244,12 @@ class EditPopup(BasePopup):
 
             manager.current = 'text_editor'
         else:
-            Log.info('Editor: Please select a file')
+            print('Editor: Please select a file')
 
         self.dismiss()
 
 
-class Mkdir(BasePopup):
-    left = NumericProperty()
-    right = NumericProperty()
-
-    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
-        super().__init__(ctx, *args, **kwargs)
-        self.filemanager = 0
-
-    def buttonselect(self, manager):
-        self.left, self.right = 0, 0
-        self.filemanager = manager
-        if manager == 1:
-            self.left = .2
-        else:
-            self.right = .2
-
+class Mkdir(DIRChoice):
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
             dir_ = self.ctx.parent.ids
@@ -324,22 +326,7 @@ class DeletePopup(BasePopup):
             self.update('right', dir_)
 
 
-class CreatePopup(BasePopup):
-    left = NumericProperty()
-    right = NumericProperty()
-
-    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
-        super().__init__(ctx, *args, **kwargs)
-        self.filemanager = 0
-
-    def buttonselect(self, manager):
-        self.left = self.right = 0
-        self.filemanager = manager
-        if manager == 1:
-            self.left = .2
-        else:
-            self.right = .2
-
+class CreatePopup(DIRChoice):
     def mkfile(self, file_name: str) -> None:
         if self.filemanager != 0 or file_name != '':
             base = self.ctx.parent.ids
@@ -365,22 +352,7 @@ class CreatePopup(BasePopup):
             Logger.info('Create: Enter a File name')
 
 
-class RenamePopup(BasePopup):
-    left = NumericProperty()
-    right = NumericProperty()
-
-    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
-        super().__init__(ctx, *args, **kwargs)
-        self.filemanager = 0
-
-    def buttonselect(self, manager):
-        self.left = self.right = 0
-        self.filemanager = manager
-        if manager == 1:
-            self.left = .2
-        else:
-            self.right = .2
-
+class RenamePopup(DIRChoice):
     def rename(self, rename_text):
         if self.filemanager != 0 or rename_text != '':
             base = self.ctx.parent.ids
