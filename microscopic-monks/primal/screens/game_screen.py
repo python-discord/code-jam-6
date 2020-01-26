@@ -1,6 +1,6 @@
 from primal.engine.screen import Screen
 from primal.engine.camera import OrthographicCamera
-from primal.engine.sprite import Player
+from primal.engine.sprite import Player, ColorSprite
 from primal.engine.world import World
 from primal.engine import keys
 
@@ -38,6 +38,9 @@ class GameScreen(Screen):
         # render gui
         self.gui_camera = OrthographicCamera(self.canvas, self.VP_WIDTH, self.VP_HEIGHT)
         self.gui_camera.start_region()
+
+        self.overlay = ColorSprite('overlay.png', (0, 0), (self.VP_WIDTH, self.VP_HEIGHT), (1, 1, 1, .3))
+        self.overlay.draw(self.canvas)
 
         self.health_bar = HealthBar((20, 680), (250, 20), 100.0)
         self.health_bar.draw(self.canvas)
