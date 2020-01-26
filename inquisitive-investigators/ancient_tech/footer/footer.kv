@@ -12,38 +12,47 @@
     Button:
         size_hint: 1,1
         text: '1: About'
+        font_size: 12.5
         on_press: root.about()
     Button:
         size_hint: 1,1
         text: '2: Edit'
+        font_size: 12.5
         on_press: root.edit()
     Button:
         size_hint: 1,1
         text: '3: Copy'
+        font_size: 12.5
         on_press: root.copy()
     Button:
         size_hint: 1,1
         text: '4: DWN'
+        font_size: 12.5
         on_press: root.down()
     Button:
         size_hint: 1,1
         text: '5: UP'
+        font_size: 12.5
         on_press: root.up()
     Button:
         size_hint: 1,1
-        text: '6: Mkdir  '
+        text: '6: Mkdir'
+        font_size: 12.5
         on_press: root.mkdir()
     Button:
         size_hint: 1,1
         text: '7: Create'
+        font_size: 12.5
         on_press: root.create()
     Button:
         size_hint: 1,1
         text: '8: Delete'
+        font_size: 12.5
         on_press: root.delete()
     Button:
         size_hint: 1,1
         text: '9: Quit'
+        font_size: 12.5
         on_press: root.quit()
 
 <AboutPopup>:
@@ -60,8 +69,10 @@
                 line_height: 1.5
                 valign: "top"
                 color: 0.34,1,1,1
+                font_size: 14
         Button:
             text: "[ Close ]"
+            font_size: 14
             size_hint_y: None
             height: "40dp"
             on_press: root.dismiss()
@@ -81,6 +92,7 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .3, 'center_y': .7}
             text: '[ Left Manager ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.edit('left')
         Button:
@@ -95,6 +107,7 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .7, 'center_y': .7}
             text: '[ Right Manager ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.edit('right')
 
@@ -102,6 +115,7 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .5, 'center_y': .3}
             text: '[ Cancel ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.dismiss()
 
@@ -124,6 +138,7 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .3, 'center_y': .4}
             text: '[ Left Manager ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.buttonselect(1)
         Button:
@@ -137,18 +152,21 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .7, 'center_y': .4}
             text: '[ Right Manager ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.buttonselect(2)
         Button:
             size_hint: .3,.1
             pos_hint: {'center_x': .5, 'center_y': .25}
             text: '[ Create New Directory ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.mkdir(root.ids.create.text)
         Button:
             size_hint: .3,.1
             pos_hint: {'center_x': .5, 'center_y': .1}
             text: '[ Cancel ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.dismiss()
 
@@ -171,6 +189,7 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .3, 'center_y': .4}
             text: '[ Left Manager ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.buttonselect(1)
         Button:
@@ -184,18 +203,21 @@
             size_hint: .3,.1
             pos_hint: {'center_x': .7, 'center_y': .4}
             text: '[ Right Manager ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.buttonselect(2)
         Button:
             size_hint: .3,.1
             pos_hint: {'center_x': .5, 'center_y': .25}
             text: '[ Create New File ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.mkfile(root.ids.create.text)
         Button:
             size_hint: .3,.1
             pos_hint: {'center_x': .5, 'center_y': .1}
             text: '[ Cancel ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.dismiss()
 
@@ -206,16 +228,19 @@
             id: left
             size_hint: .5,.1
             pos_hint: {'center_x': .5, 'center_y': .7}
+            font_size: 14
             color: 0.34,1,1,1
         Label:
             id: right
             size_hint: .5,.1
             pos_hint: {'center_x': .5, 'center_y': .5}
+            font_size: 14
             color: 0.34,1,1,1
         Button:
             id: yes
             size_hint: .2,.2
             pos_hint: {'center_x': .4, 'center_y': .3}
+            font_size: 14
             text: '[ YES ]'
             color: 0.34,1,1,1
             on_press: root.delete()
@@ -223,6 +248,7 @@
             id: no
             size_hint: .2,.2
             pos_hint: {'center_x': .6, 'center_y': .3}
+            font_size: 14
             text: '[ NO ]'
             color: 0.34,1,1,1
             on_press: root.dismiss()
@@ -237,11 +263,13 @@
             pos_hint: {'center_x': .5, 'center_y': .7}
             color: 0.34,1,1,1
             text: 'Are you sure you want to Quit?'
+            font_size: 14
         Button:
             id: yes
             size_hint: .2,.2
             pos_hint: {'center_x': .3, 'center_y': .5}
             text: '[ YES ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: quit(0)
         Button:
@@ -249,6 +277,7 @@
             size_hint: .2,.2
             pos_hint: {'center_x': .7, 'center_y': .5}
             text: '[ NO ]'
+            font_size: 14
             color: 0.34,1,1,1
             on_press: root.dismiss()
 
@@ -264,11 +293,13 @@
     title_color: 0.34,1,1,1
     title_align: 'center'
     title_font: './ancient_tech/static/retro_font.ttf'
+    title_size: 14
     background_color: 0,0,0,0
     background: './ancient_tech/static/blue.png'
 
 <TextInput>:
     font_name: './ancient_tech/static/retro_font.ttf'
+    font_size: 14
     multiline: False
     background_color: 0,0,.65,1
     foreground_color: 0.34,1,1,1
