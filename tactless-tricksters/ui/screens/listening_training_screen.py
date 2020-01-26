@@ -70,7 +70,7 @@ Builder.load_string('''
 #:import AudioIndicator ui.widgets.audio_indicator.AudioIndicator
 #:import WelcomeButton ui.widgets.welcome_button
 
-<TappingScreen>
+<ListeningScreen>
     decode_morse: decode_morse
     decode_text: decode_text
     tapping_prompt_label: tapping_prompt_label
@@ -149,7 +149,7 @@ Builder.load_string('''
 ''')
 
 
-class TappingScreen(Screen):
+class ListeningScreen(Screen):
     prompt = StringProperty("")
     decode_morse = ObjectProperty(None)
     decode_text = ObjectProperty(None)
@@ -158,7 +158,7 @@ class TappingScreen(Screen):
     tap_button = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        super(TappingScreen, self).__init__(name=kwargs.get('name'))
+        super(ListeningScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
 
     def on_enter(self):

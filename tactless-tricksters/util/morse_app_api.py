@@ -1,6 +1,7 @@
-from kivy.network.urlrequest import UrlRequest
-import urllib
 import json
+
+from kivy.network.urlrequest import UrlRequest
+
 
 class MorseAppApi(object):
     def __init__(self, util, auth_token=None):
@@ -81,8 +82,11 @@ class MorseAppApi(object):
         self._handle_get_req(callback, url=url, header=header)
 
     def _handle_get_req(self, callback, url, header=None, data=None):
-        UrlRequest(url, method='GET', req_headers=header, req_body=data, on_success=callback, on_error=callback, on_failure=callback)
+        UrlRequest(url, method='GET', req_headers=header,
+                   req_body=data, on_success=callback,
+                   on_error=callback, on_failure=callback)
 
     def _handle_post_req(self, callback, url, header=None, data=None):
-        UrlRequest(url, req_headers=header, req_body=data, on_success=callback, on_error=callback, on_failure=callback)
-
+        UrlRequest(url, req_headers=header, req_body=data,
+                   on_success=callback, on_error=callback,
+                   on_failure=callback)

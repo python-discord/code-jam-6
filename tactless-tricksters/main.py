@@ -15,7 +15,6 @@ from ui.screens.contacts_screen import ContactScreen
 from ui.screens.conversation_screen import ConversationScreen
 from ui.screens.decoder_screen import DecoderScreen
 from ui.screens.encoder_screen import EncoderScreen
-from ui.screens.listening_training_screen import ListeningScreen
 from ui.screens.message_screen import MessageScreen
 from ui.screens.tapping_training_screen import TappingScreen
 # Project imports
