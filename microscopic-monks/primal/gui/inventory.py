@@ -1,7 +1,6 @@
 from kivy.graphics.instructions import RenderContext
 
-from primal.engine.sprite import Sprite
-from primal.engine.sprite import ColorSprite
+from primal.engine.sprite import Sprite, ColorSprite, Text
 from primal.engine.feature import Feature
 
 import json
@@ -14,6 +13,7 @@ class Inventory:
 
         self.items = []
         self.grid = []
+        self.amounts = []
         self.active = 0
 
         for i in range(10):
@@ -22,6 +22,11 @@ class Inventory:
         for i in range(10):
             self.grid.append(
                 ColorSprite(None, (pos[0], pos[1] + 60 * i), (50, 50), (1, 1, 1, .25)))
+
+        for i in range(10):
+            label = Text('16', (pos[0] + 2, pos[1] + 60 * i), 15)
+            label.set_color((0, 0, 0, 0))
+            self.amounts.append(label)
 
         self.load_inventory()
         self.set_ative(self.active)
@@ -36,6 +41,8 @@ class Inventory:
             i.draw(canvas)
         for i in self.items:
             i.draw(canvas)
+        for i in self.amounts:
+            i.draw(canvas)
 
     def load_inventory(self):
         with open((Sprite.resource_dir / "inventory.json").as_posix(), "r") as read_file:
@@ -49,6 +56,8 @@ class Inventory:
         for item in self.inventory_data:
             try:
                 self.items[i].set_source(self.item_data[item[0]]['source'])
+                self.amounts[i].set_text(str(item[1]))
+                self.amounts[i].set_color((0, 0, 0, 2))
             except Exception:
                 pass
             i += 1
@@ -63,12 +72,18 @@ class Inventory:
                 continue
             if item[0] == feature.type:
                 self.inventory_data[index][1] += 1
+                self.amounts[index].set_text(str(self.inventory_data[index][1]))
                 return
 
         if empty is not None:
             self.inventory_data[empty] = [feature.type, 1]
             self.items[empty].set_source(self.item_data[feature.type]['source'])
+            self.amounts[empty].set_text(str(1))
+            self.amounts[empty].set_color((0, 0, 0, 2))
         elif len(self.inventory_data) != 10:
             self.inventory_data.append([feature.type, 1])
             source = self.item_data[feature.type]['source']
+            index = len(self.inventory_data) - 1
             self.items[len(self.inventory_data) - 1].set_source(source)
+            self.amounts[index].set_text(str(1))
+            self.amounts[index].set_color((0, 0, 0, 2))

@@ -1,6 +1,5 @@
 from kivy.graphics.instructions import RenderContext
 from kivy.uix.widget import Widget
-from kivy.core.window import Keyboard
 
 
 class Screen(Widget):
