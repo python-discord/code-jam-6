@@ -7,10 +7,12 @@ from kivy.graphics.instructions import InstructionGroup
 
 class Feature:
     def __init__(self, sprite: str, pos: Tuple[float, float], z: float, size: Tuple[float, float],
-                 angle: float):
+                 angle: float, collide: bool = False):
 
         hp_pos_x = (pos[0] + size[0] / 2) - 50
         hp_pos_y = pos[1]
+
+        self.collide = collide
 
         self.health_bar = HealthBar((hp_pos_x, hp_pos_y), (100, 7), 5)
         self.feature = RotatableSprite(sprite, pos, size, angle)
@@ -19,8 +21,17 @@ class Feature:
 
         self.set_alpha(self.alpha)
 
+    def does_collide(self) -> bool:
+        return self.collide
+
     def get_z(self) -> float:
         return self.z
+
+    def distance_to(self, pos) -> float:
+        px, py = self.get_center()
+        dx, dy = px - pos[0], py - pos[1]
+
+        return dx * dx + dy * dy
 
     def get_position(self) -> Tuple[float, float]:
         return self.feature.get_position()

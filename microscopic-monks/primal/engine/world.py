@@ -9,8 +9,8 @@ from primal.engine.feature import Feature
 
 
 class World:
-    RADIUS_WIDTH = 4
-    RADIUS_HEIGHT = 4
+    RADIUS_WIDTH = 2
+    RADIUS_HEIGHT = 2
     LOAD_RADIUS = 1
 
     def __init__(self, pos: Tuple[float, float]):
@@ -51,6 +51,10 @@ class World:
 
         self.load_area(self.loaded_center)
 
+    def get_chunk_from_coords(self, pos):
+        coords = self.get_chunk_coords_from_pos(pos)
+        return self.chunks[coords[1]][coords[0]]
+
     def get_chunk_in_range(self, rng: int):
         for y in World.get_loaded_range(World.RADIUS_HEIGHT, rng):
             for x in World.get_loaded_range(World.RADIUS_WIDTH, rng):
@@ -58,11 +62,6 @@ class World:
 
     def update(self, pos: Tuple[float, float]):
         x, y = pos
-
-        if x < 0:
-            x -= Chunk.SIZE
-        if y < 0:
-            y -= Chunk.SIZE
 
         x, y = World.get_chunk_coords_from_pos((x, y))
         lx, ly = self.loaded_center
@@ -127,7 +126,13 @@ class World:
 
     @staticmethod
     def get_chunk_coords_from_pos(pos: Tuple[float, float]) -> Tuple[int, int]:
-        return int(pos[0] / Chunk.SIZE), int(pos[1] / Chunk.SIZE)
+        x, y = pos
+        if x < 0:
+            x -= Chunk.SIZE
+        if y < 0:
+            y -= Chunk.SIZE
+
+        return int(x / Chunk.SIZE), int(y / Chunk.SIZE)
 
 
 class Chunk:
@@ -162,7 +167,7 @@ class Chunk:
             s = random.randint(100, 150)
             angle = 0
             sprite = 'r.png'
-            rock = Feature(sprite, Chunk.get_random_position(self.pos, s), .0, (s, s), angle)
+            rock = Feature(sprite, Chunk.get_random_position(self.pos, s), .0, (s, s), angle, True)
             rock.feature.set_angle(random.randint(0, 360))
             self.chunk_features.add(rock)
 

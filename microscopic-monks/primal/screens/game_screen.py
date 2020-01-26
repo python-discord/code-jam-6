@@ -23,7 +23,7 @@ class GameScreen(Screen):
         self.world = World((0, 0))
         self.world.draw(self.canvas)
 
-        self.player = Player('player.png', (0, 0), (100, 100), 0)
+        self.player = Player('player.png', (0, 0), (40, 80), 0)
         self.player.draw(self.canvas)
 
         self.world.draw_top(self.canvas)
@@ -45,23 +45,29 @@ class GameScreen(Screen):
     def update(self, delta: float):
         # Maybe move it to player update?
         pos_x, pos_y = self.player.get_position()
+        dx, dy = 0, 0
 
         if self.is_key_pressed('a'):
-            pos_x -= Player.SPEED * delta
-        elif self.is_key_pressed('d'):
-            pos_x += Player.SPEED * delta
+            dx -= Player.SPEED * delta
+        if self.is_key_pressed('d'):
+            dx += Player.SPEED * delta
 
         if self.is_key_pressed('w'):
-            pos_y += Player.SPEED * delta
-        elif self.is_key_pressed('s'):
-            pos_y -= Player.SPEED * delta
+            dy += Player.SPEED * delta
+        if self.is_key_pressed('s'):
+            dy -= Player.SPEED * delta
+
+        if dx != 0.0 or dy != 0.0:
+            px, py = self.player.get_center()
+
+            dx, dy = self.process_player_position_deltas(px, py, dx, dy)
 
         # Check for clicked features
         self.last_clicked -= delta
         if self.last_clicked < 0:
             self.last_clicked = 0
 
-        self.player.set_position((pos_x, pos_y))
+        self.player.set_position((pos_x + dx, pos_y + dy))
         self.player.set_rotation(self.get_mouse_position())
 
         if self.last_clicked == 0:
@@ -86,6 +92,22 @@ class GameScreen(Screen):
         self.camera.set_position(*self.player.get_center())  # Updates the position
         self.camera.update()
 
+    def process_player_position_deltas(self, px, py, dx, dy):
+        chunk = self.world.get_chunk_from_coords((px + dx, py + dy))
+        for feature in chunk.get_features():
+            if feature.does_collide():
+                dst = 40 + feature.get_size()[0]
+                dst = (dst * dst) / 4
+                if feature.distance_to((px, py + dy)) <= dst:
+                    dy = 0
+
+                if feature.distance_to((px + dx, py)) <= dst:
+                    dx = 0
+
+                if dy == 0 and dx == 0:
+                    return 0.0, 0.0
+        return dx, dy
+
     def process_click(self):
         mx, my = self.engine.mouse_position
         ww, wh = self.engine.window_size
@@ -102,9 +124,8 @@ class GameScreen(Screen):
             remove_features = set()
 
             for feature in features:
-                x, y = feature.get_center()
-                dx, dy = x - pos_x, y - pos_y
-                if dx * dx + dy * dy < 15_000 and feature.collide_with((mx, my), (1, 1)):
+                if feature.distance_to((pos_x, pos_y)) < 15_000 \
+                        and feature.collide_with((mx, my), (1, 1)):
                     feature.hit()
                     if feature.get_health() == 0:
                         remove_features.add(feature)
