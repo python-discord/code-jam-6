@@ -55,6 +55,18 @@
                 app.root.current = "main_screen"
                 root.dismiss()
 
+<Timer@AnchorLayout>:
+    anchor_x: "left"
+    anchor_y: "bottom"
+    BoxLayout:
+        orientation: "vertical"
+        size_hint: 0.1, 0.1
+        Label:
+            text: "Time:"
+        Label:
+            id: time_remaning
+            text: "60"
+
 <GameScreen>:
     name: "game_screen"
     AnchorLayout:
@@ -87,5 +99,5 @@
             size_hint: 0.1, 0.1
             on_press: app.root.get_screen("game_screen").button_press_positive()
             on_release: Factory.GameMenuPopup().open()
-    CheckPaper:
     Timer:
+    CheckPaper:

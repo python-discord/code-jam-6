@@ -112,7 +112,6 @@ class GameScreen(Screen):
     """Do we automatically assume new game or should we save?"""
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
-    Builder.load_file("kvs/game/timer.kv")
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
