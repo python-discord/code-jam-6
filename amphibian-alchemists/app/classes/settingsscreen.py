@@ -21,7 +21,7 @@ class SettingsScreen(Screen):
         for config_name in self.ids.keys():
             if not self.store.exists(config_name):
                 self.store.put(
-                    config_name, value=(1 if config_name != "allow_fullscreen" else 0)
+                    config_name, value=(1 if config_name != "allow_fullscreen" else int(Config.get("graphics", "fullscreen")))
                 )
             self.set_config_values(config_name)
 
@@ -42,6 +42,7 @@ class SettingsScreen(Screen):
         elif type(value_to_set) in {float, int} and (
             value_to_set >= 0 or value_to_set <= 1
         ):
+            Config.write()
             self.ids[config_name].value_normalized = value_to_set
 
     def save_settings(self, to_save):
