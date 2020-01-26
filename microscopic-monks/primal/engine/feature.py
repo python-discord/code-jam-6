@@ -3,7 +3,10 @@ from typing import Tuple
 from primal.gui.health import HealthBar
 from primal.engine.sprite import RotatableSprite
 from kivy.graphics.instructions import InstructionGroup
+
+from kivy.storage.jsonstore import JsonStore
  
+store = JsonStore('inventory.py')
  
 class Feature:
     def __init__(self, sprite: str, pos: Tuple[float, float], z: float, size: Tuple[float, float],
@@ -18,6 +21,7 @@ class Feature:
         self.feature = RotatableSprite(sprite, pos, size, angle)
         self.alpha = 0
         self.z = z
+        self.store = JsonStore('inventory.py')
  
         self.set_alpha(self.alpha)
  
@@ -68,3 +72,15 @@ class Feature:
     def draw(self, canvas: InstructionGroup):
         self.feature.draw(canvas)
         self.health_bar.draw(canvas)
+
+    def broken(self):
+        if health < 0:
+            self.store.put(sprite = 3)
+
+        else:
+            pass
+            #Not broken
+
+        
+
+    
