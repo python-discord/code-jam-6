@@ -1,6 +1,9 @@
+import random
 from itertools import chain
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
+
+from simpleaudio import PlayObject
 
 from firestarter.game_engine.resources_loader import load_resources
 from firestarter.game_engine.sprite import Sprite
