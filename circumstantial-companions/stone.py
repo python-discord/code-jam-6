@@ -45,12 +45,6 @@ PEBBLE_IMAGES = tuple(Path("assets", "img", "boulder", f"{i}.png") for i in rang
 PEBBLE_IMAGES = tuple(get_image_and_aspect(image) for image in PEBBLE_IMAGES)
 CURRENT_IMAGE = list(choice(PEBBLE_IMAGES))
 
-def get_pebble_size(width, height):
-    """Calculate the correct pebble size so we have no gaps in our stone."""
-    scaled_w, scaled_h =  PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
-    return scaled_w / pebbles_per_row, scaled_h / pebbles_per_column
-
 def pebble_setup():
     """
     Determines initial pebble color and placement from an image's non-transparent pixels.
@@ -141,12 +135,19 @@ class Chisel(Widget):
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
 
+    def get_pebble_size(self):
+        """Calculate the correct pebble size so we have no gaps in our stone."""
+        scaled_w = PEBBLE_IMAGE_SCALE * self.width
+        scaled_h = PEBBLE_IMAGE_SCALE * self.height
+        _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
+        return scaled_w / pebbles_per_row, scaled_h / pebbles_per_column
+
     def setup_canvas(self):
         self.pebbles = {}
         self.positions = []
         self.colors = []
         self.pixels = []
-        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.pebble_size = self.get_pebble_size()
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
@@ -168,7 +169,7 @@ class Chisel(Widget):
     def resize(self, *args):
         self.background.pos = self.pos
         self.background.size = self.size
-        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.pebble_size = self.get_pebble_size()
         for i, (x, y, z) in enumerate(self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
@@ -243,7 +244,7 @@ class Chisel(Widget):
         self.colors = pebble_dict['colors']
         CURRENT_IMAGE[1:] = pebble_dict['aspect']
         self.pixels = []
-        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.pebble_size = self.get_pebble_size()
         self.canvas.clear()
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
