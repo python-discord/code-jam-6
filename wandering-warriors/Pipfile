@@ -9,6 +9,7 @@ pre-commit = "*"
 
 [packages]
 kivy = "*"
+pandas = "*"
 
 [requires]
 python_version = "3.7"
