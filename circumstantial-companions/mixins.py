@@ -1,9 +1,11 @@
 import math
+from pathlib import Path
+
 from kivy.clock import Clock
 from kivy.core.image import Image as CoreImage
 from kivy.graphics import BorderImage, Color, Rectangle
 
-BORDER_IMAGE = "assets/img/sign_border.png"
+BORDER_IMAGE = str(Path("assets", "img", "sign_border.png"))
 
 
 class RepeatingBackground:

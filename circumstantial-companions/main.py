@@ -4,11 +4,12 @@ representation of Paleolithic technology!  Re-invent the wheel with this (rock)c
 simulation! A caveman workout routine guaranteed to give you chiseled slabs fast!
 """
 import contextvars
+from itertools import cycle
 import json
 import math
 import os
+from pathlib import Path
 import webbrowser
-from itertools import cycle
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -33,16 +34,18 @@ from mixins import RepeatingBackground, SignBorder
 from stone import Chisel
 
 FONT = contextvars.ContextVar("font")
-OPTIONS_BACKGROUND = "assets/img/options_background.png"
-CAVEMAN = tuple(f"assets/img/caveman{i}.png" for i in range(4))
-BUTTON_NORMAL = "assets/img/button_normal.png"
-BUTTON_HOVER = "assets/img/button_hover.png"
-BUTTON_PRESSED = "assets/img/button_pressed.png"
-BURGER_NORMAL = "assets/img/burger/normal.png"
-BURGER_HOVER = "assets/img/burger/hover.png"
-BURGER_PRESSED = "assets/img/burger/pressed.png"
+
+IMAGE_PATH = Path("assets", "img")
+OPTIONS_BACKGROUND = str(IMAGE_PATH / "options_background.png")
+CAVEMAN = tuple(str(IMAGE_PATH / f"caveman{i}.png") for i in range(4))
+BUTTON_NORMAL = str(IMAGE_PATH / "button_normal.png")
+BUTTON_HOVER = str(IMAGE_PATH / "button_hover.png")
+BUTTON_PRESSED = str(IMAGE_PATH / "button_pressed.png")
+BURGER_NORMAL = str(IMAGE_PATH / "burger" / "normal.png")
+BURGER_HOVER = str(IMAGE_PATH / "burger" / "hover.png")
+BURGER_PRESSED = str(IMAGE_PATH / "burger" / "pressed.png")
 FILE_EXTENSION = ".chisel-project"
-MAX_FILENAME_LENGTH = 128  # actually (n - 1)
+MAX_FILENAME_LENGTH = 128
 GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
 CURSOR = Cursor()
 
@@ -195,7 +198,7 @@ class ImportPopup(Popup):
             Window.remove_widget(CURSOR)
             self.loading_popup = open_loading_popup(_("Importing the project."))
             Clock.schedule_once(lambda dt: self._load_file(selection[0]), 0.1)
-    
+
     def _load_file(self, path):
         try:
             self.chisel.load(path)
@@ -393,10 +396,9 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
     def reset_chisel(self, *args):
         Window.remove_widget(CURSOR)
         popup = open_loading_popup(_("Resetting the canvas."))
-        Clock.schedule_once(lambda dt: (self.chisel.reset()
+        Clock.schedule_once(lambda dt:  self.chisel.reset()
                                         or popup.dismiss()
-                                        or Window.add_widget(CURSOR, "after")),
-                            0.1)
+                                        or Window.add_widget(CURSOR, "after"), 0.1)
 
     def bind_to_burger(self, burger):
         def _reposition(*args):

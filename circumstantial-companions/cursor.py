@@ -1,9 +1,12 @@
+from pathlib import Path
+
 from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 
-UP = "assets/img/cursor/up.png"
-DOWN = "assets/img/cursor/down.png"
+CURSOR_PATH = Path("assets", "img", "cursor")
+UP = str(CURSOR_PATH.joinpath("up.png"))
+DOWN = str(CURSOR_PATH.joinpath("down.png"))
 
 
 class CursorImage(Image):

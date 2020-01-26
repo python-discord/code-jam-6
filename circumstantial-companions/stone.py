@@ -1,5 +1,6 @@
 import math
 import json
+from pathlib import Path
 from random import choice, random
 
 from kivy.app import App
@@ -22,8 +23,8 @@ CHISEL_RADIUS = 6e-4
 MIN_POWER = 1e-5
 CHISEL_POWER = 100
 
-BACKGROUND = 'assets/img/background.png'
-SOUND = 'assets/sounds/dig.wav'
+BACKGROUND = str(Path('assets', 'img', 'background.png'))
+SOUND = str(Path('assets', 'sounds', 'dig.wav'))
 
 def get_image_and_aspect(file):
     """
