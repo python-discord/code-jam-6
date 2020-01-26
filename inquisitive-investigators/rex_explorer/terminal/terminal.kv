@@ -1,0 +1,20 @@
+#:kivy 1.11.1
+
+<Terminal>:
+    terminal_input: terminal_input
+    recycle_view: recycle_view
+
+    RecycleView:
+        viewclass: 'TerminalInput'
+        id: recycle_view
+        
+        TerminalInput:
+            id: terminal_input
+            effect_cls: "ScrollEffect"
+            shell: root
+            font_name: './rex_explorer/static/retro_font.ttf'
+            font_size: 12
+            foreground_color: root.foreground_color
+            background_color: root.background_color
+            height: max(self.parent.height, self.minimum_height)
+            size_hint_y: None

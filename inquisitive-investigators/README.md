@@ -1,15 +1,38 @@
-# Inquisitive Investigators
+# Rex Explorer - Inquisitive Investigators
+![Rex Explorer](https://cdn.discordapp.com/attachments/666081160497070080/671036109337264148/Image.PNG)
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+## About
 
-## Useful links
+Hello and thanks for using Rex-Explorer! Made over the course of a week for CodeJam VI, Rex-Explorer is a TUI file explorer with a built in terminal and many other features!
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+#### Features
+- Be able to experience what it was like to browse files and directories on your computer from the old days!
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+- A built in terminal? Yeah we were suprised too! Be able to change directories and even commit your own project to github!
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+- A built in editor too! What, did you just want to look at your files. See what it was like to edit files back in the old'n days!
+
+- A built in photo viewer!? We added this in at the absolute last minute, and it's a great addition to the program.
+
+- Create files and directories to utilize with the built in editor, terminal and file explorer.
+
+- Rename and Copy files and directories across your browser.
+
+## Installation
+
+#### Users
+
+- Install pipenv: `pip install pipenv`
+- Install dependencies: `pipenv sync`
+- Run the program: `python -m rex_explorer`
+
+#### Developers
+
+- Install pipenv: `pip install pipenv`
+- Install dependencies: `pipenv sync --dev`
 
 ## License
 
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+The font we used is licensed under the [SIL Open Font Licesnse](https://www.fontspace.com/help/#license-17)
+
+[![Code Jam Banner](https://raw.githubusercontent.com/python-discord/code-jam-6/master/ancient%20tech.png?token=AAQAKVPQ55SEFWYYLYO5YV26ETLTC)](#)

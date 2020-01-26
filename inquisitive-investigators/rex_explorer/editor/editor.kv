@@ -1,0 +1,61 @@
+#:kivy 1.11.1
+
+<TextEditor>:
+    editor: editor
+    recycler: recycler
+    BoxLayout:
+        RecycleView:
+            effect_cls: "ScrollEffect"
+            viewclass: 'EditorIO'
+            id: recycler
+
+            EditorIO:
+                id: editor
+                root: root
+                font_name: './rex_explorer/static/retro_font.ttf'
+                font_size: 12
+                foreground_color: root.foreground_color
+                background_color: root.background_color
+                height: max(self.parent.height, self.minimum_height)
+                size_hint_y: None
+    F:
+        size_hint: 1,.05
+
+
+
+<SavePopup>:
+    title: 'Save File?'
+    FloatLayout:
+        Label:
+            id: file
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            color: 0.34,1,1,1
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .4}
+            text: '[ Save ]'
+            color: 0.34,1,1,1
+            on_press: root.save()
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .4}
+            text: '[ Cancel ]'
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
+<F>:
+    canvas:
+        Color:
+            rgba: 0,0,0,.5
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'ESC: Exit'
+        Label:
+            text: 'CTRL + S: Save'
+        Label:
+            text: 'CTRL +/-: Zoom In/Out'

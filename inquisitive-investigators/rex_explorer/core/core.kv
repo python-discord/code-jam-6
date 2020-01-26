@@ -1,0 +1,67 @@
+#:kivy 1.11.1
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+
+<ScreenManager>:
+    transition: NoTransition()
+
+<BrowserScreen>:
+    name: browser
+    Browser:
+        id: browser
+
+<Browser>:
+    left_browser: left
+    right_browser: right
+    terminal: terminal
+    footer: footer
+
+    FileBrowser:
+        id: left
+        pos_hint: {'top': 1}
+        size_hint: .499,.8
+    FileBrowser:
+        id: right
+        pos_hint: {'top': 1,'right':1}
+        size_hint: .499,.8
+    Border:
+        pos_hint: {'top': .2}
+        size_hint: 1,.01
+    Terminal:
+        id: terminal
+        pos_hint: {'top': .19}
+        size_hint: 1,.15
+    Footer:
+        id: footer
+        pos_hint: {'top': .04}
+        size_hint: 1,.04
+
+<Button>:
+    font_name: './rex_explorer/static/retro_font.ttf'
+    font_size: 11.5
+    background_normal: ''
+    background_color: (0,0,0,0)
+
+<Label>:
+    font_name: './rex_explorer/static/retro_font.ttf'
+    font_size: 11.5
+
+<Border>:
+    canvas.before:
+        Color:
+            rgb: 0.34,1,1
+        Rectangle:
+            size: root.size
+            pos: root.pos
+
+<TextInput>:
+    canvas.before:
+        Color:
+            rgba:
+                ((1,1,1,1)
+                if self.focus and not self._cursor_blink
+                else (0, 0, 0, 0))
+        Rectangle:
+            pos: self._cursor_visual_pos
+            size: root.cursor_width + 10, -self._cursor_visual_height
+        Color:
+            rgba: self.disabled_foreground_color if self.disabled else (self.hint_text_color if not self.text else self.foreground_color)
