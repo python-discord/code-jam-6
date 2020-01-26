@@ -53,7 +53,7 @@ Once you have those configured, you are ready to decipher! Type the ciphertext l
 
 Beware though, you only have a certain amount of time to decipher the message before the Allies capture you! Decipher the complete message to win the game!
 
-Note: If you have Autoinput off and mistype once, move the rotors back one input and continue typing from where you messed up (Remember, The Germans didn't have a backspace key).
+Note: If you have Autoinput off and mistype once, you can no longer win (Remember, The Germans didn't have a backspace key).
 
 ---
 ### Settings (Defaults)
