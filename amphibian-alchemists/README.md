@@ -3,7 +3,7 @@ By: Amphibian Alchemists
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The Enigma Machine from WWII is the most infamous encryption device of the era. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths.
+The Enigma Machine from WWII is the most infamous encryption device of the era. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths before the Allies capture you.
 
 Table of Contents:
 - Setup
@@ -27,6 +27,8 @@ The current configuration is intended to be incorporated with the Discord Postal
 Start a new game. You are given paper with instructions. Configure the rotors parallel with that of the paper. Configure the plug PAIRS (each pair of plugs is connected by one wire).
 
 Once you have those configured, type whatever the ciphered text is. Autoinput is enabled.
+
+Beware though, you only have a certain amount of time to decipher the message before the allies capture you!
 
 Note: If you have autoinput off and mistype once, move the rotor that just rotated backwards and continue typing from where you messed up. Remember, Germans didn't have a backspace on a piece of paper like us with computers.
 
