@@ -118,22 +118,35 @@ def setup_new_game_settings():
     )
 
 
+def auto_input_processor(char):
+    """
+    Processes the next handled letter for auto-inputting
+     if directed by user from settings
+     """
+    config_store = JsonStore(CONFIG_DIR)
+    try:
+        if config_store.get("auto_input")["value"] == 1:
+            game_id = App.get_running_app().game_id
+            store = JsonStore(DATA_DIR)
+            game = store.get(game_id)
+            current_output_text = game["current_output_text"]
+            ciphered_text = game["ciphered_text"]
+            output = str(ciphered_text)[len(current_output_text)]
+            return output
+    except KeyError:
+        # Handle if setting not found
+        config_store.put("auto_input", value=1)
+        return char
+    except IndexError:
+        # Game won. Nothing else to autoinput
+        return char
+
+
 class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.upper() in App.get_running_app().keys:
-            # Autoinput
-            letter = substring.upper()
-            config_store = JsonStore(CONFIG_DIR)
-            try:
-                if config_store.get("auto_input")["value"] == 1:
-                    game_id = App.get_running_app().game_id
-                    store = JsonStore(DATA_DIR)
-                    game = store.get(str(game_id))
-                    current_output_text = game["current_output_text"]
-                    ciphered_text = game["ciphered_text"]
-                    letter = str(ciphered_text)[len(current_output_text)]
-            except KeyError:
-                config_store.put("auto_input", value=1)
+            # Auto input processing
+            letter = auto_input_processor(substring.upper())
             # Key press
             s = App.get_running_app().machine.key_press(letter)
             return super().insert_text(s, from_undo=from_undo)
@@ -231,17 +244,7 @@ class GameScreen(Screen):
 
         # Auto-input invading key
         letter = key.name  # Saving in case auto-input disabled
-        config_store = JsonStore(CONFIG_DIR)
-        try:
-            if config_store.get("auto_input")["value"] == 1:
-                game_id = App.get_running_app().game_id
-                store = JsonStore(DATA_DIR)
-                game = store.get(str(game_id))
-                current_output_text = game["current_output_text"]
-                ciphered_text = game["ciphered_text"]
-                letter = str(ciphered_text)[len(current_output_text)]
-        except KeyError:
-            config_store.put("auto_input", value=1)
+        letter = auto_input_processor(letter)
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
             board_output.insert_text(letter)
