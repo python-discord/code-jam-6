@@ -142,9 +142,13 @@ class Game(EventDispatcher):
         if self.pause_game == True:
             return
         if action in (Actions.MOVE_LEFT, Actions.MOVE_UP):
-            self._mirror_moving.play()
+            old_val = self.mirror.state
             self.mirror.state += 1
+            if old_val != self.mirror.state:
+                self._mirror_moving.play()
         elif action in (Actions.MOVE_RIGHT, Actions.MOVE_DOWN):
-            self._mirror_moving.play()
+            old_val = self.mirror.state
             self.mirror.state -= 1
+            if old_val != self.mirror.state:
+                self._mirror_moving.play()
         return True
