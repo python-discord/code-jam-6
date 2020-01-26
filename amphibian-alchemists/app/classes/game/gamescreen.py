@@ -293,6 +293,10 @@ class GameScreen(Screen):
         )
         on_config_change()
         self.manager.get_screen("game_selector_screen").load_game(game_id)
+        # Reset timer based on new current_state that was config above
+        self.timer_clock.cancel()
+        self.current_time = game["last_saved_state"]["timer"]
+        self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
 
     def save_game(self):
         game_id = App.get_running_app().game_id

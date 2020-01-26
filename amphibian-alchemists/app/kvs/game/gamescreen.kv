@@ -5,13 +5,18 @@
     BoxLayout:
         orientation: "vertical"
         Label:
-            text: "You lost!"
+            text: "You've been captured!"
         BoxLayout:
             size_hint_y: 0.2
             Button:
                 text: "Try again"
                 on_release:
                     app.root.current = "game_selector_screen"
+                    root.dismiss()
+            Button:
+                text: "Load Save Point"
+                on_release:
+                    app.root.get_screen("game_screen").load_old_game()
                     root.dismiss()
             Button:
                 text: "Back to main menu"
