@@ -11,6 +11,8 @@ class Ledger(BoxLayout):
         self.row = 1
         self.new_row()
 
+        self.clear_button_src = 'assets/graphics/clear.png'
+
     def select(self, col: str):
         """select column: ['x', 'y', 'z']"""
         if col not in ['x', 'y', 'z']:
@@ -97,3 +99,29 @@ class Ledger(BoxLayout):
     #         self.stored_right_digit = layout
     #
     #     self.add_next_digit(layout)
+    #
+    # def _keydown(self, *args):
+    #     if(args[1] >= 257 and args[1] <= 265):
+    #         if not self.add_left_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png')):
+    #             self.add_right_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png'))
+    #     if(args[1] == 267):
+    #         l = Label(text="[color=000000]/[/color]", markup=True)
+    #         l.font_size = '58dp'
+    #         self.add_middle(l)
+    #     if(args[1] == 268):
+    #         l = Label(text="[color=000000]*[/color]", markup=True)
+    #         l.font_size = '58dp'
+    #         self.add_middle(l)
+    #     if(args[1] == 269):
+    #         l = Label(text="[color=000000]-[/color]", markup=True)
+    #         l.font_size = '58dp'
+    #         self.add_middle(l)
+    #     if(args[1] == 270):
+    #         l = Label(text="[color=000000]+[/color]", markup=True)
+    #         l.font_size = '58dp'
+    #         self.add_middle(l)
+    #     if(args[1] == 271):
+    #         self.l_pos = ''
+    #         self.m_pos = ''
+    #         self.r_pos = ''
+    #         self.next_line()

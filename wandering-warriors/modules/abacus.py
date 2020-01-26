@@ -37,9 +37,6 @@ class AbacusColumn(FloatLayout):
             self.down.append(Bead())
 
     def on_touch_down(self, touch):
-        if self.abacus.suppress_input:
-            return
-
         for bead in self.up + self.down:
             if bead.anim is not None:
                 return
@@ -124,7 +121,7 @@ class AbacusAnim:
 class Abacus(FloatLayout):
     MAX_BAR_W = 10
     MIN_BORDER_W = 16
-    MAX_BEAD_SPACING = 8
+    MIN_BEAD_SPACING = 4
 
     N_BARS = 12
     N_TOP_BEADS = 1
@@ -164,10 +161,10 @@ class Abacus(FloatLayout):
             self.top_beads = []
             self.bottom_beads = []
 
-            Color(0.8, 0.8, 0.8, 1)
+            Color(.8, .8, .8, 1)
 
             for i in range(self.N_BARS):
-                self.bar_rects.append([Rectangle(), Rectangle()])
+                self.bar_rects.append([Rectangle(source='assets/graphics/silver.jpg'), Rectangle(source='assets/graphics/silver.jpg')])
 
                 top = AbacusColumn(self.N_TOP_BEADS, self)
                 self.add_widget(top)
@@ -179,7 +176,8 @@ class Abacus(FloatLayout):
                 self.bottom_beads.append(bottom)
 
         self.anim_queue = deque([])
-        self.suppress_input = False
+
+        self.clear_button_src = 'assets/graphics/clear.png'
 
         self.bind(pos=self.update, size=self.update)
         self.update()
@@ -192,12 +190,17 @@ class Abacus(FloatLayout):
         inner_w = self.width - 2 * border_w
         bead_w = min(
             (self.height - 3 * border_w) / (self.N_TOP_BEADS + 1 + self.N_BOTTOM_BEADS + 1) * 2,
-            (inner_w - self.N_BARS * self.MAX_BEAD_SPACING) / self.N_BARS
+            (inner_w - self.N_BARS * self.MIN_BEAD_SPACING) / self.N_BARS
         )
 
-        offset_x = max(0, inner_w - (bead_w + self.MAX_BEAD_SPACING) * self.N_BARS) / 2
+        offset_x = max(160, inner_w - (bead_w + self.MIN_BEAD_SPACING) * self.N_BARS) / 2
         abacus_w = self.width - 2 * offset_x
         inner_w -= 2 * offset_x
+
+        bead_w = min(
+            (self.height - 3 * border_w) / (self.N_TOP_BEADS + 1 + self.N_BOTTOM_BEADS + 1) * 2,
+            (inner_w - self.N_BARS * self.MIN_BEAD_SPACING) / self.N_BARS
+        )
 
         self.border[0].pos = (self.x + offset_x, self.y + self.height - border_w)
         self.border[0].size = (abacus_w, border_w)
@@ -315,6 +318,12 @@ class Abacus(FloatLayout):
 
         return v
 
+    def set_value(self, v):
+        Thread(target=self.preset(v)).start()
+
+    def clear(self):
+        Thread(target=self.reset()).start()
+
     def build_anim(self, anim):
         for col, n in anim.up_shifts:
             for bead in col.down[:n]:
@@ -387,24 +396,6 @@ class Abacus(FloatLayout):
                 return False
 
         return self.build_anim(anim)
-
-    def add(self, x, y):
-        pass
-
-    def sub(self, x, y):
-        pass
-
-    def mult(self, x, y):
-        pass
-
-    def div(self, x, y):
-        pass
-
-    def power(self, x, y):
-        pass
-
-    def sqrt(self, x, y):
-        pass
 
     def reset(self):
         anim = AbacusAnim()

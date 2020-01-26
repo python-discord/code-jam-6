@@ -4,13 +4,14 @@ from kivy.uix.widget import Widget
 
 from modules import Abacus as AbacusBase
 from modules import DrawPad
+from modules.operations import OperationsLayout
 
 
-class MainScreen(Screen):
+class Calculator(Screen):
     pass
 
 
-class SettingsScreen(Screen):
+class Settings(Screen):
     pass
 
 
@@ -22,9 +23,8 @@ class Abacus(AbacusBase):
     pass
 
 
-class OperationsBar(Widget):
-    def buttonImage(self, operation: str) -> str:
-        return f'assets/graphics/{operation}.png'
+class OperationsBar(OperationsLayout):
+    pass
 
 
 class CuneiformDrawingInput(DrawPad):
@@ -35,10 +35,22 @@ class TopRightButton(Widget):
     pass
 
 
+class ClearButton(Widget):
+    pass
+
+
+class HelpButton(Widget):
+    pass
+
+
+class SettingsButton(Widget):
+    pass
+
+
 class Screen:
     def __init__(self):
         self.sm = ScreenManager()
-        self.sm.add_widget(MainScreen(name='calculator'))
+        self.sm.add_widget(Calculator(name='calculator'))
 
     def get_manager(self):
         return self.sm
