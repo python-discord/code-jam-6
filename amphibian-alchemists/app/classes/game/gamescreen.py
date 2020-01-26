@@ -106,7 +106,7 @@ def setup_new_game_settings():
     )
 
 
-def auto_input_processor(char):
+def auto_input_processor(char) -> str:
     """
     Processes the next handled letter for auto-inputting
      if directed by user from settings
@@ -122,11 +122,12 @@ def auto_input_processor(char):
             output = str(ciphered_text)[len(current_output_text)]
             return output
     except KeyError:
-        # Handle if setting not found
+        # If setting not found, start again and re-process
         config_store.put("auto_input", value=1)
-        return char
+        return auto_input_processor(char)
     except IndexError:
-        # Game won. Nothing else to autoinput
+        # Game won or messed up and passed len(ciphertext).
+        # Nothing else to auto-input.
         return char
 
 
@@ -220,9 +221,10 @@ class GameScreen(Screen):
 
     def handle_key(self, key):
         """
-        Here goes what we're gonna do whenever a key in the machine is pressed
+        ... whenever a key/letter in the machine
+        (keyboard or board_output) is pressed
         """
-
+        # Handle visuals
         self.play_effect_sound("keyboard_click")
 
         anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
@@ -237,6 +239,7 @@ class GameScreen(Screen):
         if not board_output.focus:
             board_output.insert_text(letter)
         store_put(current_output_text=board_output.text)
+
         # Updating rotors
         new_rotors = App.get_running_app().machine.get_display()
         save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
@@ -244,6 +247,7 @@ class GameScreen(Screen):
         rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
         rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]
         rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
+
         # Check win condition
         game_id = App.get_running_app().game_id
         store = JsonStore(DATA_DIR)

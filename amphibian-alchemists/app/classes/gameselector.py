@@ -55,8 +55,12 @@ class GameSelectorScreen(Screen):
                 DATE_FORMAT = "%b %d %Y %H:%M:%S"
                 created = datetime.fromisoformat(str(game["created_date"]))
                 created = created.strftime(DATE_FORMAT)
-                last_saved = datetime.fromisoformat(str(game["last_saved_date"]))
-                last_saved = last_saved.strftime(DATE_FORMAT)
+                try:
+                    last_saved = datetime.fromisoformat(str(game["last_saved_date"]))
+                    last_saved = last_saved.strftime(DATE_FORMAT)
+                except ValueError:
+                    # Since last_saved_time is None to begin with
+                    last_saved = str(game["last_saved_date"]) or "None"
                 self.rv.data.append(
                     {
                         "text": f"{title}\n"
