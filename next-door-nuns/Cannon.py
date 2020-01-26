@@ -61,12 +61,10 @@ class Cannon(Widget):
         self.animation.start(self.cannon)
 
     def fire_cannon(self):
-        # self.cannonball.pos = (self.cannon.pos[0] + self.cannon.size[0], self.cannon.pos[1] + self.cannon.size[1]/2)
         self.cannonball.pos = (int(self.cannon.pos[0]+cos(radians(self.angle))
                                * self.cannon.size[0]/2),
                                int(self.cannon.pos[1]+sin(radians(self.angle))
                                * self.cannon.size[1]/2))
-        # print(self.cannonball.pos)
         self.velocity_clock = Clock.schedule_interval(self.drop, 0.1)
         self.velocity_y = self.velocity * (self.angle / 90)
         self.velocity_x = self.velocity - self.velocity_y
@@ -78,12 +76,6 @@ class Cannon(Widget):
             self.cannonball.pos = (self.cannonball.pos[0] + self.velocity_x,
                                    self.cannonball.pos[1] + self.velocity_y)
             self.velocity_y -= 0.98
-            # print("Cannonball X coord: {}".format(self.cannonball.pos[0]))
-            # print("Cannonball Y coord : {}" .format(self.cannonball.pos[1]))
-            # print("Target X coordinate {}".format(self.target.pos[0]))
-            # print("Target Y coordinate {}" .format(self.target.pos[1]))
-            # print("Target X size {}".format(self.target.size[0]))
-            # print("Target Y size {}".format(self.target.size[1]))
 
             # Checks for X position collision
             if (self.cannonball.pos[0] < (self.target.pos[0] + self.target.size[0])) and \
@@ -91,7 +83,6 @@ class Cannon(Widget):
                 self.x_collide = True
             else:
                 self.x_collide = False
-            # print(self.target.pos[0] + self.target.size[0])
 
             # Checks for Y position collision
             if (self.cannonball.pos[1] < (self.target.pos[1] + self.target.size[1])) and \
@@ -99,12 +90,9 @@ class Cannon(Widget):
                 self.y_collide = True
             else:
                 self.y_collide = False
-            # print("X collide : {}".format(self.x_collide))
-            # print("Y collide : {}" .format(self.y_collide))
 
             # If X and Y collision are both true, collision with target
             if self.x_collide is True and self.y_collide is True:
-                # print("Collide")
                 content = Button(text='Press to Try Again')
                 self.P = Popup(title="TARGET HIT!!!!", title_align='center',
                                title_size=40, title_color=[1, 0, 0, 1], content=content,
