@@ -14,6 +14,7 @@ from kivy.properties import (
     StringProperty
 )
 
+from ..utils.paths import ABOUT
 from ..core.exceptions import (
     InvalidBrowser,
     InvalidSelection
@@ -112,7 +113,7 @@ class AboutPopup(BasePopup):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
-        with open('ancient_tech/static/about.txt', 'r') as f:
+        with open(ABOUT, 'r') as f:
             self.ids.AboutInfo.text = f.read()
 
 

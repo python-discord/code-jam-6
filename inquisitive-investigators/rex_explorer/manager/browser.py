@@ -18,9 +18,10 @@ from kivy.properties import (
 )
 
 from .file import NewFile
+from ..utils.paths import MANAGER_KV
 from ..utils.utils import file_info, short_path
 
-Builder.load_file('./ancient_tech/manager/filemanager.kv')
+Builder.load_file(MANAGER_KV)
 
 
 class FileHeader(FloatLayout):

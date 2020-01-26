@@ -1,5 +1,6 @@
 #:kivy 1.11.1
 #:import NoTransition kivy.uix.screenmanager.NoTransition
+#:import FONT rex_explorer.utils.paths.FONT
 
 <ScreenManager>:
     transition: NoTransition()
@@ -36,13 +37,13 @@
         size_hint: 1,.04
 
 <Button>:
-    font_name: './ancient_tech/static/retro_font.ttf'
+    font_name: FONT
     font_size: 11.5
     background_normal: ''
     background_color: (0,0,0,0)
 
 <Label>:
-    font_name: './ancient_tech/static/retro_font.ttf'
+    font_name: FONT
     font_size: 11.5
 
 <Border>:

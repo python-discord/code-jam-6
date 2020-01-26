@@ -7,8 +7,9 @@ from kivy.properties import ObservableList
 from kivy.core.window import Window, Keyboard
 
 from .commands import *
+from ..utils.paths import FOOTER_KV
 
-Builder.load_file('./ancient_tech/footer/footer.kv')
+Builder.load_file(FOOTER_KV)
 
 
 class Footer(BoxLayout):

@@ -17,8 +17,9 @@ from ..footer.footer import Footer
 from ..terminal.terminal import Terminal
 from ..manager.browser import FileBrowser
 from ..editor.editor import TextEditor
+from ..utils.paths import CORE_KV
 
-Builder.load_file('./ancient_tech/core/core.kv')
+Builder.load_file(CORE_KV)
 
 
 class Manager(ScreenManager):

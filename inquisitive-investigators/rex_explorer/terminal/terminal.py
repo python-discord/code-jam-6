@@ -11,8 +11,9 @@ from kivy.properties import (
 
 from .dispatcher import Shell
 from .termio import TerminalInput
+from ..utils.paths import TERMINAL_KV, FONT
 
-Builder.load_file('./ancient_tech/terminal/terminal.kv')
+Builder.load_file(TERMINAL_KV)
 
 
 class Terminal(BoxLayout, Shell):
@@ -22,9 +23,7 @@ class Terminal(BoxLayout, Shell):
     foreground_color = ColorProperty((1, 1, 1, 1))
     background_color = ColorProperty((0, 0, 0, 1))
 
-    font_name = StringProperty(
-        './ancient_tech/static/retro_font.ttf'
-    )
+    font_name = StringProperty(FONT)
     font_size = NumericProperty(11)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:

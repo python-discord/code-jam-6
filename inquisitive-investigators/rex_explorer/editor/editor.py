@@ -7,24 +7,23 @@ from kivy.properties import (
     ObjectProperty,
     StringProperty,
     NumericProperty,
-    ListProperty
+    ColorProperty
 )
 
 from .editorIO import EditorIO
+from ..utils.paths import EDITOR_KV, FONT
 
-Builder.load_file('./ancient_tech/editor/editor.kv')
+Builder.load_file(EDITOR_KV)
 
 
 class TextEditor(Screen):
     editor = ObjectProperty()
     recycler = ObjectProperty()
 
-    foreground_color = ListProperty((1, 1, 1, 1))
-    background_color = ListProperty((0, 0, 0, 1))
+    foreground_color = ColorProperty((1, 1, 1, 1))
+    background_color = ColorProperty((0, 0, 0, 1))
 
-    font_name = StringProperty(
-        './ancient_tech/static/retro_font.ttf'
-    )
+    font_name = StringProperty(FONT)
     font_size = NumericProperty(12.5)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
