@@ -6,7 +6,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObservableList
 from kivy.core.window import Window, Keyboard
 
-from .commands import AboutPopup, EditPopup, Mkdir, CreatePopup, DeletePopup, QuitPopup
+from .commands import *
 
 Builder.load_file('./ancient_tech/footer/footer.kv')
 
@@ -106,8 +106,15 @@ class Footer(BoxLayout):
         return True
 
     def copy(self):
-
-        pass
+        popup = CopyPopup(
+            self, size_hint=(.5, .5),
+            pos_hint={
+                'center_x': .5,
+                'center_y': .5
+            }
+        )
+        popup.open()
+        return True
 
     def mkdir(self) -> None:
         popup = Mkdir(

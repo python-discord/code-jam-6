@@ -78,6 +78,100 @@
             on_press: root.dismiss()
             color: 0.34,1,1,1
 
+<CopyPopup>:
+    title: 'Copy a file or directory'
+
+    FloatLayout:
+
+        Label:
+            text: 'Copy from:'
+            pos_hint: {'center_x': .5, 'center_y': .9}
+            font_size: 13
+
+        Button:
+            id: top_left
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, root.top_left
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .7}
+            text: '[ Left Browser ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.select('from', 'left')
+
+        Button:
+            id: top_right
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, root.top_right
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .7}
+            text: '[ Right Browser ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.select('from', 'right')
+
+        Label:
+            text: 'Copy to:'
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            font_size: 13
+
+        Button:
+            id: bottom_left
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, root.bottom_left
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .3}
+            text: '[ Left Browser ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.select('to', 'left')
+
+        Button:
+            id: bottom_right
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, root.bottom_right
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .3}
+            text: '[ Right Browser ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.select('to', 'right')
+
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .6, 'center_y': .1}
+            text: '[ Copy ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.copy()
+
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .4, 'center_y': .1}
+            text: '[ Cancel ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
 <EditPopup>:
     title: 'Edit a file'
     FloatLayout:

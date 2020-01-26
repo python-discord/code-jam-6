@@ -1,12 +1,18 @@
 from typing import Any, Union
 from pathlib import Path
-from shutil import rmtree
+from shutil import copy, copytree, rmtree
 
-from kivy.properties import NumericProperty
 from kivy.uix.popup import Popup
 from kivy.logger import Logger
+from kivy.properties import (
+    NumericProperty,
+    StringProperty
+)
 
-from ..core.exceptions import InvalidBrowser
+from ..core.exceptions import (
+    InvalidBrowser,
+    InvalidSelection
+)
 
 
 class BasePopup(Popup):
@@ -88,11 +94,90 @@ class AboutPopup(BasePopup):
             self.ids.AboutInfo.text = f.read()
 
 
+class CopyPopup(BasePopup):
+    top_left = NumericProperty()
+    top_right = NumericProperty()
+    bottom_left = NumericProperty()
+    bottom_right = NumericProperty()
+
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any) -> None:
+        super().__init__(ctx, *args, **kwargs)
+        self.to = None
+        self.from_ = None
+
+    def select(self, option: str, selection: str) -> None:
+        """
+        Store and validate selections.
+        """
+        if selection not in ('left', 'right'):
+            raise InvalidSelection (
+                'Selection must be either "left" or "right"'
+            )
+
+        if option == 'to':
+            self.to = selection
+
+            if selection == 'left':
+                self.to = 'right'
+
+                self.top_left = 0
+                self.top_right = .2
+                self.bottom_left = .2
+                self.bottom_right = 0
+            else:
+                self.to = 'left'
+
+                self.top_left = .2
+                self.top_right = 0
+                self.bottom_left = 0
+                self.bottom_right = .2
+
+        elif option == 'from':
+            self.from_ = selection
+
+            if selection == 'left':
+                self.to = 'right'
+
+                self.top_left = .2
+                self.top_right = 0
+                self.bottom_left = 0
+                self.bottom_right = .2
+            else:
+                self.to = 'left'
+
+                self.top_left = 0
+                self.top_right = .2
+                self.bottom_left = .2
+                self.bottom_right = 0
+
+        else:
+            raise InvalidSelection(
+                'Selection must be either "to" or "from"'
+            )
+
+    def copy(self) -> None:
+        if self.from_ is None or self.to is None:
+            Logger.info(
+                'Copy: Please select a browser to copy to/from'
+            )
+
+        else:
+            if self.from_ == 'left':
+                from_ = self.ctx.parent.ids.left
+                to = self.ctx.parent.ids.right
+            else:
+                from_ = self.ctx.parent.ids.right
+                to = self.ctx.parent.ids.left
+
+            # if from_.ids.rv.selected
+
+        self.dismiss()
+
+
 class EditPopup(BasePopup):
 
     def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any) -> None:
         super().__init__(ctx, *args, **kwargs)
-        self.ctx = ctx
 
     def edit(self, side: str) -> None:
         if side == 'left':
@@ -112,7 +197,8 @@ class EditPopup(BasePopup):
 
             manager.current = 'text_editor'
         else:
-            print('Please Select a File')
+            Log.info('Editor: Please select a file')
+
         self.dismiss()
 
 
