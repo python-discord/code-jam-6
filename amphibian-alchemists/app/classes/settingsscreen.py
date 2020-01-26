@@ -1,7 +1,7 @@
 import os
 
-from kivy.config import Config
 from kivy.app import App
+from kivy.config import Config
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 
@@ -21,7 +21,12 @@ class SettingsScreen(Screen):
         for config_name in self.ids.keys():
             if not self.store.exists(config_name):
                 self.store.put(
-                    config_name, value=(1 if config_name != "allow_fullscreen" else int(Config.get("graphics", "fullscreen")))
+                    config_name,
+                    value=(
+                        1
+                        if config_name != "allow_fullscreen"
+                        else int(Config.get("graphics", "fullscreen"))
+                    ),
                 )
             self.set_config_values(config_name)
 
