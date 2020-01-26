@@ -127,8 +127,8 @@ class Abacus(FloatLayout):
     MAX_BEAD_SPACING = 8
 
     N_BARS = 12
-    N_TOP_BEADS = 2
-    N_BOTTOM_BEADS = 5
+    N_TOP_BEADS = 1
+    N_BOTTOM_BEADS = 4
 
     TOP_V = N_BOTTOM_BEADS + 1
     PLACE = (N_TOP_BEADS + 1) * TOP_V
