@@ -1,0 +1,9 @@
+docutils; sys_platform == "win32"
+pygments; sys_platform == "win32"
+pypiwin32; sys_platform == "win32"
+kivy_deps.sdl2; sys_platform == "win32"
+kivy_deps.glew; sys_platform == "win32"
+kivy
+Babel
+numpy
+simpleaudio
