@@ -31,8 +31,8 @@ gc.disable()
 
 
 class MainBox(FloatLayout):
-    def __init__(self, util, **kwargs):
-        super(MainBox, self).__init__(**kwargs)
+    def __init__(self, **kwargs):
+        super(MainBox, self).__init__()
         self.screens = AnchorLayout(anchor_x='center', anchor_y='center')
         self.util = kwargs.get('util')
         self.content = ScreenManager()
@@ -60,8 +60,8 @@ class MainBox(FloatLayout):
 
 
 class MainApp(App):
-    # Change APP colors here
     util = Utility()
+    # Change APP colors here
     theme_cls = ThemeManager()
     theme_cls.primary_palette = 'Teal'
     theme_cls.primary_hue = '300'
@@ -71,7 +71,6 @@ class MainApp(App):
     accent_color = [255/255, 64/255, 129/255, 1]
 
     def build(self):
-        self.util = Utility()
         return MainBox(util=self.util)
 
 
