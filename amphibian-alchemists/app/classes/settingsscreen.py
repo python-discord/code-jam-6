@@ -63,7 +63,6 @@ class SettingsScreen(Screen):
             elif to_save == "allow_fullscreen":
                 Config.set("graphics", "borderless", new_value)
                 Config.set("graphics", "resizable", 0 if new_value == 1 else 1)
-                print(Config.get("graphics", "resizable"))
                 Config.write()
                 return
 
