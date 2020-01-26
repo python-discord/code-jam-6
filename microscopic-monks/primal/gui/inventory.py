@@ -78,7 +78,7 @@ class Inventory:
                 else:
                     self.amounts[index].set_text(str(self.inventory_data[index][1]))
 
-    def add_item(self, feature: Feature):
+    def add_item(self, type: str):
         empty = None
 
         for index, item in enumerate(self.inventory_data):
@@ -86,19 +86,19 @@ class Inventory:
                 if empty is None:
                     empty = index
                 continue
-            if item[0] == feature.type:
+            if item[0] == type:
                 self.inventory_data[index][1] += 1
                 self.amounts[index].set_text(str(self.inventory_data[index][1]))
                 return
 
         if empty is not None:
-            self.inventory_data[empty] = [feature.type, 1]
-            self.items[empty].set_source(self.item_data[feature.type]['source'])
+            self.inventory_data[empty] = [type, 1]
+            self.items[empty].set_source(self.item_data[type]['source'])
             self.amounts[empty].set_text(str(1))
             self.amounts[empty].set_color((0, 0, 0, 2))
         elif len(self.inventory_data) != 10:
-            self.inventory_data.append([feature.type, 1])
-            source = self.item_data[feature.type]['source']
+            self.inventory_data.append([type, 1])
+            source = self.item_data[type]['source']
             index = len(self.inventory_data) - 1
             self.items[len(self.inventory_data) - 1].set_source(source)
             self.amounts[index].set_text(str(1))
