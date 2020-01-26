@@ -33,11 +33,11 @@ from stone import Chisel
 
 FONT = contextvars.ContextVar("font")
 IMAGE_PATH = Path("assets", "img")
-OPTIONS_BACKGROUND = str(IMAGE_PATH.joinpath("options_background.png"))
-CAVEMAN = tuple(str(IMAGE_PATH.joinpath(f"caveman{i}.png")) for i in range(4))
-BUTTON_NORMAL = str(IMAGE_PATH.joinpath("button_normal.png"))
-BUTTON_HOVER = str(IMAGE_PATH.joinpath("button_hover.png"))
-BUTTON_PRESSED = str(IMAGE_PATH.joinpath("button_pressed.png"))
+OPTIONS_BACKGROUND = str(IMAGE_PATH/"options_background.png")
+CAVEMAN = tuple(str(IMAGE_PATH/f"caveman{i}.png") for i in range(4))
+BUTTON_NORMAL = str(IMAGE_PATH/"button_normal.png")
+BUTTON_HOVER = str(IMAGE_PATH/"button_hover.png")
+BUTTON_PRESSED = str(IMAGE_PATH/"button_pressed.png")
 FILE_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128
 GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
