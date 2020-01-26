@@ -1,0 +1,6 @@
+# this is a normal python file
+name = 'name'
+term_name = 'term'
+ps = '$'
+end = ' '
+format = '{name}@{terminal}:{path}{ps}{end}'

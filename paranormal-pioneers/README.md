@@ -1,15 +1,35 @@
 # Paranormal Pioneers
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+## About Project
+Our project is old DOS style terminal-based (like DOS say) computer. We tried to make this so close to these old good DOS system like MS-DOS, Apple DOS and Unix.
+We added main commands like `cd`, `ls` etc. what make experience very close like this was in old computers (and also in current terminals).
 
-## Useful links
+## Setup
+### Installing Dependencies
+First, you must install `pipenv` package:
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+`pip3.7 install pipenv`
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+Installing all other dependencies is really simple:
+Just go (when you are not already) in our project main directory (`paranormal-pioneers`) and run:
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+`pipenv install`
+
+### Running project
+Now, when dependencies is installed, you can run project. This is too really simple:
+
+`pipenv run`
+
+And you are in!
+
+## Developers
+
+- [nekit](https://github.com/NeKitDS)
+- [lakmatiol](https://github.com/lavirlifiliol)
+- [ks123](https://github.com/ks129)
+- [Tansc](https://github.com/Tansc161)
+- [DagobertDuck](https://github.com/Dag0b3rtDuck)
 
 ## License
 
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+All projects in Code Jam 6 are under the [MIT license](../LICENSE).
