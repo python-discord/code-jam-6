@@ -50,12 +50,16 @@ class MyNavigationLayout(NavigationLayout):
         self.content_nav_drawer = ContentNavigationDrawer(self)
         self.drawer_open = False
         self.scroll_view = scroll_view
+  
 
         self.add_widget(self.content_nav_drawer)
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
-        self.toolbar = MDToolbar(title='Enigma')
+        self.toolbar = MDToolbar()
         self.toolbar.anchor_title = 'center'
-        self.toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
+        self.toolbar.elevation = 0
+        self.toolbar.theme_text_color = 'Custom'
+        self.toolbar.text_color = App.get_running_app().theme_cls.primary_color
+        self.toolbar.md_bg_color = 0, 0, 0, 0 
         self.toolbar.left_action_items = [['menu', lambda x: self.toggle_nav_drawer()]]
         toolbar_anchor.add_widget(self.toolbar)
         self.add_widget(toolbar_anchor)

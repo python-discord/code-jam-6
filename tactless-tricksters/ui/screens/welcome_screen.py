@@ -29,77 +29,74 @@ Builder.load_string("""
     FloatLayout:
         size_hint: .65, .65
         pos_hint: {'center_x': 0.5, 'center_y': .5}
-        canvas.before:
-            Color:
-                rgba: app.theme_cls.accent_color
-            RoundedRectangle:
-                size: self.size
-                pos: self.pos
-                radius: [dp(10)]
+		canvas.before:
+			Color:
+				rgba:  app.theme_cls.accent_color
+			RoundedRectangle:
+				size: self.size
+				pos: self.pos
+				radius: [dp(10)]
         
         BoxLayout:
-            size_hint: .8, .8
-            orientation: 'vertical'
-            pos_hint: {'center_x': 0.5, 'center_y': .5}
+        	size_hint: .8, .8
+        	orientation: 'vertical'
+        	pos_hint: {'center_x': 0.5, 'center_y': .5}
             
-            MDLabel:
-                text: 'Welcome!'
-                font_style: 'H4'
-                halign: 'center'
-                theme_text_color: 'Custom'
-                text_color: [1, 1, 1, 1]
-                size_hint_y: .3
-                
+            Image:
+            	source: 'ui/img/welcome_morse_code.png'
+            	size_hint_y: .3
+            	allow_stretch: True
+            	
             Widget:
-                size_hint_y: .1
+            	size_hint_y: .1
 
-            GridLayout:
-                spacing: dp(20)
-                cols: 2
+        	GridLayout:
+            	spacing: dp(20)
+            	cols: 2
 
-                WelcomeButton:
-                    text: 'Decode'
-                    size_hint_x: 1
-                    icon: 'database-export'
-                    on_press:
-                        root.manager.current = 'decode'
+            	WelcomeButton:
+                	text: 'Decode'
+                	size_hint_x: 1
+                	icon: 'database-export'
+                	on_press:
+                    	root.manager.current = 'decode'
 
-                WelcomeButton:
-                    text: 'Encode'
-                    icon: 'database-import'
-                    size_hint_x: 1
-                    on_press:
-                        root.manager.current = 'encode'
+            	WelcomeButton:
+                	text: 'Encode'
+                	icon: 'database-import'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'encode'
             
-                WelcomeButton:
-                    text: 'Train'
-                    icon: 'dumbbell'
-                    size_hint_x: 1
-                    on_press:
-                        root.manager.current = 'training'
+            	WelcomeButton:
+                	text: 'Train'
+                	icon: 'dumbbell'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'training'
 
-                WelcomeButton:
-                    text: 'Calibrate'
-                    icon: 'cogs'
-                    size_hint_x: 1
-                    on_press:
-                        root.manager.current = 'calibration'
+            	WelcomeButton:
+                	text: 'Calibrate'
+                	icon: 'cogs'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'calibration'
 
-                WelcomeButton:
-                    text: 'Sign In'
-                    icon: 'login-variant'
-                    size_hint_x: 1
-                    on_press:
-                        root.manager.current = 'sign_in'
+            	WelcomeButton:
+                	text: 'Sign In'
+                	icon: 'login-variant'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'sign_in'
 
-                WelcomeButton:
-                    text: 'Message'
-                    icon: 'message'
-                    size_hint_x: 1
-                    on_press:
-                        root.manager.current = 'message'
-                        if app.util.auth_token == '': \ 
-                        root.manager.current = 'sign_in'
+            	WelcomeButton:
+                	text: 'Message'
+                	icon: 'message'
+                	size_hint_x: 1
+                	on_press:
+                    	root.manager.current = 'message'
+                    	if app.util.auth_token == '': \ 
+                    	root.manager.current = 'sign_in'
 
 """)
 
