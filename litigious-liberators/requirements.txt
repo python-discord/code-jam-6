@@ -1,2 +1,3 @@
 kivy
 kivymd==0.100.2
+ffpyplayer
