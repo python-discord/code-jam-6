@@ -109,5 +109,6 @@ venv.bak/
 # JetBrains IDE
 .idea/
 *.db
+
+#Jess
 microscopic-monks/primal/resources/bushBase.png
-microscopic-monks/__main__.py
