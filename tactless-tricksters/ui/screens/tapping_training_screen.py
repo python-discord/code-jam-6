@@ -166,13 +166,15 @@ class TappingScreen(Screen):
 
     def init_tapping_screen(self, dt):
         self.tapping_prompt_label = self.ids.tapping_prompt_label
-        self.decode_morse.children[2].children[0].bind(on_press=lambda x: self.clear_input())
+        self.decode_morse.children[2].children[2].disabled = False
+        self.decode_morse.children[2].children[2].bind(on_press=lambda x: self.clear_input())
         self.training_prompt_dict = self.util.training_prompt_dict
         self.decode_output_label.text = "^-- click on the left button to clear" \
                                         " and the right button for new prompt --^"
         self.decode_text = self.ids.decode_text
 
     def new_prompt(self, *args):
+        self.clear_input()
         self.ids.decode_output_label.text = ""
         if self.util.training_difficulty in ['Easy', 'Medium', 'Hard']:
             if self.util.training_difficulty == 'Easy':
@@ -183,7 +185,6 @@ class TappingScreen(Screen):
                 training_level = 'sentence'
             self.prompt = random.choice(self.util.training_prompt_dict[training_level])
             self.tapping_prompt_label.text = f"Please Tap out the {training_level}: {self.prompt}"
-
         else:
             print(f"failed to load {self.util.training_difficulty}")
 
