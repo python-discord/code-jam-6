@@ -50,6 +50,10 @@ class Ledger(BoxLayout):
         self.select('y')
         self.refresh_ledger()
 
+    def get_row(self) -> dict:
+        """return all values from active row"""
+        return self.df.loc[self.row].to_dict()
+
     def submit_row(self):
         """add and select new row at bottom of ledger"""
         self.col = 'z'
@@ -72,6 +76,7 @@ class Ledger(BoxLayout):
         self.row = index
         self.col = 'x'
         self.refresh_ledger()
+        self.get_row()
 
     def clear(self):
         """clear ledger and backing dataframe"""
