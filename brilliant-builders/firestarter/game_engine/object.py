@@ -67,6 +67,52 @@ class PickUpCoin(Sprite):
         return False
 
 
+class FirePlaceCheckpoint(Sprite):
+    def __init__(
+            self,
+            sprite: Union[SpriteConfig, str],
+            pos: Tuple[int, int],
+            collide: bool = False,
+            mode: int = 1,
+            engine: Engine = None,
+            **kwargs
+    ):
+        # Resolve sprite if needed
+        if isinstance(sprite, str):
+            if not engine:
+                raise ValueError('Argument engine required when searching for sprite')
+            sprite = engine.assets[sprite]
+
+        super().__init__(sprite, pos, **kwargs)
+
+        self.activated = False
+        self.collide = collide
+        self.change_mode(mode)
+
+    def on_animation_end(self) -> None:
+        if self.activated:
+            if self.current_mode == 2:
+                self.change_mode(1)
+            elif self.current_mode == 1:
+                self.change_mode(0)
+
+        self.current_frame = 0
+
+    def update(self, other_sprites: List[Sprite]) -> None:
+        pass
+
+    def on_collision(self, other: Sprite) -> bool:
+        if self.activated:
+            return self.collide
+
+        if isinstance(other, Player):
+            self.activated = True
+            print("Checkpoint set!")
+            other.checkpoint = (self.pos[0], self.pos[1] + 70)
+
+        return self.collide
+
+
 class Player(Sprite):
     acc_x = NumericProperty(0)
     acc_y = NumericProperty(0)

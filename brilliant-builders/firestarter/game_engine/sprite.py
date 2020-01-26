@@ -42,8 +42,10 @@ class Sprite(Widget):
     def cycle_animation(self) -> None:
         """Cycle the animation by one frame forwards."""
         self.current_frame += 1
-        # if we exceed the frames of animation for this mode, go back to the beginning
-        self.current_frame = self.current_frame % self.config.frame_count[self.current_mode]
+
+        if self.current_frame >= self.config.frame_count[self.current_mode]:
+            self.on_animation_end()
+
         # calculate the new texture region
         new_pos = (
             self.current_frame * self.config.size[0],
@@ -51,6 +53,10 @@ class Sprite(Widget):
         )
         # set the texture
         self.bg_rect.texture = self.config.texture.get_region(*new_pos, *self.config.size)
+
+    def on_animation_end(self) -> None:
+        """Gets called once the animation has played."""
+        self.current_frame = 0
 
     def change_mode(self, mode: int) -> None:
         """Change the mode of animation."""
