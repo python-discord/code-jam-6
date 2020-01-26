@@ -31,7 +31,7 @@ Builder.load_string("""
         pos_hint: {'center_x': 0.5, 'center_y': .5}
 		canvas.before:
 			Color:
-				rgba: app.theme_cls.accent_color
+				rgba:  app.theme_cls.accent_color
 			RoundedRectangle:
 				size: self.size
 				pos: self.pos
@@ -42,13 +42,18 @@ Builder.load_string("""
         	orientation: 'vertical'
         	pos_hint: {'center_x': 0.5, 'center_y': .5}
         	
-        	MDLabel:
-            	text: 'Welcome!'
-            	font_style: 'H4'
-            	halign: 'center'
-            	theme_text_color: 'Custom'
-            	text_color: [1, 1, 1, 1]
+        	#MDLabel:
+            #	text: 'Welcome!'
+            #	font_style: 'H4'
+            #	halign: 'center'
+            #	theme_text_color: 'Custom'
+            #	text_color: [1, 1, 1, 1]
+            #	size_hint_y: .3
+            
+            Image:
+            	source: 'ui/img/welcome_morse_code.png'
             	size_hint_y: .3
+            	allow_stretch: True
             	
             Widget:
             	size_hint_y: .1
