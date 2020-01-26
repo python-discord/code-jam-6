@@ -49,15 +49,18 @@ class TypeWriter(Popup):
         self.keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self.keyboard.bind(on_key_down=self._key_down)
 
-    def _key_down(self, keyboard, keycode, *arg):
+    def _key_down(self, keyboard, keycode, *args):
         punctuation = {';': 'semicolon', ':': 'colon', '#': 'enter', ' ': 'spacebar'}
-        if keycode[1] in self.ids:
-            self.ids[keycode[1]].trigger_action()
-        elif keycode[1] in punctuation:
-            self.ids[punctuation[keycode[1]]].trigger_action()
+        key = keycode[1]
+        if key in self.ids:
+            self.ids[key].trigger_action()
+        elif key in punctuation:
+            if key == ';':
+                if args[0] == 'shift':
+                    key = ':'
+            self.ids[punctuation[key]].trigger_action()
         else:
             return False
-            print(keycode[1])  # for debug
 
     def _keyboard_closed(self):
         self.keyboard.unbind(on_key_down=self._key_down)
@@ -66,7 +69,7 @@ class TypeWriter(Popup):
 
 class AutoButton(Button):
     def on_release(self):
-        # Clock.schedule_once(Thread(None, self._auto_text).start)
+        # Clock.schedule_once(Thread(None, self._auto_text).run)
         # not sure if using Clock would work / be better here
         Thread(None, self._auto_text).start()
 
@@ -155,6 +158,9 @@ class TextPaper(Image):
             self.head['x'] = STARTING_X
             self.y += self.font_size
             self.x = self.default_pos[0]
+
+    def save(self):
+        self.txt.save(f'{"".join(i.char for i in self.letters[:3])}.png')
 
 
 class Pick(Popup):
