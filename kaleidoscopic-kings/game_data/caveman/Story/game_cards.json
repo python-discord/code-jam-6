@@ -444,7 +444,7 @@
             "next_card": "random",
             "weight": 1,
             "effects": {
-              "player_hunger": -0.05,
+              "player_food": -0.05,
               "player_civility": 0.08
             }
           }
@@ -457,7 +457,7 @@
             "next_card": "random",
             "weight": 1,
             "effects": {
-              "player_hunger": 0.1,
+              "player_food": 0.1,
               "player_civility": -0.1
             }
           }
