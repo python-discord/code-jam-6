@@ -18,7 +18,7 @@ class Text:
         self.height = height
 
         self.label = Label()
-        self.label.text_size = 500, None
+        self.label.text_size = 800, None
         self.color = Color(1, 1, 1, 1)
         self.rect = Rectangle(pos=pos)
         self.set_text(text)
@@ -27,6 +27,7 @@ class Text:
         self.label.text = text
         self.label.texture_update()
         ratio = self.label.texture_size[0] / self.label.texture_size[1]
+
         self.rect.size = ratio * self.height, self.height
         self.rect.texture = self.label.texture
 

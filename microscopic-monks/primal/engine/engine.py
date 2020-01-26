@@ -30,6 +30,7 @@ class Engine(Widget):
 
         # list of screens to update
         self.screen = None
+        self.overlay = None
 
         # call the update method every frame
         Clock.schedule_interval(self.update, 1.0 / 60.0)
@@ -56,9 +57,24 @@ class Engine(Widget):
         self.screen = screen
         self.add_widget(screen)
 
+    def set_overlay(self, screen: Screen) -> None:
+        if self.overlay is not None:
+            self.remove_widget(self.overlay)
+
+        screen.set_engine(self)
+        self.overlay = screen
+        self.add_widget(screen)
+
+    def remove_overlay(self) -> None:
+        if self.overlay is not None:
+            self.remove_widget(self.overlay)
+        self.overlay = None
+
     def update(self, dt: float) -> None:
         """Call update and render on each screen """
-        if self.screen is not None:
+        if self.overlay is not None:
+            self.overlay.update(dt)
+        elif self.screen is not None:
             self.screen.update(dt)
         self.just_pressed_keys = set()
 

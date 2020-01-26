@@ -3,6 +3,7 @@ from primal.engine.camera import OrthographicCamera
 from primal.engine.sprite import Player, ColorSprite
 from primal.engine.world import World
 from primal.engine import keys
+from primal.screens.death_screen import DeathScreen
 
 from primal.gui.health import HealthBar
 from primal.gui.inventory import Inventory
@@ -53,6 +54,9 @@ class GameScreen(Screen):
         self.timerValue = 0
 
     def update(self, delta: float):
+        if self.disable:
+            return
+
         # Maybe move it to player update?
         pos_x, pos_y = self.player.get_position()
         dx, dy = 0, 0
@@ -124,6 +128,9 @@ class GameScreen(Screen):
         self.camera.set_zoom(self.zoom)
         self.camera.set_position(*self.player.get_center())  # Updates the position
         self.camera.update()
+
+        if self.health_bar.get_health() <= 0:
+            self.engine.set_overlay(DeathScreen())
 
     def process_player_nearby(self, px, py, delta):
         chunk = self.world.get_chunk_from_coords((px, py))
