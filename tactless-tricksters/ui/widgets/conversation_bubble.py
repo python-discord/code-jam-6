@@ -51,7 +51,7 @@ class ConversationBubble(ButtonBehavior, MDCard):
         if self.size_hint_y is None:
             for c in self.children:
                 temp_height += c.height
-            self.height = temp_height + 10  # Add a buffer to the bottom to prevent text clipping.
+            self.height = temp_height + 10
         if self.size_hint_x is None:
             self.width = max(c.width for c in self.children) if self.children else 0
 
@@ -96,14 +96,16 @@ class ConversationBubble(ButtonBehavior, MDCard):
                 self.sound_list.append('short_pause')
 
         if len(self.sound_list) > self.cur_sound_index:
-            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(
+                self.sound_list[self.cur_sound_index])
             self.cur_sound.bind(on_stop=self.play_next_sound)
             self.cur_sound.play()
 
     def play_next_sound(self, dt):
         self.cur_sound_index += 1
         if len(self.sound_list) > self.cur_sound_index:
-            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(
+                self.sound_list[self.cur_sound_index])
             self.cur_sound.bind(on_stop=self.play_next_sound)
             self.cur_sound.play()
 
@@ -113,4 +115,3 @@ class ConversationBubble(ButtonBehavior, MDCard):
         self.cur_sound_index = 0
         self.sound_list = []
         self.cur_sound = None
-  
