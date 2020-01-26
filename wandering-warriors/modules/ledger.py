@@ -1,93 +1,142 @@
 from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.uix.image import Image
 from kivy.uix.label import Label
+import math
+
+A = 0
 
 
 class LedgerLayout(FloatLayout):
-    child_widgets: list
+    left_digit: bool
+    middle_op: bool
+    right_digit: bool
+    side: str
+    stored_right_digit: Widget
+    stored_left_digit: Widget
 
     def __init__(self, *args, **kwargs):
         super(LedgerLayout, self).__init__()
         Window.bind(on_key_down=self._keydown)
-        self.l_pos = ''
-        self.m_pos = ''
-        self.r_pos = ''
+        self.left_digit = False
+        self.middle_op = False
+        self.right_digit = False
+        self.stored_right_digit = None
+        self.stored_left_digit = None
+        self.side = 'left'
 
-    def left(self, widget):
-        widget.x = super().x
+    def toggle_side(self):
+        if self.side == 'left':
+            self.side = 'right'
+        else:
+            self.side = 'left'
+            self.next_line()
 
-    def right(self, widget):
-        widget.x = super().x + super().size[0] - 1.5 * widget.size[0]
+    def left(self, widget: Widget):
+        widget.x = self.x
 
-    def mid(self, widget):
-        widget.x = super().x + super().size[0] / 2 - .6 * widget.size[0]
+    def right(self, widget: Widget):
+        widget.x = self.x + self.size[0] - 1.5 * widget.size[0]
 
-    def top(self, widget):
-        widget.y = super().y + super().size[1]-widget.size[1]
+    def mid(self, widget: Widget):
+        widget.x = self.x + self.size[0] / 2 - .6 * widget.size[0]
 
-    def add_operator(self, widget):
-        self.left(widget)
-        self.top(widget)
-        super().add_widget(widget)
+    def top(self, widget: Widget):
+        widget.y = self.y + self.size[1] - widget.size[1]
 
-    def add_middle(self, w):
-        if self.m_pos == '':
-            w.size_hint = (.3, .3)
-            self.mid(w)
-            self.top(w)
-            self.m_pos = w
-            super().add_widget(w)
+    def add_operation(self, label: Label):
+        if not self.middle_op:
+            label.size_hint = (.3, .3)
+            self.mid(label)
+            self.top(label)
+            self.mid_op = True
+            self.add_widget(label)
 
-    def add_left_digit(self, w):
-        if self.l_pos == '':
-            w.allow_stretch = True
-            w.size_hint = (.3, .3)
-            self.left(w)
-            self.top(w)
-            self.l_pos = w
-            super().add_widget(w)
-            return True
-        return False
+    def add_next_digit(self, digit: BoxLayout):
+        digit.allow_stretch = True
+        digit.size_hint = (.3, .3)
 
-    def add_right_digit(self, w): 
-        if self.r_pos == '':
-            w.allow_stretch = True 
-            w.size_hint = (.3, .3)
-            self.right(w)
-            self.top(w)
-            self.r_pos = w
-            super().add_widget(w)
-            return True
-        return False
+        if not self.left_digit:
+            self.left(digit)
+            self.top(digit)
+            self.left_digit = True
+            self.add_widget(digit)
+        elif not self.right_digit:
+            self.right(digit)
+            self.top(digit)
+            self.right_digit = True
+            self.add_widget(digit)
+        else:
+            return False
+
+        return True
 
     def next_line(self):
-        for child in super(LedgerLayout, self).children:
-            child.y -= child.size[1] - .2 * child.size[1]
+        for child in self.children:
+            child.y -= 0.8 * child.height
 
-    def _keydown(self, *args):
-        if(args[1] >= 257 and args[1] <= 265):
-            if not self.add_left_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png')):
-                self.add_right_digit(Image(source=f'assets/graphics/cuneiform/c{args[1] - 256}.png'))
-        if(args[1] == 267):
-            l = Label(text="[color=000000]/[/color]", markup=True)
-            l.font_size = '58dp'
-            self.add_middle(l)
-        if(args[1] == 268):
-            l = Label(text="[color=000000]*[/color]", markup=True)
-            l.font_size = '58dp'
-            self.add_middle(l)
-        if(args[1] == 269):
-            l = Label(text="[color=000000]-[/color]", markup=True)
-            l.font_size = '58dp'
-            self.add_middle(l)
-        if(args[1] == 270):
-            l = Label(text="[color=000000]+[/color]", markup=True)
-            l.font_size = '58dp'
-            self.add_middle(l)
-        if(args[1] == 271):
-            self.l_pos = ''
-            self.m_pos = ''
-            self.r_pos = ''
-            self.next_line()
+    def add_cuneiform(self, b10_number: int):
+        # turn into an [b10, b10, b10], each at max 60
+        if b10_number == 0:
+            if self.side == 'left':
+                self.left_digit = False
+            else:
+                self.right_digit = False
+
+            self.add_next_digit(BoxLayout())
+            return
+
+        upper_limit = int(math.log(b10_number, 60)) + 1
+        b60_number = []
+
+        for i in range(upper_limit - 1, -1, -1):
+            b60_number.append(b10_number // 60 ** i)
+            b10_number %= 60 ** i
+
+        layout = BoxLayout()
+
+        for i in b60_number:
+            ones = i % 10
+            tens = (i // 10) * 10
+            layout.add_widget(
+                Image(source=f'assets/graphics/cuneiform/c{tens}.png')
+            )
+
+            layout.add_widget(
+                Image(source=f'assets/graphics/cuneiform/c{ones}.png')
+            )
+
+        if self.side == 'left':
+            self.left_digit = False
+            if self.stored_left_digit:
+                self.stored_left_digit.clear_widgets()
+            self.stored_left_digit = layout
+        else:
+            self.right_digit = False
+            if self.stored_right_digit:
+                self.stored_right_digit.clear_widgets()
+            self.stored_right_digit = layout
+
+        self.add_next_digit(layout)
+
+    def _keydown(self, _, keycode: int, __, key: str, *_args):
+        global A
+
+        if 48 <= keycode <= 57:
+            A += keycode - 48
+            self.add_cuneiform(A)
+
+        # a numpad has to be used to not have to consider shift.
+        elif key in ['/', '*', '-', '+']:
+            self.add_operation(
+                label=Label(
+                    text=f'[color=000000]{key}[/color]',
+                    markup=True,
+                    font_size='58dp'
+                )
+            )
+
+        elif keycode in [13, 271]:
+            self.toggle_side()
