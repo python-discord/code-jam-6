@@ -4,8 +4,9 @@ from random import randint
 
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
-                                 WINDOW_HEIGHT, LANE_BOUNDS)
-from TLOA.views import (ShipView, PauseMenuView)
+                                 WINDOW_HEIGHT, LANE_BOUNDS, NUMBER_OF_LANES)
+from TLOA.entities import BrownShip
+from TLOA.views import ShipView, PauseMenuView
 
 from kivy import Logger
 from kivy.app import App
@@ -152,31 +153,31 @@ class GameView(Widget):
         health = math.ceil(health / 10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
 
-    def on_add_ship(self, _game: Game, ship: ShipView):
+    def on_add_ship(self, _game: Game, ship: BrownShip):
         ship.shape = ShipView(
             ship,
             source=ATLAS_PATH.format(ship.id),
             pos=(WINDOW_WIDTH, LANE_BOUNDS[ship.lane_id][1])
         )
-        self.redraw_ships()
+        self.add_widget(ship.shape)
+        self.redraw_ships(redraw_from=ship.lane_id)
 
     def on_remove_ship(self, game: Game, ship: ShipView):
         ship.shape.clear_widgets()
         self.remove_widget(ship.shape)
         game.score += 1
 
-    def redraw_ships(self):
-        for lane in self._game.ship_lanes:
+    def redraw_ships(self, redraw_from=NUMBER_OF_LANES):
+        for lane in self._game.ship_lanes[:redraw_from]:
             for ship in lane:
                 self.remove_widget(ship.shape)
 
-        for lane_number, lane in reversed(list(enumerate(self._game.ship_lanes))):
+        for lane in self._game.ship_lanes[:redraw_from]:
             for ship in lane:
                 self.add_widget(ship.shape)
 
-            if lane_number == self._game.mirror.state:
-                self.canvas.add(self._game.death_rays.color)
-                self.canvas.add(self._game.death_rays)
+        self.canvas.add(self._game.death_rays.color)
+        self.canvas.add(self._game.death_rays)
 
     @staticmethod
     def _sin_transition(progress: float):

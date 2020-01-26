@@ -129,7 +129,7 @@ class Game(EventDispatcher):
             self.dispatch('on_add_ship', ship)
             Logger.info("Ship Spawned at lane %d", lane)
 
-    def on_health_change(self, game, health):
+    def on_health_change(self, _game: 'Game', health: float):
         if health <= 0:
             self._island_destroyed.play()
 

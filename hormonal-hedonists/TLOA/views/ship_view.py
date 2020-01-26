@@ -37,13 +37,11 @@ class ShipView(Widget):
     def on_health_change(self, _ship: BrownShip, value: float):
         health = math.ceil(value / 10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
-        # burn the ship if health < 50
-        if health <= 80:
+        # burn the ship if health <= 60
+        if health <= 60:
             self._fire.opacity = 100
-        # destroy it if health is 0
 
     def on_pos_changed(self, _ship_view, pos):
         x, y = self._ship_image.pos = pos
         self._hp_bar.pos = (x + HP_BAR_X_OFFSET, y + HP_BAR_Y_OFFSET)
         self._fire.pos = (x + FIRE_X_OFFSET, y + FIRE_Y_OFFSET)
-        # TODO for burning effect
