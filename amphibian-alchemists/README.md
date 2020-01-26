@@ -1,12 +1,13 @@
-# Enigma Communication
+# Elusive Enigmas
 By: Amphibian Alchemists
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Used by the Germans to send covert messages, the WWII Enigma Machine is the most famous encryption device of the 20th Century. As the role of a code receiver for the Germans, you must decipher the message given to you before the Allies capture you!
+Used by the Germans to send covert messages, the WWII Enigma Machine is the most famous encryption device of the 20th Century. As the role of a code receiver for the Germans, you must decipher the message given to you by the commander before the Allies capture you!
 
 Table of Contents:
 - Setup
+- Background
 - Short Tutorial: Gist of the game
 - Full-Length Tutorial
 - Settings
@@ -23,14 +24,23 @@ Table of Contents:
 The current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
 
 ---
+### Background
+To gain the full experience, it's best to understand how the machine works. 
+- https://en.wikipedia.org/wiki/Enigma_machine
+- [In-depth YouTube guide and technical details](https://www.youtube.com/watch?v=GcI-YlFSGYo)
+
+A diagram of the machine's internal functionality:
+![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
+
+---
 ### Short Tutorial: Gist of the game
-Start a new game. You are given paper with instructions. Configure the rotors parallel with that of the paper. Configure the plug PAIRS (each pair of plugs is connected by one wire).
+Start a new game. You are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper (each pair of plugs is connected by one wire).
 
-Once you have those configured, type whatever the ciphered text is. Autoinput is enabled.
+Once you have those configured, type whatever the ciphertext is. If Autoinput is enabled, your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
 
-Beware though, you only have a certain amount of time to decipher the message before the allies capture you!
+Beware though, you only have a certain amount of time to decipher the message before the Allies capture you!
 
-Note: If you have autoinput off and mistype once, move the rotor that just rotated backwards and continue typing from where you messed up. Remember, Germans didn't have a backspace on a piece of paper like us with computers.
+Note: If you have Autoinput off and mistype once, move the rotor that just rotated backwards and continue typing from where you messed up (Remember, The Germans didn't have a backspace key).
 
 ---
 ### Full-Length Tutorial
@@ -58,16 +68,6 @@ The output characters when you type will be shown and automatically configured i
 - Autoinput the next, correct ciphertext letter: On
 - Musics: On
 - Sound effects: On 
-
----
-### Guides
-
-You can learn more about the enigma machine here:
-- https://en.wikipedia.org/wiki/Enigma_machine
-- [In-depth YouTube guide and technical details](https://www.youtube.com/watch?v=GcI-YlFSGYo)
-
-A diagram of the machine's internal functionality:
-![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
 
 ---
 ### LICENSE
