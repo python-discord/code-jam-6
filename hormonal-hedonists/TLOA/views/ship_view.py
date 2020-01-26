@@ -1,6 +1,6 @@
 import math
 
-from TLOA.core.constants import ATLAS_PATH, IMAGES_PATH, LIGHT_FOCUS_OFFSET
+from TLOA.core.constants import ATLAS_PATH, IMAGES_PATH
 from TLOA.entities import BrownShip
 
 from kivy.uix.image import Image
@@ -38,7 +38,7 @@ class ShipView(Widget):
         health = math.ceil(value / 10) * 10
         self._hp_bar.source = ATLAS_PATH.format(health)
         # burn the ship if health < 50
-        if health <=80:
+        if health <= 80:
             self._fire.opacity = 100
         # destroy it if health is 0
 

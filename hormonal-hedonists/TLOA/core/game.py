@@ -62,9 +62,9 @@ class Game(EventDispatcher):
     def step(self, dt):
         if not self.running:
             return False
-
-        elif self.pause_game == True:
+        elif self.pause_game:
             return
+
         # step ships and remove any dead ones
         for lane in self.ship_lanes:
             for ship in lane[:]:
@@ -116,7 +116,7 @@ class Game(EventDispatcher):
     def spawn_ship(self, override=False):
         if not self.running:
             return False
-        elif self.pause_game == True:
+        elif self.pause_game:
             return
 
         if override or random.random() < SHIP_SPAWN_CHANCE:
@@ -139,8 +139,9 @@ class Game(EventDispatcher):
         self._ship_destroyed.play()
 
     def process_action(self, action: Actions):
-        if self.pause_game == True:
+        if self.pause_game:
             return
+
         if action in (Actions.MOVE_LEFT, Actions.MOVE_UP):
             old_val = self.mirror.state
             self.mirror.state += 1

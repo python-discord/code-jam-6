@@ -8,14 +8,13 @@ from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WI
 from TLOA.views import (ShipView, PauseMenuView)
 
 from kivy import Logger
+from kivy.app import App
 from kivy.animation import Animation
 from kivy.core.window import Window
 from kivy.clock import Clock
-from kivy.core.window import Window
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.uix.widget import Widget
-from kivy.vector import Vector
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 
@@ -40,7 +39,6 @@ class GameView(Widget):
         self.pause_menu_content.button_main_menu.bind(on_release=self.show_main_menu)
         self.pause_menu_content.button_exit.bind(on_release=self.exit_game)
 
-
         self._background = Image(
             source=IMAGES_PATH.format('background.zip'),
             anim_delay=1
@@ -54,26 +52,30 @@ class GameView(Widget):
 
         self.pause_menu_opened = False
 
-        self.pause_menu = Popup(title='Pirate ships are on hold...',
-                                title_size='20sp',
-                                title_align='center',
-                                title_color=(1, 0.1, 0.1, 1),
-                                title_font=FONT_PATH.format('Pacifico-Regular.ttf'),
-                                content=self.pause_menu_content,
-                                separator_color=(0, 0, 0, 0),
-                                separator_height=0,
-                                size_hint=(None, None),
-                                size=(300, 250),
-                                auto_dismiss=False,
-                                background=IMAGES_PATH.format('yellow_panel.png'))
+        self.pause_menu = Popup(
+            title='Pirate ships are on hold...',
+            title_size='20sp',
+            title_align='center',
+            title_color=(1, 0.1, 0.1, 1),
+            title_font=FONT_PATH.format('Pacifico-Regular.ttf'),
+            content=self.pause_menu_content,
+            separator_color=(0, 0, 0, 0),
+            separator_height=0,
+            size_hint=(None, None),
+            size=(300, 250),
+            auto_dismiss=False,
+            background=IMAGES_PATH.format('yellow_panel.png')
+        )
 
-        self.pause_btn = Button(background_normal=IMAGES_PATH.format('ui_pause.png'),
-                                background_down=IMAGES_PATH.format('ui_pause_click.png'),
-                                border=(0, 0, 0, 0),
-                                pos=((WINDOW_WIDTH / 3) + 85, WINDOW_HEIGHT - 65),
-                                width=35,
-                                height=35,
-                                on_release=self.open_pause_menu)
+        self.pause_btn = Button(
+            background_normal=IMAGES_PATH.format('ui_pause.png'),
+            background_down=IMAGES_PATH.format('ui_pause_click.png'),
+            border=(0, 0, 0, 0),
+            pos=((WINDOW_WIDTH / 3) + 85, WINDOW_HEIGHT - 65),
+            width=35,
+            height=35,
+            on_release=self.open_pause_menu
+        )
 
     def show_main_menu(self, *args):
         self.pause_menu.dismiss()
@@ -84,9 +86,9 @@ class GameView(Widget):
         self.__init__(self._game)
         self._game.start()
 
-
-    def exit_game(self, *args):
-        quit()
+    @staticmethod
+    def exit_game(*args):
+        App.get_running_app().stop()
 
     def open_pause_menu(self, *args):
         self.pause_menu.open()
@@ -145,7 +147,6 @@ class GameView(Widget):
         # Add the Score display
         self.add_widget(self._score)
         self.add_widget(self.pause_btn)
-
 
     def on_island_health_change(self, _game: Game, health: int):
         health = math.ceil(health / 10) * 10
