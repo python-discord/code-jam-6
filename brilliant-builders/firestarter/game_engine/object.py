@@ -1,4 +1,3 @@
-import random
 from typing import List, Tuple, Union
 
 from firestarter.game_engine.engine import Engine
@@ -152,7 +151,7 @@ class FlameBuddy(Sprite):
 
     def on_player_pos(self, new_pos: Tuple[float, float]) -> None:
         distance_to_player = ((self.pos[0] - new_pos[0]),
-                              (self.pos[1] - new_pos[1]-55))
+                              (self.pos[1] - new_pos[1] - 55))
 
         x_offset = -1 * distance_to_player[0] / 15
 

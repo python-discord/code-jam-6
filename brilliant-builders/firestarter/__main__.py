@@ -2,11 +2,11 @@ from typing import Any
 
 from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.object import (
+    FlameBuddy,
     GenericObject,
     PickUpCoin,
     Player,
     PlayerUiHeart,
-    FlameBuddy
 )
 
 from kivy.app import App
@@ -28,7 +28,8 @@ class MyGame(Engine):
 
         # Player
         self.player = Player(self.assets['player'], (50, 90))
-        self.player.bind(lives=self.update_hearts, pos=lambda _, v: self.flameBuddy.on_player_pos(v))
+        self.player.bind(lives=self.update_hearts,
+                         pos=lambda _, v: self.flameBuddy.on_player_pos(v))
         self.add_player(self.player)
 
         # Platforms, Items, etc.
