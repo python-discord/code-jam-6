@@ -536,6 +536,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
 class ChiselApp(App):
     def build(self):
+        Window.minimum_width, Window.minimum_height = Window.size
         root = FloatLayout()
         navdrawer = NavigationDrawer()
         navdrawer.toggle_state()
