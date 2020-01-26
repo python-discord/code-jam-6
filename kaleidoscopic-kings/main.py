@@ -6,12 +6,11 @@ from backend import path_handler
 from frontend.frontend import MainWidget
 from frontend.swipe import Rotater  # noqa: F401
 from dataclasses import dataclass
-
 from kivy.app import App
 from kivy.config import Config
 from kivy.event import EventDispatcher
 from kivy.lang import global_idmap
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 
 
 class MainState:
@@ -35,9 +34,13 @@ class DataController(EventDispatcher):
     active_card: Card = ObjectProperty(rebind=True)
     game_state = ObjectProperty(rebind=True)
     game: Game = ObjectProperty()
+    story_name: StringProperty()
 
     def choice_handler(self, choice):
         """Used to update state for the app when the user makes a choice"""
+        if self.active_card.card_type == "game_over":
+            self.game = game = load_game(self.story_name)
+            self.active_card = game.start_game()
         if choice == "1" or len(self.active_card.options) == 1:
             outcome = self.active_card.options[0].get_outcome()
         else:
@@ -63,7 +66,6 @@ class CardGameApp(App):
         Config.set("graphics", "height", "1000")
 
         story_name = "caveman"
-
         global_idmap["data"] = ctl = DataController()
         # Kivy really does not like path lib or joinpath or anything with path unless
         # it's a hardcoded string
@@ -75,6 +77,7 @@ class CardGameApp(App):
         global_idmap[
             "sound_assets"
         ] = f"{path_handler.get_game_sounds_path(story_name)}\\"
+        ctl.story_name = story_name
         ctl.game = game = load_game(story_name)
         ctl.active_card = game.start_game()
         ctl.set_game_state()

@@ -375,11 +375,11 @@
       }
     ]
   },
-    {
+  {
     "card_id": "cat",
     "card_type": "event",
     "card_image": "dodo.png",
-      "card_sound": "meow.wav",
+    "card_sound": "meow.wav",
     "text": "There's a cat",
     "options": [
       {
@@ -403,6 +403,23 @@
             "effects": {
               "player_civility": -0.67
             }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "tribe_discovery_intentional",
+    "card_type": "game_over",
+    "card_image": "test.jpg",
+    "text": "Well. It seems you're dead.",
+    "options": [
+      {
+        "text": "Uh oh. Better give this another shot",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random"
           }
         ]
       }
