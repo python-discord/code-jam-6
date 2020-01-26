@@ -5,8 +5,8 @@ from random import randint
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
                                  WINDOW_HEIGHT, LANE_BOUNDS, LIGHT_COLOR_MAX_RED,
-                                LIGHT_COLOR_MAX_GREEN, LIGHT_COLOR_MAX_BLUE,
-                                LIGHT_COLOR_MAX_ALPHA)
+                                 LIGHT_COLOR_MAX_GREEN, LIGHT_COLOR_MAX_BLUE)
+
 from TLOA.entities import BrownShip
 from TLOA.views import ShipView, PauseMenuView
 
@@ -182,6 +182,10 @@ class GameView(Widget):
         game.score += 1
         if self.store.get('hi-score')['score'] < game.score:
             self.store.put('hi-score', score=game.score)
+            self.pause_menu_content.hi_score.text = "[color=ffffff]High Score: [/color]" \
+                                                    "[color=724800]" + \
+                                                    str(self.store.get('hi-score')['score']) + \
+                                                    "[/color]"
 
     def redraw_ships(self, redraw_to=0):
         for lane in self._game.ship_lanes[:redraw_to]:
@@ -191,9 +195,6 @@ class GameView(Widget):
         for lane in self._game.ship_lanes[:redraw_to][::-1]:
             for ship in lane:
                 self.add_widget(ship.shape)
-
-        #self.canvas.add(self._game.death_rays.color)
-        #self.canvas.add(self._game.death_rays)
 
     @staticmethod
     def _sin_transition(progress: float):
