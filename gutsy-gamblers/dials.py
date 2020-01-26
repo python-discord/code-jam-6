@@ -157,14 +157,12 @@ class DialWidget(FloatLayout):
 
         try:
             today_sunrise = sun_time.get_sunrise_time(self.date)
-        except SunTimeException as e:
-            print(e)
+        except SunTimeException:
             raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
 
         try:
             today_sunset = sun_time.get_sunset_time(self.date)
-        except SunTimeException as e:
-            print(e)
+        except SunTimeException:
             raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
