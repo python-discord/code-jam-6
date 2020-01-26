@@ -97,7 +97,7 @@ class TextPaper(Image):
         # Creating Blank Paper image to type on.
         # self.img = Im.open("paper.png")
         # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
-        self.colour = 255, 255, 255, 255
+        self.colour = 10, 10, 10, 255
         self.txt = Im.new('RGBA', (int(SCREEN_WIDTH * .75), PAPER_HEIGHT), (200, 200, 200, 255))
         self.default_pos = PAPER_WIDTH//2,  -(SCREEN_HEIGHT + PAPER_HEIGHT - STARTING_Y) // 8
         # Type writer does not type from the top rather type from the bottom.
