@@ -273,5 +273,22 @@
         ]
       }
     ]
+  },
+  {
+    "card_id": "game_over",
+    "card_type": "game_over",
+    "card_image": "test.jpg",
+    "text": "You have lost!",
+    "options": [
+      {
+        "text": "Unfortunate",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random"
+          }
+        ]
+      }
+    ]
   }
 ]
