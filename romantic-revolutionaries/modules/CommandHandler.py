@@ -30,14 +30,11 @@ class Help(Command):
 
 
 class Move(Command):
-    def __init__(self, nav_control, map_control, view_control):
+    def __init__(self, nav_control):
         super().__init__(method=nav_control.go, hotkeys=['go', 'move', 'head', 'walk', 'run',
                                                          'north', 'east', 'south', 'west',
                                                          'n', 'e', 's', 'w'])
         self.nav_control = nav_control
-        self.map_control = map_control
-        self.view_control = view_control
-        # self.map_control.subscribe(self.map_callback)
         self.directions = {
             'north': Directions.NORTH,
             'east': Directions.EAST,
@@ -66,32 +63,35 @@ class Move(Command):
         self.method(direction, distance)
         return True
 
-    def map_callback(self, current_location, room, visible_block, did_bonk):
-        if did_bonk:
-            self.app.add_text("You walk directly into a wall and bonk your head.")
-            return
+class Look(Command):
+    def __init__(self, view_control):
+        super().__init__(method=view_control.look, hotkeys=['look',
+                                                         'north', 'east', 'south', 'west',
+                                                         'n', 'e', 's', 'w'])
+        self.view_control = view_control
+        self.directions = {
+            'north': Directions.NORTH,
+            'east': Directions.EAST,
+            'south': Directions.SOUTH,
+            'west': Directions.WEST,
+            'n': Directions.NORTH,
+            'e': Directions.EAST,
+            's': Directions.SOUTH,
+            'w': Directions.WEST
+        }
 
-        if room is not None:
-            self.app.add_text(room.intro_text())
+    def parse(self, words):
+        direction
+        match = re.match(rf'({"|".join(self.hotkeys)})?( )?([a-zA-Z]+)?( )?(\d+)?', ' '.join(words))
 
-        next_path_text = "There are paths leading[color=FFFF00]"
-        if visible_block[0][1] != 0:
-            next_path_text += ' north,'
-        if visible_block[1][0] != 0:
-            next_path_text += ' west,'
-        if visible_block[1][2] != 0:
-            next_path_text += ' east,'
-        if visible_block[2][1] != 0:
-            next_path_text += ' south,'
+        if match:
+            if match.group(1) in list(self.directions.keys()):
+                direction = self.directions[match.group(1)]
+            elif match.group(3) in list(self.directions.keys()):
+                direction = self.directions[match.group(3)]
 
-        next_path_text = next_path_text[:-1]
-
-        next_path_text += '[/color].'
-        self.app.add_text(next_path_text)
-
-        # for _ in visible_block:
-        #     print(_)
-        # print()
+        self.method(direction)
+        return True
 
 
 class CommandHandler:
@@ -99,11 +99,11 @@ class CommandHandler:
         self.callbacks = set()
         self.app = app
         self.nav_control = kwargs['nav_control']
-        self.map_control = kwargs['map_control']
         self.view_control = kwargs['view_control']
 
         self.commands = [Help(),
-                         Move(self.nav_control, self.map_control, self.view_control)]
+                         Move(self.nav_control),
+                         Look(self.view_control)]
 
     def parse_command(self, text):
         if type(text) is not str:

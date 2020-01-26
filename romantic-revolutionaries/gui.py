@@ -102,15 +102,27 @@ class NavContainer(RelativeLayout):
 
 class LookContainer(NavContainer):
     def on_kv_post(self, base_widget):
-        self.buttons = {  # change with LookControl
-            navcont.Directions.NORTH: self.canvas.get_group('n'),
-            navcont.Directions.EAST: self.canvas.get_group('e'),
-            navcont.Directions.SOUTH: self.canvas.get_group('s'),
-            navcont.Directions.WEST: self.canvas.get_group('w')
+        self.buttons = {
+            'north': self.canvas.get_group('n'),
+            'east': self.canvas.get_group('e'),
+            'south': self.canvas.get_group('s'),
+            'west': self.canvas.get_group('w')
         }
+        # self.buttons = {  # change with LookControl
+        #     navcont.Directions.NORTH: self.canvas.get_group('n'),
+        #     navcont.Directions.EAST: self.canvas.get_group('e'),
+        #     navcont.Directions.SOUTH: self.canvas.get_group('s'),
+        #     navcont.Directions.WEST: self.canvas.get_group('w')
+        # }
 
     def on_touch_down(self, touch):
-        pass
+        for k, v in self.buttons.items():
+            points = v[0].points
+            x, y = self.to_local(touch.pos[0], touch.pos[1])
+            if self.point_inside_polygon(x, y, points):
+                self.app.fake_command(k)
+
+        return super(NavContainer, self).on_touch_down(touch)
 
 
 class TextDisplayContainer(ScrollView):
