@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-01-24 04:36+0800\n"
+"POT-Creation-Date: 2020-01-26 20:32+0800\n"
 "PO-Revision-Date: 2020-01-24 04:38+0800\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: zh_Hans_CN\n"
@@ -18,15 +18,99 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: main.py:109
+#: main.py:122
+msgid "Cancel"
+msgstr "取消"
+
+#: main.py:131
+msgid "An error has occured."
+msgstr "发生错误。"
+
+#: main.py:137
+msgid "Loading..."
+msgstr "加载中..."
+
+#: main.py:169 main.py:197
+msgid "Please select a file."
+msgstr "请选择文件。"
+
+#: main.py:189
+msgid "Import from {path}"
+msgstr "从 {path} 导入"
+
+#: main.py:194
+msgid "Open \"{filename}\""
+msgstr "打开“{filename}”"
+
+#: main.py:205
+msgid "Importing the project."
+msgstr "正在导入计划。"
+
+#: main.py:212
+msgid "The file could not be loaded."
+msgstr "无法加载文件。"
+
+#: main.py:227
+msgid "(with background)"
+msgstr "（包括背景）"
+
+#: main.py:228
+msgid "(transparent)"
+msgstr "（透明）"
+
+#: main.py:230
+msgid "All"
+msgstr "全部"
+
+#: main.py:246 main.py:329
+msgid "Select file type"
+msgstr "选择文件种类"
+
+#: main.py:250
+msgid "Please select a file type."
+msgstr "请选择文件种类。"
+
+#: main.py:289
+msgid "Save to {path}"
+msgstr "在 {path} 保存"
+
+#: main.py:317
+msgid "Save as \"{filename}\""
+msgstr "保存为“{filename}”"
+
+#: main.py:323
+msgid ""
+"The file could not be saved due to an error raised by the operating "
+"system.\n"
+"Common issue: Illegal characters in the file name."
+msgstr "由于操作系统所引起的错误，无法保存文件。\n"
+"常见问题：文件名含有非法符号。"
+
+#: main.py:402
 msgid "Options"
 msgstr "设定"
 
-#: main.py:126
+#: main.py:410 main.py:481
 msgid "Select language"
 msgstr "选择语言"
 
-#: main.py:132
+#: main.py:417
+msgid "Import..."
+msgstr "导入..."
+
+#: main.py:424
+msgid "Save as..."
+msgstr "保存为..."
+
+#: main.py:431
 msgid "Reset"
 msgstr "重置"
+
+#: main.py:438
+msgid "Source code"
+msgstr "源代码"
+
+#: main.py:487
+msgid "Resetting the canvas."
+msgstr "正在重置画布。"
 
