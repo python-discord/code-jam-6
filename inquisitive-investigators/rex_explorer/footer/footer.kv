@@ -1,5 +1,4 @@
 #:kivy 1.11.1
-#:import FONT rex_explorer.utils.paths.FONT
 #:import BUTTON rex_explorer.utils.paths.BUTTON
 
 <Footer>:
@@ -444,13 +443,13 @@
     seperator_color: 0.34,1,1
     title_color: 0.34,1,1,1
     title_align: 'center'
-    title_font: FONT
+    title_font: './rex_explorer/static/retro_font.ttf'
     title_size: 14
     background_color: 0,0,0,0
     background: BUTTON
 
 <TextInput>:
-    font_name: FONT
+    font_name: './rex_explorer/static/retro_font.ttf'
     font_size: 14
     multiline: False
     background_color: 0,0,.65,1
