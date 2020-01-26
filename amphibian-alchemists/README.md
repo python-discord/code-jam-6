@@ -10,7 +10,7 @@ Table of Contents:
 - Background
 - Short Tutorial: Gist of the game
 - Full-Length Tutorial
-- Settings
+- Settings (Defaults)
 - Guides
 
 ---
@@ -36,7 +36,7 @@ A diagram of the machine's internal functionality:
 ### Short Tutorial: Gist of the game
 Start a new game. You are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper (each pair of plugs is connected by one wire).
 
-Once you have those configured, type whatever the ciphertext is. If Autoinput is enabled, your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
+Once you have those configured, type whatever the ciphertext is. If Autoinput is enabled (default enabled), your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
 
 Beware though, you only have a certain amount of time to decipher the message before the Allies capture you!
 
@@ -64,13 +64,14 @@ Once you have finished configuring both the plugboard and rotors, go to the main
 The output characters when you type will be shown and automatically configured in another piece of paper. You can restart the game if you misconfigured the machine. __Remember, only start typing when you have finished configurations!__
 
 ---
-### Settings
+### Settings (Defaults)
+- Fullscreen: Off
 - Autoinput the next, correct ciphertext letter: On
 - Musics: On
 - Sound effects: On 
 
 ---
 ### LICENSE
-Apache 2.0 License
+MIT License
 
 Authors: [Pancho](https://github.com/Franccisco), [YoomamaFTW](https://github.com/YoomamaFTW), [sloopoo](https://github.com/flextian)
