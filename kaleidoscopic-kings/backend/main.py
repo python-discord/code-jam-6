@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 class Deck:
     """ The deck of cards from which the user draws """
     EVENT_CARD_TIMEOUT = 20
-    EVENT, RESPONSE, START = Card.CARD_TYPES
+    EVENT, RESPONSE, START, END_GAME = Card.CARD_TYPES
 
     def __init__(self, all_cards: List[Card]):
         """
@@ -21,6 +21,7 @@ class Deck:
         self._event_cards = set()
         self._response_cards = {}
         self._start_card = []
+        self._game_over_card = []
         self._build_deck(all_cards)
         self._next_card_id = "random"
         # Dictionary where keys are Card objects and values are ints representing current timeout
@@ -34,6 +35,8 @@ class Deck:
                 self._response_cards[card.card_id] = card
             elif card.card_type == self.START:
                 self._start_card.append(card)
+            elif card.card_type == self.END_GAME:
+                self._game_over_card.append(card)
 
         self._check_valid_deck()
 
@@ -42,6 +45,8 @@ class Deck:
             raise Exception("No event cards found!")
         elif len(self._start_card) != 1:
             raise Exception("There needs to be exactly 1 start card.")
+        elif len(self._game_over_card) != 1:
+            raise Exception("There needs to be exactly 1 game over card.")
 
     def get_card(self, game_state: GameState) -> Card:
         """
@@ -80,6 +85,9 @@ class Deck:
 
     def get_start_card(self) -> Card:
         return self._start_card[0]
+
+    def get_game_over_card(self) -> Card:
+        return self._game_over_card[0]
 
     def set_next_response_card(self, card_id: str):
         self._next_card_id = card_id
@@ -144,6 +152,9 @@ class Game:
     def _draw_card(self, *, start_game=False) -> Card:
         if start_game:
             card = self._deck.get_start_card()
+        elif self.game_state.is_game_over():
+            logger.info(f"Game over!")
+            card = self._deck.get_game_over_card()
         else:
             card = self._deck.get_card(self._game_state)
             self._game_state.increase_turn()

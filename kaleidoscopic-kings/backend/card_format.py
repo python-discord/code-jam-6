@@ -25,7 +25,6 @@ class GameVariable:
     The limits for int and float are defined by constants class attributes.
     For example if the _INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of
     type int, when updated, will never go over 1000 or below 0.
-    :raise TypeError, ValueError:
     """
     INTEGER_RANGE_INCLUDING: ClassVar[Tuple[int, int]] = (0, 1000)
     FLOAT_RANGE_INCLUDING: ClassVar[Tuple[float, float]] = (0.0, 1.0)
@@ -84,6 +83,9 @@ class MainState(GameVariable):
         Get's the format that is used for saving main state to json.
         """
         return {self.state_name_key: {self.value, self.label, self.icon_asset}}
+
+    def is_low(self):
+        return self.value == 0
 
     def __repr__(self):
         return str(self.value)
@@ -207,6 +209,9 @@ class GameState:
     def increase_turn(self):
         self._game_turn += 1
 
+    def is_game_over(self) -> bool:
+        return any(self._game_states[main_state].is_low() for main_state in self._main_states_names)
+
     def update_state(self, effects: List[GameVariable]):
         """
         :param effects: List of GameVariable or None representing changes that modify current game
@@ -267,23 +272,24 @@ class Card:
     """Represents a card to be presented to the user.
 
     card_id:    Unique card name.
-    card_type:  Either "event" , "response" or "start".
+    card_type:  Either "event" , "response", "start" or "end_game".
                 Response cards only exist to follow up on event cards.
                 There can only be one start card, only difference between event and start card is
                 that start card is always drawn first - so you can chain additional response cards
-                to it.
+                to it. There can also be only one end_game, this will be always drawn if any
+                of the basic states == 0
     card_image: Image filename including extension.
-    text:       Card text.
+    text:
     options:    Passed as dictionary which was loaded directly from json,
                 then it is converted and saved as list of Option objects.
-                There can be 0, 1 or 2 options.
-    conditions: [optional] Passed as dictionary loaded directly from json example
+    conditions: Passed as dictionary loaded directly from json example
                 {"player_health": 0.5} and this card would only be  valid if player health is more
                 or equal than 50%
                 After init we convert it to list of GameVariable objects.
-    card_sound: [optional] Sound file filename including extension.
+
+    card_sound: Sound file filename including extension.
     """
-    CARD_TYPES: ClassVar[Tuple[str, str]] = ("event", "response", "start")
+    CARD_TYPES: ClassVar[Tuple[str, str]] = ("event", "response", "start", "game_over")
 
     card_id: str
     card_type: str
