@@ -1,5 +1,7 @@
 #:kivy 1.11.1
 #:import utils kivy.utils
+BoxLayout:
+    orientation: "vertical"
 
 <SelectionScreen>:
     name: 'profile_list'
@@ -8,9 +10,23 @@
             rgba: utils.get_color_from_hex('#321911')
         Rectangle:
             size: self.size
-    ProfileList:
-        id: profile_list
-        size_hint_y: 0.9
+    BoxLayout
+        orientation: "vertical"
+        BoxLayout
+            size_hint_y: None
+            spacing: 20
+            ProgressBar:
+                max: 10
+                value: profile_list._attributes["Knowledge"]
+            ProgressBar:
+                max: 10
+                value: profile_list._attributes["Welfare"]
+            ProgressBar:
+                max: 10
+                value: profile_list._attributes["Energy"]
+        ProfileList:
+            id: profile_list
+            size_hint_y: 0.8
 
 <ScrollableLabel>:
     Label:
@@ -74,3 +90,53 @@
     name: 'win_screen'
     Label:
         text: 'win screen'
+
+<AttributeFill@Widget>:
+    level: 0.1
+    width: self.height
+    size_hint: 1, 1
+    color: 0, 0, 1
+    canvas:
+        Color:
+            rgb: 0,0,0
+        Line:
+            circle: (root.center_x,root.center_y,root.width/2)
+        StencilPush
+        Ellipse:
+            pos: root.pos
+            size: root.size
+        StencilUse
+
+        Color:
+            rgb: root.color
+        Rectangle:
+            pos: root.pos
+            size: (root.width, root.level*root.height)
+        StencilUnUse
+
+        StencilPop
+
+<Attribute2Fill@Widget>:
+    level: 0.1
+    width: self.height
+    size_hint: 1, 1
+    color: 0, 0, 1
+    canvas:
+
+        StencilPush
+        Rectangle:
+            pos: root.pos
+            #pos: (root.pos[0],root.pos[1]-root.level*root.height)
+            size: (root.width,root.level*root.height)
+            source: "hp.png"
+        StencilUse
+
+        Color:
+            rgb: root.color
+        Rectangle:
+            pos: root.pos
+            #size: (root.width, root.level*root.height)
+            source: "hp.png"
+        StencilUnUse
+
+        StencilPop

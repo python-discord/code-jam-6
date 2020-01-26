@@ -12,7 +12,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, DictProperty
 from yaml import safe_load
 from kivy.core.window import Window
 from collections import Counter
@@ -49,7 +49,14 @@ class ImageButton(ButtonBehavior, Image):
 
 
 class SelectionScreen(Screen):
-    pass
+    def on_pre_enter(self, *args):
+        self.ids["profile_list"]._keyboard = Window.request_keyboard(
+            self.ids["profile_list"]._keyboard_closed, self.ids["profile_list"]
+        )
+        self.ids["profile_list"]._keyboard.bind(
+            on_key_down=self.ids["profile_list"]._on_keyboard_down
+        )
+        return super().on_pre_enter(*args)
 
 
 class LossScreen(Screen):
@@ -81,10 +88,14 @@ class ProfileCard(Screen):
         # self.ids.name.font_name = "../fonts/Oldenburg/Oldenburg-Regular.ttf"
         # #When launching it from terminal using main.py the relative path to font changes.
         # To test this part as isolated app uncomment the line above and comment the line bellow
-        self.ids.name.font_name = "fonts/Oldenburg/Oldenburg-Regular.ttf"
+        self.ids.name.font_name = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)), "../fonts/Oldenburg/Oldenburg-Regular.ttf"
+        )
 
 
 class ProfileList(ScreenManager):
+    _attributes = DictProperty(None)
+
     def __init__(self, **kwargs):
         super(ProfileList, self).__init__(**kwargs)
         self.profile_dir = os.path.join(
@@ -95,8 +106,8 @@ class ProfileList(ScreenManager):
         self.cycler = self.r_cycle(self.profile_list)
         #  should be initialisable in main app
         self._attributes = Counter({"Knowledge": 5, "Welfare": 5, "Energy": 5})
-        self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
-        self._keyboard.bind(on_key_down=self._on_keyboard_down)
+        # self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        # self._keyboard.bind(on_key_down=self._on_keyboard_down)
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
             profile = safe_load(profile_file.read())
             self.add_widget(ProfileCard(profile))
