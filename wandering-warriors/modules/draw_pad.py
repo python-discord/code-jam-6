@@ -112,8 +112,9 @@ class DrawPad(FloatLayout):
             value = check_gesture(self.ud['lines'][0].points, self.gdb)
 
             if value:
-                print(f"Gesture value: {value}")
-                # TODO: report value to relevant module
+                print(f"Gesture recognized: {value}")
+                self.parent.children[2].update(value, '+')
+
                 # TODO: fade line out
                 self.clear()
 

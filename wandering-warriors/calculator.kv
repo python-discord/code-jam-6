@@ -1,3 +1,5 @@
+#:kivy 1.11.1
+
 <Calculator>:
     BoxLayout:
         orientation: 'vertical'
@@ -191,78 +193,109 @@
             size: self.size
             pos: self.pos
 
-<Ledger>:
-    #:set BORDER_W 6
+<LedgerRow@GridLayout>:
+    cols: 4
+    rows: 1
+    canvas.before:
+        Color:
+            rgba: 0.8, 0.8, 0.8, .3
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    value: ['x', 'y', 'op', 'z']
+    Label:
+        text: root.value[0]
+    Label:
+        text: root.value[1]
+    Label:
+        text: root.value[2]
+    Label:
+        text: root.value[3]
 
-    size_hint_x: 1.6
+<Ledger>:
+    size_hint_x: 1.8
     canvas:
         Color:
             rgba: 1, 1, 1, 1
         Rectangle:
-            pos: self.pos
             size: self.size
-            source: 'assets/graphics/sandstone.jpg'  # TODO: make this platform independent?
-        Color:
-            rgba: 0, 0, 0, 0.1
-        Rectangle:
             pos: self.pos
-            size: (self.width, BORDER_W)
-        Color:
-            rgba: 1, 1, 1, 0.3
-        Rectangle:
-            pos: (self.x, self.y + self.height - BORDER_W)
-            size: (self.width, BORDER_W)
-        Color:
-            rgba: 0.5, 0.5, 0.5, 0.3
-        Rectangle:
-            pos: (self.x, self.y + BORDER_W)
-            size: (BORDER_W, self.height - 2 * BORDER_W)
-        Rectangle:
-            pos: (self.x + self.width - BORDER_W, self.y + BORDER_W)
-            size: (BORDER_W, self.height - 2 * BORDER_W)
+            source: 'assets/graphics/sandstone.jpg'
+    rv: rv
+    orientation: 'vertical'
+    RecycleView:
+        id: rv
+        scroll_type: ['bars', 'content']
+        scroll_wheel_distance: dp(114)
+        bar_width: dp(10)
+        viewclass: 'LedgerRow'
+        RecycleBoxLayout:
+            default_size: None, dp(48)
+            default_size_hint: 1, None
+            size_hint_y: None
+            height: self.minimum_height
+            orientation: 'vertical'
+            spacing: dp(2)
 
 <OperationsBar>:
     size_hint_x: None
     width: 48
+    canvas.before:
+        Color:
+            rgb: .5, .5, .5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/graphics/sandbox.jpg'
     BoxLayout:
         orientation: 'vertical'
         pos: self.parent.pos
         size: self.parent.size
         Button:
             pos_hint: {'x': 0, 'top': 1}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('+')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
-                source: self.parent.parent.parent.buttonImage('plus')
+                source: self.parent.parent.parent.button_image('plus')
         Button:
             pos_hint:  {'x': 0, 'top':4/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('-')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
-                source: self.parent.parent.parent.buttonImage('minus')
+                source: self.parent.parent.parent.button_image('minus')
         Button:
             pos_hint: {'x': 0, 'top': 3/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('*')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
-                source: self.parent.parent.parent.buttonImage('times')
+                source: self.parent.parent.parent.button_image('times')
         Button:
             pos_hint: {'x': 0, 'top': 2/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].operation('/')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
-                source: self.parent.parent.parent.buttonImage('divide')
+                source: self.parent.parent.parent.button_image('divide')
         Button:
             pos_hint: {'x': 0, 'top': 1/5}
+            background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].submit_row()
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
-                source: self.parent.parent.parent.buttonImage('sqrt')
+                source: self.parent.parent.parent.button_image('equals')
 
 
 <CuneiformDrawingInput>:
@@ -293,7 +326,7 @@
             self.y = self.parent.parent.y + self.parent.parent.height - self.height
 
             self.parent.parent.clear()
-        
+
         Image:
             pos: self.parent.pos
             size: self.parent.size

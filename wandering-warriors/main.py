@@ -4,7 +4,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
 from modules import Abacus as AbacusBase
-from modules import DrawPad, LedgerLayout
+from modules import DrawPad
+from modules.operations import OperationsLayout
 
 
 class Calculator(Screen):
@@ -23,13 +24,8 @@ class Abacus(AbacusBase):
     pass
 
 
-class Ledger(LedgerLayout):
+class OperationsBar(OperationsLayout):
     pass
-
-
-class OperationsBar(Widget):
-    def buttonImage(self, operation: str) -> str:
-        return f'assets/graphics/{operation}.png'
 
 
 class CuneiformDrawingInput(DrawPad):
