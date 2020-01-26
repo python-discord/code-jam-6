@@ -190,7 +190,6 @@ class ImportPopup(Popup):
 
     def _change_btn_name(self, *args):
         selection = self.file_chooser.selection
-        print(selection)
         if selection:
             self.btn.text = _('Open "{filename}"').format(filename=Path(selection[0]).name)
             self.btn.disabled = False
