@@ -71,6 +71,7 @@ class GameSelectorScreen(Screen):
             "game_screen"
         ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
         self.manager.get_screen("plugboard_screen").clear_plugs()
+        self.manager.get_screen("game_screen").current_time = "60"
 
         self.manager.current = "game_screen"
 

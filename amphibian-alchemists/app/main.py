@@ -82,7 +82,7 @@ class AncientTechApp(App):
         ]
 
     def build(self):
-        self.title = "ENG"
+        self.title = "Elusive Enigma"
         self.icon = "misc/logo.png"
         return UIManager()
 

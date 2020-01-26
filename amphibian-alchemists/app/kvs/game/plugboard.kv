@@ -43,7 +43,7 @@
             pos_hint: {"center_x": 0.5}
             Button:
                 text: "Close"
-                on_press: app.root.get_screen("game_screen").button_press_negative()
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
                 on_release: root.dismiss()
 
 <Plug@Image>:
@@ -55,7 +55,9 @@
     source: "misc/ports.png"
     pos_hint: {"center_x": 0.5, "center_y": 0.5}
     on_center: app.root.get_screen("plugboard_screen").on_plughole_recenter(*args)
-    on_release: app.root.get_screen("plugboard_screen").handle_plug_release(*args)
+    on_release:
+        if app.root.get_screen("plugboard_screen").plugs_in_screen % 2 != 0 and root.name not in app.root.get_screen("plugboard_screen").all_plugged: app.root.get_screen("game_screen").play_effect_sound("plug_in")
+        app.root.get_screen("plugboard_screen").handle_plug_release(*args)
 
 <PlugBoard@GridLayout>:
     plug_reference: Q
@@ -314,7 +316,7 @@
             BoxLayout:
                 size_hint_y: 0.1
                 Button:
-                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                     size_hint_x: 0.5
                     text: "Go back"
                     on_release: root.manager.current = "game_screen"
@@ -326,7 +328,7 @@
                     id: remove_plug
                     text: "Remove the last pair of plugs"
                     disabled: True
-                    on_press: app.root.get_screen("game_screen").plug_remove_pop()
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("pop")
                     on_release: root.remove_grouped_plugs()
 
         AnchorLayout:
