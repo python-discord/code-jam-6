@@ -113,7 +113,7 @@ class EnigmaOutput(TextInput):
 
 
 class GameScreen(Screen):
-    current_time = StringProperty("60")
+    current_time = StringProperty("")
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
