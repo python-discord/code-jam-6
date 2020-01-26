@@ -2,6 +2,7 @@ from primal.engine.screen import Screen
 from primal.engine.camera import OrthographicCamera
 from primal.engine.sprite import Player
 from primal.engine.world import World
+from primal.engine import keys
 
 from primal.gui.health import HealthBar
 from primal.gui.inventory import Inventory
@@ -50,14 +51,14 @@ class GameScreen(Screen):
         pos_x, pos_y = self.player.get_position()
         dx, dy = 0, 0
 
-        if self.is_key_pressed('a'):
+        if self.is_key_pressed(keys.KEY_LEFT):
             dx -= Player.SPEED * delta
-        if self.is_key_pressed('d'):
+        if self.is_key_pressed(keys.KEY_RIGHT):
             dx += Player.SPEED * delta
 
-        if self.is_key_pressed('w'):
+        if self.is_key_pressed(keys.KEY_UP):
             dy += Player.SPEED * delta
-        if self.is_key_pressed('s'):
+        if self.is_key_pressed(keys.KEY_DOWN):
             dy -= Player.SPEED * delta
 
         if dx != 0.0 or dy != 0.0:
