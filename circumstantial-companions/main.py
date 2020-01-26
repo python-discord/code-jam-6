@@ -119,8 +119,7 @@ class InfoPopup(Popup):
     def __init__(self, title, text, *, dismissable=True, size_hint):
         layout = BoxLayout(orientation="vertical",
                            spacing=dp(34),
-                           padding=(dp(20),
-                           dp(15)))
+                           padding=(dp(20), dp(15)))
         self.label = Label(text=text,
                            font_name=FONT.get(),
                            font_size=sp(20),
@@ -235,10 +234,10 @@ class ImportPopup(Popup):
         try:
             self.chisel.load(path)
         except (ValueError, KeyError):
-                open_error_popup(_("The file could not be loaded."))
+            open_error_popup(_("The file could not be loaded."))
         finally:
-                self.loading_popup.dismiss()
-                Window.add_widget(CURSOR, "after")
+            self.loading_popup.dismiss()
+            Window.add_widget(CURSOR, "after")
 
     def on_dismiss(self, *args):
         self.file_chooser.cancel()
@@ -334,11 +333,9 @@ class SaveAsPopup(Popup):
             self.text_input.text = text[:MAX_FILENAME_LENGTH]
         if self.save_type:
             current_ext = self._get_file_extension()
-            if (current_ext == ".png"
-                    and self.text_input.text.endswith(PROJECT_EXTENSION)):
+            if current_ext == ".png" and self.text_input.text.endswith(PROJECT_EXTENSION):
                 self._set_save_type(None, "project")
-            elif (current_ext == PROJECT_EXTENSION
-                    and self.text_input.text.endswith(".png")):
+            elif current_ext == PROJECT_EXTENSION and self.text_input.text.endswith(".png"):
                 self._set_save_type(None, "background")
         else:
             if self.text_input.text.endswith(PROJECT_EXTENSION):
@@ -446,23 +443,23 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
 
         # Language selection
         language_btn = Button(_("Select language"),
-                           font_size=sp(18),
-                           size_hint=(1, None),
-                           height=dp(44))
+                              font_size=sp(18),
+                              size_hint=(1, None),
+                              height=dp(44))
         language_btn.bind(on_release=self.open_language_popup)
 
         # Import
         import_btn = Button(_("Import..."),
-                         font_size=sp(18),
-                         size_hint=(1, None),
-                         height=dp(44))
+                            font_size=sp(18),
+                            size_hint=(1, None),
+                            height=dp(44))
         import_btn.bind(on_release=lambda btn: ImportPopup(self.chisel).open(btn))
 
         # Save as
         save_as_btn = Button(_("Save as..."),
-                         font_size=sp(18),
-                         size_hint=(1, None),
-                         height=dp(44))
+                             font_size=sp(18),
+                             size_hint=(1, None),
+                             height=dp(44))
         save_as_btn.bind(on_release=lambda btn: SaveAsPopup(self.chisel).open(btn))
 
         # Reset
@@ -525,9 +522,9 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
     def reset_chisel(self, *args):
         Window.remove_widget(CURSOR)
         popup = open_loading_popup(_("Resetting the canvas."))
-        Clock.schedule_once(lambda dt: self.chisel.reset()
-                                       or popup.dismiss()
-                                       or Window.add_widget(CURSOR, "after"), 0.1)
+        Clock.schedule_once(lambda dt: (self.chisel.reset()
+                                        or popup.dismiss()
+                                        or Window.add_widget(CURSOR, "after")), 0.1)
 
     def bind_to_burger(self, burger):
         def _reposition(*args):
