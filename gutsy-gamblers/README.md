@@ -1,15 +1,23 @@
 # Gutsy Gamblers
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+## Ancient Technology!
+The world today is too busy. So many digits and dials everywhere! Things were much simpler in the past; the sun, moon, seasons and tides. Don’t you wish you could go back and live the neolithic life?
 
-## Useful links
+Wish no longer! The Ancient Clock brings all the simplicity of rock based neolithic time keeping to your modern crushed, ground, reconstituted, laser etched rock based rock!
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+Keep track of important times such as:
+* When sun comes up
+* When sun goes down
+* When sun is inbetween those two things
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+### Functionality
+The main dial in the app represents 24 hours and the major events you're likely to care about as a neolithic human.
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+Your location can either be specified in settings or gathered by IP geolocation.
 
 ## License
 
 All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+
+## Judges
+It's all tits up if you start messing with the time controller. It works realtime, but not for you.

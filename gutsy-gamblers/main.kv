@@ -1,0 +1,124 @@
+#:kivy 1.11.1
+#:include dials.kv
+
+<MainScreen>:
+    Button:
+        text: "Time Control"
+        font_size: 12
+        pos_hint: {'center_x': 0.15, 'center_y': 0.95}
+        size_hint: 0.2, 0.05
+        on_press: root.time_control_button()
+
+    Button:
+        text: "Location"
+        font_size: 12
+        pos_hint: {'center_x': 0.5, 'center_y': 0.95}
+        size_hint: 0.2, 0.05
+        on_press: root.settings_button()
+
+
+<TimeWizard>:
+    title: 'Time Wizard'
+    redraw_checkbox: redraw_checkbox
+    current_date: current_date
+
+    size_hint: 0.25, 0.8
+    pos_hint: {'center_x': 0.15, 'center_y': 0.5}
+
+	BoxLayout:
+		orientation: 'vertical'
+
+		GridLayout:
+			size_hint: 1, 0.2
+        	cols: 2
+        	Label:
+        		text: "Speedy Time"
+			CheckBox:
+				id: redraw_checkbox
+
+
+		BoxLayout:
+			orientation: 'horizontal'
+
+			BoxLayout:
+				orientation: 'vertical'
+
+				Label:
+					text: "Day Length"
+					font_size: 12
+					size_hint: None, 0.03
+					pos_hint: {'center_x': 0.5, 'center_y': 0}
+
+				Slider:
+					id: day_slider
+					orientation: 'vertical'
+					min: 1
+					max: 100
+					value: 1
+#					on_touch_up: root.time_lapse(round(self.value))
+
+			BoxLayout:
+				orientation: 'vertical'
+
+				Label:
+					text: "Date Iterate"
+					font_size: 12
+					size_hint: None, 0.03
+					pos_hint: {'center_x': 0.5, 'center_y': 0}
+
+				Slider:
+					id: date_slider
+					orientation: 'vertical'
+					min: 1
+					max: 100
+					value: 1
+#					on_touch_up: root.date_lapse(round(self.value))
+
+		Label:
+		    id: current_date
+			size_hint: 1, 0.2
+
+		Button:
+		    text: "Revert date"
+		    on_press: root.revert_date()
+
+<SettingsScreen>:
+    id: body
+    # kivy automatically fills the corresponding properties on the
+    # class in main.py with the objects of the id for propertyname : id
+    location_field : loc
+    feedback : feedback
+    guess_location : guess
+    close_button: close_settings
+    title: "Settings"
+
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            text: "Enter a location or guess by ip.\nLocation can be entered as 'latitude, longitude' (ex: 53.3, -18.9)\nor by entering an address/city/location."
+
+        TextInput:
+            id: loc
+
+        Label:
+            id: feedback
+            text: ""
+
+        BoxLayout:
+            orientation: "horizontal"
+
+            UpdateLocationButton:
+                id: update
+                text: "Update"
+                settingsscreen: body
+
+            GuessLocationButton:
+                id: guess
+                settingsscreen: body
+                text: "Guess by IP"
+
+        Button:
+            id : close_settings
+            text : "Close Settings"
+            on_release: root.dismiss()

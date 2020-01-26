@@ -1,0 +1,145 @@
+<NowMarker>:
+	Image:
+		source: 'assets/arrow_marker.png'
+		size_hint: None, None
+		size_hint: 0.1, 0.1
+		pos_hint: {'center_x': 0.5, 'center_y': 0.765}
+
+<SunRiseMarker>:
+    rot_angle: 0
+
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.rot_angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+	Image:
+		source: 'assets/sun_rise.png'
+		size_hint: 0.045, 0.045
+		pos_hint: {'center_x': 0.5, 'center_y': 0.85}
+
+<SunSetMarker>:
+    rot_angle: 0
+
+    canvas.before:
+        PushMatrix
+        Rotate:
+            angle: root.rot_angle
+            origin: self.center
+    canvas.after:
+        PopMatrix
+
+	Image:
+		source: 'assets/sun_set.png'
+		size_hint: 0.045, 0.045
+		pos_hint: {'center_x': 0.5, 'center_y': 0.85}
+
+<DialWidget>:
+    dial_file: ''
+    dial_size: (0, 0)
+
+	canvas.before:
+		PushMatrix
+		Rotate:
+			angle: root.angle
+			axis: 0, 0, 1
+			origin: (self.width / 2, self.height / 2)
+
+	canvas.after:
+		PopMatrix
+
+	Image:
+	    source: 'assets/dial.png'
+		size_hint: root.dial_size
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+<DialEffectWidget>:
+    shade_size: (0, 0)
+	size: 1, 1
+	pos: (self.width / 2) - (root.shade_size[0] / 2), (self.height / 2) - (root.shade_size[1] / 2)
+
+    on_size: root._pos_check()
+
+<SunShading>:
+    shade_size: (0, 0)
+
+    shade_one_angle_start: 0
+    shade_one_angle_stop: 0
+    shade_one_color: 0, 0, 0, 1
+
+    shade_two_angle_start: 0
+    shade_two_angle_stop: 0
+    shade_two_color: 0, 0, 0, 0
+
+    sun_one_angle_start: 0
+    sun_one_angle_stop: 0
+    sun_one_color: 0, 0, 0, 0
+
+    sun_two_angle_start: 0
+    sun_two_angle_stop: 0
+    sun_two_color: 0, 0, 0, 0
+
+    on_size: root._size_check()
+
+    canvas:
+        # Shade One #
+        Color:
+            rgba: root.shade_one_color
+
+        Ellipse:
+            size: root.shade_size
+            angle_start: root.shade_one_angle_start
+            angle_end: root.shade_one_angle_stop
+            pos: 0, 0
+
+        # Shade Two #
+        Color:
+            rgba: root.shade_two_color
+
+        Ellipse:
+            size: root.shade_size
+            angle_start: root.shade_two_angle_start
+            angle_end: root.shade_two_angle_stop
+            pos: 0, 0
+
+        # Sun One #
+        Color:
+            rgba: root.sun_one_color
+
+        Ellipse:
+            size: root.shade_size
+            angle_start: root.sun_one_angle_start
+            angle_end: root.sun_one_angle_stop
+            pos: 0, 0
+
+        # Sun Two #
+        Color:
+            rgba: root.sun_two_color
+
+        Ellipse:
+            size: root.shade_size
+            angle_start: root.sun_two_angle_start
+            angle_end: root.sun_two_angle_stop
+            pos: 0, 0
+
+<SeasonDial>:
+    dial_file: ''
+    dial_size: (0, 0)
+
+    canvas.before:
+		PushMatrix
+		Rotate:
+			angle: root.angle
+			axis: 0, 0, 1
+			origin: (self.width / 2, self.height / 2)
+
+	canvas.after:
+		PopMatrix
+
+	Image:
+	    source: root.dial_file
+		size_hint: root.dial_size
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}
