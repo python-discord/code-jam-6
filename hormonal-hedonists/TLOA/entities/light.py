@@ -18,7 +18,7 @@ class LightRays(Mesh):
             LIGHT_COLOR_MAX_RED,
             LIGHT_COLOR_MAX_GREEN,
             LIGHT_COLOR_MAX_BLUE,
-            LIGHT_COLOR_MAX_ALPHA)
+            LIGHT_COLOR_MAX_ALPHA*1.5)
         self.vertices = []
         self.indices = []
         self.mode = 'triangle_fan'
@@ -28,7 +28,7 @@ class LightRays(Mesh):
 
         self.trace(point=point, surface=surface)
 
-    def trace(self, point: Vector, surface: List[Vector], angle=0):
+    def trace(self, point: Vector, surface: List[Vector]):
         # Compute the vertices for sun ray mesh
         self.mirror = surface
         self.point = point
