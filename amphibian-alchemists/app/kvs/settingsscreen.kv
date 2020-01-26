@@ -69,17 +69,11 @@
                     BoxLayout:
                         orientation: "vertical"
                         Label:
-                            markup: True
-                            text: "Allow Fullscreen\n[color=000000][b](Restart required)[/b][/color]"
-                        Label:
                             text: "Automatically input the correct text"
                         Label:
                             text: "Saved games:"
                     BoxLayout:
                         orientation: "vertical"
-                        CheckBox:
-                            id: allow_fullscreen
-                            on_state: root.save_settings("allow_fullscreen")
                         CheckBox:
                             id: auto_input
                             on_state: root.save_settings("auto_input")
