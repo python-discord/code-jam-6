@@ -208,6 +208,7 @@ class GameScreen(Screen):
         )
         sound.volume = volume
         sound.play()
+        Clock.schedule_once(lambda dt: sound.unload(), sound.length)
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
