@@ -223,6 +223,12 @@ class GameScreen(Screen):
 
         if not self.timer_clock:
             self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
+        else:
+            self.timer_clock()
+
+    def on_leave(self):
+        if self.timer_clock:
+            self.timer_clock.cancel()
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
