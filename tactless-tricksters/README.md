@@ -1,6 +1,11 @@
-# Enigma (Tactless Tricksters)
+# Morse Code Jam (Tactless Tricksters)
 
-Enigma is a morse code app that allows you to communicate with people using morse code. 
+Morse Code Jam is an app that brings morse code technology to the 21st century!  
+Have you ever wanted to send a friend a morse code message but can't because AT&T 
+stopped servicing telegram lines in the 1930s?  Well Morse Code Jam has you covered!
+Morse code utilizes the power of the internet to digitiz morse code and send it over
+the internet to friends and family! 
+
 Some features include:
 - messaging functionality that allows you to connect and communicate via morse
 
