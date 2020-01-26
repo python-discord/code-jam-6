@@ -88,12 +88,20 @@
 <OperationsBar>:
     size_hint_x: None
     width: 48
+    canvas.before:
+        Color:
+            rgb: .5, .5, .5
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/graphics/sandbox.jpg'
     BoxLayout:
         orientation: 'vertical'
         pos: self.parent.pos
         size: self.parent.size
         Button:
             pos_hint: {'x': 0, 'top': 1}
+            background_color: 1, .1, .1, 0
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -102,6 +110,7 @@
             # on_release: self.parent.parent.parent.parent.parent.send_operation('plus')
         Button:
             pos_hint:  {'x': 0, 'top':4/5}
+            background_color: 1, .1, .1, 0
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -109,6 +118,7 @@
                 source: self.parent.parent.parent.button_image('minus')
         Button:
             pos_hint: {'x': 0, 'top': 3/5}
+            background_color: 1, .1, .1, 0
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -116,6 +126,7 @@
                 source: self.parent.parent.parent.button_image('times')
         Button:
             pos_hint: {'x': 0, 'top': 2/5}
+            background_color: 1, .1, .1, 0
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -123,6 +134,7 @@
                 source: self.parent.parent.parent.button_image('divide')
         Button:
             pos_hint: {'x': 0, 'top': 1/5}
+            background_color: 1, .1, .1, 0
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
