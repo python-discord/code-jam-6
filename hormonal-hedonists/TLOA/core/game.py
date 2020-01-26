@@ -116,6 +116,8 @@ class Game(EventDispatcher):
     def spawn_ship(self, override=False):
         if not self.running:
             return False
+        elif self.pause_game == True:
+            return
 
         if override or random.random() < SHIP_SPAWN_CHANCE:
             lane = random.randrange(NUMBER_OF_LANES)

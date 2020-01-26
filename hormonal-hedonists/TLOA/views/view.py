@@ -37,7 +37,9 @@ class GameView(Widget):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
         self.pause_menu_content.button_resume.bind(on_release=self.close_pause_menu)
+        self.pause_menu_content.button_main_menu.bind(on_release=self.show_main_menu)
         self.pause_menu_content.button_exit.bind(on_release=self.exit_game)
+
 
         self._background = Image(
             source=IMAGES_PATH.format('background.zip'),
@@ -72,6 +74,16 @@ class GameView(Widget):
                                 width=35,
                                 height=35,
                                 on_release=self.open_pause_menu)
+
+    def show_main_menu(self, *args):
+        self.pause_menu.dismiss()
+        self.pause_menu_opened = True
+        self.canvas.clear()
+        self.clear_widgets()
+        self._game = Game()
+        self.__init__(self._game)
+        self._game.start()
+
 
     def exit_game(self, *args):
         quit()

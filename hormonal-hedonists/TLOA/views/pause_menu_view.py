@@ -19,7 +19,7 @@ class PauseMenuView(GridLayout):
 
         self.button_main_menu = Button(background_normal=IMAGES_PATH.format('btn.png'),
                              background_down=IMAGES_PATH.format('btn_pressed.png'),
-                             text="Main Menu",
+                             text="Restart Game",
                              size_hint=[1, None],
                              font_name=FONT_PATH.format('Pacifico-Regular.ttf'),
                              font_size='18sp',
