@@ -1,4 +1,5 @@
 {
   "test": {"range": 0, "recipe": {"test2": 3}, "source": "testimg.png", "damage": 0, "size": [1, 1]},
-  "test2": {"range": 0, "recipe": {}, "source": "testimg2.png", "damage": 0, "size": [1, 2]}
+  "test2": {"range": 0, "recipe": {}, "source": "testimg2.png", "damage": 0, "size": [1, 2]},
+  "rocks": {"range": 0, "recipe": {}, "source": "r.png", "damage": 0}
 }

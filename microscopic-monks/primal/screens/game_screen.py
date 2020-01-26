@@ -22,6 +22,8 @@ class GameScreen(Screen):
         self.camera = OrthographicCamera(self.canvas, self.VP_WIDTH, self.VP_HEIGHT)
         self.camera.start_region()
 
+        self.zoom = 1.0
+
         self.world = World((0, 0))
         self.world.draw(self.canvas)
 
@@ -90,10 +92,16 @@ class GameScreen(Screen):
             self.timer -= 1
             self.timerValue += 1
             print(self.timerValue)
-            self.health_drop() #  Rename HealthDrop to health_drop          
+            self.health_drop()         
 
             
              
+        if 'scrolldown' in self.engine.mouse_keys:
+            self.zoom += delta * 3
+            self.zoom = min(1.6, self.zoom)
+        elif 'scrollup' in self.engine.mouse_keys:
+            self.zoom -= delta * 3
+            self.zoom = max(0.68, self.zoom)
 
         new_clicked_features = dict()
 
@@ -105,10 +113,14 @@ class GameScreen(Screen):
                 feature.set_alpha(new_value)
             new_clicked_features[feature] = new_value
 
+        self.inventory.update()
+
         self.clicked_features = new_clicked_features
         self.engine.mouse_keys = set()
 
         self.world.update(self.player.get_center())
+
+        self.camera.set_zoom(self.zoom)
         self.camera.set_position(*self.player.get_center())  # Updates the position
         self.camera.update()
 
@@ -144,7 +156,11 @@ class GameScreen(Screen):
             remove_features = set()
 
             for feature in features:
-                if feature.distance_to((pos_x, pos_y)) < 15_000 \
+                dst = 40 + feature.get_size()[0]
+                dst = (dst * dst) / 4
+                dst += 10_000
+
+                if feature.distance_to((pos_x, pos_y)) < dst \
                         and feature.collide_with((mx, my), (1, 1)):
                     feature.hit()
                     if feature.get_health() == 0:
