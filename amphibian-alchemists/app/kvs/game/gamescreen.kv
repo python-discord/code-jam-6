@@ -79,8 +79,21 @@
 <Timer@AnchorLayout>:
     anchor_x: "left"
     anchor_y: "bottom"
+    padding: dp(10)
     screen: root.parent
     BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+                width: 2
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
         orientation: "vertical"
         size_hint: 0.1, 0.1
         Label:
