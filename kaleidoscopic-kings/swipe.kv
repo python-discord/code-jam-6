@@ -1,0 +1,100 @@
+#:kivy 1.11.1
+<MainWidget>:
+
+    GridLayout:
+        size: root.size
+        cols: 3
+        spacing: 50
+        # Background Image
+        canvas:
+            Rectangle:
+                source: './assets/cave.jpg'
+                size: self.size
+                pos: self.pos
+
+        # Stats Section
+        GridLayout:
+            cols: 1
+            rows: 4
+            padding: 50
+
+            Image:
+                source: './assets/stone_tablet.png'
+            Image:
+                source: './assets/stone_tablet.png'
+            Image:
+                source: './assets/stone_tablet.png'
+            Image:
+                source: './assets/stone_tablet.png'
+
+        # Main Card Section
+        BoxLayout:
+
+            Card:
+                size_hint: None,None
+                do_rotation: False
+                do_scale: False
+                do_translation: False
+                rotation: 0
+                scale: 2
+                Image:
+                    scale: 2
+                    size_hint: None,None
+                    source: './assets/python_discord_logo.png'
+
+
+        GridLayout:
+            cols: 1
+            rows: 2
+            padding: 50
+
+            Image:
+                source: './assets/stone_tablet.png'
+                allow_stretch: True
+                keep_ratio: False
+            Image:
+                source: './assets/stone_tablet.png'
+                allow_stretch: True
+                keep_ratio: False
+
+        BoxLayout:
+            cols: 1
+            orientation: "vertical"
+            spacing: 20
+            padding: 50
+
+            Image:
+                source: './assets/stone_tablet.png'
+                allow_stretch: True
+                keep_ratio: False
+
+            GridLayout:
+                cols: 3
+                rows: 2
+                spacing: 15
+                padding: 50
+
+                Image:
+                    source: './assets/stone_tablet.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                Image:
+                    source: './assets/stone_tablet.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                Image:
+                    source: './assets/stone_tablet.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                Image:
+                    source: './assets/stone_tablet.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                Image:
+                    source: './assets/stone_tablet.png'
+                    allow_stretch: True
+                    keep_ratio: False
+                Image:
+                    source: './assets/stone_tablet.png'
+                    allow_stretch: True
+                    keep_ratio: False

@@ -1,0 +1,10 @@
+{
+  "background_theme_asset": "background.jpg",
+  "music_theme_asset": "theme.mp3",
+  "basic_4_states": {
+    "player_health": {"value": 1.0, "label": "Health", "icon_asset": "player_health.jpg"},
+    "player_water": {"value": 1.0, "label": "Water", "icon_asset": "player_water.jpg"},
+    "player_food": {"value": 1.0, "label": "Food", "icon_asset": "player_food.jpg"},
+    "player_something": {"value": 1.0, "label": "Something", "icon_asset": "player_something.jpg"}
+  }
+}

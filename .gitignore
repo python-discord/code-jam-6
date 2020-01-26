@@ -109,3 +109,5 @@ venv.bak/
 # JetBrains IDE
 .idea/
 *.db
+.DS_Store
+tags
