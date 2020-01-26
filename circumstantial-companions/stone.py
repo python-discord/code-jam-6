@@ -228,7 +228,7 @@ class Chisel(Widget):
         colors = []
         for (x, y, z), color in zip(self.positions, self.colors):
             if y:
-                positions.append(x, y, z)
+                positions.append((x, y, z))
                 colors.append(color)
 
         pebble_dict = {'positions': positions,
