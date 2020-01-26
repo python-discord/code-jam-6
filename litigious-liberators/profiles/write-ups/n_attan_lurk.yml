@@ -1,0 +1,23 @@
+Name: N'attan Lurk
+Picture: n_attan_lurk.jpg
+Biography: >
+  Apart from my physical prowess, people associate me mostly with my killer lasagna. In my free
+  time, I like to go exploring the nearby hill to find cool dens, and play with the
+  Chaoyangsauruses.
+Choices:
+  right: Go on your own path
+  left: Hike with N'attan.
+Results:
+  right: >
+    I'm not an adventure guy.
+  left: >
+    Adventure time!
+Deltas:
+  right:
+    Knowledge: 0
+    Welfare: 0
+    Energy: 0
+  left:
+    Knowledge: 1
+    Welfare: 1
+    Energy: 1

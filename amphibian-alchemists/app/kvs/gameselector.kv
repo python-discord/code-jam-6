@@ -1,0 +1,43 @@
+<SelectableButton>:
+    group: "saves"
+
+<GameSelectorScreen>:
+    name: "game_selector_screen"
+    rv: rv
+    AnchorLayout:
+        anchor_y: "top"
+        BoxLayout:
+            size_hint_y: 0.1
+            padding: dp(8)
+            spacing: dp(16)
+            Button:
+                text: "Go back"
+                on_release:
+                    root.manager.current = "main_screen"
+                    app.root.get_screen('game_screen').play_effect_sound('swoosh')
+            Button:
+                text: "Load game"
+                disabled: not root.last_selected
+                on_press: app.root.get_screen('game_screen').play_effect_sound('swoosh')
+                on_release: if root.last_selected: root.load_game(root.last_selected.index)
+            Button:
+                text: "New game"
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('swoosh')
+                    root.new_game()
+
+    AnchorLayout:
+        RecycleView:
+            id: rv
+            size_hint: 0.8, 0.5
+            scroll_type: ['bars', 'content']
+            scroll_wheel_distance: dp(114)
+            bar_width: dp(12)
+            viewclass: "SelectableButton"
+            RecycleBoxLayout:
+                orientation: "vertical"
+                default_size: None, dp(70)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(2)

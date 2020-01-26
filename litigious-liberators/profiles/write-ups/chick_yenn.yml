@@ -1,0 +1,24 @@
+Name: Chick Yenn
+Picture: chick_yenn.jpg
+Biography: >
+  I am the princess of this land. I love to live by occeans because I like to get my body tanned.
+  "Live today like you are getting fried tomorrow" - This has been my motto for a long time.
+Choices:
+  right: >
+    Date princess Chick.
+  left: >
+    Let's have some fried chicken tomorrow.
+Results:
+  right: >
+    She knows more about this land than anyone else!
+  left: >
+    Its always nice to have stomach filled!
+Deltas:
+  right:
+    Knowledge: 3
+    Welfare: 3
+    Energy: 0
+  left:
+    Knowledge: 0
+    Welfare: 0
+    Energy: 3

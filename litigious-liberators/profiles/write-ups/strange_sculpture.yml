@@ -1,0 +1,23 @@
+Name: Strange Sculpture
+Picture: strange_sculpture.png
+Biography: >
+  Particular sections of the Land are filled nothing but these sculptures. Some speculate that
+  these are some sort of ancient currency so widespread they ended poverty for good. Others stand
+  firm on their belief they were idols for the ancient deity Bisleri
+Choices:
+  right: Take one as home decoration.
+  left: Use it as a container.
+Results:
+  right: >
+    Looks Good!
+  left: >
+    Nice idea!
+Deltas:
+  right:
+    Knowledge: 0
+    Welfare: 1
+    Energy: 0
+  left:
+    Knowledge: 1
+    Welfare: 0
+    Energy: 0
