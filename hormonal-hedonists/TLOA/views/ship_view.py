@@ -9,8 +9,8 @@ from kivy.uix.widget import Widget
 HP_BAR_X_OFFSET = 75
 HP_BAR_Y_OFFSET = 150
 
-FIRE_X_OFFSET = 75
-FIRE_Y_OFFSET = 20
+FIRE_X_OFFSET = 35
+FIRE_Y_OFFSET = 85
 
 
 class ShipView(Widget):
