@@ -51,7 +51,12 @@
         on_press: root.delete()
     Button:
         size_hint: 1,1
-        text: '9: Quit'
+        text: '9: Rename'
+        font_size: 12.5
+        on_press: root.rename()
+    Button:
+        size_hint: 1,1
+        text: '0: Quit'
         font_size: 12.5
         on_press: root.quit()
 
@@ -347,6 +352,57 @@
             color: 0.34,1,1,1
             on_press: root.dismiss()
 
+
+<RenamePopup>:
+    title: 'Rename a File?'
+    FloatLayout:
+        TextInput:
+            id: create
+            size_hint: .5,.15
+            pos_hint: {'center_x': .5, 'center_y': .7}
+            hint_text: 'Enter File Name'
+        Button:
+            id: left
+            canvas:
+                Color:
+                    rgba: 0,0,0, root.left
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .4}
+            text: '[ Left Manager ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.buttonselect(1)
+        Button:
+            id: right
+            canvas:
+                Color:
+                    rgba: 0,0,0, root.right
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .4}
+            text: '[ Right Manager ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.buttonselect(2)
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .25}
+            text: '[ Rename File ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.rename(root.ids.create.text)
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .1}
+            text: '[ Cancel ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
 
 
 <QuitPopup>:

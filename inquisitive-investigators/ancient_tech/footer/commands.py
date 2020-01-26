@@ -1,8 +1,8 @@
 from typing import Any, Union
 from pathlib import Path
 from shutil import (
-    copy, 
-    copytree, 
+    copy,
+    copytree,
     rmtree,
     SameFileError
 )
@@ -115,7 +115,7 @@ class CopyPopup(BasePopup):
         Store and validate selections.
         """
         if selection not in ('left', 'right'):
-            raise InvalidSelection (
+            raise InvalidSelection(
                 'Selection must be either "left" or "right"'
             )
 
@@ -179,7 +179,7 @@ class CopyPopup(BasePopup):
 
             except AttributeError:
                 Logger.info('Copy: Select a file/directory to copy')
-            
+
             else:
                 to_obj = Path(to.ids.header.ids.directory.current_dir)
 
@@ -354,6 +354,48 @@ class CreatePopup(BasePopup):
 
             if not dir_.exists():
                 dir_.touch()
+
+                self.update(self.filemanager, current)
+                self.dismiss()
+
+            else:
+                Logger.info('Create: File already exists')
+
+        else:
+            Logger.info('Create: Enter a File name')
+
+
+class RenamePopup(BasePopup):
+    left = NumericProperty()
+    right = NumericProperty()
+
+    def __init__(self, ctx: 'Footer', *args: Any, **kwargs: Any):
+        super().__init__(ctx, *args, **kwargs)
+        self.filemanager = 0
+
+    def buttonselect(self, manager):
+        self.left = self.right = 0
+        self.filemanager = manager
+        if manager == 1:
+            self.left = .2
+        else:
+            self.right = .2
+
+    def rename(self, rename_text):
+        if self.filemanager != 0 or rename_text != '':
+            base = self.ctx.parent.ids
+
+            if self.filemanager == 1:
+                current = base.left.ids.header.ids.directory.current_dir
+                select = self.ctx.parent.ids.left.ids.rv.selected
+            elif self.filemanager == 2:
+                current = base.right.ids.header.ids.directory.current_dir
+                select = self.ctx.parent.ids.right.ids.rv.selected
+
+            dir_check = Path(current) / rename_text
+
+            if not dir_check.is_file():
+                Path(select.txt).rename(dir_check)
 
                 self.update(self.filemanager, current)
                 self.dismiss()

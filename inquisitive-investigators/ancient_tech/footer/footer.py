@@ -31,7 +31,8 @@ class Footer(BoxLayout):
             '6': self.mkdir,
             '7': self.create,
             '8': self.delete,
-            '9': self.quit
+            '9': self.rename,
+            '0': self.quit
         }
 
     def on_touch_up(self, touch):
@@ -157,6 +158,17 @@ class Footer(BoxLayout):
             RVR.scroll_y += .1
 
         return False
+
+    def rename(self) -> None:
+        popup = RenamePopup(
+            self, size_hint=(.5, .5),
+            pos_hint={
+                'center_x': .5,
+                'center_y': .5
+            }
+        )
+        popup.open()
+        return True
 
     def delete(self) -> None:
         popup = DeletePopup(
