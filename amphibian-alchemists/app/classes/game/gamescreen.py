@@ -248,7 +248,7 @@ class GameScreen(Screen):
     def load_output_text(self):
         game_id = App.get_running_app().game_id
         store = JsonStore(DATA_DIR)
-        keyboard_output = store.get(str(game_id))["last_saved_output_text"]
+        keyboard_output = store.get(str(game_id))["current_output_text"]
         if keyboard_output:
             self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = (
                 keyboard_output
