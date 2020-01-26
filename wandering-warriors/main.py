@@ -1,4 +1,5 @@
 from kivy.app import App
+from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.widget import Widget
 
@@ -51,12 +52,15 @@ class Screen:
     def __init__(self):
         self.sm = ScreenManager()
         self.sm.add_widget(Calculator(name='calculator'))
+        self.sm.add_widget(Settings(name='settings'))
 
     def get_manager(self):
         return self.sm
 
 
 class CalculatorApp(App):
+    TEXTURE = StringProperty('assets/graphics/wood.png')
+
     def build(self):
         return Screen().get_manager()
 
