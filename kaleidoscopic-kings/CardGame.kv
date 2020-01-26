@@ -1,4 +1,6 @@
 #:kivy 1.11.1
+#: import Animation kivy.animation.Animation
+
 # Uncomment out this to have a border drawn around everything
 
 #:import random random.random
@@ -83,67 +85,67 @@
 
 ##################  CARD  ##################
 <CardWidget@BoxLayout>:
-    Rotater:
-        size: 800, 800
-        pos: 270, 0
-        do_rotation: False
-        do_scale: False
-        do_translation: False
-        size_hint: None, None
-        choice: data.choice_handler
-
-        SwipeCard:
-            size_hint: None, None
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            orientation: 'vertical'
+            id: card
 
             BoxLayout:
-                orientation: 'vertical'
+                size_hint_y: .3
+                Label:
+                    font_size: 20
+                    text_size: (self.size[0]*.6, self.size[1])
+                    center: root.center
+                    text: "[b]" + data.active_card.text+ "[/b]"
+                    halign: 'center'
+                    valign: 'center'
+                    markup: True
+            BoxLayout:
+                angle: 0
+                id: card_and_art
+                canvas.before:
+                    Rectangle:
+                        pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
+                        size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
+                        source: game_assets  + 'CardBackground.png'
+                #         L    T    R     B
+                padding: (100, 20, 100, 10)
                 BoxLayout:
-                    orientation: 'vertical'
-                    id: card
+                    padding: (30, 90, 30, 110)
+                    Image:
+                        source: card_assets + data.active_card.card_image
 
-                    BoxLayout:
-                        size_hint_y: .3
-                        Label:
-                            font_size: 20
-                            text_size: (self.size[0]*.6, self.size[1])
-                            center: root.center
-                            text: "[b]" + data.active_card.text+ "[/b]"
-                            halign: 'center'
-                            valign: 'center'
-                            markup: True
-                    BoxLayout:
-                        id: card_and_art
-                        BoxLayout:
-                            canvas.before:
-                                Rectangle:
-                                    pos: (self.pos[0]+(self.padding[0] ), self.pos[1]+(self.padding[1] ))
-                                    size: (self.size[0]-(self.padding[0] + self.padding[2]), self.size[1]-(self.padding[1] + self.padding[3]))
-                                    source: game_assets  + 'CardBackground.png'
-                            #         L    T    R     B
-                            padding: (100, 20, 100, 10)
-                            BoxLayout:
-                                padding: (30, 90, 30, 110)
-                                Image:
-                                    source: card_assets + data.active_card.card_image
-
-                BoxLayout:
-                    size_hint:(1, .3)
-                    orientation: 'horizontal'
-                    padding: (50, 0)
-                    ChoiceButton:
-                        background_normal: game_assets + 'LeftButton.png'
-                        text: data.active_card.options[0].text
-                        text_size: (self.size[0]*.8, self.size[1])
-                        on_press: data.choice_handler('1')
-                    ChoiceButton:
-                        background_normal: game_assets + 'RightButton.png'
-                        text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
-                        text_size: (self.size[0]*.8, self.size[1])
-                        on_press: data.choice_handler('2')
+        BoxLayout:
+            size_hint:(1, .3)
+            orientation: 'horizontal'
+            padding: (50, 0)
+            ChoiceButton:
+                id: choice_1
+                on_card_change:
+                    a = Animation(x=-550, y=50, duration=.99, t='out_bounce')
+                    a += Animation(x=-550, y=-900, duration=.01)
+                    a += Animation(x=1500, duration=.01)
+                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.2, t='linear')
+                    a.start(card_and_art)
+                background_normal: game_assets + 'LeftButton.png'
+                text: data.active_card.options[0].text
+                text_size: (self.size[0]*.8, self.size[1])
+                on_press: data.choice_handler('1')
+            ChoiceButton:
+                on_card_change:
+                    a = Animation(x=900, y=50, duration=.99, t='out_bounce')
+                    a += Animation(x=550, y=-900, duration=.01)
+                    a += Animation(x=-1500, duration=.01)
+                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.2, t='linear')
+                    a.start(card_and_art)
+                background_normal: game_assets + 'RightButton.png'
+                text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
+                text_size: (self.size[0]*.8, self.size[1])
+                on_press: data.choice_handler('2')
 
 
-<ChoiceButton@Button>:#
-
+<ChoiceButton>:
     line_height: 1.25
     font_size: 18
     center: root.center
