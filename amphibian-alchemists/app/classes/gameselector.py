@@ -103,6 +103,8 @@ class GameSelectorScreen(Screen):
         self.manager.get_screen("game_screen").current_time = (
             str(current_timer) or "200"
         )
+        if self.manager.get_screen("game_screen").timer_clock:
+            self.manager.get_screen("game_screen").timer_clock()
 
         # Switching to game screen with current config
         self.manager.current = "game_screen"
