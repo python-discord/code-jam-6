@@ -8,7 +8,6 @@ pre-commit = "*"
 flake8-import-order = "*"
 flake8-tidy-imports = "*"
 flake8-annotations = "*"
-coverage = "*"
 flake8 = "*"
 
 [packages]
@@ -24,5 +23,3 @@ python_version = "3.7"
 firestarter = "python -m firestarter"
 lint = "flake8"
 precommit = "pre-commit install"
-test = "coverage run -m unittest"
-report = "coverage report"

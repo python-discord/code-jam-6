@@ -3,10 +3,11 @@ from typing import Any
 
 from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.object import (
+    FlameBuddy,
     GenericObject,
     PickUpCoin,
     Player,
-    PlayerUiHeart
+    PlayerUiHeart,
 )
 
 from kivy.app import App
@@ -24,9 +25,13 @@ class MyGame(Engine):
         self.hearts.change_mode(5)
         self.add_sprite(self.hearts, static=True)
 
+        # FlameBuddy
+        self.flameBuddy = FlameBuddy('flame', (40, 100), collide=False, engine=self, mode=0)
+
         # Player
         self.player = Player(self.assets['player'], (50, 90))
-        self.player.bind(lives=self.update_hearts)
+        self.player.bind(lives=self.update_hearts,
+                         pos=lambda _, v: self.flameBuddy.on_player_pos(v))
         self.add_player(self.player)
 
         # Platforms, Items, etc.
@@ -37,38 +42,14 @@ class MyGame(Engine):
 
         self.add_sprites(
             [
+                self.flameBuddy,
                 self.coin,
                 self.platform_06
             ]
         )
 
-        self.unload_level([self.player, self.hearts, self.platform_06])
+        self.unload_level([self.player, self.hearts, self.platform_06, self.flameBuddy])
         self.load_level(self.levels['testzone'])
-
-        # Clock.schedule_interval(
-        #     lambda dt: self.player.change_mode(self.player.current_mode + 1),
-        #     1
-        # )
-
-        for x in range(100):
-            img = Image(source='resources/background/Tree.png',
-                        keep_ratio=True,
-                        allow_stretch=False,
-                        size_hint=(0.5, 0.5),
-                        pos_hint={'center_x': random.uniform(0, 1),
-                                  'top': random.uniform(0.36, 0.38)})
-
-            self.background.add_widget(img, index=6)
-
-        for x in range(5):
-            img = Image(source='resources/background/dino.png',
-                        keep_ratio=True,
-                        allow_stretch=False,
-                        size_hint=(random.uniform(0.45, 0.5), random.uniform(0.45, 0.5)),
-                        pos_hint={'center_x': random.uniform(0, 1),
-                                  'top': random.uniform(0.36, 0.38)})
-
-            self.background.add_widget(img, index=random.randrange(10, 30))
 
     def update_hearts(self, _: Any, value: int) -> None:
         self.hearts.change_mode(value)
