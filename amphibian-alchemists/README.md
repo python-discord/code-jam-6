@@ -19,8 +19,6 @@ Table of Contents:
 4. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
 5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
 
-The current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
-
 ---
 ### Tutorial
 In order to start decripting messages, you must first do two things: configure the rotors and the plugboard. In game, you are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper.
