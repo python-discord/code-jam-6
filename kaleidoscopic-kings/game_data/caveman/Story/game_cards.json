@@ -374,5 +374,38 @@
         ]
       }
     ]
+  },
+    {
+    "card_id": "cat",
+    "card_type": "event",
+    "card_image": "dodo.png",
+      "card_sound": "meow.wav",
+    "text": "There's a cat",
+    "options": [
+      {
+        "text": "Who's a lovely kitty cat?",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_civility": 0.07
+            }
+          }
+        ]
+      },
+      {
+        "text": "I'm more of a dog person",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_civility": -0.67
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
