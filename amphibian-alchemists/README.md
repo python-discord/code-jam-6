@@ -7,9 +7,7 @@ Used by the Germans to send covert messages, the WWII Enigma Machine is the most
 
 Table of Contents:
 - Setup
-- Background
-- Short Tutorial: Gist of the game
-- Full-Length Tutorial
+- Tutorial
 - Settings (Defaults)
 - Guides
 
@@ -24,44 +22,26 @@ Table of Contents:
 The current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
 
 ---
-### Background
-To gain the full experience, it's best to understand how the machine works. 
-- https://en.wikipedia.org/wiki/Enigma_machine
-- [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
+### Tutorial
+In order to start decripting messages, you must first do two things: configure the rotors and the plugboard. In game, you are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper.
 
-A diagram of the machine's internal functionality:
-![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
+![]()
 
----
-### Short Tutorial: Gist of the game
-Start a new game. You are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper (each pair of plugs is connected by one wire).
+## Rotors ##
 
-Once you have those configured, type whatever the ciphertext is. If Autoinput is enabled (default enabled), your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
+Configure the three rotors with the + and - buttons until they match with the instructions on the paper.
 
-Beware though, you only have a certain amount of time to decipher the message before the Allies capture you!
+## Plugboard ##
 
-Note: If you have Autoinput off and mistype once, move the rotor that just rotated backwards and continue typing from where you messed up (Remember, The Germans didn't have a backspace key).
+Click two ports to create a wire that connects both of them. These ports are labeled with letters. You must connect each letter with its respetive letter pair listed on the paper.
 
----
-### Full-Length Tutorial
-![](https://ietp-web-cdn-eandt-cache.azureedge.net/0/2/c/4/5/9/02c4592c9a481871f93b30cdb914d341e22f547b.jpg)
+![]()
 
-At the top are rotors which are configured by rotation, the middle is the lampboard which shows outputted characters, the middle is the input keyboard, and the bottom is the plugboard.
+Once you have those configured, you are ready to decipher! Type the ciphertext listed on the paper into the textbox. If Autoinput is enabled (enabled by default), your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
 
-You will be configuring the rotors and plugboard where you can plug and unplug characters.
+Beware though, you only have a certain amount of time to decipher the message before the Allies capture you! Decipher the complete message to win the game!
 
-Every 24 hours, the Germans switched the rotors and plugboard settings according to a key distributed at the beginning of each month.
-
-You are given these settings in order to decrypt the message. Your job is to configure the Enigma machine and produce logical, Anglicized/English text. Once you have configured the machine, using your keyboard, you can (randomly) type out the ciphered characters and will be magically typing out the outputted, logical characters if the machine is configured correctly.
-
-When you create a new game, you are shown the Enigma machine.
-
-- By pressing on a rotor, you will first be led to a new screen where you can rotate the rotor to its proper initial settings
-- By pressing on the plugboard, you will be led to a new screen where you can drag-and-drop plugs to its proper initial place.
-
-Once you have finished configuring both the plugboard and rotors, go to the main enigma machine and start randomly pressing keys. You can see which keys are being typed by the animations or you can press on the piece of paper at the top right to see the ciphered text.
-
-The output characters when you type will be shown and automatically configured in another piece of paper. You can restart the game if you misconfigured the machine. __Remember, only start typing when you have finished configurations!__
+Note: If you have Autoinput off and mistype once, move the rotors back one input and continue typing from where you messed up (Remember, The Germans didn't have a backspace key).
 
 ---
 ### Settings (Defaults)
@@ -69,6 +49,15 @@ The output characters when you type will be shown and automatically configured i
 - Autoinput the next, correct ciphertext letter: On
 - Musics: On
 - Sound effects: On 
+
+---
+### Background
+To gain the full experience, it's best to understand how the machine works. 
+- https://en.wikipedia.org/wiki/Enigma_machine
+- [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
+
+A diagram of the machine's internal functionality:
+![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
 
 ---
 ### LICENSE
