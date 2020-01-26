@@ -1,6 +1,6 @@
 # Circumstantial Companions
 
-![Chisel Preview](preview.gif)
+![Chisel Preview](./preview.gif)
 
 SMASH ROCK!  FASTER SWING = MORE ROCK SMASHED! This app is a pre-historically accurate
 representation of Paleolithic technology.  Re-invent the wheel with this (rock)cutting-edge
@@ -19,7 +19,61 @@ simulation! A caveman workout routine guaranteed to give you chiseled slabs fast
 
 ## Sources
 
-boulder0-4.png from https://pixabay.com/vectors/rock-boulder-stone-nature-granite-576685/ under
-Pixabay License (free for non-commercial use).
+```
+assets
+│
+├───img
+│   │   background.png
+│   │   options_background.png
+│   │   sign_border.png
+│   │
+│   ├───boulder
+│   │       0.png
+│   │       1.png
+│   │       2.png
+│   │       3.png
+│   │       4.png
+│   │
+│   ├───burger
+│   │       hover.png
+│   │       normal.png
+│   │       pressed.png
+│   │
+│   ├───button
+│   │       hover.png
+│   │       normal.png
+│   │       pressed.png
+│   │
+│   ├───caveman
+│   │       0.png
+│   │       1.png
+│   │       2.png
+│   │       3.png
+│   │
+│   └───cursor
+│           down.png
+│           up.png
+│
+├───sounds
+│       dig.wav
+│
+└───ttf
+        han_wang_yan_kai.ttf
+        keifont.ttf
+        kirsty_rg.ttf
+        zcool_kuaile_rg.ttf
+```
 
-up.png, down.png, caveman0-3.png, background.png, and dig.wav original work by salt-die
+### Images
+
+- [`boulder/*.png`][boulder-dir] from [Pixabay][pixabay-url] are licensed under the [Pixabay License][pixabay-license-url].
+
+- `background.png`, `cursor/*.png` and `caveman/*.png` are original works by salt-die.
+
+[boulder-dir]: ./assets/img/boulder
+[pixabay-url]: https://pixabay.com/
+[pixabay-license-url]: https://pixabay.com/service/license/
+
+### Sounds
+
+- `dig.wav` is an original work by salt-die.
