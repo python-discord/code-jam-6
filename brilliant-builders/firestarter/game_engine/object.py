@@ -152,13 +152,11 @@ class FlameBuddy(Sprite):
 
     def on_player_pos(self, new_pos: Tuple[float, float]) -> None:
         distance_to_player = ((self.pos[0] - new_pos[0]),
-                              (self.pos[1] - new_pos[1]-75))
+                              (self.pos[1] - new_pos[1]-55))
 
-        x_offset = -1 * distance_to_player[0] / 25
-        x_offset = x_offset * 2 if abs(x_offset) > .5 else 0
+        x_offset = -1 * distance_to_player[0] / 15
 
-        y_offset = -1 * distance_to_player[1] / 25
-        y_offset = y_offset if abs(y_offset) > .5 else 0
+        y_offset = -1 * distance_to_player[1] / 15
 
         self.vel = (x_offset, y_offset)
 
