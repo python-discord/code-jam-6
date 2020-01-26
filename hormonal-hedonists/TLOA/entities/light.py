@@ -7,6 +7,7 @@ from TLOA.core.constants import (
 
 from kivy.graphics import Mesh, Color
 from kivy.vector import Vector
+from kivy.clock import Clock
 
 
 class LightRays(Mesh):
@@ -25,6 +26,9 @@ class LightRays(Mesh):
         self.point = Vector(0, 0)
         self.mirror = []
         self.target = False
+        self.time_to_focus = 5
+        self.old_vertex3y_value = 0
+        self.old_vertex4y_value = 0
 
         self.trace(point=point, surface=surface)
 
@@ -35,22 +39,46 @@ class LightRays(Mesh):
 
         self.vertices = []
 
+        self.indices = [0, 1, 2, 3]
+        self.vertex1, self.vertex2, self.vertex3, self.vertex4 = self.mirror[1:]
+        self.vertex3 = self.vertex3 + self.point
+        self.vertex4 = self.vertex4 + self.point
+
         if self.target:
             # Make the light beam pointed to the target
-            self.indices = [0, 1, 2]
-            vertex1, vertex2 = self.mirror[1:3]
-            self.vertices.extend([self.point.x, self.point.y, vertex1.x, vertex1.y])
-            self.vertices.extend([vertex1.x, vertex1.y, vertex2.x, vertex2.y])
-            self.vertices.extend([vertex2.x, vertex2.y, self.point.x, self.point.y])
+            def start_focus(dt):
+                self.vertices.extend([self.vertex1.x, self.vertex1.y,
+                                      self.vertex2.x, self.vertex2.y])
+                self.vertices.extend([self.vertex2.x, self.vertex2.y,
+                                      self.vertex3.x, self.vertex3.y])
+                self.vertices.extend([self.vertex3.x, self.vertex3.y +
+                                      self.old_vertex3y_value, self.vertex4.x, self.vertex4.y])
+                self.vertices.extend([self.vertex4.x, self.vertex4.y -
+                                      self.old_vertex4y_value, self.vertex1.x, self.vertex1.y])
+                self.time_to_focus -= 0.1
+                self.old_vertex3y_value += 0.7
+                self.old_vertex4y_value += 0.7
+
+            if self.time_to_focus >= 5:
+                self.time_to_focus -= 0.1
+                self.event_focus = Clock.schedule_interval(start_focus, 0.01)
+
+            if self.time_to_focus <= 0:
+                Clock.unschedule(self.event_focus)
+                self.indices = [0, 1, 2]
+                vertex1, vertex2 = self.mirror[1:3]
+                self.vertices.extend([self.point.x, self.point.y, vertex1.x, vertex1.y])
+                self.vertices.extend([vertex1.x, vertex1.y, vertex2.x, vertex2.y])
+                self.vertices.extend([vertex2.x, vertex2.y, self.point.x, self.point.y])
 
         else:
             # Make the light beam non-pointed when no target available
-            self.indices = [0, 1, 2, 3]
-            vertex1, vertex2, vertex3, vertex4 = self.mirror[1:]
-            vertex3 = vertex3 + self.point
-            vertex4 = vertex4 + self.point
-
-            self.vertices.extend([vertex1.x, vertex1.y, vertex2.x, vertex2.y])
-            self.vertices.extend([vertex2.x, vertex2.y, vertex3.x, vertex3.y])
-            self.vertices.extend([vertex3.x, vertex3.y, vertex4.x, vertex4.y])
-            self.vertices.extend([vertex4.x, vertex4.y, vertex1.x, vertex1.y])
+            self.old_vertex3y_value = 0
+            self.old_vertex4y_value = 0
+            self.time_to_focus = 5
+            self.vertices.extend([self.vertex1.x, self.vertex1.y, self.vertex2.x, self.vertex2.y])
+            self.vertices.extend([self.vertex2.x, self.vertex2.y, self.vertex3.x, self.vertex3.y])
+            self.vertices.extend([self.vertex3.x, self.vertex3.y-15,
+                                  self.vertex4.x, self.vertex4.y])
+            self.vertices.extend([self.vertex4.x, self.vertex4.y+15,
+                                  self.vertex1.x, self.vertex1.y])
