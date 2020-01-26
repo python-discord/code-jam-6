@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from kivy.graphics.instructions import RenderContext
 
 from primal.engine.sprite import Sprite, ColorSprite, Text
@@ -50,10 +52,16 @@ class Inventory:
         return self.inventory_data[self.active]
 
     def load_inventory(self):
-        with open((Sprite.resource_dir / "inventory.json").as_posix(), "r") as read_file:
+        resource_dir = Path('.', 'primal', 'resources').absolute()
+        try:
+            f = open(resource_dir / "items.json")
+        except FileNotFoundError:
+            resource_dir = Path('.', 'resources').absolute()
+
+        with open((resource_dir / "inventory.json").as_posix(), "r") as read_file:
             self.inventory_data = json.load(read_file)
 
-        with open((Sprite.resource_dir / "items.json").as_posix(), "r") as read_file:
+        with open((resource_dir / "items.json").as_posix(), "r") as read_file:
             self.item_data = json.load(read_file)
 
         i = 0
