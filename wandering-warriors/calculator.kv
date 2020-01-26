@@ -102,15 +102,16 @@
         Button:
             pos_hint: {'x': 0, 'top': 1}
             background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.send_operation('plus')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
                 source: self.parent.parent.parent.button_image('plus')
-            # on_release: self.parent.parent.parent.parent.parent.send_operation('plus')
         Button:
             pos_hint:  {'x': 0, 'top':4/5}
             background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.send_operation('minus')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -119,6 +120,7 @@
         Button:
             pos_hint: {'x': 0, 'top': 3/5}
             background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.send_operation('times')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -127,6 +129,7 @@
         Button:
             pos_hint: {'x': 0, 'top': 2/5}
             background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.send_operation('divide')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -135,11 +138,12 @@
         Button:
             pos_hint: {'x': 0, 'top': 1/5}
             background_color: 1, .1, .1, 0
+            on_release: self.parent.parent.parent.children[2].next_line()
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
                 allow_stretch: True
-                source: self.parent.parent.parent.button_image('sqrt')
+                source: self.parent.parent.parent.button_image('equals')
 
 
 <CuneiformDrawingInput>:
