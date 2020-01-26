@@ -8,5 +8,5 @@ KEY_RIGHT = Keyboard.keycodes['d']
 
 
 NUMERIC_KEYS = []
-for i in range(0, 10):
-    NUMERIC_KEYS.append(Keyboard.keycodes[str(i)])
+for i in range(1, 11):
+    NUMERIC_KEYS.append(Keyboard.keycodes[str(i % 10)])

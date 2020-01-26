@@ -14,7 +14,10 @@ class Screen(Widget):
     def set_engine(self, engine):
         self.engine = engine
 
-    def is_key_pressed(self, code: int):
+    def is_key_just_pressed(self, code: int) -> bool:
+        return code in self.engine.just_pressed_keys
+
+    def is_key_pressed(self, code: int) -> bool:
         return code in self.engine.pressed_keys
 
     def get_mouse_position(self):

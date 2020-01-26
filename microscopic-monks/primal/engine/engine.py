@@ -25,6 +25,7 @@ class Engine(Widget):
         # Window.bind(on_touch_up=self.update_mouse_up)
 
         self.pressed_keys = set()
+        self.just_pressed_keys = set()
         self.mouse_keys = set()
 
         self.mouse_position = 0, 0
@@ -60,6 +61,7 @@ class Engine(Widget):
         """Call update and render on each screen """
         for screen in self.screens:
             screen.update(dt)
+        self.just_pressed_keys = set()
 
     def on_keyboard_closed(self) -> None:
         self.keyboard.unbind(on_key_down=self.on_keyboard_down)
@@ -68,6 +70,7 @@ class Engine(Widget):
 
     def on_keyboard_down(self, _, key, *args) -> None:
         self.pressed_keys.add(key[0])
+        self.just_pressed_keys.add(key[0])
 
     def on_keyboard_up(self, _, key, *args) -> None:
         self.pressed_keys.discard(key[0])

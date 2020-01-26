@@ -102,10 +102,10 @@ class GameScreen(Screen):
                 feature.set_alpha(new_value)
             new_clicked_features[feature] = new_value
 
-        self.inventory.update()
-
         self.clicked_features = new_clicked_features
         self.engine.mouse_keys = set()
+
+        self.update_inventory()
 
         self.world.update(self.player.get_center())
 
@@ -128,6 +128,12 @@ class GameScreen(Screen):
                 if dy == 0 and dx == 0:
                     return 0.0, 0.0
         return dx, dy
+
+    def update_inventory(self):
+        for i in range(len(keys.NUMERIC_KEYS)):
+            if self.is_key_just_pressed(keys.NUMERIC_KEYS[i]):
+                self.inventory.set_ative(i)
+                return
 
     def process_click(self):
         mx, my = self.engine.mouse_position
