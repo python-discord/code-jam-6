@@ -97,6 +97,7 @@ Builder.load_string('''
         md_bg_color: app.theme_cls.accent_color
 
         Image: 
+            id: morse_alphabet
             size_hint: 1, 1
 
         MDLabel:
@@ -158,7 +159,6 @@ class ListeningScreen(Screen):
     def __init__(self, **kwargs):
         super(ListeningScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
-        self.children[0].children[5].source = os.path.join('ui', 'img', 'morse_code_alphabet.png')
 
     def on_enter(self):
         Clock.schedule_once(self.init_listening_screen, 0)
@@ -167,6 +167,7 @@ class ListeningScreen(Screen):
         self.cur_sound = None
 
     def init_listening_screen(self, dt):
+        self.ids.morse_alphabet.source = os.path.join('ui', 'img', 'morse_code_alphabet.png')
         self.tapping_prompt_label = self.ids.tapping_prompt_label
         self.user_text_field.children[2].children[2].disabled = False
         self.user_text_field.children[2].children[2].bind(on_press=lambda x: self.clear_input())
