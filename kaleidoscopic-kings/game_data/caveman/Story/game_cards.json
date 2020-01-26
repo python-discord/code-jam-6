@@ -2,7 +2,7 @@
   {
     "card_id": "welcome",
     "card_type": "start",
-    "card_image": "test.jpg",
+    "card_image": "greg_the_caveman.png",
     "text": "You are greg",
     "options": [
       {
@@ -57,7 +57,7 @@
   {
     "card_id": "welcome_3",
     "card_type": "response",
-    "card_image": "test.jpg",
+    "card_image": "greg_the_caveman.png",
     "text": "This gives you some options. Maybe its time to start taking this whole evolution thing seriously?",
     "options": [
       {
@@ -84,6 +84,7 @@
     "card_id": "dino_kick",
     "card_type": "event",
     "card_image": "kickable_dino.png",
+    "card_sound": "dino_roar.wav",
     "text": "You're minding your own business, and whats this? There's a dinosaur, do you kick it?",
     "options": [
       {
@@ -119,7 +120,7 @@
   {
     "card_id": "dino_kick_friendly",
     "card_type": "response",
-    "card_image": "test.jpg",
+    "card_image": "kickable_dino.png",
     "card_sound": "kick.mp3",
     "text": "Turns out the dinosaur wasn't so scary after all. She ran away and left you some lovely eggs for breakfast",
     "options": [
@@ -178,8 +179,8 @@
   {
     "card_id": "river_dino_encounter",
     "card_type": "response",
-    "card_sound": "water.wav",
-    "card_image": "river.png",
+    "card_image": "dino.png",
+    "card_sound": "dino_roar.wav",
     "text": "Halfway trough your trip you see a dinosaur.",
     "options": [
       {
@@ -227,7 +228,7 @@
   {
     "card_id": "fishing",
     "card_type": "response",
-    "card_image": "river.png",
+    "card_image": "pufferfish.png",
     "text": "On your way to get the fishing stick you see there's one pufferfish left in the bucket.",
     "options": [
       {
@@ -253,7 +254,7 @@
   {
     "card_id": "pufferfish_sick",
     "card_type": "response",
-    "card_image": "river.png",
+    "card_image": "pufferfish.png",
     "text": "Perhaps it would have been better to cook that week old pufferfish before eating.",
     "options": [
       {
