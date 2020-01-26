@@ -30,7 +30,7 @@ class ContactCard(ButtonBehavior, MDCard):
         self.add_widget(icon)
 
         # Create name Label
-        contact_label = MDLabel(text=self.contact, font_style='H3')
+        contact_label = MDLabel(text=self.contact, font_style='H3', size_hint=(5, 1))
         contact_label.theme_text_color = 'Custom'
         contact_label.text_color = [1, 1, 1, 1]
         self.add_widget(contact_label)

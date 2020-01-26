@@ -53,14 +53,19 @@ class ConversationBubble(ButtonBehavior, MDCard):
 
     def callback_for_menu_items(self, *args):
         key = args[0]
+        encode = ''
+        decode = ''
         if '.-' not in self.label.text:
-            self.util.morse.read(words=str(self.label.text))
+            encode = self.util.morse_helper.text_to_morse(self.label.text)
+            #self.util.morse.read(words=str(self.label.text))
         else:
-            self.util.morse.read(morse=str(self.label.text))
+            decode = self.util.morse_helper.morse_to_text(self.label.text)
+            #self.util.morse.read(morse=str(self.label.text))
 
-        if 'encode' in key.lower():
-            self.label.text = self.util.morse.morse
-        if 'decode' in key.lower():
-            self.label.text = self.util.morse.words
+        if 'encode' in key.lower() and encode:
+            self.label.text = encode
+        if 'decode' in key.lower() and decode:
+            self.label.text = decode
         if 'play' in key.lower():
-            self.util.morse_transmit_thread()
+            #self.util.morse_transmit_thread()
+            pass

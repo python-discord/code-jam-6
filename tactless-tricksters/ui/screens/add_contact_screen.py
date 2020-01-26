@@ -35,10 +35,9 @@ class AddContactScreen(Screen):
 
         self.contact_input = MDTextFieldRound(size_hint=(0.75, None), pos_hint={'center_x': 0.5})
         # Hides left icon
-        self.contact_input.children[2].children[2].theme_text_color = 'Custom'
-        self.contact_input.children[2].children[2].text_color = [0, 0, 0, 0]
-        self.contact_input.children[2].children[2].font_size = 0
-        self.contact_input.children[2].children[2].height = 0
+        self.contact_input.icon_left_dasabled = True
+        # Moves widget out of the field of view
+        self.contact_input.children[2].children[2].pos_hint = {'center_x': 500, 'center_y': 500}
         self.contact_input.icon_right = 'send'
         self.contact_input.children[2].children[0].bind(
             on_press=lambda x: self.check_name(self.contact_input.text))
