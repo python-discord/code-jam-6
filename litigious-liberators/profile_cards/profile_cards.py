@@ -106,7 +106,7 @@ class ProfileList(ScreenManager):
         self.profile_list = deepcopy(self.static_profile_list)
         self.cycler = self.r_cycle(self.profile_list)
         #  should be initialisable in main app
-        self._attributes = Counter({"Knowledge": 5, "Welfare": 5, "Energy": 5})
+        self._attributes = Counter({"Knowledge": 1, "Welfare": 1, "Energy": 1})
         # self._keyboard = Window.request_keyboard(self._keyboard_closed, self)
         # self._keyboard.bind(on_key_down=self._on_keyboard_down)
         with open(f"{self.profile_dir}/{next(self.cycler)}", "r") as profile_file:
