@@ -1,4 +1,5 @@
 import os
+import platform
 from datetime import datetime
 from random import sample
 from string import ascii_uppercase
@@ -215,7 +216,7 @@ class GameScreen(Screen):
         )
         sound.volume = volume
         sound.play()
-        if os.environ["KIVY_AUDIO"] != "sdl2":
+        if platform.system() in {"Linux", "Darwin"}:
             Clock.schedule_once(lambda dt: sound.unload(), sound.length)
 
     if not os.path.exists(DATA_DIR):

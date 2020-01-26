@@ -2,6 +2,7 @@
     title: "Time's up"
     size_hint: 0.5, 0.5
     auto_dismiss: False
+    on_open: app.root.get_screen("game_screen").ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus = False
     BoxLayout:
         orientation: "vertical"
         Label:
@@ -28,6 +29,7 @@
     title: "Winner!"
     size_hint: 0.5, 0.5
     auto_dismiss: False
+    on_open: app.root.get_screen("game_screen").ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus = False
     BoxLayout:
         orientation: "vertical"
         Label:
