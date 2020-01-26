@@ -97,7 +97,7 @@ def setup_new_game_settings():
         current_output_text="",
         last_saved_output_text="",
         created_date=datetime.now().isoformat(),
-        last_saved_date=datetime.now().isoformat(),
+        last_saved_date="None",
         encrypted_state={"reflector": "B", "rotors": rotor_setting, "plugs": plugs},
         current_state={
             "reflector": "B",
