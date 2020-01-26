@@ -19,7 +19,7 @@
         paper.ids.input_paper.recycle_view_input.data = paper.input_data()
         paper.ids.output_paper.recycle_view_output.data = paper.output_data()
     on_dismiss:
-        app.root.get_screen("game_screen").paper_wrinkle()
+        app.root.get_screen("game_screen").play_effect_sound("paper")
     BoxLayout:
         orientation: "vertical"
         padding: dp(10)
@@ -35,7 +35,7 @@
 
 <CheckPaperButton@ButtonBehavior+Image>:
     source: "misc/paper.png"
-    on_press: app.root.get_screen("game_screen").paper_wrinkle()
+    on_press: app.root.get_screen("game_screen").play_effect_sound("paper")
     on_release:
         app.root.paper_popup.open()
     PaperLabel:

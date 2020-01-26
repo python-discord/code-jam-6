@@ -7,18 +7,24 @@ from string import ascii_uppercase
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.clock import Clock
+from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
+from kivy.factory import Factory
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
 from requests import get
-from kivy.core.audio import SoundLoader
 
 from .save_game import on_config_change, save_rotors, store_put
 
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
+)
+CONFIG_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gameconfig.json")
 )
 
 
@@ -115,12 +121,26 @@ def setup_new_game_settings():
 class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.upper() in App.get_running_app().keys:
-            s = App.get_running_app().machine.key_press(substring.upper())
+            # Autoinput
+            letter = substring.upper()
+            config_store = JsonStore(CONFIG_DIR)
+            try:
+                if config_store.get("auto_input")["value"] == 1:
+                    game_id = App.get_running_app().game_id
+                    store = JsonStore(DATA_DIR)
+                    game = store.get(str(game_id))
+                    current_output_text = game["current_output_text"]
+                    ciphered_text = game["ciphered_text"]
+                    letter = str(ciphered_text)[len(current_output_text)]
+            except KeyError:
+                config_store.put("auto_input", value=1)
+            # Key press
+            s = App.get_running_app().machine.key_press(letter)
             return super().insert_text(s, from_undo=from_undo)
 
 
 class GameScreen(Screen):
-    """Do we automatically assume new game or should we save?"""
+    current_time = StringProperty("")
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
@@ -128,26 +148,47 @@ class GameScreen(Screen):
         super().__init__(**kwargs)
         Window.bind(on_key_down=self._on_key_down)
 
-    def plug_remove_pop(self):
-        SoundLoader.load("misc/pop.wav").play()
+    def load_output_text(self):
+        """On load of game from selector screen, put text in board"""
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        keyboard_output = store.get(str(game_id))["current_output_text"]
+        if keyboard_output:
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = (
+                keyboard_output
+            )
+        else:
+            self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
 
-    def key_click(self):
-        SoundLoader.load("misc/keyboard_click.wav").play()
+    def play_effect_sound(self, sound):
+        sound_names = {
+            "pop",
+            "plug_in",
+            "keyboard_click",
+            "paper",
+            "button_1",
+            "swoosh",
+            "button_2",
+            "rotor",
+        }
+        if sound not in sound_names:
+            return
 
-    def paper_wrinkle(self):
-        SoundLoader.load("misc/paper.wav").play()
+        settings = JsonStore(CONFIG_DIR)
 
-    def button_press_positive(self):
-        SoundLoader.load("misc/button_1.wav").play()
+        volume = 1.0
 
-    def button_press_swoosh(self):
-        SoundLoader.load("misc/swoosh.mp3").play()
+        if settings.exists("effects_volume"):
+            if settings.get("effects_volume")["value"] == 0:
+                return
+            else:
+                volume = settings.get("effects_volume")["value"]
 
-    def button_press_negative(self):
-        SoundLoader.load("misc/button_2.wav").play()
-
-    def rotor_turn(self):
-        SoundLoader.load("misc/rotor.wav").play()
+        sound = SoundLoader.load(
+            "misc/" + sound + (".wav" if sound != "swoosh" else ".mp3")
+        )
+        sound.volume = volume
+        sound.play()
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
@@ -160,6 +201,8 @@ class GameScreen(Screen):
             setup_new_game_settings()
         else:
             on_config_change()
+
+        self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
@@ -176,16 +219,30 @@ class GameScreen(Screen):
         """
         Here goes what we're gonna do whenever a key in the machine is pressed
         """
-        # check win condition
-        self.key_click()
+
+        self.play_effect_sound("keyboard_click")
+
         anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
             _color=[1, 1, 1], duration=0.2
         )
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
+        # Auto-input invading key
+        letter = key.name  # Saving in case auto-input disabled
+        config_store = JsonStore(CONFIG_DIR)
+        try:
+            if config_store.get("auto_input")["value"] == 1:
+                game_id = App.get_running_app().game_id
+                store = JsonStore(DATA_DIR)
+                game = store.get(str(game_id))
+                current_output_text = game["current_output_text"]
+                ciphered_text = game["ciphered_text"]
+                letter = str(ciphered_text)[len(current_output_text)]
+        except KeyError:
+            config_store.put("auto_input", value=1)
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
-            board_output.insert_text(key.name)
+            board_output.insert_text(letter)
         store_put(current_output_text=board_output.text)
         # Updating rotors
         new_rotors = App.get_running_app().machine.get_display()
@@ -227,13 +284,9 @@ class GameScreen(Screen):
         if title != "" or title is not None:
             store_put(game_title=title)
 
-    def load_output_text(self):
-        game_id = App.get_running_app().game_id
-        store = JsonStore(DATA_DIR)
-        keyboard_output = store.get(str(game_id))["last_saved_output_text"]
-        if keyboard_output:
-            self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = (
-                keyboard_output
-            )
+    def handle_timer(self, dt):
+        if int(self.current_time) == 0:
+            self.timer_clock.cancel()
+            Factory.TimesUp().open()
         else:
-            self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
+            self.current_time = str(int(self.current_time) - 1)
