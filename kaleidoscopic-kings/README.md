@@ -1,15 +1,40 @@
-# The Kaleidoscopic Kings of Ancient Technology
+# Kaleidoscopic Kings
+## Installation
+### Linux
+### Windows
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+## What is it
+Our project is broken down into two core parts, an engine and game creator to allow you to make your very own games and
+a 
+### Jurassic Greg
+You are Greg. You were minding your own business rubbing two sticks together, and poof! you discovered fire. Whilst you 
+didn't ask for this kind of evolution, you've got to live with it now, and with all the choices that come alongside being a robust modern man. 
+For example, T-Rexes, should you kick them?
 
-## Useful links
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+Throughout the game you'll be presented with a range of cards, you don't have to micromanage every little decision of 
+life - just some of the little decisions. Whether to take a bath in the river, make a pterodactyl omelette, or whether 
+maybe you *should* have kicked that T-Rex, you'll be responsible for ensuring the continuation of the great line of Greg.
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+Each choice you make will have two options, you need to decide whats best for Greg.
+### Card RPG engine
+## Using it
+### Playing the game
+Playing the game is just about as simple as it  gets. You run the app, and you're presented with a choice. You make a choice,
+rinse and repeat. 
+### Making your own game
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+## Authors and the team
+### Braindead
+BrainDead was the MVP of the project, implementing practically the entire backend of the system, both the editor and the engine. 
+Taking general ideas from the whole team, providing plenty of his own, and turning them all into reality.
+### Charlie
+Charlie focused on getting the Kivy layout working. Finding assets, shifting things around by 5 pixels at a time. 
+Coming up with the overall look and feel for Jurassic Greg, as well as the customisable design.
+### GlowingRunes
+In addition to wireframing and designing the first UI, GlowingRunes provided some fantastic audio assets for the project, carrying the unique look and feel throughout the game.
+### Heagan
+Heagan was a key player in the idea and design phase, providing insight and research into the design and implementation 
+of the eventual game, as well as implementing Animations for the front end of the app.
 
-## License
-
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+## Assets and licenses
