@@ -57,11 +57,11 @@ rinse and repeat.
 
 ### Defining your own story
 If you want to define your own story, or even if you just want to extend Greg's story, all you need to do is create json 
-files to represent your events and choices using the handy editor.
+files to represent your events and choices using the alpha editor or editing them manually (as editor isn't fully complete).
 
 ### Customising your game
 In order to customise the look and feel of your game, you'll need to create a folder for your game at the top level, which contains all the assets required. 
-These necessary assets and the structure can be seen in Jurassic Greg's implementaiton in the game_data/caveman directory.
+These necessary assets and the structure can be seen in Jurassic Greg's implementation in the game_data/caveman directory.
 
 ## The Team
 
