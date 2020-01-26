@@ -325,7 +325,7 @@ class SeasonDial(FloatLayout):
     def __init__(self, **kwargs):
         super(SeasonDial, self).__init__(**kwargs)
 
-        self.dial_file = 'assets/dial.png'
+        self.dial_file = 'assets/seasons_dial.png'
         self.dial_size = 0.4, 0.4
         self.day_length = 86400
         self.set_season_angle()  # will this work?
