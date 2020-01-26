@@ -9,6 +9,7 @@ from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
+from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.properties import StringProperty
 from kivy.storage.jsonstore import JsonStore
@@ -112,7 +113,7 @@ class EnigmaOutput(TextInput):
 
 
 class GameScreen(Screen):
-    current_time = StringProperty("15")
+    current_time = StringProperty("60")
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
@@ -162,7 +163,7 @@ class GameScreen(Screen):
         else:
             on_config_change()
 
-        Clock.schedule_interval(self.handle_timer, 1)
+        self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
@@ -238,6 +239,7 @@ class GameScreen(Screen):
 
     def handle_timer(self, dt):
         if int(self.current_time) == 0:
-            Clock.tick()
+            self.timer_clock.cancel()
+            Factory.TimesUp().open()
         else:
             self.current_time = str(int(self.current_time) - 1)
