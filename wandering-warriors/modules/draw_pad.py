@@ -37,6 +37,8 @@ class DrawPad(FloatLayout):
             for i in range(4):
                 self.border.append(Rectangle(source='assets/graphics/wood.png'))
 
+        self.clear_button_src = 'assets/graphics/clear_sandbox.png'
+
         self.bind(pos=self.update, size=self.update)
 
         self.update()
@@ -106,11 +108,8 @@ class DrawPad(FloatLayout):
                 print(f"Gesture value: {value}")
                 # TODO: report value to relevant module
                 # TODO: fade line out
-                self.click()
+                self.clear()
 
-    def click(self):
+    def clear(self):
         for l in self.lines:
             l[0].points = []
-
-    def buttonImage(self):
-        return 'assets/graphics/clear1.png'

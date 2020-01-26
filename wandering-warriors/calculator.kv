@@ -2,24 +2,50 @@
     BoxLayout:
         orientation: 'vertical'
         TopMenu:
+            SettingsButton:
         Abacus:
+            HelpButton:
+            ClearButton:
         BoxLayout:
             orientation: 'horizontal'
             Ledger:
+                HelpButton:
+                ClearButton:
             OperationsBar:
             CuneiformDrawingInput:
-                TopRightButton:
+                HelpButton:
+                ClearButton:
 
 <TopMenu>:
     size_hint_y: None
     height: 32
-    canvas:
+    canvas.before:
         Color:
-            rgb: 1, 0, 0
+            rgb: .8, .8, .8
         Rectangle:
+            source: 'assets/graphics/wood.png'
             size: self.size
             pos: self.pos
 
+<SettingsButton>:
+    Button:
+        size: (32, 32)
+        pos: (self.parent.parent.x + self.parent.parent.width - 32, self.parent.parent.y)
+        background_color: 1, 1, 1, 0
+
+        on_press:
+            self.size = (30, 30)
+            self.pos = (self.parent.parent.x + self.parent.parent.width - 32 + 1, self.parent.parent.y + 1)
+
+        on_release:
+            self.size = (32, 32)
+            self.pos = (self.parent.parent.x + self.parent.parent.width - 32, self.parent.parent.y)
+
+        Image:
+            pos: self.parent.pos
+            size: self.parent.size
+            source: 'assets/graphics/settings.png'
+            
 <Abacus>:
     canvas.before:
         Color:
@@ -112,28 +138,52 @@
             size: self.size
             pos: self.pos
 
-<TopRightButton>:
-    size_hint: 50, 50
-    #:set offset 10
+
+<ClearButton>:
     Button:
-        size: self.parent.size_hint
-        background_color: .5, .5, .5, 1 
-        x: self.parent.parent.x + self.parent.parent.size[0] - self.size[0] - offset
-        y: self.parent.parent.y + self.parent.parent.size[1] - self.size[1] - offset
+        size: [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+        x: self.parent.parent.x + self.parent.parent.width - self.width
+        y: self.parent.parent.y + self.parent.parent.height - self.height
+        background_color: 1, 1, 1, 0
+
         on_press:
-            self.background_color = 0, 0, 0.055
-            self.parent.parent.click()
+            self.size = [max(min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96) - 2, 1)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - self.width - 1
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height - 1
+
         on_release:
-            self.background_color = .5, .5, .5, 1 
-        canvas.before:
-            Color:
-                rgba: self.background_color
-            Line:
-                width: 2
-                rectangle: self.x, self.y, self.width, self.height
+            self.size = [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - self.width
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height
+
+            self.parent.parent.clear()
+        
         Image:
-            source: self.parent.parent.parent.buttonImage()
-            center_x: self.parent.center_x
-            center_y: self.parent.center_y
-            allow_stretch: True
+            pos: self.parent.pos
             size: self.parent.size
+            source: self.parent.parent.parent.clear_button_src
+
+
+<HelpButton>:
+    Button:
+        size: [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+        x: self.parent.parent.x + self.parent.parent.width - 2 * self.width
+        y: self.parent.parent.y + self.parent.parent.height - self.height
+        background_color: 1, 1, 1, 0
+
+        on_press:
+            self.size = [max(min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96) - 2, 1)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width - 3
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height - 1
+
+        on_release:
+            self.size = [min(min(self.parent.parent.width, self.parent.parent.height) / 8, 96)] * 2
+            self.x = self.parent.parent.x + self.parent.parent.width - 2 * self.width
+            self.y = self.parent.parent.y + self.parent.parent.height - self.height
+
+            #self.parent.open_help()
+
+        Image:
+            pos: self.parent.pos
+            size: self.parent.size
+            source: 'assets/graphics/help.png'

@@ -39,6 +39,18 @@ class TopRightButton(Widget):
     pass
 
 
+class ClearButton(Widget):
+    pass
+
+
+class HelpButton(Widget):
+    pass
+
+
+class SettingsButton(Widget):
+    pass
+
+
 class Screen:
     def __init__(self):
         self.sm = ScreenManager()
