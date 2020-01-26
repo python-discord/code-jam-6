@@ -1,13 +1,23 @@
-# Inquisitive Investigators
+# Rex Explorer - Inquisitive Investigators
 
-Ancient Technology!
+## Features
 
-## Installation - Developers
+- File browser
+- Built-in terminal
+- Ease-of-use footer buttons
+- Text editor
 
-* Install pipenv: `pip install pipenv`
-* Install dependencies: `pipenv sync --dev`
+## Installation
 
-All dependencies are now installed in a virtual environment.
+#### Users
+
+- Install pipenv: `pip install pipenv`
+- Install dependencies: `pipenv sync`
+
+#### Developers
+
+- Install pipenv: `pip install pipenv`
+- Install dependencies: `pipenv sync --dev`
 
 ## License
 
