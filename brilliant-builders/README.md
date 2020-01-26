@@ -3,16 +3,18 @@
 
 This is our awesome README, lets be sure to add stuff here later!
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+##Brilliant Builders Studios are proud to announce the release of super duper, mind blowing, super ancient, retro platformer:
 
-## Useful links
+#The Firestarter
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+Since you play as cavemen and you have nothing better to do you just walk through levels and light fireplaces on fireee
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+##Installation:
+1) install `pipenv`, you can get it here: https://pypi.org/project/pipenv/
+2) navigate into `brilliant builders` folder
+3) enter `pipenv sync` into the command line
+4) and finally run `pipenv run firestarter`
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+##Controls:
+Use arrow keys to move around, Space for jump and hold Shift to do wall jumps. Youre gonna figure it out, it aint Rocket science!
 
-## License
-
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
