@@ -17,7 +17,7 @@ FRICTION = .9
 DISLODGE_VELOCITY = 1e-3
 MAX_VELOCITY = .2
 
-PEBBLE_COUNT = 7e3 # per layer.
+PEBBLE_COUNT = 7e3  # per layer.
 PEBBLE_IMAGE_SCALE = .75
 
 CHISEL_RADIUS = 6e-4
@@ -26,6 +26,7 @@ CHISEL_POWER = 100
 
 BACKGROUND = str(Path('assets', 'img', 'background.png'))
 SOUND = tuple(str(Path('assets', 'sounds', f'00{i}.wav')) for i in range(1, 5))
+
 
 def get_image_and_aspect(file):
     """
@@ -42,9 +43,11 @@ def get_image_and_aspect(file):
 
     return image, int(pebbles_per_row), int(pebbles_per_column)
 
+
 PEBBLE_IMAGES = (Path("assets", "img", "boulder", f"{i}.png") for i in range(4))
 PEBBLE_IMAGES = tuple(get_image_and_aspect(image) for image in PEBBLE_IMAGES)
 CURRENT_IMAGE = list(choice(PEBBLE_IMAGES))
+
 
 def pebble_setup():
     """
@@ -52,7 +55,7 @@ def pebble_setup():
     """
     image, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
     x_scale, y_scale = 1 / pebbles_per_row, 1 / pebbles_per_column
-    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1 # Lower-left corner offset of image.
+    x_offset, y_offset = (1 - PEBBLE_IMAGE_SCALE) / 2, .1  # Lower-left corner offset of image.
     h, w, _ = image.shape
 
     for x in range(pebbles_per_row):
@@ -67,6 +70,7 @@ def pebble_setup():
             pebble_y = (1 - y) * PEBBLE_IMAGE_SCALE + y_offset
             normalized_color = r / 255, g / 255, b / 255, a / 255
             yield pebble_x, pebble_y, normalized_color
+
 
 def is_dislodged(velocity):
     """
@@ -123,7 +127,7 @@ class Pebble:
 
         if not self.y:
             self.update.cancel()
-            del stone.pebbles[self.index] # Remove reference // kill this object
+            del stone.pebbles[self.index]  # Remove reference // kill this object
 
 
 class Chisel(Widget):
@@ -269,7 +273,7 @@ class Chisel(Widget):
         self.background.texture.mag_filter = 'nearest'
 
     def export_png(self, path_to_file, transparent=False):
-        colors = [] # We won't save pebbles on the floor.
+        colors = []  # We won't save pebbles on the floor.
         for color, pixel in zip(self.colors, self.pixels):
             _, y = pixel.pos
             if not y:

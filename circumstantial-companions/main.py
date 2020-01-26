@@ -250,7 +250,7 @@ class SaveAsPopup(Popup):
         self.save_type = None
         self.choices = {
             "background": ".png " + _("(with background)"),
-            "transparent": ".png " +_("(transparent)"),
+            "transparent": ".png " + _("(transparent)"),
             "project": PROJECT_EXTENSION,
             "all": _("All")
         }

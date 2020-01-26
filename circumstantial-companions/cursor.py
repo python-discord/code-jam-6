@@ -44,5 +44,3 @@ class Cursor(Widget):
 
     def on_cursor_enter(self, *args):
         self.opacity = 1
-
-
