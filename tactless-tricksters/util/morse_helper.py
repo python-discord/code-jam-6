@@ -1,4 +1,22 @@
-class Morse:
+RATE = 16000
+CHUNK = 4000  # number of audio samples per frame of test_data
+DATA_RATE = 400  # sampling rate of signal activity in audio
+
+# morse parameters
+SMALLEST_TIME_UNIT = .08  # the unit of time in seconds that other duration will be multiple of
+DOT_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT
+DASH_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 3
+LETTER_END_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 3
+WORD_END_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 7
+
+NUM_BITS_PER_SEC = int(RATE / DATA_RATE)
+DOT_DURATION_THRESHOLD_BIT = int(DOT_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+DASH_DURATION_THRESHOLD_BIT = int(DASH_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+LETTER_END_DURATION_THRESHOLD_BIT = int(LETTER_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+WORD_END_DURATION_THRESHOLD_BIT = int(WORD_END_DURATION_THRESHOLD_SEC * NUM_BITS_PER_SEC)
+
+
+class MorseHelper:
     def __init__(self):
         self.__letter_to_morse = {'a': '.-', 'b': '-...', 'c': '-.-.',
                                   'd': '-..', 'e': '.', 'f': '..-.',
@@ -13,7 +31,23 @@ class Morse:
                                   '4': '....-', '5': '.....', '6': '-....',
                                   '7': '--...', '8': '---..', '9': '----.',
                                   ' ': '/'}
-        self.__morse_to_letter = {morse: letter for letter, morse in self.__letter_to_morse.items}
+        self.__morse_to_letter = {morse: letter for letter, morse in self.__letter_to_morse.items()}
+
+    @property
+    def long_press_dur(self):
+        return DOT_DURATION_THRESHOLD_SEC
+
+    @property
+    def short_press_dur(self):
+        return DASH_DURATION_THRESHOLD_BIT
+
+    @property
+    def long_pause_dur(self):
+        return LETTER_END_DURATION_THRESHOLD_BIT
+
+    @property
+    def short_pause_dur(self):
+        return WORD_END_DURATION_THRESHOLD_BIT
 
     def morse_to_text(self, morse_code):
         text = ''
@@ -36,4 +70,3 @@ class Morse:
 
     def signal_to_morse(self, signal):
         pass
-
