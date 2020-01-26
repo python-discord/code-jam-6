@@ -4,15 +4,18 @@ Biography: >
   On our first date, I'll carve our names in a tree. It's the most romantic way to let you know I
   have long and sharp claws.
 Choices:
+<<<<<<< HEAD
   right: >
     First date with Jeff.
   left: >
     Ignore Jeff.
+=======
+  right: First date with Jeff.
+  left: Ignore Jeff.
+>>>>>>> 5c55e278ce36218ebecfb48dd621b21ceed15e46
 Results:
-  right: >
-    Hope he won't kill me.
-  left: >
-    What a creep!
+  right: Hope he won't kill me.
+  left: What a creep!
 Deltas:
   right:
     Knowledge: 0

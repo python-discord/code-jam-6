@@ -1,4 +1,5 @@
 #:kivy 1.11.1
+#:import utils kivy.utils
 <CreateProfile>
     ProfileSwiper:
         id: profile_carousel
@@ -22,32 +23,36 @@
                 spacing: '10dp'
                 Button:
                     text: 'Continue'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release:
                         root.ids.profile_carousel.validate_name()
 
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: "What would you do if you find a shiny object?:"
+                text: "What would you do if you find a shiny object?"
                 font_size: '25dp'
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
                 spacing: '10dp'
                 ToggleButton:
-                    text: 'Display it as a decoration.'
+                    text: 'Display it as a decoration'
                     group: 'Q1'
                     state: 'down'
                 ToggleButton:
-                    text: 'pick and tell none about it.'
+                    text: 'pick and tell none about it'
                     group: 'Q1'
                 ToggleButton:
-                    text: "Tell your trusty smart friend."
+                    text: "Tell your trusty smart friend"
                     group: 'Q1'
                 ToggleButton:
                     # TODO: show some toast about your action's consequences
                     # For example: you chose to save him so he ends up telling stuff
-                    text: 'Research about it in the library.'
+                    text: 'Research about it in the library'
                     group: 'Q1'
             BoxLayout:
                 orientation: 'horizontal'
@@ -55,32 +60,40 @@
                 spacing: '10dp'
                 Button:
                     text: 'Go Back'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_next()
 
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: 'You come across an angry animal:'
+                text: 'You come across an angry animal. You:'
                 font_size: '30dp'
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
                 spacing: '10dp'
                 ToggleButton:
-                    text: 'Run away.'
+                    text: 'Run away'
                     group: 'Q2'
                     state: 'down'
                 ToggleButton:
-                    text: 'Throw objects to scare it.'
+                    text: 'Throw objects to scare it'
                     group: 'Q2'
                 ToggleButton:
-                    text: 'Fight it with a stick.'
+                    text: 'Fight it with a stick'
                     group: 'Q2'
                 ToggleButton:
-                    text: 'You are fearless and fight it like a man.'
+                    text: 'You are fearless and fight it like a man'
                     group: 'Q2'
             BoxLayout:
                 orientation: 'horizontal'
@@ -88,32 +101,40 @@
                 spacing: '10dp'
                 Button:
                     text: 'Go Back'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
-                    # TODO: With this design we only need to valiedate the name. But we need more questions.
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
+                    # TODO: With this design we only need to validate the name. But we need more questions.
                     on_release: root.ids.profile_carousel.load_next()
         BoxLayout:
             orientation: 'vertical'
             Label:
-                text: 'You are stranded in the middle of nowhere:'
+                text: 'You are stranded in the middle of nowhere. You:'
                 font_size: '30dp'
             BoxLayout:
                 orientation: 'vertical'
                 padding: '10dp'
                 spacing: '10dp'
                 ToggleButton:
-                    text: "I'm fragile. I'll die in an hour."
+                    text: "I'm fragile. I'll die in an hour"
                     group: 'Q3'
                     state: 'down'
                 ToggleButton:
-                    text: 'There is always a way.\nI should try something.'
+                    text: 'There is always a way... I should try something'
                     group: 'Q3'
                 ToggleButton:
-                    text: 'I had gone through tough situations like this.'
+                    text: 'I had gone through tougher situations than this'
                     group: 'Q3'
                 ToggleButton:
-                    text: "This ain't much kiddo."
+                    text: "This ain't much kiddo"
                     group: 'Q3'
             BoxLayout:
                 orientation: 'horizontal'
@@ -121,8 +142,16 @@
                 spacing: '10dp'
                 Button:
                     text: 'Go Back'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
-                    # TODO: With this design we only need to valiedate the name. But we need more questions.
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
+                    # TODO: With this design we only need to validate the name. But we need more questions.
                     on_release: root.manager.current = "profile_selection"
