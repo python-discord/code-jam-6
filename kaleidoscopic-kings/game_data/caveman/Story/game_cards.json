@@ -337,5 +337,42 @@
         ]
       }
     ]
+  },
+  {
+    "card_id": "dodo_sharing",
+    "card_type": "event",
+    "card_image": "dodo.png",
+    "text": "A friendly dodo comes and says hello. His mistake",
+    "conditions": {
+      "world_found_tribe": true
+    },
+    "options": [
+      {
+        "text": "Share this tasty meal with the tribe",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_hunger": -0.05,
+              "player_civility": 0.08
+            }
+          }
+        ]
+      },
+      {
+        "text": "He seems like a meal more fit for one. And that one is me",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_hunger": 0.1,
+              "player_civility": -0.1
+            }
+          }
+        ]
+      }
+    ]
   }
 ]
