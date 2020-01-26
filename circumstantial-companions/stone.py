@@ -41,7 +41,7 @@ def get_image_and_aspect(file):
 
     return image, int(pebbles_per_row), int(pebbles_per_column)
 
-PEBBLE_IMAGES = tuple(Path("assets", "img", "boulder", f"{i}.png") for i in range(4))
+PEBBLE_IMAGES = (Path("assets", "img", "boulder", f"{i}.png") for i in range(4))
 PEBBLE_IMAGES = tuple(get_image_and_aspect(image) for image in PEBBLE_IMAGES)
 CURRENT_IMAGE = list(choice(PEBBLE_IMAGES))
 
