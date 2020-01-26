@@ -57,8 +57,8 @@ class MyNavigationLayout(NavigationLayout):
         self.toolbar.anchor_title = 'center'
         self.toolbar.elevation = 0
         self.toolbar.theme_text_color = 'Custom'
-        self.toolbar.text_color = App.get_running_app().theme_cls.primary_color
-        self.toolbar.md_bg_color = [0, 0, 0, 0]
+        self.toolbar.text_color = [1, 1, 1, 1]
+        self.toolbar.md_bg_color = App.get_running_app().theme_cls.primary_color
         self.toolbar.left_action_items = [['menu', lambda x: self.toggle_nav_drawer()]]
         toolbar_anchor.add_widget(self.toolbar)
         self.add_widget(toolbar_anchor)

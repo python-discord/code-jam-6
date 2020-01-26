@@ -27,6 +27,10 @@ class ConversationBubble(ButtonBehavior, MDCard):
         self.label.text_color = kwargs.get("text_color")
         self.add_widget(self.label)
         self.menu_items = []
+        self.prompt = ''
+        self.cur_sound_index = 0
+        self.sound_list = []
+        self.cur_sound = None
         keys = ['encode', 'decode', 'play']
         for key in keys:
             self.menu_items.append(
@@ -67,5 +71,46 @@ class ConversationBubble(ButtonBehavior, MDCard):
         if 'decode' in key.lower() and decode:
             self.label.text = decode
         if 'play' in key.lower():
-            # self.util.morse_transmit_thread()
-            pass
+            if '.-' in self.label.text:
+                self.prompt = self.util.morse_helper.morse_to_text(self.label.text)
+            else:
+                self.prompt = self.label.text
+            self.play_prompt()
+
+    def play_prompt(self):
+        self.clear_sound()
+        if self.cur_sound:
+            self.cur_sound_index = 999999
+            self.cur_sound.stop()
+        print(f"playing morse for: {self.prompt}")
+        Clock.schedule_once(self.init_morse_sounds, 0)
+
+    def init_morse_sounds(self, dt):
+        self.clear_sound()
+
+        for letter in self.prompt:
+            if letter == ' ':
+                self.sound_list.append('long_pause')
+            else:
+                self.sound_list.append(letter)
+                self.sound_list.append('short_pause')
+
+        if len(self.sound_list) > self.cur_sound_index:
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            self.cur_sound.bind(on_stop=self.play_next_sound)
+            self.cur_sound.play()
+
+    def play_next_sound(self, dt):
+        self.cur_sound_index += 1
+        if len(self.sound_list) > self.cur_sound_index:
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            self.cur_sound.bind(on_stop=self.play_next_sound)
+            self.cur_sound.play()
+
+    def clear_sound(self):
+        if self.cur_sound:
+            self.cur_sound.stop()
+        self.cur_sound_index = 0
+        self.sound_list = []
+        self.cur_sound = None
+  
