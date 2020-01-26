@@ -21,19 +21,16 @@
     size_hint_y: 0.7
     canvas:
         Color:
-            rgba: 204 / 255, 204 / 255, 204 / 255, 1
-        Rectangle:
+            rgba: 16 / 255, 16 / 255, 16 / 255, 1
+        RoundedRectangle:
             size: root.size
             pos: root.pos
     cols: 2
 
     Lamp:
         id: lamp
-    TextInput:
-        id: board_input
-        multiline: False
-        on_text:
-            if self.text != self.text.upper(): self.text = self.text.upper()
+    EnigmaOutput:
+        id: board_output
 
 <Keyboard@GridLayout>:
     canvas:
@@ -49,10 +46,10 @@
         padding: dp(15)
         canvas:
             Color:
-                rgba: 0, 0, 0, 1
+                rgba: 16 / 255, 16 / 255, 16 / 255, 1
             Line:
                 rectangle: self.x, self.y, self.width, self.height
-                width: 5
+                width: 4
         Widget:
         Key:
             id: Q
@@ -87,7 +84,7 @@
         padding: dp(10)
         canvas:
             Color:
-                rgba: 0, 0, 0, 1
+                rgba: 16 / 255, 16 / 255, 16 / 255, 1
             Line:
                 rectangle: self.x, self.y, self.width, self.height
                 width: 4
@@ -123,10 +120,10 @@
         padding: dp(10)
         canvas:
             Color:
-                rgba: 0, 0, 0, 1
+                rgba: 16 / 255, 16 / 255, 16 / 255, 1
             Line:
                 rectangle: self.x, self.y, self.width, self.height
-                width: 2
+                width: 4
         Key:
             id: P
             name: "P"
@@ -159,8 +156,6 @@
     canvas:
         Color:
             rgb: 0, 0, 0
-        Line:
-            rectangle: self.x, self.y, self.width, self.height
     orientation: "vertical"
     LampBoard:
         id: lamp_board

@@ -1,0 +1,15 @@
+name: Flake8 check
+
+on: [push]
+
+jobs:
+  flake8-check:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Flake8 checker
+        uses: cclauss/GitHub-Action-for-Flake8@v0.5.0
+        with:
+          args: flake8 . --show-source --max-line-length 100

@@ -1,2 +1,162 @@
-<Rotor>
-    name: "rotor"
+<Gear@Image>:
+    index: 0
+    source: "misc/gear0.png"
+
+<RotorLabel@Label>:
+    size_hint: 0.2, 0.2
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    canvas.before:
+        Color:
+            rgba: 232 / 255, 213 / 255, 170 / 255, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    canvas.after:
+        Color:
+            rgba: 0, 0, 0, 1
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+    color: 0, 0, 0, 1
+
+<RotorButton@ButtonBehavior+Widget>:
+    color_normal: 0, 0, 0, 1
+    color_down: 0, 0, 0, 0
+    color_disabled: 1, 0, 0, 1
+    text: ""
+    size_hint: 0.2, 0.2
+    Label:
+        size: root.size
+        pos: root.pos
+        color: root.color_normal if root.state == "normal" else root.color_down
+        on_disabled: self.color = root.color_disabled if self.disabled else root.color_normal
+        text: root.text
+
+<Rotor@BoxLayout>:
+    orientation: "vertical"
+    rotor_number: 0
+    rotor_value: rotor_value
+    canvas:
+        Color:
+            rgb: 165 / 255, 165 / 255, 165 / 255
+        Rectangle:
+            source: "misc/rotor.png"
+            size: self.size
+            pos: self.pos
+    RelativeLayout:
+        RotorButton:
+            id: up
+            text: "+"
+            pos_hint: {"center_x": 0.5, "top": 0.62}
+            on_press:
+                app.root.get_screen("game_screen").play_effect_sound("rotor")
+            on_release:
+                app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
+    RelativeLayout:
+        RotorLabel:
+            id: rotor_value
+            text: app.machine.get_display()[root.rotor_number - 1]
+    RelativeLayout:
+        RotorButton:
+            id: down
+            text: "-"
+            pos_hint: {"center_x": 0.5, "top": 0.575}
+            on_press:
+                app.root.get_screen("game_screen").play_effect_sound("rotor")
+            on_release:
+                app.root.get_screen("rotor_screen").handle_rotor_value(self, rotor_value)
+
+<Rotors@BoxLayout>:
+    size_hint_y: 0.7
+    spacing: dp(10)
+    Rotor:
+        id: first_rotor
+        rotor_number: 1
+    Gear:
+    Rotor:
+        id: second_rotor
+        rotor_number: 2
+    Gear:
+    Rotor:
+        id: third_rotor
+        rotor_number: 3
+    Gear:
+
+<RotorScreen>:
+    name: "rotor_screen"
+    rotor_section: rotor_section
+    keys: app.keys
+    AnchorLayout:
+        anchor_x: "left"
+        anchor_y: "top"
+        BoxLayout:
+            size_hint: 0.20, 0.1
+            Button:
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                text: "Go back!"
+                on_release: root.manager.current = "game_screen"
+    AnchorLayout:
+        BoxLayout:
+            padding: dp(20)
+            size_hint: 0.8, 0.8
+            canvas:
+                Color:
+                    rgba: 14 / 255, 14 / 255, 14 / 255, 1
+                RoundedRectangle:
+                    size: self.size
+                    pos: self.pos
+            Rotors:
+                id: rotor_section
+                pos_hint: {"center_y": 0.5}
+    CheckPaper:
+
+# For display in gamescreen
+<RotorDisplay@AnchorLayout>
+    BoxLayout:
+        padding: dp(80), 0, dp(70), 0
+        canvas:
+            Color:
+                rgba: 16 / 255, 16 / 255, 16 / 255, 1
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+        BoxLayout:
+            RotorModified:
+            Gear:
+            RotorModified
+            Gear:
+            RotorModified
+            Gear:
+
+<RotorModified@BoxLayout>:
+    orientation: "vertical"
+    screen: root.parent.parent.parent.parent
+    canvas:
+        Color:
+            rgb: 165 / 255, 165 / 255, 165 / 255
+        Rectangle:
+            source: "misc/rotor.png"
+            size: self.size
+            pos: self.pos
+    RelativeLayout:
+        RotorButton:
+            id: up
+            text: "+"
+            pos_hint: {"center_x": 0.5, "top": 0.62}
+            on_release:
+                if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
+    RelativeLayout:
+        RotorLabel:
+            id: rotor_value
+            index: 0
+            text: ""
+            on_index:
+                if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
+                elif self.index == 0: setattr(down, "disabled", True)
+    RelativeLayout:
+        RotorButton:
+            id: down
+            text: "-"
+            disabled: True
+            pos_hint: {"center_x": 0.5, "top": 0.575}
+            on_release:
+                if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)

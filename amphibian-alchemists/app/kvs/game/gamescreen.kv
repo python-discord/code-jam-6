@@ -1,30 +1,90 @@
+<GameTitlePopup@Popup>:
+    title: "There is already a default"
+    size_hint: 0.5, 0.25
+    BoxLayout:
+        spacing: dp(5)
+        orientation: "vertical"
+        TextInput:
+            id: game_title_input
+            size_hint_y: None
+            height: self.minimum_height
+            multiline: False
+            hint_text: "Best game ever..."
+        BoxLayout:
+            Button:
+                text: "Save game title"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+                on_release:
+                    app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
+                    root.dismiss()
+            Button:
+                text: "Cancel"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+                on_release: root.dismiss()
+
+<GameMenuPopup@Popup>:
+    title: "Select..."
+    size_hint: 0.5, 0.5
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: "Give this current game a title"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release: Factory.GameTitlePopup().open()
+        Button:
+            text: "Save a copy of current progress"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release:
+                app.root.get_screen("game_screen").save_game()
+                root.dismiss()
+        Button:
+            text: "Load old copy (WARNING: Overrides current progress!)"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release:
+                app.root.get_screen("game_screen").load_old_game()
+                root.dismiss()
+        Button:
+            text: "Close"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+            on_release:
+                root.dismiss()
+        Button:
+            text: "Exit to Main Menu"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+            on_release:
+                app.root.current = "main_screen"
+                root.dismiss()
+
 <GameScreen>:
     name: "game_screen"
     AnchorLayout:
+        anchor_y: "top"
         BoxLayout:
             orientation: "vertical"
-            size_hint: 0.75, 0.7
-            Button:
-                size_hint_y: 0.2
-                text: "Rotors"
-                on_release: root.manager.current = "rotor"
-            EnigmaKeyboard:
-                id: enigma_keyboard
+            size_hint: 0.75, 1.5
+            AnchorLayout:
+                size_hint: 1, 0.575
+                RotorDisplay:
+                Button:
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                    background_color: 0, 0, 0, 0
+                    on_release: root.manager.current = "rotor_screen"
+            BoxLayout
+                size_hint: 1, 0.9
+                EnigmaKeyboard:
+                    id: enigma_keyboard
+            AnchorLayout:
+                Button:
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                    background_color: 0, 0, 0, 0
+                    on_release: root.manager.current = "plugboard_screen"
+                PlugBoardModified:
     AnchorLayout:
+        anchor_y : "top"
         anchor_x : "left"
         Button:
-            text: "paper"
-            size_hint: 0.1, 1
-            on_release: root.manager.current = "paper"
-    AnchorLayout:
-        anchor_x : "right"
-        Button:
-            text: "Output paper"
-            size_hint: 0.1, 1
-            on_release: root.manager.current = "paper"
-    AnchorLayout:
-        anchor_y: "bottom"
-        Button:
-            text: "plugboard"
-            size_hint: 0.75, 0.15
-            on_release: root.manager.current = "plugboard"
+            text: "Menu"
+            size_hint: 0.1, 0.1
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release: Factory.GameMenuPopup().open()
+    CheckPaper:
