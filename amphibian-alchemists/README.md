@@ -14,10 +14,19 @@ Table of Contents:
 ---
 ### Setup
 1. Clone or download this repository.
-2. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
-3. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`. 
-4. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
-5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
+2. Ensure you have pip, wheel setuptools and virtualenv in the latest version: `python3 -m pip install --upgrade pip wheel setuptools virtualenv`
+3. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
+5. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`.
+6. If you're in Windows, install the Kivy dependencies:
+```
+python -m pip install docutils pygments pypiwin32 kivy_deps.sdl2==0.1.* kivy_deps.glew==0.1.*
+python -m pip install kivy_deps.gstreamer==0.1.*
+```
+7. If you are in Linux or MacOS, install ffpyplayer for audio: `pip install ffpyplayer`
+8. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
+9. In terminal, run main.py by doing `python main.py` or `python3 main.py`
+
+Troubles during setup? Check the installation instructions in the [Kivy website](https://kivy.org/doc/stable/gettingstarted/installation.html)
 
 ---
 ### Tutorial
@@ -50,11 +59,11 @@ Note: If you have Autoinput off and mistype once, move the rotors back one input
 - Fullscreen: Off
 - Autoinput the next, correct ciphertext letter: On
 - Musics: On
-- Sound effects: On 
+- Sound effects: On
 
 ---
 ### Background
-To gain the full experience, it's best to understand how the machine works. 
+To gain the full experience, it's best to understand how the machine works.
 - https://en.wikipedia.org/wiki/Enigma_machine
 - [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
 
