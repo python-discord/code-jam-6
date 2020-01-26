@@ -1,5 +1,6 @@
 import json
-from backend import path_handler
+from string import ascii_lowercase
+from backend import path_handler, card_format
 
 from kivy.uix.gridlayout import GridLayout
 from kivy.core.audio import SoundLoader
@@ -14,6 +15,11 @@ Config.set("graphics", "width", "1000")
 Config.set("graphics", "height", "600")
 
 story_name = "caveman"
+
+
+def is_snake_case(string: str):
+    valid = ascii_lowercase + "_"
+    return all(char in valid for char in string)
 
 
 class CardAddWindow(Screen):
@@ -48,19 +54,51 @@ class GameStatesWindow(Screen):
         game_states = json.load(f)
 
     def on_pre_enter(self):
-        layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
+        self.recreate_list()
 
+    def recreate_list(self):
+        self.ids.game_states_scroll_list.clear_widgets()
+
+        layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
+        layout.bind(minimum_height=layout.setter('height'))
         for key, value in self.game_states.items():
-            btn = Button(text=f"{key} : {value}")
+            btn = Button(text=f"{key} : {value}", size_hint_y=None, height=20)
             layout.add_widget(btn)
 
         self.ids.game_states_scroll_list.add_widget(layout)
 
-    def on_pre_leave(self):
-        self.ids.game_states_scroll_list.clear_widgets()
+    def add_game_state(self, state_name_key: str, value: str):
+        if not state_name_key or not value:
+            print("Can't be empty!")
+            return
+        elif not is_snake_case(state_name_key):
+            print("Only lowercase character plus char _ are supported.")
+            return
+        elif state_name_key in self.game_states:
+            print("Key already present!")
+            return
 
-    def wtf(self, root_ids):
-        print(root_ids)
+        if value.lower() == "true":
+            value = True
+        elif value.lower() == "false":
+            value = False
+        elif "." in value:
+            try:
+                value = float(value)
+            except ValueError:
+                pass
+        else:
+            try:
+                value = int(value)
+            except ValueError:
+                print("Unknown value type.")
+                return
+
+        # Class init will error if invalid type
+        card_format.GameVariable(state_name_key, value)
+        self.game_states.update({state_name_key: value})
+
+        self.recreate_list()
 
 
 class WindowManager(ScreenManager):

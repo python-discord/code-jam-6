@@ -118,7 +118,7 @@ WindowManager:
             Button:
                 text: 'Add state'
                 on_release:
-                    root.wtf(root.ids)
+                    root.add_game_state(root.ids.state_name_key.text, root.ids.value.text)
 
             Button:
                 text: 'Remove state'
