@@ -65,7 +65,7 @@ def pebble_setup():
             pebble_x = x * PEBBLE_IMAGE_SCALE + x_offset
             pebble_y = (1 - y) * PEBBLE_IMAGE_SCALE + y_offset
             normalized_color = r / 255, g / 255, b / 255, a / 255
-            yield normalized_color, pebble_x, pebble_y
+            yield pebble_x, pebble_y, normalized_color
 
 def is_dislodged(velocity):
         """
@@ -145,21 +145,26 @@ class Chisel(Widget):
     def setup_canvas(self):
         self.pebbles = {}
         self.positions = []
+        self.rgba = []
         self.colors = []
         self.pixels = []
-        self.pebble_size = self.get_pebble_size()
+        self.pebble_size = size = self.get_pebble_size()
+
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
+
             for depth, color_scale in enumerate((.4, .6, 1)):
-                for (r, g, b, a), x, y in pebble_setup():
-                    color = color_scale * r, color_scale * g, color_scale * b, a
-                    Color(*color)
+                for x, y, (r, g, b, a) in pebble_setup():
                     scaled_x = x * self.width
                     scaled_y = y * self.height
-                    self.colors.append(color)
                     self.positions.append((x, y, depth))
-                    self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
+
+                    color = color_scale * r, color_scale * g, color_scale * b, a
+                    self.rgba.append(color)
+                    self.colors.append(Color(*color))
+                    self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=size))
+
         self.background.texture.mag_filter = 'nearest'
 
     def _delayed_resize(self, *args):
@@ -169,12 +174,12 @@ class Chisel(Widget):
     def resize(self, *args):
         self.background.pos = self.pos
         self.background.size = self.size
-        self.pebble_size = self.get_pebble_size()
+        self.pebble_size = size = self.get_pebble_size()
         for i, (x, y, z) in enumerate(self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
             self.pixels[i].pos = scaled_x, scaled_y
-            self.pixels[i].size = self.pebble_size
+            self.pixels[i].size = size
 
     def poke_power(self, tx, ty, touch_velocity, pebble_x, pebble_y):
         """
@@ -226,7 +231,7 @@ class Chisel(Widget):
         _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
         positions = []
         colors = []
-        for (x, y, z), color in zip(self.positions, self.colors):
+        for (x, y, z), color in zip(self.positions, self.rgba):
             if y:
                 positions.append((x, y, z))
                 colors.append(color)
@@ -240,27 +245,41 @@ class Chisel(Widget):
     def load(self, path_to_file):
         with open(path_to_file, 'r') as file:
             pebble_dict = json.load(file)
+
+        CURRENT_IMAGE[1:] = pebble_dict['aspect']
+
         self.pebbles = {}
         self.positions = pebble_dict['positions']
-        self.colors = pebble_dict['colors']
-        CURRENT_IMAGE[1:] = pebble_dict['aspect']
+        self.rgba = pebble_dict['colors']
+        self.colors = []
         self.pixels = []
-        self.pebble_size = self.get_pebble_size()
+        self.pebble_size = size = self.get_pebble_size()
+
         self.canvas.clear()
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
-            for color, (x, y, z) in zip(self.colors, self.positions):
-                Color(*color)
+            for (x, y, z), color in zip(self.positions, self.rgba):
+                self.colors.append(Color(*color))
                 scaled_x = x * self.width
                 scaled_y = y * self.height
-                self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
+                self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=size))
         self.background.texture.mag_filter = 'nearest'
 
     def export_png(self, path_to_file, transparent=False):
+        colors = [] # We won't save pebbles on the floor.
+        for color, pixel in zip(self.colors, self.pixels):
+            x, y = pixel.pos
+            if not y:
+                colors.append((color, color.a))
+                color.a = 0
         if transparent:
             self.background_color.a = 0
+
         self.export_to_png(str(path_to_file))
+
+        for color, alpha in colors:
+            color.a = alpha
         self.background_color.a = 1
 
 
