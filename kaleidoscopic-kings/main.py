@@ -17,7 +17,7 @@ from kivy.properties import ObjectProperty, StringProperty
 class MainState:
     def __init__(self, label: str, value: float):
         self.label: str = label
-        value = f"{int(value*100//2)}%"
+        value = f"{int(value * 100 // 2)}%"
         self.value: str = value
 
 
@@ -61,7 +61,6 @@ class DataController(EventDispatcher):
 
 class CardGameApp(App):
     def build(self):
-
         Config.set("graphics", "width", "900")
         Config.set("graphics", "height", "1000")
 
@@ -77,11 +76,8 @@ class CardGameApp(App):
         ctl.game = game = load_game(story_name)
         ctl.active_card = game.start_game()
         ctl.set_game_state()
-        print(global_idmap["sound_assets"])
-        sound = SoundLoader.load(global_idmap["sound_assets"]+'caveman.wav')
+        sound = SoundLoader.load(global_idmap["sound_assets"] + 'caveman.wav')
         if sound:
-            print("Sound found at %s" % sound.source)
-            print("Sound is %.3f seconds" % sound.length)
             sound.play()
         return MainWidget()
 
