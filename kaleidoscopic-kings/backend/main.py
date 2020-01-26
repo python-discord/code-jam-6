@@ -1,13 +1,11 @@
 import json
 import random
 import logging
-from pathlib import Path
 from typing import List, Dict
+from backend import path_handler
 from backend.card_format import Card, GameState, OptionOutcome
 
 logger = logging.getLogger(__name__)
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = "backend/data"
 
 
 class Deck:
@@ -156,14 +154,12 @@ class Game:
         return card
 
 
-def load_game(game_cards_filename: str = "example_game_cards.json",
-              game_stats_filename: str = "example_game_states.json",
-              main_game_stats_filename: str = "example_game_globals.json") -> Game:
+def load_game(game_story_name: str) -> Game:
     """Loads the backend and returns a game object"""
-    with open(BASE_DIR.joinpath(DATA_DIR, game_cards_filename)) as f:
+    with open(path_handler.get_cards_json_path(game_story_name)) as f:
         _cards = [Card(**card_dict) for card_dict in json.load(f)]
-    with open(BASE_DIR.joinpath(DATA_DIR, game_stats_filename)) as f:
+    with open(path_handler.get_game_state_json_path(game_story_name)) as f:
         _game_states = json.load(f)
-    with open(BASE_DIR.joinpath(DATA_DIR, main_game_stats_filename)) as f:
+    with open(path_handler.get_global_game_state_json_path(game_story_name)) as f:
         _game_globals = json.load(f)
     return Game(_cards, _game_states, _game_globals["basic_4_states"])
