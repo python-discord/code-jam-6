@@ -11,9 +11,11 @@
             orientation: "horizontal"
             Button:
                 text: "Yes"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
                 on_release: app.stop()
             Button:
                 text: "No"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
                 on_release: root.dismiss()
 
 <MainScreen>:
@@ -24,19 +26,24 @@
             size_hint: 0.5, 0.5
             GridLayout:
                 pos_hint: {"center_x": 0.5}
-                size_hint_x: 0.3
+                size_hint_x: 0.35
                 cols: 2
                 Image:
                     source: app.icon
                 Label:
-                    text: app.title
+                    text: "[b]Elusive Enigma[/b]"
+                    font_size: "25dp"
+                    markup: True
             Widget:
             MenuButton:
-                text: "New Game"
-                on_release: root.manager.current = "game_screen"
+                text: "Start"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                on_release: root.manager.current = "game_selector_screen"
             MenuButton:
                 text: "Settings"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
                 on_release: root.manager.current = "settings_screen"
             MenuButton:
                 text: "Exit"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
                 on_release: Factory.ConfirmationPopup().open()

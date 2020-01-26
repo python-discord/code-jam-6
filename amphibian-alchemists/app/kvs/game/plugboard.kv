@@ -1,0 +1,458 @@
+<PopupLabel@Label>:
+    size_hint_y: None
+    pos_hint: {"top": 0.7}
+    text_size: root.width, None
+    size: self.texture_size
+    halign: "center"
+    valign: "top"
+
+<Wire@Widget>:
+    points: []
+    plugs: ""
+    color: [0, 0, 0]
+    canvas:
+        Color:
+            rgba: root.color + [0.4]
+        Line:
+            points: root.points
+            width: 5
+
+<PlugResume@Popup>:
+    size_hint: 0.5, 0.5
+    title: "Statistics"
+    BoxLayout:
+        spacing: dp(10)
+        orientation: "vertical"
+        GridLayout:
+            rows: 2
+            BoxLayout:
+                size_hint_y: 0.5
+                PopupLabel:
+                    text: "Pair of plugs:"
+                PopupLabel:
+                    text: "Number of plugs in screen:"
+            BoxLayout:
+                ScrollView:
+                    PopupLabel:
+                        text: "\n".join(app.root.get_screen("plugboard_screen").wires)
+                StackLayout:
+                    PopupLabel:
+                        text: str(app.root.get_screen("plugboard_screen").plugs_in_screen)
+        BoxLayout:
+            size_hint: 0.3, 0.2
+            pos_hint: {"center_x": 0.5}
+            Button:
+                text: "Close"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+                on_release: root.dismiss()
+
+<Plug@Image>:
+    app: app
+    size_hint: 0.1, 0.1
+    source: "misc/plug.png"
+
+<PlugHole@ButtonBehavior+Image>:
+    source: "misc/ports.png"
+    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    on_center: app.root.get_screen("plugboard_screen").on_plughole_recenter(*args)
+    on_release:
+        if app.root.get_screen("plugboard_screen").plugs_in_screen % 2 != 0 and root.name not in app.root.get_screen("plugboard_screen").all_plugged: app.root.get_screen("game_screen").play_effect_sound("plug_in")
+        app.root.get_screen("plugboard_screen").handle_plug_release(*args)
+
+<PlugBoard@GridLayout>:
+    plug_reference: Q
+    padding: dp(30)
+    canvas:
+        Color:
+            rgba: 16 / 255, 16 / 255, 16 / 255, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    cols: 17
+    orientation: 'vertical'
+    size_hint: 0.9, 0.8
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: Q
+            name: "Q"
+        Label:
+            text: "Q"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: W
+            name: "W"
+        Label:
+            text: "W"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: E
+            name: "E"
+        Label:
+            text: "E"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: R
+            name: "R"
+        Label:
+            text: "R"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: T
+            name: "T"
+        Label:
+            text: "T"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: Z
+            name: "Z"
+        Label:
+            text: "Z"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: U
+            name: "U"
+        Label:
+            text: "U"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: I
+            name: "I"
+        Label:
+            text: "I"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: O
+            name: "O"
+        Label:
+            text: "O"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: A
+            name: "A"
+        Label:
+            text: "A"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: S
+            name: "S"
+        Label:
+            text: "S"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: D
+            name: "D"
+        Label:
+            text: "D"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: F
+            name: "F"
+        Label:
+            text: "F"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: G
+            name: "G"
+        Label:
+            text: "G"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: H
+            name: "H"
+        Label:
+            text: "H"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: J
+            name: "J"
+        Label:
+            text: "J"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: K
+            name: "K"
+        Label:
+            text: "K"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: P
+            name: "P"
+        Label:
+            text: "P"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: Y
+            name: "Y"
+        Label:
+            text: "Y"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: X
+            name: "X"
+        Label:
+            text: "X"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: C
+            name: "C"
+        Label:
+            text: "C"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: V
+            name: "V"
+        Label:
+            text: "V"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: B
+            name: "B"
+        Label:
+            text: "B"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: N
+            name: "N"
+        Label:
+            text: "N"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: M
+            name: "M"
+        Label:
+            text: "M"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        PlugHole:
+            id: L
+            name: "L"
+        Label:
+            text: "L"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+<PlugboardScreen>
+    name: "plugboard_screen"
+    FloatLayout:
+        id: floating_widgets
+        AnchorLayout:
+            anchor_x: "left"
+            anchor_y: "top"
+            BoxLayout:
+                size_hint_y: 0.1
+                Button:
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                    size_hint_x: 0.5
+                    text: "< Go back"
+                    on_release: root.manager.current = "game_screen"
+                Button:
+                    text: "Statistics"
+                    on_release: Factory.PlugResume().open()
+                Button:
+                    id: remove_plug
+                    text: "Remove the last pair of plugs"
+                    disabled: True
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("pop")
+                    on_release: root.remove_grouped_plugs()
+
+        AnchorLayout:
+            padding: dp(30)
+            PlugBoard:
+                size_hint: 0.7, 0.7
+                id: plug_board
+        AnchorLayout:
+            anchor_y: "bottom"
+            BoxLayout:
+                size_hint: 0.1, 0.2
+                Label:
+                    text: "Click a port to add a plug"
+        CheckPaper:
+
+# for the gamescreen
+<PlugBoardModified@GridLayout>:
+    canvas:
+        Color:
+            rgba: 16 / 255, 16 / 255, 16 / 255, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    cols: 17
+    orientation: 'vertical'
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "Q"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "W"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "E"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "R"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "T"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "Z"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "U"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "I"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "O"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:

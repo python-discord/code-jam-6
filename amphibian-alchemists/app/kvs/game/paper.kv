@@ -1,0 +1,53 @@
+<PaperLabel@Label>:
+    color: 0, 0, 0, 1
+    markup: True
+    text_size: root.width, None
+    size: self.texture_size
+    halign: "center"
+
+<InputPaper@RecycleView>:
+    canvas.before:
+        Color:
+        Rectangle:
+            source: "misc/paper.png"
+            size: self.size
+            pos: self.pos
+    recycle_view_input: recycle_view_input
+    id: recycle_view_input
+    viewclass: "PaperLabel"
+    data: []
+    RecycleBoxLayout:
+        padding: dp(10)
+        default_size: None, dp(25)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+<OutputPaper@RecycleView>:
+    canvas.before:
+        Color:
+        Rectangle:
+            source: "misc/paper.png"
+            size: self.size
+            pos: self.pos
+    recycle_view_output: recycle_view_output
+    id: recycle_view_output
+    viewclass: "PaperLabel"
+    data: []
+    RecycleBoxLayout:
+        padding: dp(10)
+        default_size: None, dp(25)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: "vertical"
+
+<Paper>:
+    name: "paper_screen"
+    BoxLayout:
+        spacing: dp(20)
+        InputPaper:
+            id: input_paper
+        OutputPaper:
+            id: output_paper
