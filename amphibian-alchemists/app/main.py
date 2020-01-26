@@ -1,11 +1,15 @@
+import platform
 import os
 
-import kivy
-from enigma.machine import EnigmaMachine
-from kivy.app import App
-from kivy.factory import Factory
-from kivy.lang import Builder
-from kivy.uix.screenmanager import FadeTransition, ScreenManager
+if platform.system() in {"Linux", "Darwin"}:
+    os.environ["KIVY_AUDIO"] = "sdl2"
+
+import kivy # noqa
+from enigma.machine import EnigmaMachine # noqa
+from kivy.app import App # noqa
+from kivy.factory import Factory # noqa
+from kivy.lang import Builder # noqa
+from kivy.uix.screenmanager import FadeTransition, ScreenManager # noqa
 
 kivy.require("1.11.1")
 
