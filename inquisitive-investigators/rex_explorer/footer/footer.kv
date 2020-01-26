@@ -23,6 +23,11 @@
         on_press: root.edit()
     Button:
         size_hint: 1,1
+        text: 'Q: View'
+        font_size: 12.5
+        on_press: root.photo_view()
+    Button:
+        size_hint: 1,1
         text: '3: Copy'
         font_size: 12.5
         on_press: root.copy()
@@ -174,6 +179,48 @@
         Button:
             size_hint: .3,.1
             pos_hint: {'center_x': .4, 'center_y': .1}
+            text: '[ Cancel ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.dismiss()
+
+<PhotoPopup>:
+    title: 'View a photo'
+
+    FloatLayout:
+        Button:
+            id: left
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, 0
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.1
+            pos_hint: {'center_x': .3, 'center_y': .7}
+            text: '[ Left Manager ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.view('left')
+        Button:
+            id: right
+            canvas:
+                Color:
+                    rgba: 0, 0, 0, 0
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+
+            size_hint: .3,.1
+            pos_hint: {'center_x': .7, 'center_y': .7}
+            text: '[ Right Manager ]'
+            font_size: 14
+            color: 0.34,1,1,1
+            on_press: root.view('right')
+
+        Button:
+            size_hint: .3,.1
+            pos_hint: {'center_x': .5, 'center_y': .3}
             text: '[ Cancel ]'
             font_size: 14
             color: 0.34,1,1,1

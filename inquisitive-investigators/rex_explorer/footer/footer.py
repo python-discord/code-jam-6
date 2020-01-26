@@ -26,6 +26,7 @@ class Footer(BoxLayout):
         self.actions = {
             '1': self.about,
             '2': self.edit,
+            'q': self.photo_view,
             '3': self.copy,
             '4': self.down,
             '5': self.up,
@@ -98,6 +99,17 @@ class Footer(BoxLayout):
 
     def edit(self) -> None:
         popup = EditPopup(
+            self, size_hint=(.5, .3),
+            pos_hint={
+                'center_x': .5,
+                'center_y': .5
+            }
+        )
+        popup.open()
+        return True
+
+    def photo_view(self) -> None:
+        popup = PhotoPopup(
             self, size_hint=(.5, .3),
             pos_hint={
                 'center_x': .5,

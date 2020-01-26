@@ -17,6 +17,7 @@ from ..footer.footer import Footer
 from ..terminal.terminal import Terminal
 from ..manager.browser import FileBrowser
 from ..editor.editor import TextEditor
+from ..photo_viewer.viewer import PhotoViewer
 from ..utils.paths import CORE_KV
 
 Builder.load_file(CORE_KV)
@@ -28,6 +29,7 @@ class Manager(ScreenManager):
         super(Manager, self).__init__(*args, **kwargs)
         self.add_widget(BrowserScreen(name='browser'))
         self.add_widget(TextEditor(name='text_editor'))
+        self.add_widget(PhotoViewer(name='photo_viewer'))
 
 
 class AncientTechApp(App):

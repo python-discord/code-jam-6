@@ -1,0 +1,15 @@
+#:kivy 1.11.1
+
+<PhotoViewer>:
+    dynimg: dynimg
+
+    BoxLayout:
+        orientation: 'vertical'
+                
+        ImageInterface:
+
+            DynamicImage:
+                id: dynimg
+                drag_rectangle: self.x, self.y, self.right, self.top
+                allow_stretch: True
+                keep_ratio: True

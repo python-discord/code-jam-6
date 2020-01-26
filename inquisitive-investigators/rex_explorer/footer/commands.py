@@ -245,12 +245,34 @@ class EditPopup(BasePopup):
 
             manager.current = 'text_editor'
         else:
-            print('Editor: Please select a file')
+            Logger.info('Editor: Select a file')
+
+        self.dismiss()
+
+
+class PhotoPopup(BasePopup):
+
+    def view(self, side: str) -> None:
+        if side == 'left':
+            browser = self.ctx.parent.ids.left
+        else:
+            browser = self.ctx.parent.ids.right
+
+        file = browser.ids.rv.selected
+        manager = self.ctx.parent.parent.manager
+        photo_viewer = manager.get_screen('photo_viewer')
+
+        if file is not None and file.type != 'DIR':
+            photo_viewer.dynimg.source = str(Path(file.txt))
+            manager.current = 'photo_viewer'
+        else:
+            Logger.info('Photo Viewer: Select a photo')
 
         self.dismiss()
 
 
 class Mkdir(DIRChoice):
+
     def mkdir(self, dir_name: str) -> None:
         if self.filemanager != 0 or dir_name != '':
             dir_ = self.ctx.parent.ids
