@@ -1,6 +1,4 @@
 {
-  "test": {"health": 0, "range": 0, "recipe": {"test2": 3}, "source": "testimg.png", "damage": 0, "size": [1, 1]},
-  "test2": {"health": 0, "range": 0, "recipe": {}, "source": "testimg2.png", "damage": 0, "size": [1, 2]},
   "rock": {"health": 0, "range": 0, "recipe": {}, "source": "r.png", "damage": 0},
   "tree": {"health": 0, "range": 0, "recipe": {}, "source": "topOfTree.png", "damage": 0},
   "bushBB": {"health": 0, "range": 0, "recipe": {}, "source": "berryBLUE.png", "damage": 0},
