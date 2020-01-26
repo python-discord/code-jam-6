@@ -78,7 +78,10 @@ class GameSelectorScreen(Screen):
 
         config_store = JsonStore(CONFIG_DIR)
 
-        if config_store.exists("auto_input") and config_store.get("auto_input")["value"] == 0:
+        if (
+            config_store.exists("auto_input")
+            and config_store.get("auto_input")["value"] == 0
+        ):
             self.manager.get_screen("game_screen").current_time = "200"
         else:
             self.manager.get_screen("game_screen").current_time = "100"
