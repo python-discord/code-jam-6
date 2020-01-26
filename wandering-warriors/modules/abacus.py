@@ -164,10 +164,10 @@ class Abacus(FloatLayout):
             self.top_beads = []
             self.bottom_beads = []
 
-            Color(0.8, 0.8, 0.8, 1)
+            Color(.8, .8, .8, 1)
 
             for i in range(self.N_BARS):
-                self.bar_rects.append([Rectangle(), Rectangle()])
+                self.bar_rects.append([Rectangle(source='assets/graphics/silver.jpg'), Rectangle(source='assets/graphics/silver.jpg')])
 
                 top = AbacusColumn(self.N_TOP_BEADS, self)
                 self.add_widget(top)
