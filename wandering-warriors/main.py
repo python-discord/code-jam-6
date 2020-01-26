@@ -6,11 +6,11 @@ from modules import Abacus as AbacusBase
 from modules import DrawPad, LedgerLayout
 
 
-class Calculator(Screen):
+class MainScreen(Screen):
     pass
 
 
-class Settings(Screen):
+class SettingsScreen(Screen):
     pass
 
 
@@ -42,7 +42,7 @@ class TopRightButton(Widget):
 class Screen:
     def __init__(self):
         self.sm = ScreenManager()
-        self.sm.add_widget(Calculator(name='calculator'))
+        self.sm.add_widget(MainScreen(name='calculator'))
 
     def get_manager(self):
         return self.sm
