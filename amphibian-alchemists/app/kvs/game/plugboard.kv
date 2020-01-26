@@ -320,6 +320,7 @@
                     on_release: root.manager.current = "game_screen"
                 Button:
                     text: "Statistics"
+                    on_press: app.root.get_screen("game_screen").button_press_positive()
                     on_release: Factory.PlugResume().open()
                 Button:
                     id: remove_plug
