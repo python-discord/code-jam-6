@@ -1,23 +1,7 @@
 from kivy.graphics.instructions import RenderContext
+
 from primal.engine.sprite import Sprite
-from typing import Tuple, Union
-from itertools import groupby
-
-# class Inventory(Sprite):
-#     def __init__(self, image: Union[str, None], pos, size, orientation: int = 0, **kwargs):
-#         self.baseinv = Sprite(image, pos, size)
-#
-#     def draw(self, canvas: RenderContext):
-#         self.baseinv.draw(canvas)
-#
-#     '''
-#     Weapon Base is the actual backround that the weapons will be displayed on
-#     To Do: Make actual image, find actual image location
-#     '''
-
-from kivy.graphics.instructions import RenderContext
-
-from primal.engine.sprite import ColorSprite, Item
+from primal.engine.sprite import ColorSprite
 
 import json
 
@@ -31,7 +15,8 @@ class Inventory:
         for i in range(10):
             self.grid.append(Sprite("blank.png", (pos[0] + 5, pos[1] + 60 * i + 5), (40, 40)))
         for i in range(10):
-            self.items.append(ColorSprite(None, (pos[0], pos[1] + 60*i), (50, 50), (.0, .0, .0, .25)))
+            self.items.append(
+                ColorSprite(None, (pos[0], pos[1] + 60 * i), (50, 50), (.0, .0, .0, .25)))
 
     def draw(self, canvas: RenderContext):
         for i in self.items:
@@ -51,14 +36,6 @@ class Inventory:
             try:
                 self.grid[i].set_source(itms[item]["source"])
                 self.grid[i].set_alpha(1)
-            except:
+            except Exception:
                 pass
             i += 1
-        
-        
-        
-        
-        
-
-        
-           

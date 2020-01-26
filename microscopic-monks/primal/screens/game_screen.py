@@ -10,14 +10,12 @@ from primal.gui.inventory import Inventory
 class GameScreen(Screen):
     VP_WIDTH = 1280
     VP_HEIGHT = 720
-    
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         self.clicked_features = dict()
         self.last_clicked = 0.0
-        
-        
 
         self.camera = OrthographicCamera(self.canvas, self.VP_WIDTH, self.VP_HEIGHT)
         self.camera.start_region()
@@ -40,11 +38,6 @@ class GameScreen(Screen):
 
         self.health_bar = HealthBar((20, 680), (250, 20), 100.0)
         self.health_bar.draw(self.canvas)
-
-        
-        
-        
-       
 
         self.inventory = Inventory((20, 20))
         self.inventory.draw(self.canvas)
@@ -76,7 +69,6 @@ class GameScreen(Screen):
         self.last_clicked -= delta
         if self.last_clicked < 0:
             self.last_clicked = 0
-            
 
         self.player.set_position((pos_x + dx, pos_y + dy))
         self.player.set_rotation(self.get_mouse_position())
@@ -86,16 +78,13 @@ class GameScreen(Screen):
                 self.process_click()
                 self.last_clicked = 0.03
 
-
         self.timer += delta
         while self.timer > 1:
             self.timer -= 1
             self.timerValue += 1
             print(self.timerValue)
-            self.health_drop()         
+            self.health_drop()
 
-            
-             
         if 'scrolldown' in self.engine.mouse_keys:
             self.zoom += delta * 3
             self.zoom = min(1.6, self.zoom)
@@ -180,19 +169,8 @@ class GameScreen(Screen):
 
             if clicked:
                 return
+
     def health_drop(self):
         if self.timerValue % 10 == 0:
             self.remove = 1
             self.health_bar.set_health(self.health_bar.get_health() - self.remove)
-
-
-            
-        
-            
-        
-        
-
-            
-            
-            
-

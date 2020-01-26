@@ -3,7 +3,6 @@ from kivy.graphics.instructions import RenderContext, InstructionGroup
 from primal.engine.sprite import ColorSprite
 
 
-
 class HealthBar:
     def __init__(self, pos, size, max_health: float = 100):
         self.max_health = max_health
@@ -11,7 +10,7 @@ class HealthBar:
 
         self.size = size
         self.bg = ColorSprite(None, pos, size, (.0, .0, .0, .25))
-        self.bar = ColorSprite(None, pos, size, (1, .0, .0))
+        self.bar = ColorSprite(None, pos, size, (1, .0, .0, 1))
 
     def get_current_width(self) -> float:
         if self.health < 0:
@@ -35,12 +34,3 @@ class HealthBar:
     def set_alpha(self, alpha: float):
         self.bg.set_alpha(alpha / 4)
         self.bar.set_alpha(alpha)
-
-
-
-        
-
-
-
-
-
