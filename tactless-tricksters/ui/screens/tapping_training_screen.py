@@ -34,10 +34,12 @@ class LongpressButton(Button):
     def on_press(self):
         self.last_press_time = time.time()
         if self.last_release_time is not None:
-            pause_duration = time.time() - self.last_press_time
+            pause_duration = time.time() - self.last_release_time
             if pause_duration >= self.long_pause_dur:
+                print('long_pause')
                 self.dispatch('on_long_pause')
-            elif pause_duration >= self.short_press_dur:
+            elif pause_duration >= self.short_pause_dur:
+                print('short_pause')
                 self.dispatch('on_short_pause')
 
     def set_morse_timing(self, morse_timing_dict):
@@ -70,6 +72,7 @@ Builder.load_string('''
 
 <TappingScreen>
     decode_morse: decode_morse
+    decode_text: decode_text
     tapping_prompt_label: tapping_prompt_label
     decode_output_label: decode_output_label
     tap_button: tap_button
@@ -136,7 +139,7 @@ Builder.load_string('''
                 bg_color: app.theme_cls.primary_color
                 text_color: [1, 1, 1, 1]
                 on_short_press: root.tapped('.')
-                on_long_press: root.tapped('_')
+                on_long_press: root.tapped('-')
                 on_short_pause: root.tapped(' ')
                 on_long_pause: root.tapped('/')
                 long_press_dur : app.util.morse_helper.long_press_dur
@@ -149,6 +152,7 @@ Builder.load_string('''
 class TappingScreen(Screen):
     prompt = StringProperty("")
     decode_morse = ObjectProperty(None)
+    decode_text = ObjectProperty(None)
     decode_output_label = ObjectProperty(None)
     tapping_prompt_label = ObjectProperty(None)
     tap_button = ObjectProperty(None)
@@ -184,11 +188,8 @@ class TappingScreen(Screen):
             print(f"failed to load {self.util.training_difficulty}")
 
     def update_text_display(self):
-        try:
-            user_input = self.util.morse(self.decode_morse.text)
-        except:
-            user_input = '???'
-        self.decode_morse.text = user_input
+        user_input = self.util.morse_helper.morse_to_text(self.decode_morse.text)
+        self.decode_text.text = user_input
         if self.prompt == user_input:
             self.ids.decode_output_label.text = "You got it! click dice icon to do next"
 
@@ -203,6 +204,7 @@ class TappingScreen(Screen):
         self.ids.decode_output_label.text = ""
 
     def tapped(self, morse_char):
+        print(morse_char)
         self.update_morse_display([morse_char])
 
     def return_home(self):

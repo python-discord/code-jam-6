@@ -3,9 +3,9 @@ CHUNK = 4000  # number of audio samples per frame of test_data
 DATA_RATE = 400  # sampling rate of signal activity in audio
 
 # morse parameters
-SMALLEST_TIME_UNIT = .08  # the unit of time in seconds that other duration will be multiple of
+SMALLEST_TIME_UNIT = .1  # the unit of time in seconds that other duration will be multiple of
 DOT_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT
-DASH_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 3
+DASH_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 5
 LETTER_END_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 3
 WORD_END_DURATION_THRESHOLD_SEC = SMALLEST_TIME_UNIT * 7
 
@@ -39,25 +39,27 @@ class MorseHelper:
 
     @property
     def short_press_dur(self):
-        return DASH_DURATION_THRESHOLD_BIT
+        return DASH_DURATION_THRESHOLD_SEC
 
     @property
     def long_pause_dur(self):
-        return LETTER_END_DURATION_THRESHOLD_BIT
+        return WORD_END_DURATION_THRESHOLD_SEC
 
     @property
     def short_pause_dur(self):
-        return WORD_END_DURATION_THRESHOLD_BIT
+        return LETTER_END_DURATION_THRESHOLD_SEC
 
     def morse_to_text(self, morse_code):
         text = ''
-        morse_letters = morse_code.split(' ')
-        for morse_letter in morse_letters:
-            if morse_letter in self.__morse_to_letter:
-                text += self.__morse_to_letter[morse_letter]
-            else:
-                text += '?'
-        return text
+        morse_words = [word for word in morse_code.split('/') if word != '']
+        for morse_word in morse_words:
+            for morse_letter in morse_word.split(' '):
+                if morse_letter in self.__morse_to_letter:
+                    text += self.__morse_to_letter[morse_letter]
+                else:
+                    text += '?'
+            text += ' '
+        return text.strip().strip('/')
 
     def text_to_morse(self, text):
         morse_code = []
