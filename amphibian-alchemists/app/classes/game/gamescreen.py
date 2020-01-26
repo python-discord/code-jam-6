@@ -187,20 +187,19 @@ class GameScreen(Screen):
         if not board_output.focus:
             board_output.insert_text(key.name)
         store_put(current_output_text=board_output.text)
+        # Updating rotors
+        new_rotors = App.get_running_app().machine.get_display()
+        save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
+        rotor_screen = self.manager.get_screen("rotor_screen")
+        rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
+        rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]
+        rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
         # Check win condition
         game_id = App.get_running_app().game_id
         store = JsonStore(DATA_DIR)
         plaintext = store.get(str(game_id))["unciphered_text"]
         if self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text == plaintext:
             self.manager.current = "win_screen"
-        else:
-            # Updating rotors
-            new_rotors = App.get_running_app().machine.get_display()
-            save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
-            rotor_screen = self.manager.get_screen("rotor_screen")
-            rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
-            rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]
-            rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
 
     def load_old_game(self):
         game_id = App.get_running_app().game_id
