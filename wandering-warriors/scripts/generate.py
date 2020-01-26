@@ -16,41 +16,41 @@ def blank_image_gen():
 
 
 # blank
-blank_image_gen().save(GENERATED_DIR / 'blank.png')
+blank_image_gen().save(GENERATED_DIR / 'c0.png')
 
 # one
 out = blank_image_gen()
 out.paste(ONE, (100, 100), mask=ONE)
-out.save(GENERATED_DIR / '1.png')
+out.save(GENERATED_DIR / 'c1.png')
 
 # two
 out = blank_image_gen()
 [out.paste(ONE, (50 + 100 * i, 100), mask=ONE) for i in range(2)]
-out.save(GENERATED_DIR / '2.png')
+out.save(GENERATED_DIR / 'c2.png')
 
 # three
 out = blank_image_gen()
 [out.paste(ONE, (100 * i, 100), mask=ONE) for i in range(3)]
-out.save(GENERATED_DIR / '3.png')
+out.save(GENERATED_DIR / 'c3.png')
 
 # four
 out = blank_image_gen()
 [out.paste(ONE, (100 * i, 50), mask=ONE) for i in range(3)]
 out.paste(ONE, (100, 150), mask=ONE)
-out.save(GENERATED_DIR / '4.png')
+out.save(GENERATED_DIR / 'c4.png')
 
 # five
 out = blank_image_gen()
 [out.paste(ONE, (100 * i, 50), mask=ONE) for i in range(3)]
 [out.paste(ONE, (50 + 100 * i, 150), mask=ONE) for i in range(2)]
-out.save(GENERATED_DIR / '5.png')
+out.save(GENERATED_DIR / 'c5.png')
 
 # six
 out = blank_image_gen()
 for i in range(3):
     for j in range(2):
         out.paste(ONE, (100 * i, 100 * j + 50), mask=ONE)
-out.save(GENERATED_DIR / '6.png')
+out.save(GENERATED_DIR / 'c6.png')
 
 # seven
 out = blank_image_gen()
@@ -58,7 +58,7 @@ for i in range(3):
     for j in range(3):
         out.paste(ONE, (100 * i, 100 * j), mask=ONE)
 out.paste(ONE, (100, 200), mask=ONE)
-out.save(GENERATED_DIR / '7.png')
+out.save(GENERATED_DIR / 'c7.png')
 
 # eight
 out = blank_image_gen()
@@ -66,32 +66,32 @@ for i in range(3):
     for j in range(3):
         out.paste(ONE, (100 * i, 100 * j), mask=ONE)
 [out.paste(ONE, (50 + 100 * i, 200)) for i in range(2)]
-out.save(GENERATED_DIR / '8.png')
+out.save(GENERATED_DIR / 'c8.png')
 
 # nine
 out = blank_image_gen()
 for i in range(3):
     for j in range(3):
         out.paste(ONE, (100 * i, 100 * j), mask=ONE)
-out.save(GENERATED_DIR / '9.png')
+out.save(GENERATED_DIR / 'c9.png')
 
 # ten
 out = blank_image_gen()
 out.paste(TEN, (100, 100), mask=TEN)
-out.save(GENERATED_DIR / '10.png')
+out.save(GENERATED_DIR / 'c10.png')
 
 # twenty
 out = blank_image_gen()
 out.paste(TEN, (25, 100), mask=TEN)
 out.paste(TEN, (150, 0), mask=TEN)
-out.save(GENERATED_DIR / '20.png')
+out.save(GENERATED_DIR / 'c20.png')
 
 # thirty
 out = blank_image_gen()
 out.paste(TEN, (25, 100), mask=TEN)
 out.paste(TEN, (150, 0), mask=TEN)
 out.paste(TEN, (150, 200), mask=TEN)
-out.save(GENERATED_DIR / '30.png')
+out.save(GENERATED_DIR / 'c30.png')
 
 # forty
 out = blank_image_gen()
@@ -99,7 +99,7 @@ out.paste(TEN, (25, 100), mask=TEN)
 out.paste(TEN, (100, 50), mask=TEN)
 out.paste(TEN, (100, 150), mask=TEN)
 out.paste(TEN, (200, 0), mask=TEN)
-out.save(GENERATED_DIR / '40.png')
+out.save(GENERATED_DIR / 'c40.png')
 
 # fifty
 out = blank_image_gen()
@@ -108,4 +108,4 @@ out.paste(TEN, (100, 50), mask=TEN)
 out.paste(TEN, (100, 150), mask=TEN)
 out.paste(TEN, (200, 0), mask=TEN)
 out.paste(TEN, (200, 100), mask=TEN)
-out.save(GENERATED_DIR / '50.png')
+out.save(GENERATED_DIR / 'c50.png')
