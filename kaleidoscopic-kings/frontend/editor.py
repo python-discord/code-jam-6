@@ -15,6 +15,8 @@ Config.set("graphics", "width", "1000")
 Config.set("graphics", "height", "600")
 
 story_name = "caveman"
+with open(path_handler.get_game_state_json_path(story_name)) as f:
+    _game_states = json.load(f)
 
 
 def is_snake_case(string: str):
@@ -41,18 +43,68 @@ class CardAddWindow(Screen):
     def preview_image(cls, image_filename: str):
         full_img_path = path_handler.get_card_art_path(story_name).joinpath(image_filename)
         if not full_img_path.is_file():
-            print(f"\t Warning, image file is not found in path:{full_img_path}\n"
-                  f"Continuing but please make sure to add image file in that path.")
+            print(f"\t Image file is not found in path:{full_img_path}\n")
         else:
             Popup(title="Image preview",
                   content=Image(source=str(full_img_path)),
                   size_hint=(None, None), size=(400, 400)).open()
 
+    def add_card(self):
+        card_id = self.ids.card_id.text
+        if not card_id or not is_snake_case(card_id):
+            print("Card id only lowercase character plus char _ are supported.")
+            return
+
+        card_sound = self.ids.card_sound.text
+        print(card_sound)  # TODO REMOVE PRECOMMIT COMPLAINED FOR NOT USING IT
+
+        card_type = self.ids.card_type.text
+        if card_type.lower() not in card_format.Card.CARD_TYPES:
+            print("Invalid card type")
+            return
+
+        card_image = self.ids.card_image.text
+        full_img_path = path_handler.get_card_art_path(story_name).joinpath(card_image)
+        if not card_image:
+            print("Invalid image input")
+            return
+        elif not full_img_path.is_file():
+            print(f"\t Image file is not found in path:{full_img_path}\n")
+            return
+
+        card_options = self.ids.card_options.text
+        try:
+            card_options = json.loads(card_options)
+            if len(card_options) > 2:
+                print("There can be no more than 2 options!")
+                return
+            for option in card_options:
+                # Class init will error if invalid options
+                card_format.Option(**option)
+        except Exception as e:
+            print(f"Invalid formatted options: {e}")
+            return
+
+        card_conditions = self.ids.card_conditions.text
+        try:
+            card_conditions = json.loads(card_conditions)
+            for condition_name, condition_value in card_conditions.items():
+                # Class init will error if invalid value
+                card_format.GameVariable(condition_name, condition_value)
+                if condition_name not in _game_states:
+                    print(f"Condition {condition_name} not in game states!")
+                    return
+        except Exception as e:
+            print(f"Invalid formatted conditions: {e}")
+            return
+
+        card_text = self.ids.card_text.text
+        if not card_text:
+            print("Invalid card text input")
+            return
+
 
 class GameStatesWindow(Screen):
-    with open(path_handler.get_game_state_json_path(story_name)) as f:
-        game_states = json.load(f)
-
     def on_pre_enter(self):
         self.recreate_list()
 
@@ -61,7 +113,7 @@ class GameStatesWindow(Screen):
 
         layout = GridLayout(cols=1, spacing=10, size_hint_y=None)
         layout.bind(minimum_height=layout.setter('height'))
-        for key, value in self.game_states.items():
+        for key, value in _game_states.items():
             btn = Button(text=f"{key} : {value}", size_hint_y=None, height=20)
             layout.add_widget(btn)
 
@@ -77,7 +129,7 @@ class GameStatesWindow(Screen):
         elif not is_snake_case(state_name_key):
             print("Only lowercase character plus char _ are supported.")
             return
-        elif state_name_key in self.game_states:
+        elif state_name_key in _game_states:
             print("Key already present!")
             return
 
@@ -109,12 +161,12 @@ class GameStatesWindow(Screen):
         except (ValueError, TypeError) as e:
             print(e)
 
-        self.game_states.update({state_name_key: value})
+        _game_states.update({state_name_key: value})
         self.save_game_states()
 
     def remove_game_state(self, state_name_key: str):
         try:
-            del self.game_states[state_name_key]
+            del _game_states[state_name_key]
         except KeyError as e:
             print("No such key ", e)
             return
@@ -123,7 +175,7 @@ class GameStatesWindow(Screen):
     def save_game_states(self):
         self.recreate_list()
         with open(path_handler.get_game_state_json_path(story_name), "w") as f:
-            json.dump(self.game_states, f, indent=4, sort_keys=True)
+            json.dump(_game_states, f, indent=4, sort_keys=True)
 
 
 class WindowManager(ScreenManager):

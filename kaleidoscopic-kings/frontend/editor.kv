@@ -28,6 +28,7 @@ WindowManager:
             rows: 5
 
             TextInput:
+                id: card_id
                 size_hint_y: None
                 height: 30
                 font_size: 12
@@ -35,6 +36,7 @@ WindowManager:
                 multiline: False
 
             TextInput:
+                id: card_sound
                 size_hint_y: None
                 height: 30
                 font_size: 12
@@ -44,6 +46,7 @@ WindowManager:
                     root.preview_sound(self.text)
 
             TextInput:
+                id: card_type
                 size_hint_y: None
                 height: 30
                 font_size: 12
@@ -51,6 +54,7 @@ WindowManager:
                 multiline: False
 
             TextInput:
+                id: card_image
                 size_hint_y: None
                 height: 30
                 font_size: 12
@@ -60,15 +64,18 @@ WindowManager:
                     root.preview_image(self.text)
 
             TextInput:
+                id: card_options
                 hint_text: 'options json'
                 multiline: True
 
             TextInput:
+                id: card_conditions
                 hint_text: 'conditions json'
                 hint_text: "(optional) Conditions json\nExample would be:\n{player_health:0.5}"
                 multiline: True
 
             TextInput:
+                id: card_text
                 size_hint_y: None
                 height: 30
                 font_size: 12
@@ -79,6 +86,8 @@ WindowManager:
                 size_hint_y: None
                 height: 30
                 text: 'Add card'
+                on_release:
+                    root.add_card()
 
             Button:
                 size_hint_y: None
