@@ -4,7 +4,6 @@ from math import sqrt
 
 from .gesture import check_gesture
 from .gesture_db import load_gestures
-from .controller import controller
 
 
 def calculate_points(x1, y1, x2, y2, steps=1):
@@ -105,7 +104,8 @@ class DrawPad(FloatLayout):
 
             if value:
                 print(f"Gesture recognized: {value}")
-                controller.update(value, '+')
+                self.parent.children[2].update(value, '+')
+
                 # TODO: fade line out
                 self.click()
 

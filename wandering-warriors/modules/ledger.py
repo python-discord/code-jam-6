@@ -1,23 +1,54 @@
 from kivy.uix.boxlayout import BoxLayout
+import pandas as pd
 
 
 class Ledger(BoxLayout):
     def __init__(self, **kwargs):
         super(Ledger, self).__init__(**kwargs)
         print('[ INIT LEDGER ]')
+        self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
+        self.col = 'x'
+        self.row = 1
+        self.new_row()
 
-    def refresh(self):
+    def select(self, col: str):
+        """select column: ['x', 'y', 'z']"""
+        if col not in ['x', 'y', 'z']:
+            print(f"WARNING: Invalid column: {col}")
+            pass
+        else:
+            self.col = col
+
+    def update(self, n: int, op: str = '='):
+        """update active cell"""
+        if op == '+':
+            self.df.at[self.row, self.col] += n
+        if op == '-':
+            self.df.at[self.row, self.col] -= n
+        if op == '*':
+            self.df.at[self.row, self.col] *= n
+        if op == '/':
+            self.df.at[self.row, self.col] /= n
+        if op == '=':
+            self.df.at[self.row, self.col] = n
+        print(self.df)
+        self.update_ledger()
+
+    def new_row(self):
+        """add and select new row at bottom of ledger"""
+        index = len(self.df.index) + 1
+        self.df.loc[index] = {'x': 0, 'y': 0, 'op': None, 'z': 0}
+        self.row = index
+        self.col = 'x'
+        print(self.df)
+
+    def update_ledger(self):
+        """update ledger view with current data"""
+        rows = self.df.values.astype('str')
+        print(f"ROWS: {rows}")
         print(f"ids: {self.ids}")
-
-        test_data = [
-            ['3.0', '2.0', '*', '6.0'],
-            ['4.0', '8.0', '+', '12.0'],
-            ['0.0', '0.0', '', '0.0'],
-            ['10.0', '0.0', '', '0.0']
-        ]
-
         self.rv.data = [
-            {'value': row} for row in test_data
+            {'value': row} for row in rows
         ]
 
     def clear(self):
