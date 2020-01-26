@@ -18,6 +18,8 @@ class Text:
         self.height = height
 
         self.label = Label()
+        self.label.font_size = 20
+        self.label.bold = True
         self.label.text_size = 800, None
         self.color = Color(1, 1, 1, 1)
         self.rect = Rectangle(pos=pos)
@@ -30,6 +32,8 @@ class Text:
 
         self.rect.size = ratio * self.height, self.height
         self.rect.texture = self.label.texture
+        self.rect.texture.mag_filter = 'nearest'
+        self.rect.texture.min_filter = 'nearest'
 
     def set_color(self, color: Tuple[float, float, float, float]):
         self.color.r = color[0]
