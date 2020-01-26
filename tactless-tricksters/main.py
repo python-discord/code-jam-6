@@ -74,6 +74,5 @@ class MainApp(App):
         return MainBox(util=self.util)
 
 
-
 if __name__ == "__main__":
     MainApp().run()
