@@ -108,13 +108,37 @@ BoxLayout:
 
 <LossScreen>:
     name: 'loss_screen'
-    Label:
-        text: 'loss screen'
+    FloatLayout:
+        Image:
+        Label:
+            text: 'You Lose :('
+            font_size: '60sp'
+            font_name: "delinquent-black-font/DelinquentCapsSkewdBlack-q2wq.ttf"
+            color: 1, 1, 1, 1
+        Button:
+            text: 'Replay'
+            background_normal: ''
+            background_color: utils.get_color_from_hex('#fbc02d')
+            size_hint_y: 0.15
+            color: 0, 0, 0, 1
+            on_release: root.replay()
 
 <WinScreen>:
     name: 'win_screen'
-    Label:
-        text: 'win screen'
+    FloatLayout:
+        Image:
+        Label:
+            text: 'You Win :D'
+            font_size: '60sp'
+            font_name: "delinquent-black-font/DelinquentCapsSkewdBlack-q2wq.ttf"
+            color: 1, 1, 1, 1
+        Button:
+            text: 'Replay'
+            background_normal: ''
+            background_color: utils.get_color_from_hex('#fbc02d')
+            size_hint_y: 0.15
+            color: 0, 0, 0, 1
+            on_release: root.replay()
 
 <AttributeFill@Widget>:
     level: 0.1

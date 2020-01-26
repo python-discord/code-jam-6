@@ -60,11 +60,24 @@ class SelectionScreen(Screen):
         return super().on_pre_enter(*args)
 
 
-class LossScreen(Screen):
+class ReplayScreen(Screen):
+    def __init__(self, **kw):
+        super().__init__(**kw)
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        sourcefile = os.path.join(dir_path, "./winloss.jpg")
+        self.children[0].children[-1].source = sourcefile
+
+    def replay(self):
+        profile_carousel = self.manager.get_screen("create_profile").ids.profile_carousel
+        profile_carousel.index = 0
+        self.manager.current = "create_profile"
+
+
+class LossScreen(ReplayScreen):
     pass
 
 
-class WinScreen(Screen):
+class WinScreen(ReplayScreen):
     pass
 
 
