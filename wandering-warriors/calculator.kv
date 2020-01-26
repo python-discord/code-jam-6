@@ -205,12 +205,19 @@
     value: ['x', 'y', 'op', 'z']
     Label:
         text: root.value[0]
-    Label:
-        text: root.value[1]
+        color: .1,.1,.1,1
     Label:
         text: root.value[2]
+        color: .1,.1,.1,1
+    Label:
+        text: root.value[1]
+        color: .1,.1,.1,1
     Label:
         text: root.value[3]
+        color: .1,.1,.1,1
+
+
+
 
 <Ledger>:
     size_hint_x: 1.8
@@ -223,8 +230,10 @@
             source: 'assets/graphics/sandstone.jpg'
     rv: rv
     orientation: 'vertical'
+    size_hint_y: 1
     RecycleView:
         id: rv
+        size_hint_y: 1
         scroll_type: ['bars', 'content']
         scroll_wheel_distance: dp(114)
         bar_width: dp(10)
