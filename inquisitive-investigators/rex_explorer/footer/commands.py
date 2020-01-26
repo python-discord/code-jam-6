@@ -324,10 +324,8 @@ class DeletePopup(BasePopup):
     def delete(self):
         if self.filel is not None:
             self._remove(self.filel)
-
         if self.filer is not None:
             self._remove(self.filer)
-
         self.dismiss()
 
     def _remove(self, dir_) -> None:
