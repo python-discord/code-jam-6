@@ -227,7 +227,10 @@ class GameScreen(Screen):
             self.timer_clock()
 
     def on_leave(self):
-        if self.timer_clock:
+        if self.timer_clock and self.manager.current not in {
+            "rotor_screen",
+            "plugboard_screen",
+        }:
             self.timer_clock.cancel()
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
