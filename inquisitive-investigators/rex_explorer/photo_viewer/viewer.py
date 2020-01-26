@@ -2,6 +2,7 @@ from typing import Any
 
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
+from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty
 
@@ -18,4 +19,8 @@ class PhotoViewer(Screen):
 
 
 class ImageInterface(Widget):
+    pass
+
+
+class Foot(FloatLayout):
     pass

@@ -24,9 +24,9 @@ class Footer(BoxLayout):
 
         # Keyboard binds
         self.actions = {
-            '1': self.about,
-            '2': self.edit,
-            'q': self.photo_view,
+            '`': self.about,
+            '1': self.edit,
+            '2': self.photo_view,
             '3': self.copy,
             '4': self.down,
             '5': self.up,

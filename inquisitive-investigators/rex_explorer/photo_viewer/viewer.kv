@@ -13,3 +13,20 @@
                 drag_rectangle: self.x, self.y, self.right, self.top
                 allow_stretch: True
                 keep_ratio: True
+
+    Foot:
+        size_hint: 1, .05
+
+<Foot>:
+    canvas:
+        Color:
+            rgba: 0,0,0,.5
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'ESC: Exit'
+        Label:
+            text: 'CTRL +/-: Zoom In/Out'
