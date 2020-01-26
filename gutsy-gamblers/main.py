@@ -122,7 +122,6 @@ class TimeWizard(Popup):
 
 
 # Settings panel #
-
 class UpdateLocationButton(Button):
     """
     Button for updating location.
