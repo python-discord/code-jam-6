@@ -18,11 +18,17 @@ from kivy.uix.image import Image
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
+from kivy.storage.jsonstore import JsonStore
 
 
 class GameView(Widget):
     def __init__(self, game: Game, **kwargs):
         super().__init__(**kwargs)
+
+        self.store = JsonStore('Hi-Score.json')
+        if not self.store.exists('hi-score'):
+            self.store.put('hi-score', score=0)
+
         self._game = game
         self.pause_menu_content = PauseMenuView()
 
@@ -63,7 +69,7 @@ class GameView(Widget):
             separator_color=(0, 0, 0, 0),
             separator_height=0,
             size_hint=(None, None),
-            size=(300, 250),
+            size=(300, 280),
             auto_dismiss=False,
             background=IMAGES_PATH.format('yellow_panel.png')
         )
@@ -159,6 +165,7 @@ class GameView(Widget):
             source=ATLAS_PATH.format(ship.id),
             pos=(WINDOW_WIDTH, LANE_BOUNDS[ship.lane_id][1])
         )
+        # ship.shape._ship_image.collide_point()
         self.add_widget(ship.shape)
         self.redraw_ships(redraw_to=ship.lane_id)
 
@@ -212,3 +219,6 @@ class GameView(Widget):
     def on_score_change(self, _game: Game, score: int):
         Logger.debug(f'New score: {score}')
         self._score.text = f'Score: {score:3}'
+
+        if self.store.get('hi-score')['score'] < score:
+            self.store.put('hi-score', score=score)
