@@ -7,7 +7,8 @@ The Enigma Machine from WWII is the most infamous encryption device of the era. 
 
 Table of Contents:
 - Setup
-- Tutorial
+- Short Tutorial: Gist of the game
+- Full-Length Tutorial
 - Guides
 
 ---
@@ -15,13 +16,21 @@ Table of Contents:
 1. Clone or download this repository.
 2. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
 3. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`. 
-4. Go to the top directory where `reuirements.txt` lives and `pip install -r requirements.txt`.
+4. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
 5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
 
-THe current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup o=your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
+The current configuration is intended to be incorporated with the Discord Postal Service server. If you'd like to setup o=your own DPS in your city-based Discord server, there is another README that you can check out for instructions in the discord-postal-service directory.
 
 ---
-### Tutorial
+### Short Tutorial: Gist of the game
+Start a new game. You are given paper with instructions. Configure the rotors parallel with that of the paper. Configure the plug PAIRS (each pair of plugs is connected by one wire).
+
+Once you have those configured, type whatever the ciphered text is. Autoinput is enabled.
+
+Note: If you have autoinput off and mistype once, move the rotor that just rotated backwards and continue typing from where you messed up. Remember, Germans didn't have a backspace on a piece of paper like us with computers.
+
+---
+### Full-Length Tutorial
 ![](https://ietp-web-cdn-eandt-cache.azureedge.net/0/2/c/4/5/9/02c4592c9a481871f93b30cdb914d341e22f547b.jpg)
 
 At the top are rotors which are configured by rotation, the middle is the lampboard which shows outputted characters, the middle is the input keyboard, and the bottom is the plugboard.
