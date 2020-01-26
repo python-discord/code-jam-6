@@ -1,6 +1,7 @@
 # Kivy imports
 import random
 import time
+import os
 
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -99,7 +100,6 @@ Builder.load_string('''
 
         Image: 
             size_hint: 1, 1
-            source: 'ui\img\morse_code_alphabet.png' 
             
         MDLabel:
             id: tapping_prompt_label
@@ -148,7 +148,7 @@ Builder.load_string('''
                 size: [dp(56), dp(56)]
                 bg_color: app.theme_cls.primary_color
                 text_color: [1, 1, 1, 1]
-                on_short_press: root.tapped('.')
+                on_short_press:  root.tapped('.')
                 on_long_press: root.tapped('-')
                 on_short_pause: root.tapped(' ')
                 on_long_pause: root.tapped('/')
@@ -170,6 +170,7 @@ class TappingScreen(Screen):
     def __init__(self, **kwargs):
         super(TappingScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
+        self.children[0].children[5].source = os.path.join('ui', 'img', 'morse_code_alphabet.png')
 
     def on_enter(self):
         Clock.schedule_once(self.init_tapping_screen, 0)

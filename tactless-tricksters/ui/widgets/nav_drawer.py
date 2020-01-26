@@ -1,3 +1,5 @@
+import os
+
 from kivy.uix.anchorlayout import AnchorLayout
 from kivy.app import App
 from kivy.clock import Clock
@@ -11,7 +13,7 @@ class ContentNavigationDrawer(MDNavigationDrawer):
         super(ContentNavigationDrawer, self).__init__()
         self.nav_layout = nav_layout
         self.use_logo = 'logo'
-        self.drawer_logo = 'ui/img/nav_drawer_logo.png'
+        self.drawer_logo = os.path.join('ui', 'img', 'nav_drawer_logo.png')
         self.home = NavigationDrawerIconButton(text="Home", icon='home',
                                                on_press=lambda x:
                                                self.scr_chng('welcome', self.home))
