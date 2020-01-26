@@ -5,7 +5,6 @@ simulation! A caveman workout routine guaranteed to give you chiseled slabs fast
 """
 import contextvars
 from itertools import cycle
-import json
 import math
 from pathlib import Path
 import webbrowser
@@ -45,7 +44,7 @@ BURGER_HOVER = str(IMAGE_PATH / "burger" / "hover.png")
 BURGER_PRESSED = str(IMAGE_PATH / "burger" / "pressed.png")
 PROJECT_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128
-GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
+GITHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
 CURSOR = Cursor()
 
 
@@ -94,7 +93,7 @@ class BurgerButton(ButtonBehavior, Image):
             self.source = BURGER_PRESSED
         else:
             self._on_mouse_pos(override=True)
-        
+
 
 class Popup(SignBorder, KivyPopup):
     def __init__(self, title, content, **kwargs):
@@ -439,7 +438,7 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
                          font_size=sp(18),
                          size_hint=(1, None),
                          height=dp(42))
-        src_btn.bind(on_release=lambda btn: webbrowser.open(GTIHUB_URL))
+        src_btn.bind(on_release=lambda btn: webbrowser.open(GITHUB_URL))
 
         # Animation - Normal loading of an animation won't apply desired mag_filter to each
         # individual texture, so we load each frame and cycle through the textures 'by-hand'.
