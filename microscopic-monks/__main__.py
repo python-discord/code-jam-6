@@ -18,7 +18,7 @@ class Application(App):
     def build(self):
         """Return the root widget."""
         Window.clearcolor = (0, 0, 0, 1)
-        # Window.fullscreen = "auto"
+        Window.fullscreen = "auto"
         self.title = "Primal"
         game = PrimalGame()
         game.set_screen(SplashScreen())
