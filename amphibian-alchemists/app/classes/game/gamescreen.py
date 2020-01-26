@@ -105,7 +105,18 @@ def setup_new_game_settings():
 class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.upper() in App.get_running_app().keys:
-            s = App.get_running_app().machine.key_press(substring.upper())
+            # Autoinput
+            letter = substring.upper()
+            config_store = JsonStore(CONFIG_DIR)
+            if config_store.get("autoinput")["value"] == 1:
+                game_id = App.get_running_app().game_id
+                store = JsonStore(DATA_DIR)
+                game = store.get(str(game_id))
+                current_output_text = game["current_output_text"]
+                ciphered_text = game["ciphered_text"]
+                letter = str(ciphered_text)[len(current_output_text)]
+            # Key press
+            s = App.get_running_app().machine.key_press(letter)
             return super().insert_text(s, from_undo=from_undo)
 
 
