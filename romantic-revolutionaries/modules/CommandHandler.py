@@ -30,13 +30,14 @@ class Help(Command):
 
 
 class Move(Command):
-    def __init__(self, nav_control, map_control):
+    def __init__(self, nav_control, map_control, view_control):
         super().__init__(method=nav_control.go, hotkeys=['go', 'move', 'head', 'walk', 'run',
                                                          'north', 'east', 'south', 'west',
                                                          'n', 'e', 's', 'w'])
         self.nav_control = nav_control
         self.map_control = map_control
-        self.map_control.subscribe(self.map_callback)
+        self.view_control = view_control
+        # self.map_control.subscribe(self.map_callback)
         self.directions = {
             'north': Directions.NORTH,
             'east': Directions.EAST,
@@ -99,9 +100,10 @@ class CommandHandler:
         self.app = app
         self.nav_control = kwargs['nav_control']
         self.map_control = kwargs['map_control']
+        self.view_control = kwargs['view_control']
 
         self.commands = [Help(),
-                         Move(self.nav_control, self.map_control)]
+                         Move(self.nav_control, self.map_control, self.view_control)]
 
     def parse_command(self, text):
         if type(text) is not str:

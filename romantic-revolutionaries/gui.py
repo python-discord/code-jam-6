@@ -1,5 +1,5 @@
 import inspect
-import textwrap
+# NOT USED import textwrap
 
 from kivy._event import partial
 from kivy.app import App
@@ -17,6 +17,7 @@ from kivy.uix.textinput import TextInput
 
 from modules.navigation import navcont
 from modules.map import MapControl
+from modules.view import viewcontrol
 from modules import CommandHandler
 
 
@@ -219,10 +220,15 @@ class GUIApp(App):
         """)
         self.nav_control = navcont.NavControl()
         self.map_control = MapControl.DungeonMap()
+        self.view_control = viewcontrol.ViewControl()
+
         self.nav_control.subscribe(self.map_control.callback)
+        self.map_control.subscribe(self.view_control.callback)
+        self.view_control.subscribe(self.add_text)
         self.command_handler = CommandHandler.CommandHandler(self,
                                                              nav_control=self.nav_control,
-                                                             map_control=self.map_control)
+                                                             map_control=self.map_control,
+                                                             view_control=self.view_control)
 
     def add_text(self, text, on_newline=True):
         self.gui.add_text(text, on_newline)
