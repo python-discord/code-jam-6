@@ -1,7 +1,5 @@
 from primal.engine.engine import Engine
-
 from primal.screens.game_screen import GameScreen
-
 from kivy.app import App
 from kivy.core.window import Window
 
