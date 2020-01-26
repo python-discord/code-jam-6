@@ -55,7 +55,10 @@ assets
 │           up.png
 │
 ├───sounds
-│       dig.wav
+│       001.wav
+│       002.wav
+│       003.wav
+│       004.wav
 │
 └───ttf
         han_wang_yan_kai.ttf
@@ -75,11 +78,8 @@ assets
 - `button/*.png` are just a hundred pixels of the same color (of unknown [trademark][trademark-url]).
 
 [boulder-dir]: ./assets/img/boulder
-[sound-dir]: ./assests/sounds
 [pixabay-url]: https://pixabay.com/
 [pixabay-license-url]: https://pixabay.com/service/license/
-[zapsplat-url]: https://www.zapsplat.com/
-[zapsplat-license-url]: https://www.zapsplat.com/license-type/standard-license/
 
 [img-dir]: ./assets/img
 [burger-dir]: ./assets/img/burger
@@ -95,4 +95,31 @@ assets
 
 ### Sounds
 
-- [`sounds/*.wav`][sound-dir] from [zapsplat][zapsplat-url] are under the [Zapsplat License][zapsplat-license-url].
+- [`sounds/*.wav`][sounds-dir] from [Zapsplat][zapsplat-url] are licensed under the [Zapsplat Standard License][zapsplat-license-url].
+
+[sounds-dir]: ./assests/sounds
+[zapsplat-url]: https://www.zapsplat.com/
+[zapsplat-license-url]: https://www.zapsplat.com/license-type/standard-license/
+
+### Fonts
+
+- Han Wang Yan Kai calligraphy font ([`han_wang_yan_kai.ttf`][ttf-dir]) from [wangfonts][wangfonts-url] is licensed under the [GNU General Public License, version 2][gnu-gpl-v2-url].
+
+- Keifont or けいふぉんと！ ([`keifont.ttf`][ttf-dir]) from [Sumomomoji][sumomomoji-url] is licensed under the [Apache License, Version 2.0][apache-v2-url].
+
+- Kirsty Regular ([`kirsty_rg.ttf`][ttf-dir]) from [Typodermic Fonts Inc.][typodermic-url] is licensed under their [license][typodermic-license-url].
+
+- ZCOOL KuaiLe Regular ([`zcool_kuaile_rg.ttf`][ttf-dir]) from [Google Fonts][google-fonts-url] is licensed under the [Open Font License][ofl-url].
+
+[ttf-dir]: ./assets/ttf
+[wangfonts-url]: https://code.google.com/archive/p/wangfonts/
+[gnu-gpl-v2-url]: http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+[sumomomoji-url]: http://font.sumomo.ne.jp/font_1.html
+[apache-v2-url]: https://www.apache.org/licenses/LICENSE-2.0.html
+
+[typodermic-url]: http://typodermicfonts.com/kirsty/
+[typodermic-license-url]: http://typodermicfonts.com/license/
+
+[google-fonts-url]: https://fonts.google.com/specimen/ZCOOL+KuaiLe
+[ofl-url]: http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web
