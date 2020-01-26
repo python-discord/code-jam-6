@@ -98,4 +98,6 @@ class GameSelectorScreen(Screen):
         self.manager.get_screen("plugboard_screen").load_plugs()
         self.manager.get_screen("game_screen").load_output_text()
 
+        self.manager.get_screen("game_screen").current_time = "100"
+
         self.manager.current = "game_screen"
