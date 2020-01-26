@@ -20,6 +20,8 @@ class GameScreen(Screen):
         self.camera = OrthographicCamera(self.canvas, self.VP_WIDTH, self.VP_HEIGHT)
         self.camera.start_region()
 
+        self.zoom = 1.0
+
         self.world = World((0, 0))
         self.world.draw(self.canvas)
 
@@ -75,6 +77,13 @@ class GameScreen(Screen):
                 self.process_click()
                 self.last_clicked = 0.03
 
+        if 'scrolldown' in self.engine.mouse_keys:
+            self.zoom += delta * 3
+            self.zoom = min(1.6, self.zoom)
+        elif 'scrollup' in self.engine.mouse_keys:
+            self.zoom -= delta * 3
+            self.zoom = max(0.68, self.zoom)
+
         new_clicked_features = dict()
 
         for feature, value in self.clicked_features.items():
@@ -89,6 +98,8 @@ class GameScreen(Screen):
         self.engine.mouse_keys = set()
 
         self.world.update(self.player.get_center())
+
+        self.camera.set_zoom(self.zoom)
         self.camera.set_position(*self.player.get_center())  # Updates the position
         self.camera.update()
 
