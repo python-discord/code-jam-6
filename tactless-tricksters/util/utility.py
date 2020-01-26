@@ -178,7 +178,7 @@ class Utility(object):
 
         # Temp debug data
         self.message_dict = {}
-        Clock.schedule_interval(self.update_messages, 1)
+        # Clock.schedule_interval(self.update_messages, 1)
 
         if platform not in ['ios', 'android']:
             self.morse = Morse()
