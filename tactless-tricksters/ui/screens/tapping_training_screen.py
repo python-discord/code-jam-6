@@ -1,7 +1,6 @@
 # Kivy imports
 import random
 import time
-import os
 
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -77,17 +76,17 @@ Builder.load_string('''
     tapping_prompt_label: tapping_prompt_label
     decode_output_label: decode_output_label
     tap_button: tap_button
-    
+
     AnchorLayout:
         anchor_x: 'center'
         anchor_y: 'top'
-        
+
         MDToolbar:
             title: 'Tap Training'
             anchor_title: 'center'
             md_bg_color: app.theme_cls.primary_color
             left_action_items: [["arrow-left", lambda x: root.return_menu()]]
-    
+
     MDCard:
         id: decode_card
         padding: dp(24)
@@ -98,10 +97,10 @@ Builder.load_string('''
         elevation: 15
         md_bg_color: app.theme_cls.accent_color
 
-        Image: 
+        Image:
             size_hint: 1, 1
             source: 'ui/img/morse_code_alphabet.png'
-            
+
         MDLabel:
             id: tapping_prompt_label
             text: root.prompt
@@ -110,14 +109,14 @@ Builder.load_string('''
             size_hint: 1, .05
             theme_text_color: 'Custom'
             text_color: [1, 1, 1, 1]
-        
+
         MDTextFieldRound:
             id: decode_text
             icon_type: 'without'
             hint_text: 'The text of your morse will be displayed here'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: 0.85, 0.5
-        
+
         MDTextFieldRound:
             id: decode_morse
             hint_text: 'Your morse will be displayed here'
@@ -126,7 +125,7 @@ Builder.load_string('''
             icon_left: 'close-circle'
             icon_right: 'dice-5'
             icon_callback: root.new_prompt
-            
+
         MDLabel:
             id: decode_output_label
             text: ''
@@ -135,12 +134,12 @@ Builder.load_string('''
             size_hint: 1, .05
             theme_text_color: 'Custom'
             text_color: [1, 1, 1, 1]
-        
+
         BoxLayout:
             anchor_x:'center'
             anchor_y:'bottom'
             padding: [dp(25), dp(25), dp(25), dp(25)]
-        
+
             LongpressButton:
                 id: tap_button
                 valign: 'center'

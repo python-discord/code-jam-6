@@ -1,7 +1,6 @@
 # Kivy imports
 import random
 import time
-import os
 
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -76,11 +75,11 @@ Builder.load_string('''
     tapping_prompt_label: tapping_prompt_label
     decode_output_label: decode_output_label
     tap_button: play_button
-    
+
     AnchorLayout:
         anchor_x: 'center'
         anchor_y: 'top'
-        
+
         MDToolbar:
             title: 'Listening Training'
             anchor_title: 'center'
@@ -96,7 +95,7 @@ Builder.load_string('''
         elevation: 15
         md_bg_color: app.theme_cls.accent_color
 
-        Image: 
+        Image:
             id: morse_alphabet
             size_hint: 1, 1
             source: 'ui/img/morse_code_alphabet.png'
@@ -139,7 +138,7 @@ Builder.load_string('''
                 bg_color: app.theme_cls.primary_color
                 text_color: [1, 1, 1, 1]
                 on_press: root.play_prompt()
-                
+
             Button:
                 id: play_button
                 text: 'Play New Morse Code'
@@ -174,7 +173,8 @@ class ListeningScreen(Screen):
         self.training_prompt_dict = self.util.training_prompt_dict
         self.decode_output_label.text = "^-- click on the left button to clear" \
                                         " and the right button for new prompt --^\n" \
-                                        "v---click here to replay audio and here to play new audio --v"
+                                        "v---click here to replay audio and here" \
+                                        " to play new audio --v"
         self.play_new_prompt()
 
     def check_answer(self, *args):
@@ -204,14 +204,16 @@ class ListeningScreen(Screen):
                 self.sound_list.append('short_pause')
 
         if len(self.sound_list) > self.cur_sound_index:
-            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            letter_char_sound = self.sound_list[self.cur_sound_index]
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(letter_char_sound)
             self.cur_sound.bind(on_stop=self.play_next_sound)
             self.cur_sound.play()
 
     def play_next_sound(self, dt):
         self.cur_sound_index += 1
         if len(self.sound_list) > self.cur_sound_index:
-            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            letter_char_sound = self.sound_list[self.cur_sound_index]
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(letter_char_sound)
             self.cur_sound.bind(on_stop=self.play_next_sound)
             self.cur_sound.play()
 
@@ -225,7 +227,8 @@ class ListeningScreen(Screen):
             else:
                 training_level = 'sentence'
             self.prompt = random.choice(self.util.training_prompt_dict[training_level])
-            self.tapping_prompt_label.text = f"Please translate the morse code ({training_level}) being played"
+            self.tapping_prompt_label.text = f"Please translate the morse code " \
+                                             f"({training_level}) being played"
         else:
             print(f"failed to load {self.util.training_difficulty}")
 

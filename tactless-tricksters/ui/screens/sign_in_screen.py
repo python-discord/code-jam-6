@@ -34,7 +34,8 @@ class SignInScreen(Screen):
                              pos_hint={'top': 0.8, 'center_x': 0.5}
                              )
 
-        sign_in_label = MDLabel(text='Sign in or Create an Account', font_style='H4', halign='center')
+        sign_in_label = MDLabel(text='Sign in or Create an Account',
+                                font_style='H4', halign='center')
         sign_in_label.theme_text_color = 'Custom'
         sign_in_label.text_color = [1, 1, 1, 1]
 
@@ -97,7 +98,6 @@ class SignInScreen(Screen):
             signin_card.add_widget(Widget())
             signin_card.add_widget(choice_box)
             signin_card.add_widget(Widget())
-
 
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')
         toolbar = MDToolbar(title='Add Contact', anchor_title='center')
