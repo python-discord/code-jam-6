@@ -165,11 +165,11 @@ class GameView(Widget):
             source=ATLAS_PATH.format(ship.id),
             pos=(WINDOW_WIDTH, LANE_BOUNDS[ship.lane_id][1])
         )
-        # ship.shape._ship_image.collide_point()
+        ship.bind(on_launch_cannon_ball=self.on_launch_cannon_ball)
         self.add_widget(ship.shape)
         self.redraw_ships(redraw_to=ship.lane_id)
 
-    def on_remove_ship(self, game: Game, ship: ShipView):
+    def on_remove_ship(self, game: Game, ship: BrownShip):
         ship.shape.clear_widgets()
         self.remove_widget(ship.shape)
         game.score += 1
@@ -199,6 +199,22 @@ class GameView(Widget):
     @staticmethod
     def on_mirror_state_change(mirror, value: int):
         mirror.shape.source = ATLAS_PATH.format(f'{mirror.id}-{value}')
+
+    def on_launch_cannon_ball(self, ship):
+        x, y = ship.shape.pos
+        cannon_ball = Image(source=IMAGES_PATH.format('fire.zip'), pos=(x + 50, y + 50))
+        cannon_ball.size = cannon_ball.texture_size
+
+        self.add_widget(cannon_ball)
+        arc_animation = Animation(x=10, y=475, d=3)
+        arc_animation.bind(on_complete=self.on_cannon_ball_complete)
+        arc_animation.start(cannon_ball)
+
+        return True
+
+    def on_cannon_ball_complete(self, animation, image):
+        self.remove_widget(image)
+        self._game.health -= 10
 
     def _keyboard_closed(self):
         self._keyboard.unbind(on_key_down=self._on_keyboard_down)

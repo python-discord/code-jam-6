@@ -31,9 +31,9 @@ class MirrorCannon(Entity):
             round(0.5*MIRROR_DIAMETER*math.sin(math.radians(self.angle)))
         )
 
-        p2 = p0 - Vector(
-            round(0.5*MIRROR_DIAMETER*math.cos(math.radians(self.angle))),
-            round(0.5*MIRROR_DIAMETER*math.sin(math.radians(self.angle)))
-        )
+        p2 = -(p1 - p0) + p0
 
-        return p0, p1, p2
+        p3 = (p2 - p0).rotate(90-self.angle)
+        p4 = -p3
+
+        return p0, p1, p2, p3, p4
