@@ -8,7 +8,6 @@ from ui.widgets.nav_drawer import MyNavigationLayout
 
 
 Builder.load_string("""
-#:kivy 1.11.1
 #:import MDCard kivymd.uix.card
 #:import MDToolbar kivymd.uix.toolbar
 #:import MDRectangleFlatIconButton kivymd.uix.button
@@ -20,9 +19,7 @@ Builder.load_string("""
     md_border_color: app.theme_cls.primary_color
     pos_hint: {'center_y': 1.5, 'center_x': 0.5}
 
-<BlankLabel@MDLabel>
-    text: ''
-#    font_style: 'H6'
+<BlankLabel@MDLabel>:
 
 <WelcomeScreen>
     canvas.before:

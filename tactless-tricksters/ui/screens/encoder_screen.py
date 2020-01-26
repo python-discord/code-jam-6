@@ -11,6 +11,7 @@ from kivymd.uix.button import MDFloatingActionButton
 from kivymd.uix.card import MDCard
 from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextFieldRound
+from kivy.utils import platform
 
 # Project imports
 from ui.widgets.audio_indicator import AudioIndicator
@@ -46,8 +47,9 @@ class EncoderScreen(Screen):
         self.encode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5},
                                              size_hint=(0.85, 0.5))
         self.encode_input.icon_right = 'database-import'
-        self.encode_input.children[2].children[0].bind(
-            on_press=lambda x: self.encode_audio(self.encode_input.text))
+        if platform not in ['ios', 'android']:
+        	self.encode_input.children[2].children[0].bind(
+            	on_press=lambda x: self.encode_audio(self.encode_input.text))
         self.encode_input.icon_left = 'microphone'
         self.encode_input.children[2].children[2].disabled = False
         self.encode_input.children[2].children[2].bind(on_press=lambda x: self.speech_to_text())

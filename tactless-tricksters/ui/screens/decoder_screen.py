@@ -4,6 +4,7 @@ from kivy.uix.anchorlayout import AnchorLayout
 from kivy.app import App
 from kivy.metrics import dp
 from kivy.clock import Clock
+from kivy.utils import platform
 
 # kivymd imports
 from kivymd.uix.button import MDFloatingActionButton
@@ -20,7 +21,8 @@ class DecoderScreen(Screen):
     def __init__(self, **kwargs):
         super(DecoderScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
-        self.amr = self.util.auto_morse_recognizer
+        if platform not in ['ios', 'android']:
+        	self.amr = self.util.auto_morse_recognizer
         self.ui_layout()
 
     def ui_layout(self):
@@ -30,7 +32,8 @@ class DecoderScreen(Screen):
         self.record_button = MDFloatingActionButton(icon='record', size=[dp(56), dp(56)])
         self.record_button.md_bg_color = App.get_running_app().theme_cls.primary_color
         self.record_button.text_color = [1, 1, 1, 1]
-        self.record_button.bind(on_press=lambda x: self.decode_audio())
+        if platform not in ['ios', 'android']:
+        	self.record_button.bind(on_press=lambda x: self.decode_audio())
         record_button_anchor.add_widget(self.record_button)
 
         self.decode_input = MDTextFieldRound(pos_hint={'center_x': 0.5, 'center_y': 0.5},
@@ -56,7 +59,10 @@ class DecoderScreen(Screen):
                                            halign='center', size_hint=(1, 0.5))
         self.decode_output_label.theme_text_color = 'Custom'
         self.decode_output_label.text_color = [1, 1, 1, 1]
-        self.audio_indicator = AudioIndicator(stack_width=self.amr.bits_per_frame)
+        if platform not in ['ios', 'android']:
+        	self.audio_indicator = AudioIndicator(stack_width=self.amr.bits_per_frame)
+        else:
+        	self.audio_indicator = AudioIndicator(stack_width=40)
         self.audio_indicator.size_hint = (1, 2)
 
         decode_card.add_widget(self.audio_indicator)
