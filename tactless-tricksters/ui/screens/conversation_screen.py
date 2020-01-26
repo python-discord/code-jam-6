@@ -48,7 +48,8 @@ class ConversationScreen(Screen):
                     md_bg_color = [1, 1, 1, 0.6]
                     text_color = [0, 0, 0, 1]
                 message_label = MDLabel(text=message['message'], font_style='Caption', size_hint=(1, None))
-
+                self.util.morse.read(words=str(message_label.text))
+                message_label.text = self.util.morse.morse
                 message_card = ConversationBubble(util=self.util,
                                                   size=message_label.size,
                                                   message=message_label,

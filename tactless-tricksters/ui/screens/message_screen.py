@@ -36,10 +36,10 @@ class MessageScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' ', size_hint=(1, 5)))
 
         for key in self.util.user_data['message_dict']:
-            message_aray = self.util.user_data['message_dict'][key]
             temp_dict = self.util.user_data['message_dict'][key][-1:][0]
-            print(temp_dict)
-            message_card = MessageCard(text_post=temp_dict['message'],
+            self.util.morse.read(words=str(temp_dict['message']))
+            morse_code = self.util.morse.morse
+            message_card = MessageCard(text_post=morse_code,
                                        name=key,
                                        name_data=(key + '\n' + temp_dict['timestamp']),
                                        swipe=True,
