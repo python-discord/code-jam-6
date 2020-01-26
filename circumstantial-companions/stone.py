@@ -230,7 +230,7 @@ class Chisel(Widget):
     def export_png(self, path_to_file, transparent=False):
         if transparent:
             self.background_color.a = 0
-        self.export_to_png(path_to_file)
+        self.export_to_png(str(path_to_file))
         self.background_color.a = 1
 
     def load(self, path_to_file):

@@ -7,7 +7,6 @@ import contextvars
 from itertools import cycle
 import json
 import math
-import os
 from pathlib import Path
 import webbrowser
 
@@ -44,10 +43,17 @@ BUTTON_PRESSED = str(IMAGE_PATH / "button" / "pressed.png")
 BURGER_NORMAL = str(IMAGE_PATH / "burger" / "normal.png")
 BURGER_HOVER = str(IMAGE_PATH / "burger" / "hover.png")
 BURGER_PRESSED = str(IMAGE_PATH / "burger" / "pressed.png")
-FILE_EXTENSION = ".chisel-project"
+PROJECT_EXTENSION = ".chisel-project"
 MAX_FILENAME_LENGTH = 128
 GTIHUB_URL = "https://github.com/salt-die/code-jam-6/tree/master/circumstantial-companions"
 CURSOR = Cursor()
+
+
+def get_saves_path():
+    path = Path.cwd()
+    if (path / "saves").exists():
+        return str(path / "saves")
+    return str(path)
 
 
 class Button(SignBorder, KivyButton):
@@ -113,7 +119,7 @@ class InfoPopup(Popup):
         self._resize_label()
 
         if dismissable:
-            btn = Button(_("Cancel"), font_size=sp(16), size_hint=(1, 0.3))
+            btn = Button(_("Cancel"), font_size=sp(16), size_hint=(1, 0.35))
             layout.add_widget(btn)
             btn.bind(on_release=self.dismiss)
 
@@ -133,32 +139,32 @@ def open_loading_popup(text):
     return popup
 
 
-class SelectLanguagePopup(Popup):
+class SelectionPopup(Popup):
     choice = StringProperty()
 
-    def __init__(self):
+    def __init__(self, title, choices):
         layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-        for locale_code, locale_info in LOCALES.items():
-            btn = Button(locale_info["name"], font_size=sp(16))
+        for key, string in choices.items():
+            btn = Button(string, font_size=sp(16))
 
-            def _make_select_function(locale_code):
+            def _make_select_function(key):
                 def _select(btn):
                     self.dismiss()
-                    self.choice = locale_code
+                    self.choice = key
 
                 return _select
 
-            btn.bind(on_release=_make_select_function(locale_code))
+            btn.bind(on_release=_make_select_function(key))
             layout.add_widget(btn)
 
-        super().__init__(_("Select language"), layout, size_hint=(0.5, 0.8))
+        super().__init__(title, layout, size_hint=(0.5, 0.8))
 
 
 class ImportPopup(Popup):
     def __init__(self, chisel):
         self.chisel = chisel
         layout = BoxLayout(orientation="vertical", spacing=dp(34), padding=(dp(20), dp(15)))
-        self.file_chooser = FileChooserListView(path=".", filters=[self._filter_file],
+        self.file_chooser = FileChooserListView(path=get_saves_path(), filters=[self._filter_file],
                                                 size_hint=(1, 0.85))
         self.btn = Button(_("Please select a file."), disabled=True, font_size=sp(16),
                           size_hint=(1, 0.15))
@@ -174,18 +180,19 @@ class ImportPopup(Popup):
 
     @staticmethod
     def _filter_file(folder, filename):
-        return filename.endswith(FILE_EXTENSION)
+        return filename.endswith(PROJECT_EXTENSION)
 
     def _change_title(self, *args):
         path = self.file_chooser.path
         if path == ".":
-            path = os.getcwd()
+            path = Path.cwd()
         self.title = _("Import from {path}").format(path=path)
 
     def _change_btn_name(self, *args):
         selection = self.file_chooser.selection
+        print(selection)
         if selection:
-            self.btn.text = _('Open "{filename}"').format(filename=os.path.basename(selection[0]))
+            self.btn.text = _('Open "{filename}"').format(filename=Path(selection[0]).name)
             self.btn.disabled = False
         else:
             self.btn.text = _("Please select a file.")
@@ -213,27 +220,42 @@ class ImportPopup(Popup):
 
 
 class SaveAsPopup(Popup):
+
     def __init__(self, chisel):
         self.chisel = chisel
+        self.save_type = None
+        self.choices = {
+            "background": ".png " + _("(with background)"),
+            "transparent": ".png " +_("(transparent)"),
+            "project": PROJECT_EXTENSION,
+            "all": _("All")
+        }
+
         layout = BoxLayout(orientation="vertical",
                            spacing=dp(34),
                            padding=(dp(20), dp(15)))
-        self.file_chooser = FileChooserListView(path=".",
+        self.file_chooser = FileChooserListView(path=get_saves_path(),
                                                 filters=[self._filter_file],
                                                 size_hint=(1, 0.75))
-        self.text_input = TextInput(text="Untitled" + FILE_EXTENSION,
+
+        sublayout = BoxLayout(orientation="horizontal", spacing=dp(10), size_hint=(1, 0.1))
+        self.text_input = TextInput(text="Untitled",
                                     multiline=False,
                                     font_name=FONT.get(),
                                     font_size=sp(16),
-                                    size_hint=(1, 0.1))
-        self.btn = Button("", font_size=sp(16), size_hint=(1, 0.15))
-        self._change_btn_name()
+                                    size_hint_x=0.6)
+        self.save_type_btn = KivyButton(text=_("Select file type"), font_name=FONT.get(), size_hint_x=0.4)
+        sublayout.add_widget(self.text_input)
+        sublayout.add_widget(self.save_type_btn)
+
+        self.save_btn = Button(_("Please select a file type."), disabled=True, font_size=sp(16), size_hint=(1, 0.15))
 
         self.file_chooser.bind(path=self._change_title, selection=self._set_text)
         self.text_input.bind(text=self._on_text_input, on_text_validate=self._save_file)
-        self.btn.bind(on_release=self._save_file)
+        self.save_type_btn.bind(on_release=self.open_save_type_popup)
+        self.save_btn.bind(on_release=self._save_file)
 
-        for widget in (self.file_chooser, self.text_input, self.btn):
+        for widget in (self.file_chooser, sublayout, self.save_btn):
             layout.add_widget(widget)
 
         super().__init__("", layout, size_hint=(0.7, 0.9))
@@ -241,51 +263,118 @@ class SaveAsPopup(Popup):
 
     @staticmethod
     def _filter_file(folder, filename):
-        return filename.endswith(FILE_EXTENSION)
-
-    @staticmethod
-    def _resolve_filename(string):
-        if string.endswith(FILE_EXTENSION):
-            return string
-        return string + FILE_EXTENSION
+        return filename.endswith(PROJECT_EXTENSION) or filename.endswith(".png")
 
     @staticmethod
     def _maybe_shorten(string):
         if len(string) > 24:
-            filename, ext = string.rsplit(".", 1)
-            return filename[:6] + "..." + filename[-5:] + "." + ext
+            parts = string.rsplit(".", 1)
+            if len(parts) > 1:
+                filename, ext = parts
+                return filename[:6] + "..." + filename[-5:] + "." + ext
+            return parts[0][:6] + "..." + parts[0][-5:]
+        return string
+
+    def _resolve_filename(self, string):
+        ext = self._get_file_extension()
+        if ext is None:
+            return string
+        if not string.endswith(ext):
+            string += ext
         return string
 
     def _change_title(self, *args):
         path = self.file_chooser.path
         if path == ".":
-            path = os.getcwd()
+            path = Path.cwd
         self.title = _("Save to {path}").format(path=path)
 
     def _set_text(self, *args):
         selection = self.file_chooser.selection
         if selection:
-            self.text_input.text = os.path.basename(selection[0])
+            self.text_input.text = Path(selection[0]).name
 
     def _on_text_input(self, *args):
         text = self.text_input.text
         if len(text) > MAX_FILENAME_LENGTH:
             self.text_input.text = text[:MAX_FILENAME_LENGTH]
+        if self.save_type:
+            current_ext = self._get_file_extension()
+            if current_ext == ".png" and self.text_input.text.endswith(PROJECT_EXTENSION):
+                self._set_save_type(None, "project")
+            elif current_ext == PROJECT_EXTENSION and self.text_input.text.endswith(".png"):
+                self._set_save_type(None, "background")
+        else:
+            if self.text_input.text.endswith(PROJECT_EXTENSION):
+                self._set_save_type(None, "project")
+            elif self.text_input.text.endswith(".png"):
+                self._set_save_type(None, "background")
         self._change_btn_name()
 
     def _change_btn_name(self, *args):
+        if self.save_type is None:
+            return
         filename = self._resolve_filename(self.text_input.text)
-        self.btn.text = _('Save as "{filename}"').format(filename=self._maybe_shorten(filename))
+        self.save_btn.text = _('Save as "{filename}"').format(filename=self._maybe_shorten(filename))
 
     def _save_file(self, *args):
-        filename = self._resolve_filename(self.text_input.text)
         try:
-            self.chisel.save(os.path.join(self.file_chooser.path, filename))
+            self._do_saves()
         except OSError:
             open_error_popup(_("The file could not be saved due to an error "
                                "raised by the operating system.\nCommon "
                                "issue: Illegal characters in the file name."))
         self.dismiss()
+
+    def open_save_type_popup(self, *args):
+        popup = SelectionPopup(_("Select file type"), self.choices)
+        popup.bind(choice=self._set_save_type)
+        popup.open()
+
+    def _set_save_type(self, instance, choice):
+        self.save_type_btn.text = self.choices[choice]
+        self.save_btn.disabled = False
+        if self.save_type is not None:
+            old_ext = self._get_file_extension()
+            if old_ext and self.text_input.text.endswith(old_ext):
+                self.text_input.text = self.text_input.text[:-len(old_ext)]
+        self.save_type = choice
+        new_ext = self._get_file_extension()
+        if new_ext and not self.text_input.text.endswith(new_ext):
+            self.text_input.text += new_ext
+        self._change_btn_name()
+
+    def _get_file_extension(self):
+        extensions = {
+            "background": ".png",
+            "transparent": ".png",
+            "project": PROJECT_EXTENSION,
+            "all": None
+        }
+        return extensions[self.save_type]
+
+    def _do_saves(self):
+        filename = self._resolve_filename(self.text_input.text)
+        path = Path(self.file_chooser.path)
+        ext = self._get_file_extension()
+        if ext is None:
+            bg_path = path / (filename + ".png")
+            trans_path = path / (filename + "_transparent.png")
+            project_path = path / (filename + PROJECT_EXTENSION)
+        else:
+            bg_path = trans_path = project_path = path / filename
+
+        bg_func = lambda: self.chisel.export_png(bg_path, transparent=False)
+        trans_func = lambda: self.chisel.export_png(trans_path, transparent=True)
+        project_func = lambda: self.chisel.save(project_path)
+        all_func = lambda: bg_func() or trans_func() or project_func()
+        functions = {
+            "background": bg_func,
+            "transparent": trans_func,
+            "project": project_func,
+            "all": all_func
+        }
+        functions[self.save_type]()
 
     def on_dismiss(self, *args):
         self.file_chooser.cancel()
@@ -389,7 +478,8 @@ class OptionsPanel(RepeatingBackground, BoxLayout):
         self.bg_rect.size = (bg_width, bg_height)
 
     def open_language_popup(self, *args):
-        language_popup = SelectLanguagePopup()
+        locales = {code: info["name"] for code, info in LOCALES.items()}
+        language_popup = SelectionPopup(_("Select language"), locales)
         language_popup.bind(choice=lambda instance, choice: self.build(choice))
         language_popup.open()
 
