@@ -1,8 +1,6 @@
 import random
 from typing import Any
 
-from simpleaudio import PlayObject
-
 from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.object import (
     GenericObject,
@@ -14,6 +12,8 @@ from firestarter.game_engine.object import (
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
+
+from simpleaudio import PlayObject
 
 
 class MyGame(Engine):
