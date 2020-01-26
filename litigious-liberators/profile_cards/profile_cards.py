@@ -16,6 +16,7 @@ from kivy.properties import StringProperty
 from yaml import safe_load
 from kivy.core.window import Window
 from collections import Counter
+from kivy.core.audio import SoundLoader
 
 Config.set("input", "mouse", "mouse,multitouch_on_demand")
 
@@ -62,8 +63,15 @@ class WinScreen(Screen):
 class ProfileCard(Screen):
     def __init__(self, profile, **kwargs):
         super(ProfileCard, self).__init__(**kwargs)
+        dir_path = os.path.dirname(os.path.realpath(__file__))
         pic_addr = f"../profiles/pictures/{profile['Picture']}"
-        self.ids.picture.source = os.path.join(os.path.dirname(os.path.abspath(__file__)), pic_addr)
+        sound_addr = f"../profiles/sounds/{profile.get('Sound')}"
+        self.ids.picture.source = os.path.join(dir_path, pic_addr)
+        sound = SoundLoader.load(os.path.join(dir_path, sound_addr))
+        if sound:
+            print("Sound found at %s" % sound.source)
+            print("Sound is %.3f seconds" % sound.length)
+            sound.play()
         self.deltas = Counter(profile["Deltas"])
         self.ids.name.text = profile["Name"]
         self.ids.right_choice.text += profile["Choices"]["right"]

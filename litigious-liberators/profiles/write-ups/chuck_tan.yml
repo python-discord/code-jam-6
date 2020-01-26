@@ -1,0 +1,24 @@
+Name: Chuck Tan
+Picture: chuck_tan.jpg
+Biography: >
+  Yo hommy! You must've heard the saying "The chuck the chicken may cross the road but nobody 
+  crosses the chuck the chicken". I know kung-fu, karate you name it.
+Choices:
+  right: >
+    Become chuck's hommie
+  left: >
+    Let's have some fried chicken tomorrow.
+Results:
+  right: >
+    I better learn some moves.
+  left: >
+    Nothing better than fried chicken!
+Deltas:
+  right:
+    Knowledge: 3
+    Welfare: 3
+    Energy: 1
+  left:
+    Knowledge: 0
+    Welfare: 0
+    Energy: 3
