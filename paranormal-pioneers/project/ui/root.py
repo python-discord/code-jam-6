@@ -48,8 +48,8 @@ class ConsoleInput(TextInput):
 
     def keyboard_on_key_down(self, window, keycode, text, modifiers):
         code, key = keycode
-        if (code not in (276, 273) and self.cursor_index() < self.prompt_pos) and \
-                (code == 8 and self.cursor_index() == self.prompt_pos) and False:
+        if (code not in (276, 273) and self.cursor_index() < self.prompt_pos) or \
+                (code == 8 and self.cursor_index() == self.prompt_pos):
             self.cursor = self.get_cursor_from_index(self.prompt_pos)
             return
         if code == 13:
