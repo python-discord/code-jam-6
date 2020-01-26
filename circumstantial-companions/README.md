@@ -79,4 +79,4 @@ assets
 
 ### Sounds
 
-- [`sounds/*.png`][sound-dir] from [zapsplat][zapsplat-url] are under the [Zapsplat License][zapsplat-license-url].
+- [`sounds/*.wav`][sound-dir] from [zapsplat][zapsplat-url] are under the [Zapsplat License][zapsplat-license-url].
