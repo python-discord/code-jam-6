@@ -66,12 +66,13 @@ class MorseHelper:
         return text.strip().strip('/')
 
     def text_to_morse(self, text):
-        morse_code = []
+        morse_code = ''
+        text = text.lower()
         for letter in text:
             if letter in self.__letter_to_morse:
-                text += self.__morse_to_letter[letter] + ' '
+                morse_code += self.__letter_to_morse[letter] + ' '
             else:
-                text += '? '
+                morse_code += '/?/ '
         return morse_code
 
     def get_letter_as_morse_sound(self, letter):
