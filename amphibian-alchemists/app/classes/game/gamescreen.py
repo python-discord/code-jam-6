@@ -29,18 +29,6 @@ CONFIG_DIR = os.path.join(
 
 
 def get_wiki_summary() -> str:
-
-    test_mode = True
-    easy_mode = True
-
-    if test_mode:
-        return "abc"
-    elif easy_mode:
-        response = get("https://randomwordgenerator.com/json/sentences.json")
-        rand = random.randint(0, 233)
-        easy_msg = response.json()["data"][rand]["sentence"]
-        return easy_msg
-
     endpoint = (
         "https://en.wikipedia.org/w/api.php?action=query&list=random&"
         "format=json&rnnamespace=0&rnlimit=1&origin=*"
