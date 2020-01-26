@@ -108,7 +108,7 @@ class DrawPad(FloatLayout):
                 print(f"Gesture value: {value}")
                 # TODO: report value to relevant module
                 # TODO: fade line out
-                self.click()
+                self.clear()
 
     def clear(self):
         for l in self.lines:
