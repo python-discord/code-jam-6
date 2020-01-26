@@ -75,8 +75,11 @@ assets
 - `button/*.png` are just a hundred pixels of the same color (of unknown [trademark][trademark-url]).
 
 [boulder-dir]: ./assets/img/boulder
+[sound-dir]: ./assests/sounds
 [pixabay-url]: https://pixabay.com/
 [pixabay-license-url]: https://pixabay.com/service/license/
+[zapsplat-url]: https://www.zapsplat.com/
+[zapsplat-license-url]: https://www.zapsplat.com/license-type/standard-license/
 
 [img-dir]: ./assets/img
 [burger-dir]: ./assets/img/burger
@@ -92,4 +95,4 @@ assets
 
 ### Sounds
 
-- `dig.wav` is an original work by salt-die.
+- [`sounds/*.wav`][sound-dir] from [zapsplat][zapsplat-url] are under the [Zapsplat License][zapsplat-license-url].
