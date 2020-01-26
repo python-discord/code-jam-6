@@ -1,3 +1,5 @@
 kivymd=0.100.2
 Kivy==1.11.0
-requests
+numpy
+pyaudio
+
