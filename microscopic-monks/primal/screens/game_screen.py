@@ -56,6 +56,11 @@ class GameScreen(Screen):
         self.timer = 0
         self.timerValue = 0
 
+        selected = self.inventory.get_active()
+        if len(selected) != 0:
+            sprite = self.inventory.get_sprite(selected[0])
+            self.player.change_item(sprite)
+
     def update(self, delta: float):
         if self.disable:
             return
@@ -169,6 +174,13 @@ class GameScreen(Screen):
         for i in range(len(keys.NUMERIC_KEYS)):
             if self.is_key_just_pressed(keys.NUMERIC_KEYS[i]):
                 self.inventory.set_ative(i)
+
+                selected = self.inventory.get_active()
+                if len(selected) != 0:
+                    sprite = self.inventory.get_sprite(selected[0])
+                    self.player.change_item(sprite)
+                else:
+                    self.player.change_item(None)
                 return
 
     def process_left_click(self):
@@ -217,6 +229,10 @@ class GameScreen(Screen):
                         else:
                             self.inventory.add_item(feature.type)
 
+                        selected = self.inventory.get_active()
+                        if len(selected) != 0:
+                            sprite = self.inventory.get_sprite(selected[0])
+                            self.player.change_item(sprite)
                         if feature in self.clicked_features:
                             del self.clicked_features[feature]
                     else:

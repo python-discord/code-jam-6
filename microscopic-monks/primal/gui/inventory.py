@@ -74,6 +74,9 @@ class Inventory:
                 pass
             i += 1
 
+    def get_sprite(self, type: str):
+        return self.item_data[type]['source']
+
     def remove_item(self, name, amount):
         for index, item in enumerate(self.inventory_data):
             if len(item) != 0 and item[0] == name:

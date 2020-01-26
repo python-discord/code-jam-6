@@ -145,6 +145,8 @@ class Player(RotatableSprite):
         color = (0, 0, 0, 1)
         self.timer = 0
 
+        self.in_hand = ColorSprite(None, (0, 0), (20, 20), (1, 1, 1, 1))
+        self.in_hand.set_alpha(0)
         self.left_size = (20, size[1] * 0.3)
         self.right_size = (20, size[1] * 0.3)
         self.left = ColorSprite(None, (0, 0), self.left_size, color)
@@ -179,9 +181,17 @@ class Player(RotatableSprite):
         self.left.set_size(self.left_size)
         self.right.set_size(self.right_size)
 
+    def change_item(self, image):
+        if image is None:
+            self.in_hand.set_alpha(0)
+        else:
+            self.in_hand.set_source(image)
+            self.in_hand.set_alpha(1)
+
     def set_position(self, pos: Tuple[float, float]):
         self.left.set_position((pos[0], pos[1] + self.get_size()[1] * 0.2,))
         self.right.set_position((pos[0], pos[1] + self.get_size()[1] * 0.5))
+        self.in_hand.set_position((pos[0] + 30, pos[1] - 10))
         super().set_position(pos)
 
     def draw(self, canvas: Union[RenderContext, InstructionGroup]):
@@ -190,6 +200,7 @@ class Player(RotatableSprite):
         self.left.draw(canvas)
         self.right.draw(canvas)
         canvas.add(self.bg_rect)
+        self.in_hand.draw(canvas)
         canvas.add(PopMatrix())
 
 
