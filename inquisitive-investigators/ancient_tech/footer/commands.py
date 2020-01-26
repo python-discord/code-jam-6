@@ -8,6 +8,7 @@ from kivy.logger import Logger
 
 from ..core.exceptions import InvalidBrowser
 
+
 class BasePopup(Popup):
 
     def __init__(
@@ -77,7 +78,7 @@ class BasePopup(Popup):
 
         else:
             self.opp_update = False
-            
+
 
 class AboutPopup(BasePopup):
 
@@ -85,7 +86,7 @@ class AboutPopup(BasePopup):
         super().__init__(*args, **kwargs)
         with open('ancient_tech/static/about.txt', 'r') as f:
             self.ids.AboutInfo.text = f.read()
-            
+
 
 class EditPopup(BasePopup):
 
@@ -103,14 +104,16 @@ class EditPopup(BasePopup):
         manager = self.ctx.parent.parent.manager
         editor = manager.get_screen('text_editor')
 
-        if file is not None:
+        if file is not None and file.type != 'DIR':
             editor.editor.file_path = str(Path(file.txt))
 
             with open(Path(file.txt), 'r') as f:
                 editor.editor.text = f.read()
 
             manager.current = 'text_editor'
-            self.dismiss()
+        else:
+            print('Please Select a File')
+        self.dismiss()
 
 
 class Mkdir(BasePopup):
@@ -140,7 +143,6 @@ class Mkdir(BasePopup):
             elif self.filemanager == 2:
                 dir_ = Path(dir_.right.ids.header.ids.directory.current_dir)
                 new_dir = dir_ / dir_name
-
 
             if not new_dir.exists():
                 new_dir.mkdir()
@@ -231,18 +233,18 @@ class CreatePopup(BasePopup):
 
             elif self.filemanager == 2:
                 current = base.right.ids.header.ids.directory.current_dir
-                
+
             dir_ = Path(current) / file_name
-                
+
             if not dir_.exists():
                 dir_.touch()
-        
+
                 self.update(self.filemanager, current)
                 self.dismiss()
 
             else:
                 Logger.info('Create: File already exists')
-            
+
         else:
             Logger.info('Create: Enter a File name')
 

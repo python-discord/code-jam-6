@@ -1,11 +1,10 @@
 from __future__ import annotations
-from typing import Any, Tuple, Union
+from typing import Tuple, Union
 
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObservableList
 from kivy.core.window import Window, Keyboard
-from kivy.uix.textinput import TextInput
 
 from .commands import *
 
@@ -26,6 +25,7 @@ class Footer(BoxLayout):
         self.actions = {
             '1': self.about,
             '2': self.edit,
+            '3': self.copy,
             '4': self.down,
             '5': self.up,
             '6': self.mkdir,
@@ -60,7 +60,7 @@ class Footer(BoxLayout):
         self._keyboard = None
 
     def _match(
-        self, key: str, *args: Any, **kwargs: Any
+            self, key: str, *args: Any, **kwargs: Any
     ) -> Union[bool, None]:
         """
         Calls the coresponding function to a specific key 
@@ -70,11 +70,11 @@ class Footer(BoxLayout):
         return func(*args, **kwargs) if func else None
 
     def _on_keyboard_down(
-        self,
-        keyboard: Keyboard,
-        keycode: Tuple[str, int],
-        text: str,
-        modifiers: ObservableList
+            self,
+            keyboard: Keyboard,
+            keycode: Tuple[str, int],
+            text: str,
+            modifiers: ObservableList
     ) -> Union[bool, None]:
         """
         Ensures that multiple popups cannot be open
@@ -85,31 +85,9 @@ class Footer(BoxLayout):
 
     def about(self) -> None:
         popup = AboutPopup(
-            self, size_hint=(.7, .6), 
+            self, size_hint=(.7, .6),
             pos_hint={
-                'center_x': .5, 
-                'center_y': .5
-            }
-        )
-        popup.open()
-        return True
-
-    def mkdir(self) -> None:
-        popup = Mkdir(
-            self, size_hint=(.5, .5), 
-            pos_hint={
-                'center_x': .5, 
-                'center_y': .5
-            }
-        )
-        popup.open()
-        return True
-
-    def create(self) -> None:
-        popup = CreatePopup(
-            self, size_hint=(.5, .5), 
-            pos_hint={
-                'center_x': .5, 
+                'center_x': .5,
                 'center_y': .5
             }
         )
@@ -118,9 +96,34 @@ class Footer(BoxLayout):
 
     def edit(self) -> None:
         popup = EditPopup(
-            self, size_hint=(.5, .3), 
+            self, size_hint=(.5, .3),
             pos_hint={
-                'center_x': .5, 
+                'center_x': .5,
+                'center_y': .5
+            }
+        )
+        popup.open()
+        return True
+
+    def copy(self):
+        print(1)
+
+    def mkdir(self) -> None:
+        popup = Mkdir(
+            self, size_hint=(.5, .5),
+            pos_hint={
+                'center_x': .5,
+                'center_y': .5
+            }
+        )
+        popup.open()
+        return True
+
+    def create(self) -> None:
+        popup = CreatePopup(
+            self, size_hint=(.5, .5),
+            pos_hint={
+                'center_x': .5,
                 'center_y': .5
             }
         )
@@ -149,9 +152,9 @@ class Footer(BoxLayout):
 
     def delete(self) -> None:
         popup = DeletePopup(
-            self, size_hint=(.7, .6), 
+            self, size_hint=(.7, .6),
             pos_hint={
-                'center_x': .5, 
+                'center_x': .5,
                 'center_y': .5
             }
         )
@@ -160,9 +163,9 @@ class Footer(BoxLayout):
 
     def quit(self) -> None:
         popup = QuitPopup(
-            self, size_hint=(.5, .5), 
+            self, size_hint=(.5, .5),
             pos_hint={
-                'center_x': .5, 
+                'center_x': .5,
                 'center_y': .5
             }
         )
