@@ -12,8 +12,7 @@
     color: [0, 0, 0]
     canvas:
         Color:
-            rgb: root.color or [0, 0, 0]
-            a: 0.5
+            rgba: root.color + [0.4]
         Line:
             points: root.points
             width: 5
@@ -44,6 +43,7 @@
             pos_hint: {"center_x": 0.5}
             Button:
                 text: "Close"
+                on_press: app.root.get_screen("game_screen").button_press_negative()
                 on_release: root.dismiss()
 
 <Plug@Image>:
@@ -62,7 +62,7 @@
     padding: dp(30)
     canvas:
         Color:
-            rgba: 101 / 255, 67 / 255, 33 / 255, 1
+            rgba: 16 / 255, 16 / 255, 16 / 255, 1
         RoundedRectangle:
             pos: self.pos
             size: self.size
@@ -314,6 +314,7 @@
             BoxLayout:
                 size_hint_y: 0.1
                 Button:
+                    on_press: app.root.get_screen("game_screen").button_press_swoosh()
                     size_hint_x: 0.5
                     text: "< Go back"
                     on_release: root.manager.current = "game_screen"
@@ -324,7 +325,9 @@
                     id: remove_plug
                     text: "Remove the last pair of plugs"
                     disabled: True
+                    on_press: app.root.get_screen("game_screen").plug_remove_pop()
                     on_release: root.remove_grouped_plugs()
+
         AnchorLayout:
             padding: dp(30)
             PlugBoard:
@@ -335,5 +338,119 @@
             BoxLayout:
                 size_hint: 0.1, 0.2
                 Label:
-                    text: "Click in a plughole to add a plug there"
+                    text: "Click a port to add a plug"
         CheckPaper:
+
+# for the gamescreen
+<PlugBoardModified@GridLayout>:
+    canvas:
+        Color:
+            rgba: 16 / 255, 16 / 255, 16 / 255, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+    cols: 17
+    orientation: 'vertical'
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "Q"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "W"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "E"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "R"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "T"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "Z"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "U"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "I"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    FloatLayout:
+        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Image:
+            source: "misc/ports.png"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        Label:
+            text: "O"
+            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
+    Widget:
