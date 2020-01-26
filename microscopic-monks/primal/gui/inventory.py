@@ -1,7 +1,6 @@
 from kivy.graphics.instructions import RenderContext
 
 from primal.engine.sprite import Sprite, ColorSprite, Text
-from primal.engine.feature import Feature
 
 import json
 
