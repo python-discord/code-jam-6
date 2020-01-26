@@ -170,8 +170,7 @@ class CopyPopup(BasePopup):
                 to = self.ctx.parent.ids.left
 
             try:
-                print(self.from_)
-                from_obj = Path(from_.ids.rv.selected)
+                from_obj = Path(from_.ids.rv.selected.txt)
 
             except TypeError:
                 Logger.info('Copy: Select a file/directory to copy')

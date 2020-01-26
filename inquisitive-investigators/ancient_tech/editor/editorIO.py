@@ -53,11 +53,9 @@ class EditorIO(TextInput):
             self.cancel_selection()
 
         elif keycode[0] in KEYS['='] and 'ctrl' in modifiers:
-            print(f'Zoom in:{self.font_size}')
             self.font_size += 1
 
         elif keycode[0] in KEYS['-'] and 'ctrl' in modifiers:
-            print(f'Zoom out:{self.font_size}')
             if self.font_size > 0:
                 self.font_size -= 1
 
