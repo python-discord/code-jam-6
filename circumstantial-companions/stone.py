@@ -1,15 +1,17 @@
-import math
+import io
 import json
+import math
 from pathlib import Path
 from random import choice, random
+
+import numpy as np
+import simpleaudio as sa # sdl2_mixer non-functional for me so I resorted to this --salt-die
+from PIL import Image
 
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.widget import Widget
 from kivy.graphics import Color, Rectangle
-from PIL import Image
-import numpy as np
-import simpleaudio as sa # sdl2_mixer non-functional for me so I resorted to this --salt-die
 
 GRAVITY = .02
 FRICTION = .9
@@ -276,7 +278,11 @@ class Chisel(Widget):
         if transparent:
             self.background_color.a = 0
 
-        self.export_to_png(str(path_to_file))
+        buffer = io.BytesIO()
+        self.export_as_image().save(buffer, fmt="png")
+
+        with open(path_to_file, "wb") as file:
+            file.write(buffer.getvalue())
 
         for color, alpha in colors:
             color.a = alpha
