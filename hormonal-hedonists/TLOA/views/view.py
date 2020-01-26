@@ -170,14 +170,13 @@ class GameView(Widget):
             for ship in lane:
                 self.remove_widget(ship.shape)
 
-        for lane in self._game.ship_lanes[::-1]:
+        for lane_number, lane in reversed(list(enumerate(self._game.ship_lanes))):
             for ship in lane:
                 self.add_widget(ship.shape)
 
-        # work-around to show death ray above ships
-        with self.canvas:
-            self.canvas.add(self._game.death_rays.color)
-            self.canvas.add(self._game.death_rays)
+            if lane_number == self._game.mirror.state:
+                self.canvas.add(self._game.death_rays.color)
+                self.canvas.add(self._game.death_rays)
 
     @staticmethod
     def _sin_transition(progress: float):
