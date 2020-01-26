@@ -21,6 +21,16 @@ Builder.load_string('''
             source: 'ui/img/morse_code_bg.jpg'
             tex_coords: root.tex_coords
 
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'top'
+        
+        MDToolbar:
+            title: 'Training Menu'
+            anchor_title: 'center'
+            md_bg_color: app.theme_cls.primary_color
+            left_action_items: [["arrow-left", lambda x: root.return_home()]]
+
     MDCard:
         padding: dp(24)
         spacing: dp(24)
@@ -124,3 +134,6 @@ class TrainingMenuScreen(Screen):
     def scroll_texture(self, dt):
         for i in range(0, 8, 2):
             self.tex_coords[i] += dt / 3.
+
+    def return_home(self):
+        self.manager.current = 'welcome'

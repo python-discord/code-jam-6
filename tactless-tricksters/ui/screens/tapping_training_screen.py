@@ -77,6 +77,16 @@ Builder.load_string('''
     decode_output_label: decode_output_label
     tap_button: tap_button
     
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'top'
+        
+        MDToolbar:
+            title: 'Tap Training'
+            anchor_title: 'center'
+            md_bg_color: app.theme_cls.primary_color
+            left_action_items: [["arrow-left", lambda x: root.return_menu()]]
+    
     MDCard:
         id: decode_card
         padding: dp(24)
@@ -207,6 +217,9 @@ class TappingScreen(Screen):
     def tapped(self, morse_char):
         print(morse_char)
         self.update_morse_display([morse_char])
+
+    def return_menu(self):
+        self.manager.current = 'training'
 
     def return_home(self):
         self.manager.current = 'welcome'
