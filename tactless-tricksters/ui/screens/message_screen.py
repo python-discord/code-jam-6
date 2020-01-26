@@ -26,8 +26,10 @@ class MessageScreen(Screen):
         self.clear_widgets()
         layout = BoxLayout(orientation='vertical')
 
-        self.scroll = ScrollView(do_scroll_x=False, size_hint=(1, None), size=(Window.width, Window.height))
-        scroll_box = BoxLayout(orientation='vertical', size_hint_y=None, padding=(dp(1), dp(60)), spacing=dp(1))
+        self.scroll = ScrollView(do_scroll_x=False, size_hint=(1, None),
+                                 size=(Window.width, Window.height))
+        scroll_box = BoxLayout(orientation='vertical', size_hint_y=None,
+                               padding=(dp(1), dp(60)), spacing=dp(1))
         scroll_box.bind(minimum_height=scroll_box.setter('height'))
         # Add more self.scrollbox.add_widget(MDLabel(text='')) to increase padding
         scroll_box.add_widget(MDLabel(text=' '))
@@ -57,7 +59,7 @@ class MessageScreen(Screen):
 
         # Add floating action button to write messages
         create_message_anchor = AnchorLayout(anchor_x='right', anchor_y='bottom',
-                                            padding=[dp(25), dp(25), dp(25), dp(25)])
+                                             padding=[dp(25), dp(25), dp(25), dp(25)])
         create_message_btn = MDFloatingActionButton(icon='message', size=[dp(56), dp(56)])
         create_message_btn.md_bg_color = App.get_running_app().theme_cls.primary_color
         create_message_btn.theme_text_color = "Custom"
@@ -75,5 +77,3 @@ class MessageScreen(Screen):
 
     def switch_screens(self):
         self.manager.current = 'contact'
-
-
