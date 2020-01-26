@@ -15,6 +15,8 @@ class GameScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self.dividend = 10
+
         self.clicked_features = dict()
         self.last_clicked = 0.0
 
@@ -193,6 +195,6 @@ class GameScreen(Screen):
                 return
 
     def health_drop(self):
-        if self.timerValue % 10 == 0:
+        if self.timerValue % self.deplete == 0:
             remove = 1
             self.health_bar.set_health(self.health_bar.get_health() - remove)
