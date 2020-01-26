@@ -231,7 +231,9 @@ class GameView(Widget):
         action = KEY_MAPPING.get(key_code[1])
         if key_code[1] == 'escape' and not self.pause_menu_opened:
             self.open_pause_menu()
-        elif key_code[1] == 'escape' and self.pause_menu_opened and self.pause_menu_content.game_over == False:
+        elif key_code[1] == 'escape' \
+                and self.pause_menu_opened \
+                and self.pause_menu_content.game_over is False:
             self.close_pause_menu()
 
         if action is None:
@@ -242,4 +244,3 @@ class GameView(Widget):
     def on_score_change(self, _game: Game, score: int):
         Logger.debug(f'New score: {score}')
         self._score.text = f'Score: {score:3}'
-
