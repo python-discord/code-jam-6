@@ -28,6 +28,7 @@
   {
     "card_id": "welcome_2",
     "card_type": "response",
+    "card_sound": "meow.wav",
     "card_image": "test.jpg",
     "text": "You've just discovered fire.",
     "options": [
@@ -53,6 +54,7 @@
   },
   {
     "card_id": "welcome_3",
+  "card_sound": "water.wav",
     "card_type": "response",
     "card_image": "test.jpg",
     "text": "This gives you some options. Maybe its time to start taking this whole evolution thing seriously?",
