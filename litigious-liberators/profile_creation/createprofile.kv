@@ -1,4 +1,5 @@
 #:kivy 1.11.1
+#:import utils kivy.utils
 <CreateProfile>
     ProfileSwiper:
         id: profile_carousel
@@ -22,6 +23,10 @@
                 spacing: '10dp'
                 Button:
                     text: 'Continue'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release:
                         root.ids.profile_carousel.validate_name()
 
@@ -55,9 +60,17 @@
                 spacing: '10dp'
                 Button:
                     text: 'Go Back'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_next()
 
         BoxLayout:
@@ -88,10 +101,18 @@
                 spacing: '10dp'
                 Button:
                     text: 'Go Back'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
-                    # TODO: With this design we only need to valiedate the name. But we need more questions.
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
+                    # TODO: With this design we only need to validate the name. But we need more questions.
                     on_release: root.ids.profile_carousel.load_next()
         BoxLayout:
             orientation: 'vertical'
@@ -121,8 +142,16 @@
                 spacing: '10dp'
                 Button:
                     text: 'Go Back'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     on_release: root.ids.profile_carousel.load_previous()
                 Button:
                     text: 'Continue'
+                    background_normal: ''
+                    background_color: utils.get_color_from_hex('#fbc02d')
+                    color: 0, 0, 0, 1
+                    size_hint_y: 0.4
                     # TODO: With this design we only need to validate the name. But we need more questions.
                     on_release: root.manager.current = "profile_selection"
