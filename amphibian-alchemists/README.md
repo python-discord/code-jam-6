@@ -55,6 +55,8 @@ Beware though, you only have a certain amount of time to decipher the message be
 
 Note: If you have Autoinput off and mistype once, you can no longer win (Remember, The Germans didn't have a backspace key).
 
+You can also have a save point (executed from game menu, not main). You can save your current progress as a save point. If you ever mess up, you can restart that current game from that save point by pressing Load Game in the game menu located at the top left of a game.
+
 ---
 ### Settings (Defaults)
 - Fullscreen: Off
