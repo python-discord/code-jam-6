@@ -7,7 +7,7 @@ from kivy.clock import Clock
 class BrownShip(MovingEntity):
     id = 'brown_ship'
 
-    def __init__(self, lane_id, health=100, velocity=(-10, 0), **kwargs):
+    def __init__(self, lane_id, health=100, velocity=(-1, 0), **kwargs):
         super().__init__(health=health, velocity=velocity, **kwargs)
         self.lane_id = lane_id
         self.is_anchored = False
