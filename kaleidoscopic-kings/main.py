@@ -69,9 +69,9 @@ class CardGameApp(App):
         # it's a hardcoded string
         global_idmap[
             "all_assets"
-        ] = f"{path_handler.get_game_asset_directory_path(story_name)}\\"
-        global_idmap["game_assets"] = f"{path_handler.get_game_art_path(story_name)}\\"
-        global_idmap["card_assets"] = f"{path_handler.get_card_art_path(story_name)}\\"
+        ] = f"{path_handler.get_game_asset_directory_path(story_name)}/"
+        global_idmap["game_assets"] = f"{path_handler.get_game_art_path(story_name)}/"
+        global_idmap["card_assets"] = f"{path_handler.get_card_art_path(story_name)}/"
         global_idmap[
             "sound_assets"
         ] = f"{path_handler.get_game_sounds_path(story_name)}\\"
