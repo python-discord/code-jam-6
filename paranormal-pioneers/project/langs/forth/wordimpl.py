@@ -1,4 +1,5 @@
 import itertools as it
+import sys
 from functools import reduce, partial
 from typing import Iterable, TypeVar, Callable
 
@@ -8,9 +9,9 @@ ForthEnv = 'project.langs.forth.forthimpl.ForthEnv'
 
 # BRANCH, :
 def _step_to(
-    to_search: Iterable[T],
-    item: T,
-    predicate: Callable[[T, T], bool] = lambda i, x: x != i
+        to_search: Iterable[T],
+        item: T,
+        predicate: Callable[[T, T], bool] = lambda i, x: x != i
 ) -> int:
     return reduce(
         lambda a, _: a + 1,
@@ -251,3 +252,14 @@ def hex_literal(env: ForthEnv) -> int:
     literal = env.words[env.index + 1].upper()
     env.data.append(int(literal, 16))
     return 1
+
+
+# ACCEPT
+def accept(env: ForthEnv) -> int:
+    max_count = env.data.pop()
+    addr = env.data.pop()
+    data = sys.stdin.readline(max_count).rstrip('\n')
+    datalen = min(len(data),max_count)
+    addr.arr[addr.idx:addr.idx+datalen] = data
+    env.data.append(datalen)
+    return 0
