@@ -6,8 +6,40 @@ from kivy.core.window import Window
 from kivy.graphics import Rectangle, Color
 from kivy.graphics.instructions import RenderContext, InstructionGroup
 from kivy.graphics.context_instructions import Rotate
+from kivy.uix.label import Label
+
 import math
 import json
+
+
+class Text:
+    def __init__(self, text: str, pos: Tuple[float, float], height: float):
+        self.pos = pos
+        self.height = height
+
+        self.label = Label()
+        self.label.text_size = 500, None
+        self.color = Color(1, 1, 1, 1)
+        self.rect = Rectangle(pos=pos)
+        self.set_text(text)
+
+    def set_text(self, text: str):
+        self.label.text = text
+        self.label.texture_update()
+        ratio = self.label.texture_size[0] / self.label.texture_size[1]
+        self.rect.size = ratio * self.height, self.height
+        self.rect.texture = self.label.texture
+
+    def set_color(self, color: Tuple[float, float, float, float]):
+        self.color.r = color[0]
+        self.color.g = color[1]
+        self.color.b = color[2]
+        self.color.a = color[3]
+
+    def draw(self, canvas: RenderContext):
+        canvas.add(self.color)
+        canvas.add(self.rect)
+        canvas.add(Color(1, 1, 1, 1))
 
 
 class Sprite:
