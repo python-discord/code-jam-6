@@ -18,23 +18,20 @@ class SettingsScreen(Screen):
     store = JsonStore(CONFIG_DIR)
 
     def on_enter(self):
+        if Config.get("graphics", "fullscreen") not in {0, 1, "0", "1"}:
+            Config.set("graphics", "fullscreen", 0)
+            Config.write()
+
         for config_name in self.ids.keys():
             if not self.store.exists(config_name):
-                self.store.put(
-                    config_name,
-                    value=(
-                        1
-                        if config_name != "allow_fullscreen"
-                        else int(Config.get("graphics", "fullscreen"))
-                    ),
-                )
-            self.set_config_values(config_name)
+                self.store.put(config_name, value=1)
+            self.set_config_value(config_name)
+        self.ids.allow_fullscreen.state = (
+            "down" if Config.get("graphics", "fullscreen") == "1" else "normal"
+        )
 
-    def set_config_values(self, config_name):
+    def set_config_value(self, config_name):
         value_to_set = {
-            "allow_fullscreen": "down"
-            if self.store.get(config_name)["value"] == 1
-            else "normal",
             "auto_save": "down"
             if self.store.get(config_name)["value"] == 1
             else "normal",
@@ -47,7 +44,6 @@ class SettingsScreen(Screen):
         elif type(value_to_set) in {float, int} and (
             value_to_set >= 0 or value_to_set <= 1
         ):
-            Config.write()
             self.ids[config_name].value_normalized = value_to_set
 
     def save_settings(self, to_save):
