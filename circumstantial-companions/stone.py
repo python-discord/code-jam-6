@@ -41,15 +41,9 @@ def get_image_and_aspect(file):
 
     return image, int(pebbles_per_row), int(pebbles_per_column)
 
-PEBBLE_IMAGES = tuple(Path("assets", "img", "boulder", f"{i}.png") for i in range(4))
+PEBBLE_IMAGES = (Path("assets", "img", "boulder", f"{i}.png") for i in range(4))
 PEBBLE_IMAGES = tuple(get_image_and_aspect(image) for image in PEBBLE_IMAGES)
 CURRENT_IMAGE = list(choice(PEBBLE_IMAGES))
-
-def get_pebble_size(width, height):
-    """Calculate the correct pebble size so we have no gaps in our stone."""
-    scaled_w, scaled_h =  PEBBLE_IMAGE_SCALE * width, PEBBLE_IMAGE_SCALE * height
-    _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
-    return scaled_w / pebbles_per_row, scaled_h / pebbles_per_column
 
 def pebble_setup():
     """
@@ -101,31 +95,33 @@ class Pebble:
 
     def step(self, dt):
         """Gravity Physics"""
-        x, y = self.x, self.y
         vx, vy = self.velocity
         vx *= FRICTION
         vy *= FRICTION
         vy -= GRAVITY
 
         # Bounce off walls
+        x, y = self.x, self.y
         if not 0 < x < 1:
             vx *= -1
         if y > 1:
             vy *= -1
 
-        stone = self.stone
+        self.velocity = vx, vy
         self.x, self.y = x + vx, max(0, y + vy)
-        stone.positions[self.index] = self.x, self.y, self.z
 
-        scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
-        stone.pixels[self.index].size = stone.pebble_size
+        self.update_canvas()
+
+    def update_canvas(self):
+        stone = self.stone
+        stone.positions[self.index] = x, y, _ = self.x, self.y, self.z
+        scaled_x, scaled_y = x * stone.width, y * stone.height
         stone.pixels[self.index].pos = scaled_x, scaled_y
+        stone.pixels[self.index].size = stone.pebble_size
 
         if not self.y:
             self.update.cancel()
             del stone.pebbles[self.index] # Remove reference // kill this object
-        else:
-            self.velocity = vx, vy
 
 
 class Chisel(Widget):
@@ -139,12 +135,19 @@ class Chisel(Widget):
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
 
+    def get_pebble_size(self):
+        """Calculate the correct pebble size so we have no gaps in our stone."""
+        scaled_w = PEBBLE_IMAGE_SCALE * self.width
+        scaled_h = PEBBLE_IMAGE_SCALE * self.height
+        _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
+        return scaled_w / pebbles_per_row, scaled_h / pebbles_per_column
+
     def setup_canvas(self):
         self.pebbles = {}
         self.positions = []
         self.colors = []
         self.pixels = []
-        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.pebble_size = self.get_pebble_size()
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
             self.background = Rectangle(pos=self.pos, size=self.size, source=BACKGROUND)
@@ -166,7 +169,7 @@ class Chisel(Widget):
     def resize(self, *args):
         self.background.pos = self.pos
         self.background.size = self.size
-        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.pebble_size = self.get_pebble_size()
         for i, (x, y, z) in enumerate(self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
@@ -221,17 +224,18 @@ class Chisel(Widget):
 
     def save(self, path_to_file):
         _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
-        pebble_dict = {'positions': self.positions,
-                       'colors': self.colors,
+        positions = []
+        colors = []
+        for (x, y, z), color in zip(self.positions, self.colors):
+            if y:
+                positions.append((x, y, z))
+                colors.append(color)
+
+        pebble_dict = {'positions': positions,
+                       'colors': colors,
                        'aspect': (pebbles_per_row, pebbles_per_column)}
         with open(path_to_file, 'w') as file:
             json.dump(pebble_dict, file)
-
-    def export_png(self, path_to_file, transparent=False):
-        if transparent:
-            self.background_color.a = 0
-        self.export_to_png(str(path_to_file))
-        self.background_color.a = 1
 
     def load(self, path_to_file):
         with open(path_to_file, 'r') as file:
@@ -241,7 +245,7 @@ class Chisel(Widget):
         self.colors = pebble_dict['colors']
         CURRENT_IMAGE[1:] = pebble_dict['aspect']
         self.pixels = []
-        self.pebble_size = get_pebble_size(self.width, self.height)
+        self.pebble_size = self.get_pebble_size()
         self.canvas.clear()
         with self.canvas:
             self.background_color = Color(1, 1, 1, 1)
@@ -252,6 +256,12 @@ class Chisel(Widget):
                 scaled_y = y * self.height
                 self.pixels.append(Rectangle(pos=(scaled_x, scaled_y), size=self.pebble_size))
         self.background.texture.mag_filter = 'nearest'
+
+    def export_png(self, path_to_file, transparent=False):
+        if transparent:
+            self.background_color.a = 0
+        self.export_to_png(str(path_to_file))
+        self.background_color.a = 1
 
 
 if __name__ == '__main__':
