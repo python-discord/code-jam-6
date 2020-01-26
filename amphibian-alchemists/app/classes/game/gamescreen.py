@@ -6,13 +6,15 @@ from string import ascii_uppercase
 from enigma.machine import EnigmaMachine
 from kivy.animation import Animation
 from kivy.app import App
+from kivy.clock import Clock
+from kivy.core.audio import SoundLoader
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 from kivy.uix.textinput import TextInput
 from requests import get
-from kivy.core.audio import SoundLoader
 
 from .save_game import on_config_change, save_rotors, store_put
 
@@ -52,8 +54,6 @@ def setup_new_game_settings():
     else:
         store.put("latest_game_id", id=int(current_game_id) + 1)
     # Setting up data
-    time_remaning = 60
-    start_time = datetime.now().isoformat()
     game_id = store.get("latest_game_id")["id"]
     App.get_running_app().game_id = game_id
     plug_array = sample(ascii_uppercase, 20)
@@ -109,7 +109,7 @@ class EnigmaOutput(TextInput):
 
 
 class GameScreen(Screen):
-    """Do we automatically assume new game or should we save?"""
+    current_time = StringProperty("15")
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
@@ -149,6 +149,8 @@ class GameScreen(Screen):
             setup_new_game_settings()
         else:
             on_config_change()
+
+        Clock.schedule_interval(self.handle_timer, 1)
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
@@ -221,3 +223,9 @@ class GameScreen(Screen):
             )
         else:
             self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
+
+    def handle_timer(self, dt):
+        if int(self.current_time) == 0:
+            Clock.tick()
+        else:
+            self.current_time = str(int(self.current_time) - 1)
