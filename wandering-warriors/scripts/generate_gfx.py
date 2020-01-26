@@ -1,3 +1,6 @@
+"""
+Generate full set of cuneiform graphics from just the 1 and 10 symbol
+"""
 from pathlib import Path
 from PIL import Image
 

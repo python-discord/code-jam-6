@@ -20,4 +20,4 @@ kivy-deps-glew = "==0.1.*"
 python_version = "3.7"
 
 [scripts]
-generate = "python scripts/generate.py"
+generate_gfx = "python scripts/generate_gfx.py"
