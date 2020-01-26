@@ -76,7 +76,7 @@ Builder.load_string("""
                 text: 'Sign In'
                 icon: 'login-variant'
                 on_press:
-                    root.manager.current = ''
+                    root.manager.current = 'sign_in'
 
             BlankLabel:
 

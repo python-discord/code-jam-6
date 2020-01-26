@@ -21,6 +21,7 @@ from ui.screens.listening_training_screen import ListeningScreen
 from ui.screens.contacts_screen import ContactScreen
 from ui.screens.add_contact_screen import AddContactScreen
 from ui.screens.calibration_screen import CalibrationScreen
+from ui.screens.sign_in_screen import SignInScreen
 from util.utility import Utility
 
 import gc
@@ -47,7 +48,7 @@ class MainBox(FloatLayout):
         self.content.add_widget(ListeningScreen(name='listening', util=self.util))
         self.content.add_widget(TappingScreen(name='tapping', util=self.util))
         self.content.add_widget(CalibrationScreen(name='calibration', util=self.util))
-        # TODO: self.content.add_widget(CalibrationScreen(name='calibration, util=self.util))
+        self.content.add_widget(SignInScreen(name='sign_in', util=self.util))
         # # Place screens here
 
         self.screens.add_widget(self.content)
