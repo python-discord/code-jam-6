@@ -179,9 +179,9 @@ class Chunk:
             s = 65
             angle = random.randint(0, 359)
             sprite = random.choice(bushes)
- 
+            type = sprite.replace('.png','')
             self.chunk_features.add(
-                Feature(sprite, Chunk.get_random_position(self.pos, s), 1.0, (s, s), angle, 'bush'))
+                Feature(sprite, Chunk.get_random_position(self.pos, s), 1.0, (s, s), angle, type))
  
         while random.randint(0, 3) != 1:
             s = random.randint(150, 280)
