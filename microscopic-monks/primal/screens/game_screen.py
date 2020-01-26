@@ -94,6 +94,8 @@ class GameScreen(Screen):
                 feature.set_alpha(new_value)
             new_clicked_features[feature] = new_value
 
+        self.inventory.update()
+
         self.clicked_features = new_clicked_features
         self.engine.mouse_keys = set()
 
