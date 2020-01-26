@@ -11,7 +11,7 @@ from kivy.app import App
 from kivy.config import Config
 from kivy.event import EventDispatcher
 from kivy.lang import global_idmap
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty
 
 
 class MainState:
@@ -35,22 +35,20 @@ class DataController(EventDispatcher):
     active_card: Card = ObjectProperty(rebind=True)
     game_state = ObjectProperty(rebind=True)
     game: Game = ObjectProperty()
-    assets_loc = StringProperty("assets/")
 
     def choice_handler(self, choice):
         """Used to update state for the app when the user makes a choice"""
         if choice == "1" or len(self.active_card.options) == 1:
             outcome = self.active_card.options[0].get_outcome()
-            self.active_card = self.game.take_turn(outcome)
         else:
-            outcome = self.active_card.options[0].get_outcome()
-            self.active_card = self.game.take_turn(outcome)
-
+            card_choice = 1 if len(self.active_card.options) > 0 else 0
+            outcome = self.active_card.options[card_choice].get_outcome()
+        self.active_card = self.game.take_turn(outcome)
         self.set_game_state()
 
     def set_game_state(self):
         """
-        Sets teh states for the 4 main player states. Currently uses dud values til the
+        Sets the states for the 4 main player states. Currently uses dud values til the
         backend version is done
         """
         states = [self.game.game_state.get_main_state(i) for i in range(4)]
@@ -69,14 +67,18 @@ class CardGameApp(App):
         global_idmap["data"] = ctl = DataController()
         # Kivy really does not like path lib or joinpath or anything with path unless
         # it's a hardcoded string
-        global_idmap["all_assets"] = f"{path_handler.get_game_asset_directory_path(story_name)}\\"
-        global_idmap["game_assets"] = f"{path_handler.get_game_art_path(story_name)}\\"
-        global_idmap["card_assets"] = f"{path_handler.get_card_art_path(story_name)}\\"
-        global_idmap["sound_assets"] = f"{path_handler.get_game_sounds_path(story_name)}\\"
+        global_idmap[
+            "all_assets"
+        ] = f"{path_handler.get_game_asset_directory_path(story_name)}/"
+        global_idmap["game_assets"] = f"{path_handler.get_game_art_path(story_name)}/"
+        global_idmap["card_assets"] = f"{path_handler.get_card_art_path(story_name)}/"
+        global_idmap[
+            "sound_assets"
+        ] = f"{path_handler.get_game_sounds_path(story_name)}\\"
         ctl.game = game = load_game(story_name)
         ctl.active_card = game.start_game()
         ctl.set_game_state()
-        sound = SoundLoader.load(global_idmap["sound_assets"] + 'caveman.wav')
+        sound = SoundLoader.load(global_idmap["sound_assets"] + "caveman.wav")
         if sound:
             sound.play()
         return MainWidget()

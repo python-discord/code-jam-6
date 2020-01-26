@@ -133,7 +133,7 @@
                     a += Animation(angle=0, x=card_and_art.x, y=card_and_art.y, duration=.1, t='linear')
                     a.start(card_and_art)
                     audio = data.active_card.card_sound if data.active_card.card_sound is not None else "default_card_switch.wav"
-                    s = SoundLoader.load(sound_assets + "default_card_switch.wav")
+                    s = SoundLoader.load(sound_assets + audio)
                     s.play()
                 background_normal: game_assets + 'LeftButton.png'
                 text: data.active_card.options[0].text
@@ -146,7 +146,7 @@
                     a += Animation(angle=0, x=card_and_art.x, y=card_and_art.y, duration=.1, t='linear')
                     a.start(card_and_art)
                     audio = data.active_card.card_sound if data.active_card.card_sound is not None else "default_card_switch.wav"
-                    s = SoundLoader.load(sound_assets + "default_card_switch.wav")
+                    s = SoundLoader.load(sound_assets +audio)
                     s.play()
                 background_normal: game_assets + 'RightButton.png'
                 text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text

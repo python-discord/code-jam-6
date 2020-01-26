@@ -3,10 +3,64 @@
     "card_id": "welcome",
     "card_type": "start",
     "card_image": "test.jpg",
-    "text": "Welcome hollaa!?",
+    "text": "You are greg",
     "options": [
       {
-        "text": "Swipe left to choose me!",
+        "text": "Click here to choose this option",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_2"
+          }
+        ]
+      },
+      {
+        "text": "No, click here to choose me!",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_2"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "welcome_2",
+    "card_type": "response",
+    "card_sound": "meow.wav",
+    "card_image": "test.jpg",
+    "text": "You've just discovered fire.",
+    "options": [
+      {
+        "text": "Clicky click!",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_3"
+          }
+        ]
+      },
+      {
+        "text": "Click clicky",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "welcome_3"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "welcome_3",
+  "card_sound": "water.wav",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "This gives you some options. Maybe its time to start taking this whole evolution thing seriously?",
+    "options": [
+      {
+        "text": "I shall found the everlasting dynasty of Greg, my line shall survive for eons.",
         "outcomes": [
           {
             "weight": 1,
@@ -15,7 +69,7 @@
         ]
       },
       {
-        "text": "No swipe right and choose me!",
+        "text": "I'll just try and not get eaten.",
         "outcomes": [
           {
             "weight": 1,
@@ -37,7 +91,9 @@
           {
             "weight": 0.5,
             "next_card": "random",
-            "effects": {"player_health": -0.3}
+            "effects": {
+              "player_health": -0.3
+            }
           },
           {
             "weight": 0.5,
@@ -51,7 +107,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"player_food": -0.1}
+            "effects": {
+              "player_food": -0.1
+            }
           }
         ]
       }
@@ -70,7 +128,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"player_food": 0.2}
+            "effects": {
+              "player_food": 0.2
+            }
           }
         ]
       }
@@ -80,7 +140,10 @@
     "card_id": "natural_smell",
     "card_type": "event",
     "card_image": "test.jpg",
-    "conditions": {"world_encountered_dinosaur": false},
+    "card_sound": "water.wav",
+    "conditions": {
+      "world_found_tribe": true
+    },
     "text": "You stretch your arms and almost faint from your smell.",
     "options": [
       {
@@ -93,7 +156,9 @@
           {
             "weight": 0.6,
             "next_card": "random",
-            "effects": {"village_love": 0.1}
+            "effects": {
+              "village_love": 0.1
+            }
           }
         ]
       },
@@ -103,7 +168,9 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"village_love": -0.1}
+            "effects": {
+              "village_love": -0.1
+            }
           }
         ]
       }
@@ -121,7 +188,86 @@
           {
             "weight": 1,
             "next_card": "random",
-            "effects": {"world_encountered_dinosaur": true}
+            "effects": {
+              "world_encountered_dinosaur": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "tribe_encounter_event",
+    "card_type": "event",
+    "card_image": "test.jpg",
+    "conditions": {
+      "world_found_tribe": false
+    },
+    "text": "When out for a lovely little wander, you hear some remarkably Greg-like sounds a little way away",
+    "options": [
+      {
+        "text": "Investigate",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "tribe_discovery_intentional",
+            "effects": {
+              "village_love": -0.1,
+              "player_civility": 0.15
+            }
+          }
+        ]
+      },
+      {
+        "text": "Nothing good can come from anything Greg-like. Run away",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "tribe_discovery_run",
+            "effects": {
+              "village_love": -0.1,
+              "player_civility": -0.1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "tribe_discovery_intentional",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "When investigating, you find a whole tribe of Greg-likes beings. \"people\" they call themselves. Maybe you weren't the first to find fire...",
+    "options": [
+      {
+        "text": "They made it pretty clear that joining wasn't optional",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random",
+            "effects": {
+              "world_found_tribe": true
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "tribe_discovery_run",
+    "card_type": "response",
+    "card_image": "test.jpg",
+    "text": "Despite your best efforts, you stumble into a group of Greg-likes beings. \"people\" they call themselves.",
+    "options": [
+      {
+        "text": "They made it pretty clear that joining wasn't optional",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random",
+            "effects": {
+              "world_found_tribe": true
+            }
           }
         ]
       }
