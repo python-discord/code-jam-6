@@ -140,9 +140,6 @@
     "card_type": "event",
     "card_image": "test.jpg",
     "card_sound": "water.wav",
-    "conditions": {
-      "world_found_tribe": true
-    },
     "text": "You stretch your arms and almost faint from your smell.",
     "options": [
       {
@@ -201,7 +198,7 @@
     "card_type": "event",
     "card_image": "test.jpg",
     "conditions": {
-      "world_found_tribe": false
+      "world_found_another_tribe": false
     },
     "text": "When out for a lovely little wander, you hear some remarkably Greg-like sounds a little way away",
     "options": [
@@ -246,7 +243,7 @@
             "weight": 1,
             "next_card": "random",
             "effects": {
-              "world_found_tribe": true
+              "world_found_another_tribe": true
             }
           }
         ]
@@ -266,7 +263,7 @@
             "weight": 1,
             "next_card": "random",
             "effects": {
-              "world_found_tribe": true
+              "world_found_another_tribe": true
             }
           }
         ]
@@ -280,7 +277,7 @@
     "text": "When out hunting, you see an odd looking dinosaur in the distance. This isn't just a run of the mill Rex",
     "conditions": {
       "world_encountered_dinosaur": true,
-      "world_found_tribe": true
+      "world_found_another_tribe": true
     },
     "options": [
       {
@@ -345,7 +342,7 @@
     "card_image": "dodo.png",
     "text": "A friendly dodo comes and says hello. His mistake",
     "conditions": {
-      "world_found_tribe": true
+      "world_found_another_tribe": true
     },
     "options": [
       {
