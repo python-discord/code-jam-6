@@ -27,7 +27,7 @@
 
 <WinPopup@Popup>:
     title: "Winner!"
-    size_hint: 0.5, 0.5
+    size_hint: 0.8, 0.8
     auto_dismiss: False
     on_open: app.root.get_screen("game_screen").ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus = False
     BoxLayout:
@@ -36,6 +36,12 @@
             text: "Congratulations!"
         Label:
             text: "It took you" + app.root.get_screen("game_screen").current_time + "s!"
+        Label:
+            text: "The decrypted text is:"
+        Label:
+            text: "TEXT HERE"
+            text_size: self.parent.width, None
+            size: self.texture_size
         BoxLayout:
             size_hint_y: 0.2
             Button:
