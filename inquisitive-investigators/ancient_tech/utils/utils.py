@@ -60,7 +60,7 @@ def file_info(
         path = Path(dir_)
         stats = path.stat()
 
-        if len(path.name) > 22:
+        if len(path.name) > 15:
             name = path.name[:10] + '...'
         else:
             name = path.name
@@ -95,7 +95,10 @@ def file_info(
                 )
             )
 
-        type_ = t
+        if len(t) > 7:
+            type_ = t[:6] + '..'
+        else:
+            type_ = t
 
     else:
         name = '<-'
