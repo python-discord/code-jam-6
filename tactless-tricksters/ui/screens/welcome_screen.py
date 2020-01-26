@@ -97,11 +97,11 @@ Builder.load_string("""
             BlankLabel:
 
             WelcomeButton:
-                text: 'Exit'
-                icon: 'close'
+                text: 'Message'
+                icon: 'message'
                 on_press:
                     # TODO: create exit function
-                    root.manager.current = ''
+                    root.manager.current = 'message'
 """)
 
 

@@ -37,8 +37,8 @@ class ConversationScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' '))
         scroll_box.add_widget(MDLabel(text=' ', size_hint=(1, 5)))
 
-        if contact != '' and contact in self.util.message_dict.keys():
-            for message in self.util.message_dict[contact]:
+        if contact != '' and contact in self.util.user_data['message_dict'].keys():
+            for message in self.util.user_data['message_dict'][contact]:
                 if self.util.username == message['sender']:
                     pos_hint = {'center_x': 0.3}
                     md_bg_color = [0.698, 0.875, 0.859, 1]
