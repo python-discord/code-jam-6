@@ -9,6 +9,7 @@ Table of Contents:
 - Setup
 - Short Tutorial: Gist of the game
 - Full-Length Tutorial
+- Settings
 - Guides
 
 ---
@@ -49,6 +50,12 @@ When you create a new game, you are shown the Enigma machine.
 Once you have finished configuring both the plugboard and rotors, go to the main enigma machine and start randomly pressing keys. You can see which keys are being typed by the animations or you can press on the piece of paper at the top right to see the ciphered text.
 
 The output characters when you type will be shown and automatically configured in another piece of paper. You can restart the game if you misconfigured the machine. __Remember, only start typing when you have finished configurations!__
+
+---
+### Settings
+- Autoinput the next, correct ciphertext letter: On
+- Musics: On
+- Sound effects: On 
 
 ---
 ### Guides
