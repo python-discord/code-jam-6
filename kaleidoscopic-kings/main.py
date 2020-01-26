@@ -17,7 +17,7 @@ from kivy.properties import ObjectProperty
 class MainState:
     def __init__(self, label: str, value: float):
         self.label: str = label
-        value = f"{int(value * 100 // 2)}%"
+        value = f"{int(value * 100)}%"
         self.value: str = value
 
 
