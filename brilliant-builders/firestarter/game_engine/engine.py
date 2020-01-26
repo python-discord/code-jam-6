@@ -37,7 +37,7 @@ class Engine(Widget):
         self.cam_target: Optional[Sprite] = None
 
         # dict of assets
-        self.assets, self.levels = load_resources()
+        self.assets, self.levels, self.sounds = load_resources()
 
         self.sprite_classes = {cls.__name__: cls for cls in get_all_subclasses(Sprite)}
 
