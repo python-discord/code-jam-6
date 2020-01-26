@@ -10,8 +10,8 @@ When you load into Primal, the clock starts ticking, your health will start depl
 Good luck fellow human!
 
 ## Installation
-- Install dependencies from `requirements.txt` by writing: `pip install -r requirements.txt` or `pip3 install -r requirements.txt`
-- Run `__main__.py` by writing `python __main__.py` or `python3 __main__.py`
+- Install dependencies from `requirements.txt` by running `pip install -r requirements.txt` or `pip3 install -r requirements.txt`
+- Run `__main__.py` by running `python __main__.py` or `python3 __main__.py`
 
 ## Credits
 ### Developers
