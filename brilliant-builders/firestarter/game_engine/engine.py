@@ -30,7 +30,7 @@ class Engine(Widget):
         self.pressed_keys = set()
 
         # list of sprites
-        self.sprites: List[Sprite] = []  # TODO: make this only accept sprite classes
+        self.sprites: List[Sprite] = []
         # list of elements that shouldn't be moved
         self.static_sprites: List[Sprite] = []
         # Object the camera should follow

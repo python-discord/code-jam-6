@@ -1,3 +1,4 @@
+import random
 from typing import List, Tuple, Union
 
 from firestarter.game_engine.engine import Engine
@@ -28,17 +29,11 @@ class GenericObject(Sprite):
         self.collide = collide
         self.change_mode(mode)
 
-    def update(self, *args) -> None:
-        pass
-
     def on_collision(self, other: Sprite) -> bool:
         return self.collide
 
 
 class PlayerUiHeart(Sprite):
-
-    def update(self, *args) -> None:
-        pass
 
     def on_collision(self, other: Sprite) -> bool:
         return False
@@ -48,23 +43,35 @@ class Platform(Sprite):
     def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
         super().__init__(config, pos, **kwargs)
 
-    def update(self, other_sprites: List[Sprite]) -> None:
-        pass
-
 
 class PickUpCoin(Sprite):
-    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs):
-        super().__init__(config, pos, **kwargs)
+    def __init__(
+            self,
+            sprite: Union[SpriteConfig, str],
+            pos: Tuple[int, int],
+            collide: bool = False,
+            mode: int = 1,
+            engine: Engine = None,
+            **kwargs
+    ):
+        # Resolve sprite if needed
+        if isinstance(sprite, str):
+            if not engine:
+                raise ValueError('Argument engine required when searching for sprite')
+            sprite = engine.assets[sprite]
 
-    def update(self, other_sprites: List[Sprite]) -> None:
-        pass
+        super().__init__(sprite, pos, **kwargs)
+
+        self.activated = False
+        self.collide = collide
+        self.change_mode(mode)
 
     def on_collision(self, other: Sprite) -> bool:
         if isinstance(other, Player):
             print("coin +1!")
             other.score += 1
             self.kill()
-        return False
+        return self.collide
 
 
 class FirePlaceCheckpoint(Sprite):
@@ -110,6 +117,58 @@ class FirePlaceCheckpoint(Sprite):
             print("Checkpoint set!")
             other.checkpoint = (self.pos[0], self.pos[1] + 70)
 
+        return self.collide
+
+
+class FlameBuddy(Sprite):
+
+    acc_x = NumericProperty(0)
+    acc_y = NumericProperty(0)
+    acc = ReferenceListProperty(acc_x, acc_y)
+    vel_x = NumericProperty(0)
+    vel_y = NumericProperty(0)
+    vel = ReferenceListProperty(vel_x, vel_y)
+
+    def __init__(
+            self,
+            sprite: Union[SpriteConfig, str],
+            pos: Tuple[int, int],
+            collide: bool = False,
+            mode: int = 1,
+            engine: Engine = None,
+            **kwargs
+    ):
+        # Resolve sprite if needed
+        if isinstance(sprite, str):
+            if not engine:
+                raise ValueError('Argument engine required when searching for sprite')
+            sprite = engine.assets[sprite]
+
+        super().__init__(sprite, pos, **kwargs)
+
+        self.activated = False
+        self.collide = collide
+        self.change_mode(mode)
+
+    def on_player_pos(self, new_pos: Tuple[float, float]) -> None:
+        distance_to_player = ((self.pos[0] - new_pos[0]),
+                              (self.pos[1] - new_pos[1]-75))
+
+        x_offset = -1 * distance_to_player[0] / 25
+        x_offset = x_offset * 2 if abs(x_offset) > .5 else 0
+
+        y_offset = -1 * distance_to_player[1] / 25
+        y_offset = y_offset if abs(y_offset) > .5 else 0
+
+        self.vel = (x_offset, y_offset)
+
+    def update(self, other_sprites: List[Sprite]) -> None:
+        self.vel = (self.vel_x + self.acc_x, self.vel_y + self.acc_y)
+        # self.vel = (min(self.vel_x, 5), min(self.vel_y, 5))
+        self.pos = (self.pos[0] + self.vel_x, self.pos[1] + self.vel_y)
+        self.acc = (0, 0)
+
+    def on_collision(self, other: Sprite) -> bool:
         return self.collide
 
 
