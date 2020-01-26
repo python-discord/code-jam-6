@@ -11,10 +11,29 @@ from kivy.animation import Animation
 
 class Cannon(Widget):
     angle_int_deg= NumericProperty(50)
+    """
+    Cannon allows rough simulation of physics, allowing a flat velocity and an angle between 0 and 90 degrees to fire
+    a cannonball based on those properties. The input fields allow for user changes to these attributes, with the submit
+    buttons finalizing the changes for each.
+
+    1. __init__: creates the background features along with the cannon and cannonball
+
+    2. set_velocity: checks to make sure that the velocity is an integer greater than zero, with no upper limit, then
+        converts the string taken from the TextInput in the kv file into an integer and sets it to self.velocity
+
+    3. set_angle: Very similar to set_velocity, but only accepts a number from 0 to 90, and sets the self.angle variable
+
+    4. fire_cannon: sets the position of the cannonball in front of the cannon, adds the velocities of the x and y
+        vector based on the input angle and velocity, and schedules a clock object to track each step of its movement
+
+    5. drop: callback used by the fire_cannon clock to apply the simulated effects of gravity by reducing the velocity
+        each tick, by 0.98 to adhere to Earth's 9.8m/s/s gravity.
+    """
     def __init__(self, **kwargs):
         super(Cannon, self).__init__(**kwargs)
-        self.velocity = 0
-        self.angle = 0
+        self.velocity = 10
+        self.angle = 30
+        
         with self.canvas:
             self.sky = Rectangle(size=(2000, 1000), source="Back_Drop.png")
             self.grass = Rectangle(size=(2000, 100), source="Grass.png")
@@ -46,11 +65,6 @@ class Cannon(Widget):
                 self.rotate.angle = self.angle
 
 
-
-    def rot_animation(self, instance):
-        self.animation = Animation(angle=self.angle, duration=1)
-        self.animation += Animation(angle=self.angle + 10, duration=1)
-        self.animation.start(self.cannon)
 
     def fire_cannon(self):
         # self.cannonball.pos = (self.cannon.pos[0] + self.cannon.size[0], self.cannon.pos[1] + self.cannon.size[1]/2)
