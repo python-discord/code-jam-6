@@ -35,10 +35,10 @@ class MessageScreen(Screen):
         scroll_box.add_widget(MDLabel(text=' '))
 
         for key in self.util.user_data['message_dict']:
+            morse_code = ''
             temp_dict = self.util.user_data['message_dict'][key][-1:][0]
-            if '_' not in temp_dict['message']:
-                self.util.morse.read(words=str(temp_dict['message']))
-                morse_code = self.util.morse.morse
+            if '_.' not in temp_dict['message']:
+                morse_code = self.util.morse_helper.text_to_morse(str(temp_dict['message']))
             else:
                 morse_code = str(temp_dict['message'])
 

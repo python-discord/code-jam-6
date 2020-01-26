@@ -35,7 +35,7 @@ class MessageCard(LongPressButton, MDCardPost):
                                           text_post=kwargs.get('text_post'),
                                           name_data=kwargs.get('name_data'),
                                           swipe=kwargs.get('swipe'),
-                                          path_to_avatar=os.path.join('ui', 'img', 'default_avatar.png'),
+                                          path_to_avatar=str(os.path.join('ui', 'img', 'default_avatar.png')),
                                           )
 
         self.util = kwargs.get('util')
