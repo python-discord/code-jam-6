@@ -1,6 +1,7 @@
 import os
 
 from kivy.app import App
+from kivy.config import Config
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
 
@@ -17,23 +18,29 @@ class SettingsScreen(Screen):
     store = JsonStore(CONFIG_DIR)
 
     def on_enter(self):
-        for config_name in self.ids.keys():
-            if not self.store.exists(config_name):
-                self.store.put(
-                    config_name, value=(1 if config_name != "allow_fullscreen" else 0)
-                )
-            self.set_config_values(config_name)
+        if Config.get("graphics", "fullscreen") in {1, "1", "fake"}:
+            Config.set("graphics", "fullscreen", 0)
+            Config.write()
 
-    def set_config_values(self, config_name):
+        for config_name in self.ids.keys():
+            if config_name == "allow_fullscreen":
+                self.ids.allow_fullscreen.state = (
+                    "down"
+                    if Config.get("graphics", "fullscreen") == "auto"
+                    else "normal"
+                )
+                continue
+            if not self.store.exists(config_name):
+                self.store.put(config_name, value=1)
+            self.set_config_value(config_name)
+
+    def set_config_value(self, config_name):
         value_to_set = {
-            "allow_fullscreen": "down"
-            if self.store.get(config_name)["value"] == 1
-            else "normal",
-            "auto_save": "down"
-            if self.store.get(config_name)["value"] == 1
-            else "normal",
             "background_volume": self.store.get(config_name)["value"],
             "effects_volume": self.store.get(config_name)["value"],
+            "auto_input": "down"
+            if self.store.get(config_name)["value"] == 1
+            else "normal",
         }.get(config_name)
 
         if value_to_set in {"down", "normal"}:
@@ -46,12 +53,19 @@ class SettingsScreen(Screen):
     def save_settings(self, to_save):
         new_value = {
             "allow_fullscreen": 1 if self.ids.allow_fullscreen.state == "down" else 0,
-            "auto_save": 1 if self.ids.auto_save.state == "down" else 0,
             "background_volume": self.ids.background_volume.value_normalized,
             "effects_volume": self.ids.effects_volume.value_normalized,
+            "auto_input": 1 if self.ids.auto_input.state == "down" else 0,
         }.get(to_save)
 
         if type(new_value) in {int, float} and (new_value >= 0 or new_value <= 1):
+            if to_save == "background_volume":
+                self.manager.get_screen("main_screen").music.volume = new_value
+            elif to_save == "allow_fullscreen":
+                Config.set("graphics", "fullscreen", "auto" if new_value == 1 else 0)
+                Config.write()
+                return
+
             self.store.put(to_save, value=new_value)
 
     def delete_saved_games(self, popup):
