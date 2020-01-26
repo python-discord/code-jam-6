@@ -139,7 +139,7 @@ class GameScreen(Screen):
                 dst = 40 + feature.get_size()[0]
                 dst = (dst * dst) / 4
                 if feature.distance_to((px, py)) <= dst + 2_000:
-                    self.health_bar.set_health(self.health_bar.get_health() - delta * 3)
+                    self.health_bar.set_health(self.health_bar.get_health() - delta * 9)
                     return
 
     def process_player_position_deltas(self, px, py, dx, dy, delta):
