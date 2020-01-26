@@ -26,6 +26,7 @@ class Game(EventDispatcher):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.pause_game = False
+        self._sound = None
         self.mirror = MirrorCannon()
 
         self._island_destroyed: Sound = SoundLoader.load(AUDIO_PATH.format("mirror_moving.wav"))
@@ -50,9 +51,9 @@ class Game(EventDispatcher):
     def start(self):
         Logger.info('Start game')
 
-        sound: Sound = SoundLoader.load(AUDIO_PATH.format("island_background.wav"))
-        sound.loop = True
-        sound.play()
+        self._sound: Sound = SoundLoader.load(AUDIO_PATH.format("island_background.wav"))
+        self._sound.loop = True
+        self._sound.play()
 
         self.running = True
 
