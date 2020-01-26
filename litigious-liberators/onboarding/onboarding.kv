@@ -1,4 +1,44 @@
 #:kivy 1.11.1
 <OnboardingScreen>:
+    canvas:
+        Color:
+            rgba: utils.get_color_from_hex('#321911')
+        Rectangle:
+            size: self.size
     MyOnboardWidget:
         id: my_onboard_widget
+        Image:
+            id: bg_img
+            source: "onboarding/intro_img_crop.jpg"
+
+        Label:
+            id: app_name
+            pos_hint: {"center_x": 0.50, "center_y": 0.8}
+            text: "R E S U R G E N C E"
+            font_size: "30sp"
+            font_name: "delinquent-black-font/DelinquentCapsSkewdBlack-q2wq.ttf"
+            color:  utils.get_color_from_hex("#ff0000")#1, 0, 0, 1
+        Label:
+            text: "Double tap to skip intro"
+            pos_hint: {"center_x": 0.50, "center_y": 0.1}
+            color: 1,1,1,0.5
+#        Label:
+#            id: story_0
+#            pos_hint: {"center_x": 0.50, "center_y": 0.5}
+#            text: "It's the year 12020 CE.... It's the year 12020 CE... It's the year 12020 CE..."
+#            font_size: "35sp"
+#            text_size: (self.width,None)
+#            font_name: "delinquent-black-font/DelinquentExtract-V4we.ttf"
+#            color: 1, 1, 1, 1
+#            opacity: 0
+#            halign: "center"
+#
+#        Label:
+#            id: story_1
+#            pos_hint: {"center_x": 0.50, "center_y": 0.5}
+#            text: "Civilization"
+#            font_size: "35sp"
+#            font_name: "delinquent-black-font/DelinquentExtract-V4we.ttf"
+#            color:  utils.get_color_from_hex("#ff0000")#1, 0, 0, 1
+#            opacity: 0
+

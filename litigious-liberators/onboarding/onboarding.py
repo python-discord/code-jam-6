@@ -1,21 +1,32 @@
 from kivy.app import App
-from kivy.uix.image import AsyncImage
 from kivy.uix.label import Label
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.animation import Animation
+from kivy.clock import Clock
+from functools import partial
 
 lorem = ""
 sentences = [
-    "Dino Tinder is a Tinder Clone adapted\n for the middle ages.",
-    "my",
-    "friends",
+    "It's the year 12020 CE...",
+    """Civilization has fallen, after humans caused their own demise as they tried to
+    interfere with the natural order of things thousands of years ago """,
+    """Experiments with prehistoric animals DNA, race to the ultimate doomsday's
+    weapon and total neglect of the Global Warming...""",
+    "Today, flora and fauna from all ages flourish, treading the ruins of an ancient civilization.",
+    """Some humans survived against all odds, striving to rebuild what was lost,
+    but without lost knowledge and wisdom it seems hopeless.""",
+    """You are one of these humans. Will you be the one cunning and smart enough to tip
+    the scales or will your ignorance careless attitude ruin everything?""",
+    "Only time will tell.",
 ]
-images = [
-    "https://placekitten.com/g/1080/1920",
-    "https://placekitten.com/g/200/300",
-    "https://placekitten.com/g/300/400",
-]
+# images = [
+#     "https://placekitten.com/g/1080/1920",
+#     "https://placekitten.com/g/200/300",
+#     "https://placekitten.com/g/300/400",
+# ]
+
+images = ["onboarding/intro_img_crop.jpg"]
 
 
 class MyOnboardWidget(FloatLayout):
@@ -23,55 +34,66 @@ class MyOnboardWidget(FloatLayout):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
-        for index, image_url in enumerate(images):
-            image_object = AsyncImage(source=image_url, size_hint=(1, 1))
-            image_object.opacity = 1 if index == 0 else 0
-            setattr(self, f"image_{index}", image_object)
-            self.add_widget(image_object)
+        self.steps = 0
+        # for index, image_url in enumerate(images):
+        #     image_object = AsyncImage(source=image_url, size_hint=(1, 1))
+        #     image_object.opacity = 1 if index == 0 else 0
+        #     setattr(self, f"image_{index}", image_object)
+        #     self.add_widget(image_object)
 
         for index, sentence in enumerate(sentences):
             label_object = Label(
-                text=lorem,
-                pos_hint={"center_x": 0.50, "center_y": 0.2},
-                color=[1, 0, 0, 1],
-                halign="left",
-                valign="middle",
-                font_size="15sp",
-                text_size=(400, 600),
+                text=sentence,
+                text_size=(self.width * 4, None),
+                pos_hint={"center_x": 0.50, "center_y": 0.5},
+                color=[1, 1, 1, 1],
+                valign="center",
+                # align="middle",
+                font_size="35sp",
+                font_name="delinquent-black-font/DelinquentExtract-V4we.ttf",
+                # text_size=(400, 600),
             )
-            label_object.opacity = 1 if index == 0 else 0
+            # label_object.opacity = 1 if index == 0 else 0
+            label_object.opacity = 0
             setattr(self, f"description_{index}", label_object)
             self.add_widget(label_object)
 
-        self.add_widget(
-            Label(
-                text="Welcome to DinoTinder",
-                pos_hint={"center_x": 0.40, "center_y": 0.3},
-                color=[1, 0, 0, 1],
-                halign="left",
-                valign="middle",
-                font_size="25sp",
-            )
-        )
-
-    def animate(self, obj_out, obj_in):
+    def animate(self, obj_out, obj_in, opacity, *args):
         appear = Animation(opacity=1, duration=1)
-        disappear = Animation(opacity=0, duration=1)
+        disappear = Animation(opacity=opacity, duration=1)
         appear.start(obj_in)
         disappear.start(obj_out)
 
     def on_touch_down(self, touch):
         if self.steps == 0:
-            self.animate(obj_out=self.image_0, obj_in=self.image_1)
-            self.animate(obj_out=self.description_0, obj_in=self.description_1)
-        if self.steps == 1:
-            self.animate(obj_out=self.image_1, obj_in=self.image_2)
-            self.animate(obj_out=self.description_1, obj_in=self.description_2)
+            Clock.schedule_once(
+                partial(
+                    self.animate, self.parent.ids["bg_img"], getattr(self, f"description_0"), 0.2
+                ),
+                0.5 + 0 * 5,
+            )
+            speed = 15
+            delay = len(sentences[0]) / speed + 1
+            for index, sentence in enumerate(sentences[1:], start=1):
+                # print(index, sentence)
+                # print(getattr(self, f"description_{index - 1}"))
+                # print(getattr(self, f"description_{index}"))
+
+                Clock.schedule_once(
+                    partial(
+                        self.animate,
+                        getattr(self, f"description_{index-1}"),
+                        getattr(self, f"description_{index}"),
+                        0,
+                    ),
+                    1 + delay,
+                )
+                delay += len(sentence) / speed
+        if touch.is_double_tap:
+            self.parent.manager.current = "create_profile"
 
         self.steps += 1
-        if self.steps > 2:
-            self.parent.manager.current = "create_profile"
+
         return True
 
 
