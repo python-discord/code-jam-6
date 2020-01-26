@@ -23,17 +23,19 @@ Table of Contents:
 ### Tutorial
 In order to start decripting messages, you must first do two things: configure the rotors and the plugboard. In game, you are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper.
 
-![](amphibian-alchemists/readme_images/mainscreen.png)
+![](readme_images/gamescreen.png)
 
 #### Rotors ####
 
 Configure the three rotors with the + and - buttons until they match with the instructions on the paper.
 
+![](readme_images/rotor.png=)![](readme_images/rotorpaper.png)
+
 #### Plugboard ####
 
 Click two ports to create a wire that connects both of them. These ports are labeled with letters. You must connect each letter with its respetive letter pair listed on the paper.
 
-![]()
+![](readme_images/plugboard.png)![](readme_images/plugboardpaper.png)
 
 Once you have those configured, you are ready to decipher! Type the ciphertext listed on the paper into the textbox. If Autoinput is enabled (enabled by default), your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
 
