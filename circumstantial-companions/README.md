@@ -1,6 +1,6 @@
 # Circumstantial Companions
 
-![Chisel Preview](./preview.png)
+![Chisel Preview](./preview.gif)
 
 SMASH ROCK!  FASTER SWING = MORE ROCK SMASHED! This app is a pre-historically accurate
 representation of Paleolithic technology.  Re-invent the wheel with this (rock)cutting-edge
