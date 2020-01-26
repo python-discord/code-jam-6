@@ -75,7 +75,7 @@ assets
 
 - [`background.png`][img-dir], [`cursor/*.png`][cursor-dir] and [`caveman/*.png`][caveman-dir] are original works by [salt-die][salt-die-github].
 
-- `button/*.png` are just a hundred pixels of the same color (of unknown [trademark][trademark-url]).
+- [`button/*.png`][button-dir] are just a hundred pixels of the same color (of unknown [trademark][trademark-url]).
 
 [boulder-dir]: ./assets/img/boulder
 [pixabay-url]: https://pixabay.com/
