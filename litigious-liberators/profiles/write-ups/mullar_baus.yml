@@ -1,0 +1,25 @@
+Name: Mullar Baus
+Picture: mullar_baus.png
+Biography: >
+  Heyy there! I'm the chief cook for my clan, and know various cuisines. I usually spend my free
+  time watching petflix or playing with the baby dinosaurs, but mostly I'll be trying out some new
+  recipe to invigorate everybody who'll be eating my food.
+Choices:
+  right: >
+    Tell her Chenny's taste better.
+  left: >
+    Tell her shes better than Chenny's
+Results:
+  right: >
+    Oops! sorry Mullar.
+  left: >
+    Hope Chenny won't kill me!
+Deltas:
+  right:
+    Knowledge: 0
+    Welfare: -1
+    Energy: 1
+  left:
+    Knowledge: 0
+    Welfare: 1
+    Energy: 1

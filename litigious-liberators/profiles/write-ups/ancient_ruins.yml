@@ -1,0 +1,26 @@
+Name: Ancient Ruins
+Picture: ancient_ruins.png
+Biography: >
+  No one knows what caused the Reemergence and destroyed the city,
+  but one cannot stop feeling amazed looking at the skyscrapers,
+  so tall that could be seen from the space.
+  These concrete ruins of Nova Ark are rumoured to contain invaluable treasures within its stony mazes.
+Choices:
+  right: >
+    Explore and find something useful
+  left: >
+    Comeback later.
+Results:
+  right: >
+    Treasures... Here I come..
+  left: >
+    Meh... Not so interesting
+Deltas:
+  right:
+    Knowledge: 2
+    Welfare: 2
+    Energy: -2
+  left:
+    Knowledge: 0
+    Welfare: 0
+    Energy: 0

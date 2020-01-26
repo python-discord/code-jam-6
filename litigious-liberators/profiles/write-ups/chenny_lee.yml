@@ -1,0 +1,26 @@
+Name: Chenny Lee
+Picture: chenny_lee.png
+Biography: >
+  Pro: can cook
+  Con: will try to get you to do the dishes
+  Pro: not afraid of spiders
+  Con: afraid of moths
+Choices:
+  right: >
+    Attend Chenny's cake party.
+  left: >
+    Explore a cave with Chenny.
+Results:
+  right: >
+    Yummy!
+  left: >
+    Hope they aren't any moths.
+Deltas:
+  right:
+    Knowledge: 0
+    Welfare: 0
+    Energy: 3
+  left:
+    Knowledge: 1
+    Welfare: 2
+    Energy: -1
