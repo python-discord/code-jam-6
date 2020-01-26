@@ -54,16 +54,20 @@ class Rotater(Scatter):
         if self.anim is None:
             self.rotation = 0
             if self.dir == -1:
-                self.anim = Animation(x=self.init_x-1500,
-                                      rotation=25,
-                                      transition=self.trans,
-                                      duration=1000)
+                self.anim = Animation(
+                    x=self.init_x - 1500,
+                    rotation=25,
+                    transition=self.trans,
+                    duration=1000,
+                )
                 self.anim.start(self)
             if self.dir == 1:
-                self.anim = Animation(x=self.init_x+1500,
-                                      rotation=-25,
-                                      transition=self.trans,
-                                      duration=1000)
+                self.anim = Animation(
+                    x=self.init_x + 1500,
+                    rotation=-25,
+                    transition=self.trans,
+                    duration=1000,
+                )
                 self.anim.start(self)
 
         difference = self.saxis - touch.spos[0]
@@ -77,17 +81,18 @@ class Rotater(Scatter):
             self.anim.stop(self)
             if ac.KEYFRAME > 0.1:
                 self.anim_down = Animation(
-                                        x=self.init_x + 1500 if self.dir == 1 else -1500,
-                                        y=self.init_y-1500,
-                                        rotation=self.rotation + -90 if self.dir == 1 else 90,
-                                        transition=AnimationTransition.linear,
-                                        duration=1)
+                    x=self.init_x + 1500 if self.dir == 1 else -1500,
+                    y=self.init_y - 1500,
+                    rotation=self.rotation + -90 if self.dir == 1 else 90,
+                    transition=AnimationTransition.linear,
+                    duration=1,
+                )
                 self.anim_down += Animation(
                     x=self.init_x,
                     y=self.init_y,
                     rotation=0,
                     transition=AnimationTransition.linear,
-                    duration=0
+                    duration=0,
                 )
                 self.anim_down.start(self)
 
@@ -101,7 +106,7 @@ class Rotater(Scatter):
                     x=self.init_x,
                     y=self.init_y,
                     transition=AnimationTransition.linear,
-                    duration=0.2
+                    duration=0.2,
                 )
                 self.anim_return.start(self)
 
