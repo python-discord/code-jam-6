@@ -27,7 +27,7 @@ class TextEditor(Screen):
     font_name = StringProperty(
         './ancient_tech/static/retro_font.ttf'
     )
-    font_size = NumericProperty(14)
+    font_size = NumericProperty(12.5)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(TextEditor, self).__init__(*args, **kwargs)

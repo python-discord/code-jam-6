@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union
 from pathlib import Path
 from shutil import rmtree
 
@@ -23,7 +23,7 @@ class BasePopup(Popup):
             *args, **kwargs
         )
 
-    def update(self, browser_side: str, dir_: str) -> None:
+    def update(self, browser_side: Union[str, int], dir_: str) -> None:
         """
         Refreshes the specified browser side.
         """

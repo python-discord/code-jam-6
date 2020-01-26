@@ -25,7 +25,7 @@ class Terminal(BoxLayout, Shell):
     font_name = StringProperty(
         './ancient_tech/static/retro_font.ttf'
     )
-    font_size = NumericProperty(14)
+    font_size = NumericProperty(11)
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super(Terminal, self).__init__(*args, **kwargs)
