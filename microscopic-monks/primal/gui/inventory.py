@@ -45,6 +45,9 @@ class Inventory:
             i.draw(canvas)
 
     def get_active(self):
+        if self.active >= len(self.inventory_data):
+            return []
+
         return self.inventory_data[self.active]
 
     def load_inventory(self):
