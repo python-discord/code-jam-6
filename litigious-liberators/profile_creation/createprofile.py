@@ -3,6 +3,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.carousel import Carousel
 from collections import Counter
 from kivy.properties import DictProperty
+from kivymd.toast import toast
 
 import json
 import os
@@ -49,6 +50,13 @@ class CreateProfile(Screen):
 class ProfileSwiper(Carousel):
     def on_touch_down(self, touch):
         return super().on_touch_down(touch)
+
+    def validate_name(self):
+        name = self.slides[0].children[1].children[0].text
+        if not name:
+            toast("Please enter name!")
+        else:
+            self.load_next()
 
 
 class AfterSwipeScreen(Screen):

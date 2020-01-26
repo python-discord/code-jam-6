@@ -21,11 +21,9 @@
                 padding: '10dp', '50dp'
                 spacing: '10dp'
                 Button:
-                    text: 'Go Back'
-                    on_release: root.ids.profile_carousel.load_next()
-                Button:
                     text: 'Continue'
-                    on_release: root.ids.profile_carousel.load_next()
+                    on_release:
+                        root.ids.profile_carousel.validate_name()
 
         BoxLayout:
             orientation: 'vertical'
