@@ -17,6 +17,8 @@ Config.set("graphics", "height", "600")
 story_name = "caveman"
 with open(path_handler.get_game_state_json_path(story_name)) as f:
     _game_states = json.load(f)
+with open(path_handler.get_cards_json_path(story_name)) as f:
+    _game_cards = json.load(f)
 
 
 def is_snake_case(string: str):
@@ -86,22 +88,53 @@ class CardAddWindow(Screen):
             return
 
         card_conditions = self.ids.card_conditions.text
-        try:
-            card_conditions = json.loads(card_conditions)
-            for condition_name, condition_value in card_conditions.items():
-                # Class init will error if invalid value
-                card_format.GameVariable(condition_name, condition_value)
-                if condition_name not in _game_states:
-                    print(f"Condition {condition_name} not in game states!")
-                    return
-        except Exception as e:
-            print(f"Invalid formatted conditions: {e}")
-            return
+        if card_conditions:
+            try:
+                card_conditions = json.loads(card_conditions)
+                for condition_name, condition_value in card_conditions.items():
+                    # Class init will error if invalid value
+                    card_format.GameVariable(condition_name, condition_value)
+                    if condition_name not in _game_states:
+                        print(f"Condition {condition_name} not in game states!")
+                        return
+            except Exception as e:
+                print(f"Invalid formatted conditions: {e}")
+                return
+        else:
+            card_conditions = None
 
         card_text = self.ids.card_text.text
         if not card_text:
             print("Invalid card text input")
             return
+
+        """
+         card_id: str
+        card_type: str
+        card_image: str
+        text: str
+        options: Union[dict, List[Option]]
+        conditions: Union[dict, List[GameVariable], None] = None
+        card_sound: str = None
+        """
+        # Class init will error if invalid type or out of range
+        try:
+            _ = card_format.Card(card_id, card_type, card_image, card_text, card_options,
+                                 card_conditions, card_sound)
+        except Exception as e:
+            print(f"Can't construct card {e}")
+
+        # TODO Use backend to generate json just by passing args to Card
+        new_card = {"card_id": card_id, "card_type": card_type, "card_image": card_image,
+                    "text": card_text, "options": card_options, "conditions": card_conditions,
+                    "card_sound": card_sound}
+        _game_cards.append(new_card)
+        self.save_cards()
+
+    def save_cards(self):
+        # self.recreate_list()
+        with open(path_handler.get_cards_json_path(story_name), "w") as f:
+            json.dump(_game_cards, f, indent=4, sort_keys=True)
 
 
 class GameStatesWindow(Screen):
