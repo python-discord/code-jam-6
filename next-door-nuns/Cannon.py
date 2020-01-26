@@ -2,33 +2,42 @@ from kivy.app import App
 from kivy.properties import Clock
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
+from kivy.uix.button import Button
 from kivy.graphics import Rectangle
-from kivy.graphics import Rotate, Color,context_instructions
-from kivy.uix.image import Image
-from kivy.properties import NumericProperty
-from math import sin,cos,radians
+from kivy.graphics import Rotate, context_instructions
+from math import sin, cos, radians
 from kivy.animation import Animation
+from kivy.uix.popup import Popup
+import random
+
 
 class Cannon(Widget):
-    angle_int_deg= NumericProperty(50)
+    """Main class for the cannon game operation"""
     def __init__(self, **kwargs):
         super(Cannon, self).__init__(**kwargs)
         self.velocity = 0
+        self.velocity_clock = 0
+        self.velocity_x = 0
+        self.velocity_y = 0
         self.angle = 0
+        self.x_collide = False
+        self.y_collide = False
+        self.x_rand = 0
+        self.y_rand = 0
+        random.seed()
         with self.canvas:
             self.sky = Rectangle(size=(2000, 1000), source="Back_Drop.png")
             self.grass = Rectangle(size=(2000, 100), source="Grass.png")
-
+            self.target = Rectangle(size=(35, 35), pos=(400, 0), source="python_discord_logo.png")
             self.wheel = Rectangle(size=(35, 35), pos=(20, 0), source="Wheel.png")
 
+            # Draws the cannon and binds rotation object to it for changing in set_angle()
             self.canvas.before
             context_instructions.PushMatrix()
-            self.rotate = Rotate(origin=(35,12.5), angle=self.angle)
+            self.rotate = Rotate(origin=(42.5, 12.5), angle=self.angle)
             self.cannon = Rectangle(size=(50, 15), pos=(35, 10), source="cannon.png")
-            #self.cannon = Rectangle(size=(50, 15), pos=(35, 15))
             context_instructions.PopMatrix()
             self.canvas.after
-
 
             self.cannonball = Rectangle(pos=(1000, 1000), size=(10, 10), source="Cannon_Ball.png")
 
@@ -39,13 +48,12 @@ class Cannon(Widget):
                 print(self.velocity)
 
     def set_angle(self, angle):
+        """ Sets the angle of the cannon and updates the rotation"""
         # self.angle_int_deg = int(angle)
         if int(angle):
             if -1 < int(angle) <= 90:
                 self.angle = int(angle)
                 self.rotate.angle = self.angle
-
-
 
     def rot_animation(self, instance):
         self.animation = Animation(angle=self.angle, duration=1)
@@ -54,19 +62,60 @@ class Cannon(Widget):
 
     def fire_cannon(self):
         # self.cannonball.pos = (self.cannon.pos[0] + self.cannon.size[0], self.cannon.pos[1] + self.cannon.size[1]/2)
-        self.cannonball.pos = (int(self.cannon.pos[0]+cos(radians(self.angle))*self.cannon.size[0]),
-                               int(self.cannon.pos[1] + sin(radians(self.angle))*self.cannon.size[1]))
-        print(self.cannonball.pos)
+        self.cannonball.pos = (int(self.cannon.pos[0]+cos(radians(self.angle))
+                               * self.cannon.size[0]/2),
+                               int(self.cannon.pos[1]+sin(radians(self.angle))
+                               * self.cannon.size[1]/2))
+        # print(self.cannonball.pos)
         self.velocity_clock = Clock.schedule_interval(self.drop, 0.1)
         self.velocity_y = self.velocity * (self.angle / 90)
         self.velocity_x = self.velocity - self.velocity_y
 
     def drop(self, dt):
-
+        """Updates the position of the cannonball and detects collision
+        with target"""
         if self.velocity_x >= 0:
-            self.cannonball.pos = (self.cannonball.pos[0] + self.velocity_x, self.cannonball.pos[1] + self.velocity_y)
+            self.cannonball.pos = (self.cannonball.pos[0] + self.velocity_x,
+                                   self.cannonball.pos[1] + self.velocity_y)
             self.velocity_y -= 0.98
-            
+            # print("Cannonball X coord: {}".format(self.cannonball.pos[0]))
+            # print("Cannonball Y coord : {}" .format(self.cannonball.pos[1]))
+            # print("Target X coordinate {}".format(self.target.pos[0]))
+            # print("Target Y coordinate {}" .format(self.target.pos[1]))
+            # print("Target X size {}".format(self.target.size[0]))
+            # print("Target Y size {}".format(self.target.size[1]))
+
+            # Checks for X position collision
+            if (self.cannonball.pos[0] < (self.target.pos[0] + self.target.size[0])) and \
+               (self.cannonball.pos[0] > (self.target.pos[0])):
+                self.x_collide = True
+            else:
+                self.x_collide = False
+            # print(self.target.pos[0] + self.target.size[0])
+
+            # Checks for Y position collision
+            if (self.cannonball.pos[1] < (self.target.pos[1] + self.target.size[1])) and \
+               (self.cannonball.pos[1] > (self.target.pos[1])):
+                self.y_collide = True
+            else:
+                self.y_collide = False
+            # print("X collide : {}".format(self.x_collide))
+            # print("Y collide : {}" .format(self.y_collide))
+
+            # If X and Y collision are both true, collision with target
+            if self.x_collide is True and self.y_collide is True:
+                # print("Collide")
+                content = Button(text='Press to Try Again')
+                self.P = Popup(title="TARGET HIT!!!!", title_align='center',
+                               title_size=40, title_color=[1, 0, 0, 1], content=content,
+                               size_hint=(None, None), size=(400, 400), auto_dismiss=False)
+                content.bind(on_press=self.P.dismiss)
+                self.P.open()
+
+                # Generate random number for coordinate of next target
+                self.x_rand = random.randint(20, 600)
+                self.y_rand = random.randint(0, 400)
+                self.target.pos = (self.x_rand, self.y_rand)
 
         else:
             Clock.unschedule(self.velocity_clock)
@@ -74,8 +123,7 @@ class Cannon(Widget):
             self.cannonball.pos = (self.cannonball.pos[0], 0)
             Clock.unschedule(self.velocity_clock)
 
-class Target(Widget):
-    pass
+
 class CannonApp(App):
     def build(self):
         return kv

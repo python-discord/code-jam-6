@@ -1,65 +1,49 @@
 FloatLayout:
+
     Cannon:
         id: cannon
 
-    #Image:
-     #   id: image
-     #   source: 'cannon.png'
-     #   pos: 8,3
-     #   size_hint: .075,.075
-     #   canvas.before:
-     #       PushMatrix
-     #       Rotate:
-     #           angle: cannon.angle_int_deg
-     #           origin: self.center
-     #   canvas.after:
-     #       PopMatrix
-
-    Target:
-        id:target
-        canvas:
-            Rectangle:
-                size: (35,35)
-                pos: (400,0)
-                source: 'python_discord_logo.png'
     Button:
         text: "Fire!"
         size_hint: (0.2, 0.05)
-        pos_hint: {"x": 0.0, "y":0.55}
+        pos_hint: {"x": 0.0, "y": 0.55}
         on_press:
             root.ids.cannon.fire_cannon()
+
     Label:
-        color: 0,0,0,1
+        color: 0, 0, 0, 1
         text: "Enter Velocity Here:"
         size_hint: (0.3, 0.05)
-        pos_hint: {"x":0.0, "y":0.9}
+        pos_hint: {"x": 0.0, "y": 0.9}
 
     TextInput:
         id: velocity
         size_hint: (0.3, 0.05)
-        pos_hint: {"x": 0.0, "y":0.85}
+        pos_hint: {"x": 0.0, "y": 0.85}
+
     Button:
         text: "Submit"
         size_hint: (0.2, 0.05)
-        pos_hint: {"x": 0.0, "y":0.8}
+        pos_hint: {"x": 0.0, "y": 0.8}
         on_press:
             root.ids.cannon.set_velocity(root.ids.velocity.text)
-            root.ids.velocity.text = ""
+            # root.ids.velocity.text = ""
     Label:
-        color: 0,0,0,1
+        color: 0, 0, 0, 1
         text: "Enter Angle Here:"
         size_hint: (0.3, 0.05)
-        pos_hint: {"x":0.0, "y":0.7}
+        pos_hint: {"x": 0.0, "y": 0.7}
 
     TextInput:
         id: angle
         size_hint: (0.3, 0.05)
-        pos_hint: {"x": 0.0, "y":0.65}
+        pos_hint: {"x": 0.0, "y": 0.65}
+
     Button:
         text: "Submit"
         size_hint: (0.2, 0.05)
-        pos_hint: {"x": 0.0, "y":0.6}
+        pos_hint: {"x": 0.0, "y": 0.6}
         on_press:
             root.ids.cannon.set_angle(root.ids.angle.text)
             root.ids.cannon.rot_animation
-            root.ids.angle.text = ""
+            # root.ids.angle.text = ""
