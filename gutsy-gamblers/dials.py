@@ -157,13 +157,15 @@ class DialWidget(FloatLayout):
 
         try:
             today_sunrise = sun_time.get_sunrise_time(self.date)
-        except SunTimeException:
-            raise ValueError("AINT NO SUNSHINE WHEN SHE'S GONE")
+        except SunTimeException:  # Manually set to midnight
+            today_sunrise = datetime.today()
+            today_sunrise.replace(hour=0, minute=0, second=0)
 
         try:
             today_sunset = sun_time.get_sunset_time(self.date)
-        except SunTimeException:
-            raise ValueError("HOLY SHIT TOO MUCH SUNSHINE WHEN SHE'S HERE")
+        except SunTimeException:  # Manually set to midnight
+            today_sunset = datetime.today()
+            today_sunset.replace(hour=0, minute=0, second=0)
 
         # This is *super* ugly, I'm sure we can find a more elegant way to do this
         now = datetime.utcnow() - timedelta(hours=0)
