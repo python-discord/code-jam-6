@@ -43,7 +43,7 @@ class DataController(EventDispatcher):
             outcome = self.active_card.options[0].get_outcome()
             self.active_card = self.game.take_turn(outcome)
         else:
-            outcome = self.active_card.options[0].get_outcome()
+            outcome = self.active_card.options[1].get_outcome()
             self.active_card = self.game.take_turn(outcome)
 
         self.set_game_state()
@@ -54,6 +54,7 @@ class DataController(EventDispatcher):
         backend version is done
         """
         states = [self.game.game_state.get_main_state(i) for i in range(4)]
+        print(states)
         self.game_state = self.game_state = GameState(
             *[MainState(s.label, s.value) for s in states]
         )
