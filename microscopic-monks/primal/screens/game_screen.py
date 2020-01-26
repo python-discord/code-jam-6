@@ -1,3 +1,5 @@
+import random
+
 from primal.engine.screen import Screen
 from primal.engine.camera import OrthographicCamera
 from primal.engine.sprite import Player, ColorSprite
@@ -198,14 +200,22 @@ class GameScreen(Screen):
             for feature in features:
                 dst = 40 + feature.get_size()[0]
                 dst = (dst * dst) / 4
-                dst += 10_000
+                dst += 12_000
 
                 if feature.distance_to((pos_x, pos_y)) < dst \
                         and feature.collide_with((mx, my), (1, 1)):
                     feature.hit()
                     if feature.get_health() == 0:
                         remove_features.add(feature)
-                        self.inventory.add_item(feature.type)
+
+                        if random.randint(0, 15) == 0:
+                            which_weapon = random.randint(0, 1)
+                            if which_weapon == 1:
+                                self.inventory.add_item('shovel')
+                            else:
+                                self.inventory.add_item('spear')
+                        else:
+                            self.inventory.add_item(feature.type)
 
                         if feature in self.clicked_features:
                             del self.clicked_features[feature]
