@@ -1,4 +1,7 @@
+import random
 from typing import Any
+
+from simpleaudio import PlayObject
 
 from firestarter.game_engine.engine import Engine
 from firestarter.game_engine.object import (
@@ -36,6 +39,10 @@ class MyGame(Engine):
                          pos=lambda _, v: self.flameBuddy.on_player_pos(v))
         self.add_player(self.player)
 
+        # Music
+        self.musics = [self.sounds['music_01']]
+        self.playing_music = self.play_music()
+
         # Platforms, Items, etc.
         self.platform_06 = GenericObject('box', (50, 20), True, 3, self)
 
@@ -62,10 +69,17 @@ class MyGame(Engine):
         """Move the hearts to the top left corner."""
         self.hearts.pos = (0, value - 64)
 
+    def play_music(self) -> PlayObject:
+        return random.choice(self.musics).play()
+
     def update(self, dt: float) -> None:
+        # Music update
+        if not self.playing_music.is_playing():
+            self.playing_music = self.play_music()
+
+        # Player update
         if 'spacebar' in self.pressed_keys and self.player.is_standing:
             self.player.acc_y = 20
-
         if 'a' in self.pressed_keys:
             if self.player.is_standing:
                 self.player.vel_x = -5
