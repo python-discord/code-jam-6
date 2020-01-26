@@ -6,17 +6,19 @@ class Ledger(BoxLayout):
         super(Ledger, self).__init__(**kwargs)
         print('[ INIT LEDGER ]')
 
-    def test(self):
-        print(self.ids)
-        self.display_rows.data = [
-            {'data': ['TEST X', 'TEST Y', 'TEST OP', 'TEST Z']}
+    def refresh(self):
+        print(f"ids: {self.ids}")
+
+        test_data = [
+            ['3.0', '2.0', '*', '6.0'],
+            ['4.0', '8.0', '+', '12.0'],
+            ['0.0', '0.0', '', '0.0'],
+            ['10.0', '0.0', '', '0.0']
         ]
 
-    def refresh(self):
-        print(f"ids: {super(Ledger, self).ids}")
-        # self.display_rows.data = [
-        #     {'data': ['TEST X', 'TEST Y', 'TEST OP', 'TEST Z']}
-        # ]
+        self.rv.data = [
+            {'value': row} for row in test_data
+        ]
 
     def clear(self):
         self.rv.data = []

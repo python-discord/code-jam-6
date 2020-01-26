@@ -4,19 +4,14 @@ Backend controller for communicating operations b/w widgets
 
 import pandas as pd
 from .ledger import Ledger
-
-test_data = [
-    {'x': 3, 'y': 2, 'op': '*', 'z': 6},
-    {'x': 4, 'y': 8, 'op': '+', 'z': 12},
-    {'x': 0, 'y': 0, 'op': None, 'z': 0}
-]
+from kivy.uix.widget import Widget
 
 
-class Controller:
-    def __init__(self):
+class Controller(Widget):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         print('[ INIT CONTROLLER ]')
-        # self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
-        self.df = pd.DataFrame(test_data)
+        self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
         self.ledger = Ledger()
         self.col = 'x'
         self.row = 1

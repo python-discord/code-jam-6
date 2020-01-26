@@ -40,15 +40,15 @@
         Rectangle:
             size: self.size
             pos: self.pos
-    data: ['x', 'y', 'op', 'z']
+    value: ['x', 'y', 'op', 'z']
     Label:
-        text: root.data[0]
+        text: root.value[0]
     Label:
-        text: root.data[1]
+        text: root.value[1]
     Label:
-        text: root.data[2]
+        text: root.value[2]
     Label:
-        text: root.data[3]
+        text: root.value[3]
 
 <Ledger>:
     size_hint_x: 1.8
@@ -59,7 +59,7 @@
             size: self.size
             pos: self.pos
             source: 'assets/graphics/sandstone.jpg'
-    display_rows: rv
+    rv: rv
     orientation: 'vertical'
     BoxLayout:
         size_hint_y: None
@@ -67,9 +67,8 @@
         padding: dp(8)
         spacing: dp(8)
         Button:
-            text: 'Test'
-            on_press: root.test()
-
+            text: 'Refresh'
+            on_press: root.refresh()
     RecycleView:
         id: rv
         scroll_type: ['bars', 'content']
