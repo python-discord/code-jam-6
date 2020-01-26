@@ -50,7 +50,6 @@ class MyNavigationLayout(NavigationLayout):
         self.content_nav_drawer = ContentNavigationDrawer(self)
         self.drawer_open = False
         self.scroll_view = scroll_view
-  
 
         self.add_widget(self.content_nav_drawer)
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')

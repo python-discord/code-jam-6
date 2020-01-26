@@ -61,10 +61,10 @@ class ConversationBubble(ButtonBehavior, MDCard):
         decode = ''
         if '.-' not in self.label.text:
             encode = self.util.morse_helper.text_to_morse(self.label.text)
-            #self.util.morse.read(words=str(self.label.text))
+            # self.util.morse.read(words=str(self.label.text))
         else:
             decode = self.util.morse_helper.morse_to_text(self.label.text)
-            #self.util.morse.read(morse=str(self.label.text))
+            # self.util.morse.read(morse=str(self.label.text))
 
         if 'encode' in key.lower() and encode:
             self.label.text = encode
@@ -113,4 +113,4 @@ class ConversationBubble(ButtonBehavior, MDCard):
         self.cur_sound_index = 0
         self.sound_list = []
         self.cur_sound = None
-
+  
