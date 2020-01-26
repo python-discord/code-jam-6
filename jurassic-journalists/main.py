@@ -16,17 +16,18 @@ from kivy.animation import Animation
 from kivy.core.audio import SoundLoader
 from PIL import ImageDraw
 from PIL import Image as Im
-
+from string import ascii_lowercase
 
 # Screen Dimensions
 SCREEN_WIDTH, SCREEN_HEIGHT = Window.size
 if SCREEN_HEIGHT / SCREEN_WIDTH < 1.5:
     SCREEN_WIDTH = 540
     SCREEN_HEIGHT = 720
-STARTING_X = 50 # PAPER_WIDTH - 240
-STARTING_Y = 50 # PAPER_HEIGHT + 100
+STARTING_X = 50
+STARTING_Y = 50
 PAPER_WIDTH = SCREEN_WIDTH * .7 - STARTING_X
 PAPER_HEIGHT = SCREEN_WIDTH
+
 
 class MainScreen(ScreenManager):
     ''' ScreenManager '''
@@ -40,14 +41,36 @@ class PhoneScreen(Screen):
     ''' Screen Two '''
 
 
+class TypeWriter(Popup):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.keyboard = Window.request_keyboard(self._keyboard_closed, self)
+        self.keyboard.bind(on_key_down=self._key_down)
+
+    def _key_down(self, keyboard, keycode, mod, arg):
+        punctuation = {'spacebar': 'space', ';': 'semicolon', ':': 'colon'}
+        if keycode[1] in ascii_lowercase:
+            self.ids[keycode[1]].trigger_action()
+        elif keycode[1] in punctuation:
+            self.ids[punctuation[keycode[1]]].trigger_action()
+        else:
+            return False
+            print(keycode[1])
+
+    def _keyboard_closed(self):
+        self.keyboard.unbind(on_key_down=self._key_down)
+        self.keyboard = None
+
+
 class TypeWriterButton(Button):
     sound = SoundLoader.load('assets/click.wav')
+
     def on_release(self):
         self.parent.typw.text += self.txt
         if abs(self.anim_y - self.default_y) >= .01:
-            Animation(anim_y = self.default_y, d=.025, t='out_bounce').start(self)
+            Animation(anim_y=self.default_y, d=.025, t='out_bounce').start(self)
         else:
-            Animation(anim_y = self.anim_y + .005, d=.025, t='out_bounce').start(self)
+            Animation(anim_y=self.anim_y + .005, d=.025, t='out_bounce').start(self)
 
 
 class TextPaper(Image):
@@ -60,8 +83,8 @@ class TextPaper(Image):
         # self.img = Im.open("paper.png")
         # self.img.resize((int(SCREEN_WIDTH *.75), SCREEN_HEIGHT))
         self.colour = 255, 255, 255, 255
-        self.txt = Im.new('RGBA', (int(SCREEN_WIDTH *.75), PAPER_HEIGHT), (200,200,200,255))
-        self.default_pos = PAPER_WIDTH//2,  - (SCREEN_HEIGHT + PAPER_HEIGHT - STARTING_Y) // 8
+        self.txt = Im.new('RGBA', (int(SCREEN_WIDTH * .75), PAPER_HEIGHT), (200, 200, 200, 255))
+        self.default_pos = PAPER_WIDTH//2,  -(SCREEN_HEIGHT + PAPER_HEIGHT - STARTING_Y) // 8
         # Type writer does not type from the top rather type from the bottom.
         # self.txt = self.img.copy()
         self.head = {'x': STARTING_X, 'y': STARTING_Y}
@@ -102,11 +125,7 @@ class TextPaper(Image):
             self.head["x"] = STARTING_X
             self.head["y"] += self.font_size
             self.y += self.font_size
-            #self.x = self.default_pos[0]
-
-            # 10 is to adjust the height. If you guys can investigate why it is not
-            # matching the height and width of letter defined in kv file that would be great.
-            line_height = self.head["y"] - STARTING_Y - 10
+            line_height = self.head["y"] - STARTING_Y
             self.pos = [self.default_pos[0], self.default_pos[1]+line_height]
             self.first_letter = True
 
@@ -125,8 +144,8 @@ class TextPaper(Image):
 
 class Pick(Popup):
     def __init__(self, typw, **kwargs):
-       super().__init__(**kwargs)
-       self.typw = typw
+        super().__init__(**kwargs)
+        self.typw = typw
 
 
 class PhoneButtons(Label):
@@ -159,6 +178,7 @@ class JurassicJournalistApp(App):
         Builder.load_file('objects.kv')
         Window.size = SCREEN_WIDTH, SCREEN_HEIGHT
         return MainScreen()
+
 
 if __name__ == '__main__':
     JurassicJournalistApp().run()
