@@ -31,7 +31,7 @@ Builder.load_string("""
             size: self.size
             source: 'ui/img/morse_code_bg.jpg'
             tex_coords: root.tex_coords
-            
+
     MDCard:
         padding: dp(24)
         spacing: dp(24)
@@ -71,12 +71,13 @@ Builder.load_string("""
 
             BlankLabel:
             BlankLabel:
-
+            
             WelcomeButton:
-                text: 'Sign In'
-                icon: 'login-variant'
+                text: 'Train'
+                icon: 'dumbbell'
                 on_press:
-                    root.manager.current = 'sign_in'
+                    root.manager.current = 'training'
+
 
             BlankLabel:
 
@@ -89,10 +90,10 @@ Builder.load_string("""
             BlankLabel:
 
             WelcomeButton:
-                text: 'Train'
-                icon: 'dumbbell'
+                text: 'Sign In'
+                icon: 'login-variant'
                 on_press:
-                    root.manager.current = 'training'
+                    root.manager.current = 'sign_in'
 
             BlankLabel:
 
@@ -102,6 +103,12 @@ Builder.load_string("""
                 on_press:
                     # TODO: create exit function
                     root.manager.current = 'message'
+
+            # WelcomeButton:
+            #     text: 'Exit'
+            #     icon: 'close'
+            #     on_press:
+            #         app.stop()
 """)
 
 

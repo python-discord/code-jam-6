@@ -1,22 +1,25 @@
 # qpy:kivy
 # Kivy Imports
-from kivy.properties import StringProperty
-from kivy.uix.screenmanager import ScreenManager
-from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.anchorlayout import AnchorLayout
-from kivy.uix.screenmanager import NoTransition
-from kivymd.theming import ThemeManager
+import gc
+
 from kivy.app import App
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.screenmanager import NoTransition
+from kivy.uix.screenmanager import ScreenManager
+from kivymd.theming import ThemeManager
 
-
+from ui.screens.add_contact_screen import AddContactScreen
+from ui.screens.calibration_screen import CalibrationScreen
+from ui.screens.contacts_screen import ContactScreen
+from ui.screens.conversation_screen import ConversationScreen
+from ui.screens.decoder_screen import DecoderScreen
+from ui.screens.encoder_screen import EncoderScreen
+from ui.screens.message_screen import MessageScreen
+from ui.screens.tapping_training_screen import TappingScreen
 # Project imports
 from ui.screens.training_menu_screen import TrainingMenuScreen
 from ui.screens.welcome_screen import WelcomeScreen
-from ui.screens.encoder_screen import EncoderScreen
-from ui.screens.decoder_screen import DecoderScreen
-from ui.screens.message_screen import MessageScreen
-from ui.screens.conversation_screen import ConversationScreen
-from ui.screens.tapping_training_screen import TappingScreen
 from ui.screens.listening_training_screen import ListeningScreen
 from ui.screens.contacts_screen import ContactScreen
 from ui.screens.add_contact_screen import AddContactScreen
@@ -24,15 +27,14 @@ from ui.screens.calibration_screen import CalibrationScreen
 from ui.screens.sign_in_screen import SignInScreen
 from util.utility import Utility
 
-import gc
 gc.disable()
 
 
 class MainBox(FloatLayout):
-    def __init__(self, **kwargs):
-        super(MainBox, self).__init__()
+    def __init__(self, util, **kwargs):
+        super(MainBox, self).__init__(**kwargs)
         self.screens = AnchorLayout(anchor_x='center', anchor_y='center')
-        self.util = Utility()
+        self.util = util
         self.content = ScreenManager()
         self.content.transition = NoTransition()
 
@@ -59,6 +61,7 @@ class MainBox(FloatLayout):
 
 class MainApp(App):
     # Change APP colors here
+    util = Utility()
     theme_cls = ThemeManager()
     theme_cls.primary_palette = 'Teal'
     theme_cls.primary_hue = '300'
@@ -68,7 +71,7 @@ class MainApp(App):
     accent_color = [255/255, 64/255, 129/255, 1]
 
     def build(self):
-        return MainBox()
+        return MainBox(self.util)
 
 
 if __name__ == "__main__":

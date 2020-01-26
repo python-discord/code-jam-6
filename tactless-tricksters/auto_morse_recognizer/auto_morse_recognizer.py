@@ -69,18 +69,6 @@ class AutoMorseRecognizer:
                 morse_code, speech_activity = [], [0] * self.bits_per_frame
         return morse_code, speech_activity
 
-    # def run(self):
-    #     try:
-    #         self.start()
-    #         self.old_buffer = np.array([])
-    #         while True:
-    #             data = np.frombuffer(self.stream.read(CHUNK), dtype=np.int16).astype(float)
-    #             morse_code, _ = self.get_morse_from_audio(data)
-    #             if morse_code:
-    #                 print(' '.join(morse_code), end=' ')
-    #     finally:
-    #         self.stop()
-    #
     # def get_morse_from_wav_file(self, audio_path):
     #     fs, x = wavfile.read(audio_path)
     #     x = x.astype(float)

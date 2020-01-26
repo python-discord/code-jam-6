@@ -1,11 +1,9 @@
-from sys import byteorder
-from array import array
-from struct import pack
-
-import pyaudio
 import wave
-import struct
+from array import array
+from sys import byteorder
+
 import numpy as np
+import pyaudio
 
 THRESHOLD = 300
 chunk = 1024
@@ -32,17 +30,17 @@ letter_to_morse = {
     "8": "---..", "9": "----.", "0": "-----",
     " ": "/"}
 
+
 class MorseCodeDecoder(object):
     def __int__(self):
-        self.stop = False
+        self.stop = None
 
     def is_silent(self, snd_data):
-        "Returns 'True' if below the 'silent' threshold"
+        """Returns 'True' if below the 'silent' threshold"""
         return max(snd_data) < THRESHOLD
 
-
     def normalize(self, snd_data):
-        "Average the volume out"
+        """Average the volume out"""
         # 32768 maximum /2
         MAXIMUM = 16384
         times = float(MAXIMUM) / max(abs(i) for i in snd_data)
@@ -51,7 +49,6 @@ class MorseCodeDecoder(object):
         for i in snd_data:
             r.append(int(i * times))
         return r
-
 
     def encode(self, list1):
         list1 = list1.split("0")
@@ -71,10 +68,10 @@ class MorseCodeDecoder(object):
         # print(list1)
 
         for i in range(len(list1)):
-            if len(list1[i]) >= 20 and len(list1[i]) < 50:  # 200-490 ms dah, throws values >50
+            if 20 <= len(list1[i]) < 50:  # 200-490 ms dah, throws values >50
                 listascii += "-"
                 counter = 0
-            elif len(list1[i]) < 20 and len(list1[i]) > 5:  # 50-190ms is dit
+            elif 20 > len(list1[i]) > 5:  # 50-190ms is dit
                 listascii += "."
                 counter = 0
             elif len(list1[i]) == 0:  # blank character adds 1
@@ -98,7 +95,7 @@ class MorseCodeDecoder(object):
             if listascii[i] == "":
                 stringout += " "
 
-        if (stringout != " "):
+        if stringout != " ":
             print(stringout)
 
         # print("record start")
@@ -106,10 +103,6 @@ class MorseCodeDecoder(object):
 
     def record(self):
         num_silent = 0
-        snd_started = False
-        oncount = 0
-        offcount = 0
-        status = 0
         timelist = ""
 
         p = pyaudio.PyAudio()
@@ -130,10 +123,10 @@ class MorseCodeDecoder(object):
                 snd_data.byteswap()
 
             # r.extend(snd_data)
-            sample_width = p.get_sample_size(FORMAT)
+            # sample_width = p.get_sample_size(FORMAT)
 
             # find frequency of each chunk
-            indata = np.array(wave.struct.unpack("%dh" % (chunk), snd_data)) * window
+            indata = np.array(wave.struct.unpack("%dh" % chunk, snd_data)) * window
 
             # take fft and square each value
             fftData = abs(np.fft.rfft(indata)) ** 2
@@ -153,7 +146,7 @@ class MorseCodeDecoder(object):
                 thefreq = which * RATE / chunk
             # print(thefreq)
 
-            if thefreq > (FREQ - HzVARIANCE) and thefreq < (FREQ + HzVARIANCE):
+            if (FREQ - HzVARIANCE) < thefreq < (FREQ + HzVARIANCE):
                 status = 1
                 # print("1")
             else:
@@ -184,6 +177,8 @@ class MorseCodeDecoder(object):
         print("ended")
         print(num_silent)
         p.terminate()
+        self.stop = True
+
 
 if __name__ == "__main__":
     mcd = MorseCodeDecoder()

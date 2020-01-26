@@ -40,7 +40,8 @@ class AddContactScreen(Screen):
         self.contact_input.children[2].children[2].font_size = 0
         self.contact_input.children[2].children[2].height = 0
         self.contact_input.icon_right = 'send'
-        self.contact_input.children[2].children[0].bind(on_press=lambda x: self.check_name(self.contact_input.text))
+        self.contact_input.children[2].children[0].bind(
+            on_press=lambda x: self.check_name(self.contact_input.text))
 
         add_contact_card.add_widget(add_contact_label)
         add_contact_card.add_widget(self.info_text)

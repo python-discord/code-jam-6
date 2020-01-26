@@ -26,8 +26,13 @@ class ContactScreen(Screen):
         self.clear_widgets()
 
         layout = BoxLayout(orientation='vertical')
-        scroll = ScrollView(do_scroll_x=False, size_hint=(1, None), size=(Window.width, Window.height))
-        scroll_box = BoxLayout(orientation='vertical', size_hint_y=None, padding=(dp(12), dp(60)), spacing=dp(5))
+        scroll = ScrollView(do_scroll_x=False,
+                            size_hint=(1, None),
+                            size=(Window.width, Window.height))
+        scroll_box = BoxLayout(orientation='vertical',
+                               size_hint_y=None,
+                               padding=(dp(12), dp(60)),
+                               spacing=dp(5))
         scroll_box.bind(minimum_height=scroll_box.setter('height'))
         # Add more self.scrollbox.add_widget(MDLabel(text='')) to increase padding
         scroll_box.add_widget(MDLabel(text=' '))
@@ -46,7 +51,7 @@ class ContactScreen(Screen):
 
         # Add floating action button to write messages
         add_contact_anchor = AnchorLayout(anchor_x='right', anchor_y='bottom',
-                                            padding=[dp(25), dp(25), dp(25), dp(25)])
+                                          padding=[dp(25), dp(25), dp(25), dp(25)])
         add_contact_btn = MDFloatingActionButton(icon='account-plus', size=[dp(56), dp(56)])
         add_contact_btn.md_bg_color = App.get_running_app().theme_cls.primary_color
         add_contact_btn.theme_text_color = "Custom"
@@ -68,4 +73,3 @@ class ContactScreen(Screen):
 
     def change_screen(self, screen):
         self.manager.current = screen
-
