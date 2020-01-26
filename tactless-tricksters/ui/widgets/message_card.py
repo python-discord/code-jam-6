@@ -1,10 +1,11 @@
 from kivy.uix.behaviors import ButtonBehavior
 from kivy.app import App
-from kivy.metrics import dp
 from kivy.clock import Clock
 from kivy.factory import Factory
 
 from kivymd.uix.card import MDCardPost
+
+import os
 
 
 class LongPressButton(ButtonBehavior):
@@ -34,7 +35,7 @@ class MessageCard(LongPressButton, MDCardPost):
                                           text_post=kwargs.get('text_post'),
                                           name_data=kwargs.get('name_data'),
                                           swipe=kwargs.get('swipe'),
-                                          path_to_avatar=kwargs.get('source'),
+                                          path_to_avatar=os.path.join('ui', 'img', 'default_avatar.png'),
                                           )
 
         self.util = kwargs.get('util')

@@ -122,7 +122,7 @@ class WelcomeScreen(Screen):
         self.add_widget(self.nav_bar_anchor)
 
         Clock.schedule_once(self.texture_init, 0)
-        Clock.schedule_interval(self.scroll_texture, 1 / 60.)
+        Clock.schedule_interval(self.scroll_texture, 1 / 20.)
 
     def texture_init(self, *args):
         self.canvas.before.children[-1].texture.wrap = 'repeat'
