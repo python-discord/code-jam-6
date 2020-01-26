@@ -75,13 +75,17 @@ class GameScreen(Screen):
 
         if dx != 0.0 or dy != 0.0:
             px, py = self.player.get_center()
-
             dx, dy = self.process_player_position_deltas(px, py, dx, dy, delta)
 
         # Check for clicked features
         self.last_clicked -= delta
         if self.last_clicked < 0:
             self.last_clicked = 0
+
+        if dx != 0.0 or dy != 0.0:
+            self.player.walk(delta)
+        else:
+            self.player.stop()
 
         self.player.set_position((pos_x + dx, pos_y + dy))
         self.player.set_rotation(self.get_mouse_position())

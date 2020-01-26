@@ -135,6 +135,17 @@ class RotatableSprite(Sprite):
 class Player(RotatableSprite):
     SPEED = 300
 
+    def __init__(self, image: str, pos: Tuple[float, float],
+                 size: Tuple[float, float], angle: float, **kwargs):
+        super().__init__(image, pos, size, angle, **kwargs)
+        color = (0, 0, 0, 1)
+        self.timer = 0
+
+        self.left_size = (20, size[1] * 0.3)
+        self.right_size = (20, size[1] * 0.3)
+        self.left = ColorSprite(None, (0, 0), self.left_size, color)
+        self.right = ColorSprite(None, (0, 0), self.right_size, color)
+
     def set_rotation(self, n: Tuple[float, float]):
         pos = self.pos
         size = self.size
@@ -143,6 +154,39 @@ class Player(RotatableSprite):
         x, y = n
         d = math.atan2(y - Window.size[1] / 2, x - Window.size[0] / 2) * 180 / math.pi
         self.rotate.angle = d
+
+    def stop(self):
+        if self.timer != 0:
+            self.left_size = (20, self.left_size[1])
+            self.right_size = (20, self.right_size[1])
+            self.left.set_size(self.left_size)
+            self.right.set_size(self.right_size)
+            self.timer = 0
+
+    def walk(self, delta):
+        self.timer += delta * 6
+
+        while self.timer >= math.pi * 2:
+            self.timer -= math.pi * 2
+
+        state = math.sin(self.timer)
+        self.left_size = (20 + state * 35, self.left_size[1])
+        self.right_size = (20 - state * 35, self.right_size[1])
+        self.left.set_size(self.left_size)
+        self.right.set_size(self.right_size)
+
+    def set_position(self, pos: Tuple[float, float]):
+        self.left.set_position((pos[0], pos[1] + self.get_size()[1] * 0.2,))
+        self.right.set_position((pos[0], pos[1] + self.get_size()[1] * 0.5))
+        super().set_position(pos)
+
+    def draw(self, canvas: Union[RenderContext, InstructionGroup]):
+        canvas.add(PushMatrix())
+        canvas.add(self.rotate)
+        self.left.draw(canvas)
+        self.right.draw(canvas)
+        canvas.add(self.bg_rect)
+        canvas.add(PopMatrix())
 
 
 class Item(Sprite):
