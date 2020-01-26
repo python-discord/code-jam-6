@@ -18,6 +18,8 @@
     on_open:
         paper.ids.input_paper.recycle_view_input.data = paper.input_data()
         paper.ids.output_paper.recycle_view_output.data = paper.output_data()
+    on_dismiss:
+        app.root.get_screen("game_screen").paper_wrinkle()
     BoxLayout:
         orientation: "vertical"
         padding: dp(10)
@@ -33,7 +35,9 @@
 
 <CheckPaperButton@ButtonBehavior+Image>:
     source: "misc/paper.png"
-    on_release: app.root.paper_popup.open()
+    on_press: app.root.get_screen("game_screen").paper_wrinkle()
+    on_release:
+        app.root.paper_popup.open()
     PaperLabel:
         text: "Paper"
         text_size: root.width, None
@@ -51,10 +55,11 @@
     paper_popup: Factory.PaperPopup()
     canvas:
         Color:
-            rgba: 111 / 255, 175 / 255 , 150 / 255, 1
+            rgba: 149 / 255, 69 / 255 , 53 / 255, 1
         Rectangle:
             size: root.size
             pos: root.pos
+            source: "misc/wood.png"
     MainScreen:
     GameScreen:
     GameSelectorScreen:

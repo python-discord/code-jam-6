@@ -5,6 +5,7 @@ from kivy.factory import Factory
 from kivy.properties import BoundedNumericProperty, DictProperty
 from kivy.storage.jsonstore import JsonStore
 from kivy.uix.screenmanager import Screen
+from kivy.core.audio import SoundLoader
 
 from .save_game import save_plugs
 
@@ -19,20 +20,20 @@ class PlugboardScreen(Screen):
     plug_reference = []
     wires = DictProperty({})
     wire_colors = (
-        [0, 0, 0],
-        [0, 0, 1],
         [0, 1, 0],
         [1, 0, 0],
         [1, 1, 0],
         [1, 0, 1],
-        [0, 1, 1],
         [1, 1, 1],
-        [128 / 255, 0, 128 / 255],
-        [102 / 255, 128 / 255, 0],
-        [55 / 255, 171 / 255, 200 / 255],
-        [85 / 255, 0, 34 / 255],
+        [0, 1, 204 / 255],
+        [1, 0, 102 / 255],
         [1, 102 / 255, 0],
+        [128 / 255, 179 / 255, 1],
+        [145 / 255, 111 / 255, 124 / 255],
     )
+
+    def plug_in_click(self):
+        SoundLoader.load("misc/plug_in.wav").play()
 
     # Adding the plug (which is the plughole instance)
     def get_plug(self, instance):
@@ -47,6 +48,7 @@ class PlugboardScreen(Screen):
             self.plug_reference.append(plug)
             if self.plugs_in_screen % 2 != 0:
                 wire = Factory.Wire()
+                self.plug_in_click()
                 wire.points = [
                     *self.ids.plug_board.ids[self.all_plugged[-2]].center,
                     *self.ids.plug_board.ids[self.all_plugged[-1]].center,
