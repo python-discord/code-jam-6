@@ -63,4 +63,3 @@ class LightRays(Mesh):
                 LIGHT_COLOR_MAX_GREEN,
                 LIGHT_COLOR_MAX_BLUE,
                 LIGHT_COLOR_MAX_ALPHA*0.4)
-
