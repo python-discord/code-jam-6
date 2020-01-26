@@ -1,6 +1,7 @@
 #:kivy 1.11.1
 #: import Animation kivy.animation.Animation
-
+#: import SoundLoader kivy.core.audio.SoundLoader
+#: import time time
 # Uncomment out this to have a border drawn around everything
 
 #:import random random.random
@@ -123,22 +124,28 @@
             ChoiceButton:
                 id: choice_1
                 on_card_change:
-                    a = Animation(x=-550, y=50, duration=.99, t='out_bounce')
+                    a = Animation(x=-550, y=50, duration=.5, t='out_bounce')
                     a += Animation(x=-550, y=-900, duration=.01)
                     a += Animation(x=1500, duration=.01)
-                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.2, t='linear')
+                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.1, t='linear')
                     a.start(card_and_art)
+                    audio = data.active_card.card_sound if data.active_card.card_sound is not None else "default_card_switch.wav"
+                    s = SoundLoader.load(sound_assets + "default_card_switch.wav")
+                    s.play()
                 background_normal: game_assets + 'LeftButton.png'
                 text: data.active_card.options[0].text
                 text_size: (self.size[0]*.8, self.size[1])
                 on_press: data.choice_handler('1')
             ChoiceButton:
                 on_card_change:
-                    a = Animation(x=900, y=50, duration=.99, t='out_bounce')
+                    a = Animation(x=900, y=50, duration=.7, t='out_bounce')
                     a += Animation(x=550, y=-900, duration=.01)
                     a += Animation(x=-1500, duration=.01)
-                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.2, t='linear')
+                    a += Animation(x=card_and_art.x, y=card_and_art.y, duration=.5, t='linear')
                     a.start(card_and_art)
+                    audio = data.active_card.card_sound if data.active_card.card_sound is not None else "default_card_switch.wav"
+                    s = SoundLoader.load(sound_assets + "default_card_switch.wav")
+                    s.play()
                 background_normal: game_assets + 'RightButton.png'
                 text: data.active_card.options[1].text if len(data.active_card.options) > 1 else data.active_card.options[0].text
                 text_size: (self.size[0]*.8, self.size[1])

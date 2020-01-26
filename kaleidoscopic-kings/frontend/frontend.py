@@ -9,11 +9,11 @@ class MainWidget(BoxLayout):
 class ChoiceButton(Button):
     def __init__(self, **kwargs):
         super(Button, self).__init__(**kwargs)
-        self.register_event_type('on_card_change')
+        self.register_event_type("on_card_change")
 
     def on_press(self):
         super().on_press()
-        self.dispatch('on_card_change')
+        self.dispatch("on_card_change")
 
     def on_card_change(self):
-        print('on_card_change')
+        print("on_card_change")

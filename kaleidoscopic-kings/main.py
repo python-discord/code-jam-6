@@ -1,3 +1,5 @@
+from kivy.core.audio import SoundLoader
+
 from backend.card_format import Card
 from backend.main import load_game
 from backend.main import Game
@@ -59,17 +61,23 @@ class DataController(EventDispatcher):
 
 class CardGameApp(App):
     def build(self):
+
         Config.set("graphics", "width", "900")
         Config.set("graphics", "height", "1000")
-
         global_idmap["data"] = ctl = DataController()
         global_idmap["all_assets"] = "./Game/"
         global_idmap["game_assets"] = "./Game/GameArt/"
         global_idmap["card_assets"] = "./Game/CardArt/"
+        global_idmap["sound_assets"] = "./Game/Sounds/"
         print(global_idmap["game_assets"])
         ctl.game = game = load_game()
         ctl.active_card = game.start_game()
         ctl.set_game_state()
+        sound = SoundLoader.load("./Game/Sounds/cavemen.wav")
+        if sound:
+            print("Sound found at %s" % sound.source)
+            print("Sound is %.3f seconds" % sound.length)
+            sound.play()
         return MainWidget()
 
 
