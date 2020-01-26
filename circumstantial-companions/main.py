@@ -103,6 +103,7 @@ class Popup(SignBorder, KivyPopup):
                          title_align="center",
                          content=content,
                          separator_color=(0, 0, 0, 0),
+                         background=BUTTON_PRESSED,
                          **kwargs)
         self.setup_border()
 
