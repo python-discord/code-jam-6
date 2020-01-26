@@ -1,15 +1,64 @@
-# Amphibian Alchemists!
+# Elusive Enigmas
+By: Amphibian Alchemists
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-## Useful links
+Used by the Germans to send covert messages, the WWII Enigma Machine is the most famous encryption device of the 20th Century. As the role of a code receiver for the Germans, you must decipher the message given to you by the commander before the Allies capture you!
 
-- **Code Jam Rules:** [https://pythondiscord.com/pages/code-jams/code-jam-6/rules/](https://pythondiscord.com/pages/code-jams/code-jam-6/rules/)
+Table of Contents:
+- Setup
+- Tutorial
+- Settings (Defaults)
+- Guides
 
-- **General Code Jam info:** [https://pythondiscord.com/pages/code-jams/code-jam-6/](https://pythondiscord.com/pages/code-jams/code-jam-6/)
+---
+### Setup
+1. Clone or download this repository.
+2. Create a virtual environment in your terminal (e.g. `virtualenv venv`).
+3. Activate it (`source venv/bin/activate` or, on Windows, do `venv\Scripts\activate`. 
+4. Go to the top directory where `requirements.txt` lives and `pip install -r requirements.txt`.
+5. In terminal, run main.py by doing `python main.py` or `python3 main.py`
 
-- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+---
+### Tutorial
+In order to start decripting messages, you must first do two things: configure the rotors and the plugboard. In game, you are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper.
 
-## License
+![]()
 
-All projects will merged into our Code Jam repository, which uses the [MIT license](../LICENSE). Please make sure that if you add assets, the licenses of those assets are compatible with the MIT license.
+#### Rotors ####
+
+Configure the three rotors with the + and - buttons until they match with the instructions on the paper.
+
+#### Plugboard ####
+
+Click two ports to create a wire that connects both of them. These ports are labeled with letters. You must connect each letter with its respetive letter pair listed on the paper.
+
+![]()
+
+Once you have those configured, you are ready to decipher! Type the ciphertext listed on the paper into the textbox. If Autoinput is enabled (enabled by default), your mistakes will be ignored. Turn off Autoinput in settings for a challenge!
+
+Beware though, you only have a certain amount of time to decipher the message before the Allies capture you! Decipher the complete message to win the game!
+
+Note: If you have Autoinput off and mistype once, move the rotors back one input and continue typing from where you messed up (Remember, The Germans didn't have a backspace key).
+
+---
+### Settings (Defaults)
+- Fullscreen: Off
+- Autoinput the next, correct ciphertext letter: On
+- Musics: On
+- Sound effects: On 
+
+---
+### Background
+To gain the full experience, it's best to understand how the machine works. 
+- https://en.wikipedia.org/wiki/Enigma_machine
+- [Numberphile Video](https://www.youtube.com/watch?v=G2_Q9FoD-oQ)
+
+A diagram of the machine's internal functionality:
+![](https://i.pinimg.com/originals/67/cc/c3/67ccc3a33d6fbbf4b2738e167b5cfa37.png)
+
+---
+### LICENSE
+MIT License
+
+Authors: [Pancho](https://github.com/Franccisco), [YoomamaFTW](https://github.com/YoomamaFTW), [sloopoo](https://github.com/flextian)
