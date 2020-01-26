@@ -100,6 +100,7 @@ Builder.load_string('''
 
         Image: 
             size_hint: 1, 1
+            source: 'ui/img/morse_code_alphabet.png'
             
         MDLabel:
             id: tapping_prompt_label
@@ -170,7 +171,6 @@ class TappingScreen(Screen):
     def __init__(self, **kwargs):
         super(TappingScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
-        self.children[0].children[5].source = os.path.join('ui', 'img', 'morse_code_alphabet.png')
 
     def on_enter(self):
         Clock.schedule_once(self.init_tapping_screen, 0)
