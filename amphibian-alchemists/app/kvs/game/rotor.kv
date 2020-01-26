@@ -129,7 +129,6 @@
 
 <RotorModified@BoxLayout>:
     orientation: "vertical"
-    screen: root.parent.parent.parent.parent
     canvas:
         Color:
             rgb: 165 / 255, 165 / 255, 165 / 255
@@ -139,24 +138,15 @@
             pos: self.pos
     RelativeLayout:
         RotorButton:
-            id: up
             text: "+"
             pos_hint: {"center_x": 0.5, "top": 0.62}
-            on_release:
-                if rotor_value.index < len(root.screen.keys) - 1: setattr(rotor_value, "index", rotor_value.index + 1), setattr(down, "disabled", False)
+            disabled: True
     RelativeLayout:
         RotorLabel:
-            id: rotor_value
-            index: 0
             text: ""
-            on_index:
-                if self.index == len(root.screen.keys) - 1: setattr(up, "disabled", True)
-                elif self.index == 0: setattr(down, "disabled", True)
     RelativeLayout:
         RotorButton:
             id: down
             text: "-"
-            disabled: True
             pos_hint: {"center_x": 0.5, "top": 0.575}
-            on_release:
-                if rotor_value.index > 0: setattr(rotor_value, "index", rotor_value.index - 1), setattr(up, "disabled", False)
+            disabled: True
