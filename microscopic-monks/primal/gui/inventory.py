@@ -55,6 +55,7 @@ class Inventory:
         resource_dir = Path('.', 'primal', 'resources').absolute()
         try:
             f = open(resource_dir / "items.json")
+            f.close()
         except FileNotFoundError:
             resource_dir = Path('.', 'resources').absolute()
 
