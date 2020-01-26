@@ -1,5 +1,5 @@
 <TextPaper>
-
+<WhiteOut>
 <TypeWriter>
     canvas.before:
         Color:
@@ -31,15 +31,14 @@
             pos: self.pos
             size: self.size
             letters: []
-            fontsize: 11
+            fontsize: 20
             text: ''
             on_text: 
                 self.letters.append(Letter(self.text[-1], self.fontsize, 'assets/1942.ttf', self.colour)) if '_' not in self.text[-2:] else self.escaped()
             on_letters: self.update()
-        GestureSurface:
+        WhiteOut:
             size: self.size
             pos: self.pos
-            on_gesture_complete: print("\n".join(f'{k} {getattr(self, k)}' for k in self.properties()))
         Row1:
             id: q
 			txt: 'q'

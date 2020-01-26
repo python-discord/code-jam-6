@@ -10,8 +10,11 @@ from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
+from kivy.uix.gesturesurface import GestureSurface
 # from kivy.clock import Clock
 from kivy.properties import ListProperty, ObjectProperty, NumericProperty # noqa
+from kivy.graphics import (
+    Canvas, Translate, Fbo, ClearColor, ClearBuffers, Scale)
 from kivy.core.window import Window
 from kivy.animation import Animation
 from kivy.core.audio import SoundLoader
@@ -48,7 +51,7 @@ class TypeWriter(Popup):
         super().__init__(**kwargs)
         self.keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self.keyboard.bind(on_key_down=self._key_down)
-
+        print(self.keyboard.properties())
     def _key_down(self, keyboard, keycode, *args):
         punctuation = {';': 'semicolon', ':': 'colon', '#': 'enter', ' ': 'spacebar'}
         key = keycode[1]
@@ -95,6 +98,7 @@ class TextPaper(Image):
     """
     TypeWriter Paper
     """
+    whiteout = ObjectProperty(None)
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Creating Blank Paper image to type on.
@@ -159,6 +163,11 @@ class TextPaper(Image):
             self.y += self.font_size
             self.x = self.default_pos[0]
 
+    def on_whiteout(self, *args):
+        print(type(self.whiteout))
+        print(args)
+        print(Image.from_bytes(self.whiteout))
+
     def save(self):
         self.txt.save(f'{"".join(i.char for i in self.letters[:3])}.png')
 
@@ -167,6 +176,22 @@ class Pick(Popup):
     def __init__(self, typw, **kwargs):
         super().__init__(**kwargs)
         self.typw = typw
+
+
+class WhiteOut(GestureSurface):
+    def on_gesture_complete(self, gesture):
+        fbo = Fbo(size=self.size,
+            with_stencilbuffer=True)
+
+        with fbo:
+            ClearColor(0, 0, 0, 0)
+            ClearBuffers()
+            Scale(1, -1, 1)
+            Scale(1, 1, 1)
+            Translate(-self.x, -self.y - self.height, 0)
+        fbo.add(self.canvas)
+        fbo.draw()
+        self.parent.typw.whiteout = fbo.texture.pixels
 
 
 class PhoneButtons(Label):

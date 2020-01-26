@@ -22,8 +22,3 @@ class Letter:
     def get_kerning(self):
         """ gets dimensions as tuple(w,h) that it will be when rendered. """
         return self.font.getsize(self.char)
-        
-class WiteOut:
-    """ Witeout class- the little squiggle you have to do to erase words. """
-    def __init__(self):
-        pass
