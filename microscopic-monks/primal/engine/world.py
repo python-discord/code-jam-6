@@ -154,13 +154,22 @@ class Chunk:
         if self.type != 2:
             return
 
+        bushes = ['bushBB.png', 'bushBO.png', 'bushBP.png', 'bushBR.png', 'bushBY.png']
+        while random.randint(0, 3) != 1:
+            s = 65
+            angle = random.randint(0, 359)
+            sprite = random.choice(bushes)
+
+            self.chunk_features.add(
+                Feature(sprite, Chunk.get_random_position(self.pos), .1, (s, s), angle))
+
         while random.randint(0, 3) != 1:
             s = random.randint(150, 400)
             angle = random.randint(0, 359)
             sprite = 'topOfTree.png'
 
             self.chunk_features.add(
-                Feature(sprite, Chunk.get_random_position(self.pos), .1, (s, s), angle))
+                Feature(sprite, Chunk.get_random_position(self.pos), .2, (s, s), angle))
 
     def draw(self, terrain: Sprite):
         terrain.set_position(self.pos)
