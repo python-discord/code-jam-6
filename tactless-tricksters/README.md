@@ -17,7 +17,7 @@ Some features include:
 
 - an encoder screen that converts speech to morse code
 
-## Requirement
+## Requirements
 python 3.7+
 
 This app uses pyAudio a wrapper for portAudio a library used for audio playback and recording.
@@ -28,6 +28,10 @@ To install pyAudio on windows use:
 
 for other platform
 > pip install pyaudio
+
+- **Kivy:** [https://kivy.org/#home](https://kivy.org/#home)
+
+- **KivyMD:** [https://github.com/HeaTTheatR/KivyMD](KivyMD, Version 0.100.2)
 
 
 ## Useful links
