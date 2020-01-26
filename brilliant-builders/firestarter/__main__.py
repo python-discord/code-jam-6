@@ -26,7 +26,7 @@ class MyGame(Engine):
         self.add_sprite(self.hearts, static=True)
 
         # Player
-        self.player = Player(self.assets['player'], (50, 90))
+        self.player = Player(self.assets['player'], (50, 90), death_sound=self.sounds['death'])
         self.player.bind(lives=self.update_hearts)
         self.add_player(self.player)
 

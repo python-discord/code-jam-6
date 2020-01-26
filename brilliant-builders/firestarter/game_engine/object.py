@@ -6,6 +6,8 @@ from firestarter.game_engine.sprite import Sprite, SpriteConfig
 from kivy.properties import (
     NumericProperty, ReferenceListProperty)
 
+from simpleaudio import WaveObject
+
 
 class GenericObject(Sprite):
     def __init__(
@@ -124,11 +126,19 @@ class Player(Sprite):
     score = NumericProperty(0)
     lives = NumericProperty(5)
 
-    def __init__(self, config: SpriteConfig, pos: Tuple[int, int] = (0, 0), **kwargs) -> None:
+    def __init__(
+            self,
+            config: SpriteConfig,
+            pos: Tuple[int, int] = (0, 0),
+            death_sound: WaveObject = None,
+            **kwargs
+    ) -> None:
         super().__init__(config, pos, **kwargs)
         self.is_standing: bool = False
         self.checkpoint: Tuple[int, int] = pos
         self.respawn: Tuple[int, int] = pos
+
+        self.death_sound = death_sound
 
     def set_lives(self, value: int) -> None:
         """Set the players lives."""
@@ -182,6 +192,8 @@ class Player(Sprite):
         if self.pos[1] < 0:
             # we fell out of the map!
             self.lives -= 1
+            if self.death_sound:
+                self.death_sound.play()
             if self.lives > 0:
                 # respawn at the checkpoint
                 self.pos = self.checkpoint
