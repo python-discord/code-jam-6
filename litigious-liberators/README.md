@@ -40,7 +40,7 @@ Install dependencies
 ```
 ## Running the App:
 ```bash
-python main.py -m screen:phone_iphone_6_plus,portrait,scale=0.40
+python main.py 
 ```
 ## Using the App
 * Once you open the app, the game's backstory will be presented. You can __single-click__ to move to the next part of the story or __double-click__ to skip the entire story. 
