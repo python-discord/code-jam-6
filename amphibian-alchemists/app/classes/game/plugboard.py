@@ -43,7 +43,6 @@ class PlugboardScreen(Screen):
             self.all_plugged.append(instance.name)
             self.plug_reference.append(plug)
             if self.plugs_in_screen % 2 != 0:
-                self.manager.get_screen("game_screen").play_effect_sound("plug_in")
                 wire = Factory.Wire()
                 wire.points = [
                     *self.ids.plug_board.ids[self.all_plugged[-2]].center,
