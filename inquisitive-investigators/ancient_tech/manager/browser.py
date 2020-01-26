@@ -7,8 +7,11 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.recycleview import RecycleView
-from kivy.uix.recycleview.views import _cached_views, _view_base_cache
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
+from kivy.uix.recycleview.views import (
+    _cached_views, 
+    _view_base_cache
+) # These imports fixes this error: https://github.com/kivy/kivy/issues/5986
 from kivy.properties import (
     ObjectProperty,
     StringProperty
