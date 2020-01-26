@@ -158,14 +158,18 @@ class DialWidget(FloatLayout):
         try:
             today_sunrise = sun_time.get_sunrise_time(self.date)
         except SunTimeException:
-            if date(year=self.date.year, month=3, day=21) < self.date.date() < date(year=self.date.year, month=9, day=22):
+            if date(year=self.date.year, month=3, day=21)\
+                    < self.date.date()\
+                    < date(year=self.date.year, month=9, day=22):
                 return 0, 360
             return 0, 0
 
         try:
             today_sunset = sun_time.get_sunset_time(self.date)
         except SunTimeException:
-            if date(year=self.date.year, month=3, day=21) < self.date.date() < date(year=self.date.year, month=9, day=22):
+            if date(year=self.date.year, month=3, day=21)\
+                    < self.date.date()\
+                    < date(year=self.date.year, month=9, day=22):
                 return 0, 360
             return 0, 0
 
