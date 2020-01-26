@@ -194,6 +194,95 @@
     ]
   },
   {
+    "card_id": "low_food",
+    "card_type": "event",
+    "card_image": "test.jpg",
+    "conditions": {"player_food":  0.33},
+    "text": "You feel hungry.",
+    "options": [
+      {
+        "text": "Some sleep would be just fine.",
+        "outcomes": [
+          {
+            "weight": 1.0,
+            "next_card": "random",
+            "effects": {"player_food":  -0.1}
+          }
+        ]
+      },
+      {
+        "text": "Go for some fishing.",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "fishing"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "fishing",
+    "card_type": "response",
+    "card_image": "river.png",
+    "text": "On your way to get the fishing stick you see there's one pufferfish left in the bucket.",
+    "options": [
+      {
+        "text": "Food is food, eat it.",
+        "outcomes": [
+          {
+            "weight": 1.0,
+            "next_card": "pufferfish_sick"
+          }
+        ]
+      },
+      {
+        "text": "Go for some fishing.",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "fishing_river"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "pufferfish_sick",
+    "card_type": "response",
+    "card_image": "river.png",
+    "text": "Perhaps it would have been better to cook that week old pufferfish before eating.",
+    "options": [
+      {
+        "text": "Barf",
+        "outcomes": [
+          {
+            "weight": 1.0,
+            "next_card": "random",
+            "effects": {"player_food":  0.2, "player_health":  -0.2}
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "fishing_river",
+    "card_type": "response",
+    "card_image": "river.jpg",
+    "text": "You got to river safely.",
+    "options": [
+      {
+        "text": "Catch some fish",
+        "outcomes": [
+          {
+            "weight": 1,
+            "next_card": "random"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "card_id": "tribe_encounter_event",
     "card_type": "event",
     "card_image": "test.jpg",
