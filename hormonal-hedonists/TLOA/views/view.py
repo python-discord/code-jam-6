@@ -211,7 +211,7 @@ class GameView(Widget):
 
     def on_launch_cannon_ball(self, ship):
         x, y = ship.shape.pos
-        cannon_ball = Image(source=IMAGES_PATH.format('fire.zip'), pos=(x + 50, y + 50))
+        cannon_ball = Image(source=IMAGES_PATH.format('cannon_ball.png'), pos=(x + 50, y + 50))
         cannon_ball.size = cannon_ball.texture_size
 
         self.add_widget(cannon_ball)
