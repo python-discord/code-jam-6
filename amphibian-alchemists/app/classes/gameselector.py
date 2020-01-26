@@ -11,6 +11,9 @@ from kivy.uix.togglebutton import ToggleButton
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
 )
+CONFIG_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gameconfig.json")
+)
 
 
 class SelectableButton(RecycleDataViewBehavior, ToggleButton):
@@ -52,8 +55,12 @@ class GameSelectorScreen(Screen):
                 DATE_FORMAT = "%b %d %Y %H:%M:%S"
                 created = datetime.fromisoformat(str(game["created_date"]))
                 created = created.strftime(DATE_FORMAT)
-                last_saved = datetime.fromisoformat(str(game["last_saved_date"]))
-                last_saved = last_saved.strftime(DATE_FORMAT)
+                try:
+                    last_saved = datetime.fromisoformat(str(game["last_saved_date"]))
+                    last_saved = last_saved.strftime(DATE_FORMAT)
+                except ValueError:
+                    # Since last_saved_time is None to begin with
+                    last_saved = str(game["last_saved_date"]) or "None"
                 self.rv.data.append(
                     {
                         "text": f"{title}\n"
@@ -71,7 +78,15 @@ class GameSelectorScreen(Screen):
             "game_screen"
         ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
         self.manager.get_screen("plugboard_screen").clear_plugs()
-        self.manager.get_screen("game_screen").current_time = "60"
+
+        config_store = JsonStore(CONFIG_DIR)
+        if (
+            config_store.exists("auto_input")
+            and config_store.get("auto_input")["value"] == 0
+        ):
+            self.manager.get_screen("game_screen").current_time = "200"
+        else:
+            self.manager.get_screen("game_screen").current_time = "100"
 
         self.manager.current = "game_screen"
 
@@ -81,4 +96,15 @@ class GameSelectorScreen(Screen):
         self.manager.get_screen("plugboard_screen").load_plugs()
         self.manager.get_screen("game_screen").load_output_text()
 
+        # Setting up timer
+        store = JsonStore(DATA_DIR)
+        game_id = App.get_running_app().game_id
+        current_timer = store.get(str(game_id))["current_state"]["timer"]
+        self.manager.get_screen("game_screen").current_time = (
+            str(current_timer) or "200"
+        )
+        if self.manager.get_screen("game_screen").timer_clock:
+            self.manager.get_screen("game_screen").timer_clock()
+
+        # Switching to game screen with current config
         self.manager.current = "game_screen"

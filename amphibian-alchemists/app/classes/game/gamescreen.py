@@ -1,4 +1,5 @@
 import os
+import platform
 from datetime import datetime
 from random import sample
 from string import ascii_uppercase
@@ -40,6 +41,7 @@ def get_wiki_summary() -> str:
 
 
 def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> str:
+    """Gives encrypted text based on the param settings"""
     machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
@@ -80,8 +82,20 @@ def setup_new_game_settings():
     # Storing data
     rotors.append(None)
     rotors.append(None)
+    # If time allows, have 5 rotors with 3 available at one time
     text = get_wiki_summary()
     ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
+
+    # Check if auto input is on to decide timer based game
+    config_store = JsonStore(CONFIG_DIR)
+    timer = "100"  # Default for without
+    try:
+        if config_store.get("auto_input")["value"] == 0:
+            # Give more time for hardcore, no auto players
+            timer = "200"
+    except KeyError:
+        # Couldn't find setting. Set auto input enabled. Timer 100s
+        config_store.put("auto_input", value=1)
     store.put(
         game_id,
         game_title="Game {}".format(game_id),
@@ -90,44 +104,79 @@ def setup_new_game_settings():
         current_output_text="",
         last_saved_output_text="",
         created_date=datetime.now().isoformat(),
-        last_saved_date=datetime.now().isoformat(),
+        last_saved_date="None",
         encrypted_state={"reflector": "B", "rotors": rotor_setting, "plugs": plugs},
         current_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
             "plugs": [],
+            "timer": timer,
         },
         last_saved_state={
             "reflector": "B",
             "rotors": ["A", "A", "A", None, None],
             "plugs": [],
+            "timer": timer,
         },
     )
+
+
+def auto_input_processor(char: str) -> str:
+    """
+    Processes the next handled letter for auto-inputting
+    if directed by user from settings
+    """
+    config_store = JsonStore(CONFIG_DIR)
+    try:
+        if config_store.get("auto_input")["value"] == 1:
+            game_id = App.get_running_app().game_id
+            store = JsonStore(DATA_DIR)
+            game = store.get(str(game_id))
+            current_output_text = game["current_output_text"]
+            ciphered_text = game["ciphered_text"]
+            output = str(ciphered_text)[len(current_output_text)]
+            return output
+        else:
+            return char
+    except KeyError:
+        # If setting not found, start again and re-process
+        config_store.put("auto_input", value=1)
+        return auto_input_processor(char)
+    except IndexError:
+        # Game won or messed up and passed len(ciphertext).
+        # Nothing else to auto-input.
+        return char
 
 
 class EnigmaOutput(TextInput):
     def insert_text(self, substring, from_undo=False):
         if substring.upper() in App.get_running_app().keys:
-            # Autoinput
-            letter = substring.upper()
-            config_store = JsonStore(CONFIG_DIR)
-            try:
-                if config_store.get("auto_input")["value"] == 1:
-                    game_id = App.get_running_app().game_id
-                    store = JsonStore(DATA_DIR)
-                    game = store.get(str(game_id))
-                    current_output_text = game["current_output_text"]
-                    ciphered_text = game["ciphered_text"]
-                    letter = str(ciphered_text)[len(current_output_text)]
-            except KeyError:
-                config_store.put("auto_input", value=1)
+            # Auto input processing
+
+            letter = auto_input_processor(substring.upper())
             # Key press
             s = App.get_running_app().machine.key_press(letter)
+            # Save to avoid errors later on
+            game_id = App.get_running_app().game_id
+            store = JsonStore(DATA_DIR)
+            game = store.get(str(game_id))
+            current_output_text = game["current_output_text"]
+            store_put(current_output_text=current_output_text + s)
+
+            # Check win condition
+            game_id = App.get_running_app().game_id
+            store = JsonStore(DATA_DIR)
+            plaintext = store.get(str(game_id))["unciphered_text"]
+            if store.get(str(game_id))["current_output_text"] == plaintext:
+                App.get_running_app().root.get_screen("game_screen").timer_clock.cancel()
+                Factory.WinPopup().open()
+
             return super().insert_text(s, from_undo=from_undo)
 
 
 class GameScreen(Screen):
     current_time = StringProperty("")
+    timer_clock = None
 
     Builder.load_file("kvs/game/enigmakeyboard.kv")
 
@@ -176,6 +225,8 @@ class GameScreen(Screen):
         )
         sound.volume = volume
         sound.play()
+        if platform.system() in {"Linux", "Darwin"}:
+            Clock.schedule_once(lambda dt: sound.unload(), sound.length)
 
     if not os.path.exists(DATA_DIR):
         store = JsonStore(DATA_DIR)
@@ -189,7 +240,17 @@ class GameScreen(Screen):
         else:
             on_config_change()
 
-        self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
+        if not self.timer_clock:
+            self.timer_clock = Clock.schedule_interval(self.handle_timer, 1)
+        else:
+            self.timer_clock()
+
+    def on_leave(self):
+        if self.timer_clock and self.manager.current not in {
+            "rotor_screen",
+            "plugboard_screen",
+        }:
+            self.timer_clock.cancel()
 
     def _on_key_down(self, window, key, scancode, codepoint, modifiers):
         if (
@@ -204,9 +265,10 @@ class GameScreen(Screen):
 
     def handle_key(self, key):
         """
-        Here goes what we're gonna do whenever a key in the machine is pressed
+        ... whenever a key/letter in the machine
+        (keyboard or board_output) is pressed
         """
-
+        # Handle visuals
         self.play_effect_sound("keyboard_click")
 
         anim = Animation(_color=[1, 212 / 255, 42 / 255], duration=0.2) + Animation(
@@ -215,22 +277,11 @@ class GameScreen(Screen):
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
         # Auto-input invading key
-        letter = key.name  # Saving in case auto-input disabled
-        config_store = JsonStore(CONFIG_DIR)
-        try:
-            if config_store.get("auto_input")["value"] == 1:
-                game_id = App.get_running_app().game_id
-                store = JsonStore(DATA_DIR)
-                game = store.get(str(game_id))
-                current_output_text = game["current_output_text"]
-                ciphered_text = game["ciphered_text"]
-                letter = str(ciphered_text)[len(current_output_text)]
-        except KeyError:
-            config_store.put("auto_input", value=1)
+        letter = auto_input_processor(key.name)
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
             board_output.insert_text(letter)
-        store_put(current_output_text=board_output.text)
+
         # Updating rotors
         new_rotors = App.get_running_app().machine.get_display()
         save_rotors(new_rotors[0], new_rotors[1], new_rotors[2])
@@ -240,6 +291,7 @@ class GameScreen(Screen):
         rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
 
     def load_old_game(self):
+        """Loads old/saved (point) copy of game"""
         game_id = App.get_running_app().game_id
         store = JsonStore(DATA_DIR)
         game = store.get(str(game_id))
@@ -266,8 +318,19 @@ class GameScreen(Screen):
             store_put(game_title=title)
 
     def handle_timer(self, dt):
+        """
+        Handle timer during game
+        Init timer handled in gameselector and setup_new_game_settings
+        """
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        current_state = store.get(str(game_id))["current_state"]
+        # Timer logic
         if int(self.current_time) == 0:
             self.timer_clock.cancel()
             Factory.TimesUp().open()
         else:
             self.current_time = str(int(self.current_time) - 1)
+            # Save timer in data
+            current_state["timer"] = self.current_time
+            store_put(current_state=current_state)
