@@ -109,7 +109,7 @@ class FourthGridRow(BoxLayout):
         self.category_five = ButtonWithSound(
             text="Food", sound_file='sounds/button-press-whoosh.wav')
         self.category_six = ButtonWithSound(
-            text="Construction", sound_file='sounds/button-press-whoosh.wav')
+            text="Aviation", sound_file='sounds/button-press-whoosh.wav')
         self.category_seven = ButtonWithSound(
             text="Telecommunications",
             sound_file='sounds/button-press-whoosh.wav')
@@ -253,13 +253,10 @@ class PlayScreen(Screen):
         self.manager.current = screen_to
 
     def check_answer(self, pressed):
-        # print(
-        #     f" Selected answer {pressed.text}, when split {pressed.text.split(' ', 1)}, The category is {self.category} Checking question number {self.question_number}, The length of the category questions :> {len(self.category_questions)}"
-        # )
-
         if self.question_number == len(self.category_questions):
             # Also check answer for categories with 1 question or last question for others
-            if pressed.text.split(' ', 1)[1] == self.answer:
+            if pressed.text.split(' ', 1)[1].lower().replace(
+                    ' ', '') == self.answer.lower().replace(' ', ''):
                 # print("Correctly answered the question !")
                 # pressed.background_color = (0, 1, 0, .5)
                 self.runnig_score += 1
@@ -282,7 +279,8 @@ class PlayScreen(Screen):
             self.runnig_score = 0
         else:
             # Move to this screen again with refreshed data
-            if pressed.text.split()[1] == self.answer:
+            if pressed.text.split(' ', 1)[1].lower().replace(
+                    ' ', '') == self.answer.lower().replace(' ', ''):
                 # print("Correctly answered the question !")
                 self.runnig_score += 1
                 correct_sound.play()
