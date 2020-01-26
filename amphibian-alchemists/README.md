@@ -3,7 +3,7 @@ By: Amphibian Alchemists
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-The Enigma Machine from WWII is the most infamous encryption device of the era. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths before the Allies capture you.
+The WWII Enigma Machine is the most famous encryption device of the 20th Century, used by the Germans to send messages. Given a ciphered text from upper command, your job is to decipher the text and uncover some truths before the Allies capture you.
 
 Table of Contents:
 - Setup
