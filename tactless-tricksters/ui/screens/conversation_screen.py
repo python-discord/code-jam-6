@@ -77,8 +77,8 @@ class ConversationScreen(Screen):
         self.add_widget(layout)
         self.add_widget(text_input_anchor)
         self.add_widget(toolbar_anchor)
-
         self.do_layout()
+        scroll.scroll_y = 0
 
     def send_message(self, msg):
         print("Sending message:%s" % msg)
@@ -93,7 +93,7 @@ class ConversationScreen(Screen):
                 self.util.message_dict[result['receiver']].append(result)
             else:
                 self.util.message_dict[result['receiver']] = [result]
-            self.util.save_message_dict(self.util.message_dict)
+            self.util.save_message_dict(result['receiver'], self.util.message_dict)
             self.ui_layout(result['receiver'])
             self.util.reload_screen_layout('message')
             self.text_input.text = ''

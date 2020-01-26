@@ -101,7 +101,7 @@ class Utility(object):
         self.morse = Morse()
         # Temp debug data
         self.message_dict = {}
-        Clock.schedule_interval(self.update_messages, 10)
+        Clock.schedule_interval(self.update_messages, 1)
 
         if platform not in ['ios', 'android']:
             self.morse = Morse()
@@ -124,8 +124,11 @@ class Utility(object):
         with open(self.user_data_json, 'w') as fp:
             json.dump(self.user_data, fp)
 
-    def save_message_dict(self, msg_dict):
-        self.user_data['message_dict'] = msg_dict
+    def save_message_dict(self, user, msg_dict):
+        if user in self.user_data['message_dict'].keys():
+            self.user_data['message_dict'][user].append(msg_dict[user][0])
+        else:
+            self.user_data['message_dict'][user] = msg_dict[user]
         with open(self.user_data_json, 'w') as fp:
             json.dump(self.user_data, fp)
 
@@ -150,20 +153,24 @@ class Utility(object):
             print('No data')
             return
         if result:
+            print('Receiving Message')
             for res in result:
                 if res['sender'] == self.username:
-                    if res['receiver'] in self.message_dict.keys():
-                        if res not in self.message_dict[res['receiver']]:
+                    if res['receiver'] in self.user_data['message_dict'].keys():
+                        if res not in self.user_data['message_dict'][res['receiver']]:
                             self.message_dict[res['receiver']].append(res)
+                            self.save_message_dict(res['receiver'], res)
                     else:
-                        self.message_dict[res['receiver']] = [res]
+                        self.user_data['message_dict'][res['receiver']] = res
+                        self.save_message_dict(res['receiver'], res)
                 else:
-                    if res['receiver'] in self.message_dict.keys():
-                        if res not in self.message_dict[res['sender']]:
-                            self.message_dict[res['sender']].append(res)
+                    if res['receiver'] in self.user_data['message_dict'].keys():
+                        if res not in self.user_data['message_dict'][res['sender']]:
+                            self.user_data['message_dict'][res['sender']].append(res)
+                            self.save_message_dict(res['receiver'], res)
                     else:
-                        self.message_dict[res['sender']] = [res]
-            self.save_message_dict(self.message_dict)
+                        self.user_data['message_dict'][res['sender']] = [res]
+                        self.save_message_dict(res['receiver'], res)
 
 
     def morse_transmit_thread(self):
