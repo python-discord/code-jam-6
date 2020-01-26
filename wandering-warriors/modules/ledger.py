@@ -47,6 +47,7 @@ class Ledger(BoxLayout):
             print(f"[ WARNING ] Invalid operator: {op}")
         print(self.df.at[self.row, 'op'])
         self.df.at[self.row, 'op'] = op
+        self.parent.parent.children[1].set_value(self.df.at[self.row, 'x'])
         self.select('y')
         self.refresh_ledger()
 
@@ -78,7 +79,7 @@ class Ledger(BoxLayout):
 
     def refresh_ledger(self):
         """refresh ledger view with current data"""
-        # TODO: Reincorporate A5's cuneiform translator commented out below (untested)
+        # TODO: Reincorporate cuneiform translator commented out below (untested)
         rows = self.df.values.astype('str')
         self.rv.data = [
             {'value': row} for row in rows
