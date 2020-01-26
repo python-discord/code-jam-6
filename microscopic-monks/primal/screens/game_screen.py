@@ -137,7 +137,11 @@ class GameScreen(Screen):
             remove_features = set()
 
             for feature in features:
-                if feature.distance_to((pos_x, pos_y)) < 15_000 \
+                dst = 40 + feature.get_size()[0]
+                dst = (dst * dst) / 4
+                dst += 10_000
+
+                if feature.distance_to((pos_x, pos_y)) < dst \
                         and feature.collide_with((mx, my), (1, 1)):
                     feature.hit()
                     if feature.get_health() == 0:

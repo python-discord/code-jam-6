@@ -184,7 +184,7 @@ class Chunk:
                 Feature(sprite, Chunk.get_random_position(self.pos, s), 1.0, (s, s), angle))
 
         while random.randint(0, 3) != 1:
-            s = random.randint(150, 400)
+            s = random.randint(150, 280)
             angle = random.randint(0, 359)
             sprite = 'topOfTree.png'
 
