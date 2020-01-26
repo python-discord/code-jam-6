@@ -53,6 +53,8 @@ class SettingsScreen(Screen):
 
         if type(new_value) in {int, float} and (new_value >= 0 or new_value <= 1):
             self.store.put(to_save, value=new_value)
+            if to_save == "background_volume":
+                self.manager.get_screen("main_screen").music.volume = new_value
 
     def delete_saved_games(self, popup):
         JsonStore(DATA_DIR).clear()
