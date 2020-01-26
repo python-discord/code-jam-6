@@ -43,7 +43,7 @@ Install dependencies
 python main.py 
 ```
 ## Using the App
-* Once you open the app, the game's backstory will be presented. You can __single-click__ to move to the next part of the story or __double-click__ to skip the entire story. 
+* Once you open the app, the game's backstory will be presented. You can __double-click__ to skip the entire story. 
 * After that, you need to create your profile. Enter your name and answer few simple questions to determine your initial stats to move on to the next screen.
 * Here you will be playing the actual game. You will be presented a scenario/individual where you have to press __right/left (keyboard)__ based on the choices displayed on the screen. To know more about the card, you can __click on the picture__.
 * Your goal is to maximise all the three stats without any of them going empty. These stats might increase or decrease based on your choices
