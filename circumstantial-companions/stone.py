@@ -224,9 +224,15 @@ class Chisel(Widget):
 
     def save(self, path_to_file):
         _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
-        positions = [(x, y, z) for (x, y, z) in self.positions if y]
+        positions = []
+        colors = []
+        for (x, y, z), color in zip(self.positions, self.colors):
+            if y:
+                positions.append(x, y, z)
+                colors.append(color)
+
         pebble_dict = {'positions': positions,
-                       'colors': self.colors,
+                       'colors': colors,
                        'aspect': (pebbles_per_row, pebbles_per_column)}
         with open(path_to_file, 'w') as file:
             json.dump(pebble_dict, file)
