@@ -63,3 +63,5 @@ A diagram of the machine's internal functionality:
 ---
 ### LICENSE
 Apache 2.0 License
+
+Authors: [Pancho](https://github.com/Franccisco), [YoomamaFTW](https://github.com/YoomamaFTW), [sloopoo](https://github.com/flextian)
