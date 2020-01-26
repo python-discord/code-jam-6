@@ -68,8 +68,8 @@ class Sprite(Widget):
         """Redraw the rectangle after moving the sprite."""
         self.bg_rect.pos = self.pos
 
-    def update(self, *args) -> None:
-        raise NotImplementedError()
+    def update(self, other_sprites: List[Sprite]) -> None:
+        pass
 
     def on_cam_move(self, offset: Tuple[float, float]) -> None:
         self.pos = (self.pos[0] + offset[0], self.pos[1] + offset[1])
