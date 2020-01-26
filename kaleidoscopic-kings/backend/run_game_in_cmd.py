@@ -10,7 +10,8 @@ root_logger.addHandler(handler)
 newline = "\n"
 
 if __name__ == "__main__":
-    game = load_game()
+    game_name = "caveman"
+    game = load_game(game_name)
 
     card = game.start_game()
     for _ in range(10):
