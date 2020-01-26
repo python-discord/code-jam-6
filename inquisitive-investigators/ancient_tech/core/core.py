@@ -27,10 +27,10 @@ class Browser(FloatLayout, Controller):
         self, browser_side: str,
         state: int, files: List[str]
     ) -> None:
-        if browser == 'left':
+        if browser_side == 'left':
             browser = self.left_browser
 
-        elif browser == 'right':
+        elif browser_side == 'right':
             browser = self.right_browser
 
         else:

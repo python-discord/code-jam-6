@@ -1,12 +1,12 @@
 from __future__ import annotations
-from typing import Tuple, Union
+from typing import Tuple, Union, Any
 
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObservableList
 from kivy.core.window import Window, Keyboard
 
-from .commands import *
+from .commands import AboutPopup, EditPopup, Mkdir, CreatePopup, DeletePopup, QuitPopup
 
 Builder.load_file('./ancient_tech/footer/footer.kv')
 
@@ -63,7 +63,7 @@ class Footer(BoxLayout):
             self, key: str, *args: Any, **kwargs: Any
     ) -> Union[bool, None]:
         """
-        Calls the coresponding function to a specific key 
+        Calls the coresponding function to a specific key
         if it is defined within self.actions.
         """
         func = self.actions.get(key)

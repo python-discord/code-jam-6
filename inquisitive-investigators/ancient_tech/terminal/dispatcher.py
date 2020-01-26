@@ -1,5 +1,4 @@
 import subprocess
-from pathlib import Path
 from os import chdir, getcwd
 from typing import Any, List
 
@@ -15,10 +14,10 @@ class Shell(EventDispatcher):
 
     @threaded
     def run_cmd(
-        self, cmd: List[str], 
-        show_output: bool = True, 
-        *args: Any, **kwargs: Any
-        ) -> None:
+            self, cmd: List[str],
+            show_output: bool = True,
+            *args: Any, **kwargs: Any
+    ) -> None:
         """
         Runs a command inputted into the terminal
         on a separate thread.
@@ -32,19 +31,19 @@ class Shell(EventDispatcher):
                 self.dispatch('on_output', b'\nThe system cannot find the path specified.')
             else:
                 self.dispatch('on_cwd_change', getcwd())
-        
+
         else:
             self.process = subprocess.Popen(
-                cmd, stdout=subprocess.PIPE, 
+                cmd, stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 shell=True,
             )
 
             self.dispatch('on_output', b'\n')
             line_iter = iter(self.process.stdout.readline, b'')
-            
+
             if show_output:
-                for line in line_iter:  
+                for line in line_iter:
                     self.dispatch('on_output', line)
 
         self.dispatch('on_output', b'\n')

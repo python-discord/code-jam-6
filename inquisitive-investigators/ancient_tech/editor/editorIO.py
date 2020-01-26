@@ -4,7 +4,7 @@ from kivy.clock import Clock
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Keyboard
 from kivy.properties import (
-    StringProperty,    
+    StringProperty,
     ObservableList
 )
 
@@ -19,19 +19,19 @@ class EditorIO(TextInput):
         super(EditorIO, self).__init__(*args, **kwargs)
 
     def keyboard_on_key_down(
-            self, 
-            window: Keyboard, 
-            keycode: Tuple[int, str], 
-            text: str, 
+            self,
+            window: Keyboard,
+            keycode: Tuple[int, str],
+            text: str,
             modifiers: ObservableList
-        ):
+    ):
         """
         Captures specific key presses
         and executes accordingly.
         """
         if keycode[0] in KEYS['s'] and 'ctrl' in modifiers:
             popup = SavePopup(
-                self, size_hint=(.5, .5), 
+                self, size_hint=(.5, .5),
                 pos_hint={
                     'center_x': .5, 'center_y': .5
                 }
@@ -44,7 +44,7 @@ class EditorIO(TextInput):
             text.insert(self.cursor_index(), '\n')
             self.text = ''.join(text)
             Clock.schedule_once(self._focus)
-            
+
         elif keycode[0] in KEYS['esc']:
             self.root.manager.current = 'browser'
 

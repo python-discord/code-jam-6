@@ -31,7 +31,7 @@ class TerminalInput(TextInput):
 
     def init_terminal(self) -> None:
         """
-        Get the current working directory 
+        Get the current working directory
         and username for the terminal.
         """
         self.current = os.getcwd()
@@ -44,12 +44,12 @@ class TerminalInput(TextInput):
         self.prompt()
 
     def keyboard_on_key_down(
-            self, 
-            window: Keyboard, 
-            keycode: Tuple[int, str], 
-            text: str, 
+            self,
+            window: Keyboard,
+            keycode: Tuple[int, str],
+            text: str,
             modifiers: ObservableList
-        ) -> Union[None, bool]:
+    ) -> Union[None, bool]:
         """
         Captures specific key presses
         and executes accordingly.
@@ -77,9 +77,9 @@ class TerminalInput(TextInput):
         )
 
     def _run_cmd(
-            self, cmd: str, 
+            self, cmd: str,
             *args: Any, **kwargs: Any
-        ) -> None:
+    ) -> None:
         """
         Checks OS for posix and
         executes commands.
@@ -95,7 +95,7 @@ class TerminalInput(TextInput):
 
     def validate_cursor_pos(
             self, *args: Any, **kwargs: Any
-        ) -> None:
+    ) -> None:
         if self.cursor_index() < self._cursor_pos:
             self.cursor = self.get_cursor_from_index(
                 self._cursor_pos
@@ -106,8 +106,8 @@ class TerminalInput(TextInput):
         Prompts the user for an input.
         """
         at_info = (f'[{self.user}@{self.host} '
-            f'{os.path.basename(str(self.current))}]>'
-        )
+                   f'{os.path.basename(str(self.current))}]>'
+                   )
 
         self._cursor_pos = self.cursor_index() + len(at_info)
         self.text += at_info
