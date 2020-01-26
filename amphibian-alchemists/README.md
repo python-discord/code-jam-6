@@ -23,7 +23,7 @@ Table of Contents:
 ### Tutorial
 In order to start decripting messages, you must first do two things: configure the rotors and the plugboard. In game, you are given a piece of paper with the machine's configurations. Configure the rotors (top) and the plugboard (bottom) according to the paper.
 
-![]()
+![](amphibian-alchemists/readme_images/mainscreen.png)
 
 #### Rotors ####
 
