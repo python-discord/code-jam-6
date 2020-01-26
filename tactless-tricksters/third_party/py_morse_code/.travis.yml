@@ -1,0 +1,11 @@
+language: python
+python:
+    - "3.6"
+install:
+    - sudo apt-get install portaudio19-dev
+    - sudo apt-get install python-pyaudio python3-pyaudio
+    - pip install -r requirements.txt
+script:
+    - python tests.py
+notifications:
+  email: false

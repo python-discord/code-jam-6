@@ -1,0 +1,178 @@
+<TimesUp@Popup>:
+    title: "Time's up"
+    size_hint: 0.5, 0.5
+    auto_dismiss: False
+    on_open: app.root.get_screen("game_screen").ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus = False
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "You've been captured!"
+        BoxLayout:
+            size_hint_y: 0.2
+            Button:
+                text: "Try again"
+                on_release:
+                    app.root.current = "game_selector_screen"
+                    root.dismiss()
+            Button:
+                text: "Load Save Point"
+                on_release:
+                    app.root.get_screen("game_screen").load_old_game()
+                    root.dismiss()
+            Button:
+                text: "Back to main menu"
+                on_release:
+                    app.root.current = "main_screen"
+                    root.dismiss()
+
+<WinPopup@Popup>:
+    title: "Winner!"
+    size_hint: 0.8, 0.8
+    auto_dismiss: False
+    on_open: app.root.get_screen("game_screen").ids.enigma_keyboard.ids.lamp_board.ids.board_output.focus = False
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Congratulations!"
+        Label:
+            text: "You have " + app.root.get_screen("game_screen").current_time + "s remaining!"
+
+        BoxLayout:
+            size_hint_y: 0.2
+            Button:
+                text: "New game"
+                on_release:
+                    app.root.current = "game_selector_screen"
+                    root.dismiss()
+            Button:
+                text: "Back to main menu"
+                on_release:
+                    app.root.current = "main_screen"
+                    root.dismiss()
+
+<GameTitlePopup@Popup>:
+    title: "There is already a default"
+    size_hint: 0.5, 0.25
+    BoxLayout:
+        spacing: dp(5)
+        orientation: "vertical"
+        TextInput:
+            id: game_title_input
+            size_hint_y: None
+            height: self.minimum_height
+            multiline: False
+            hint_text: "Best game ever..."
+        BoxLayout:
+            Button:
+                text: "Save game title"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+                on_release:
+                    app.root.get_screen("game_screen").change_game_title(self, game_title_input.text)
+                    root.dismiss()
+            Button:
+                text: "Cancel"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+                on_release: root.dismiss()
+
+<GameMenuPopup@Popup>:
+    title: "Select..."
+    size_hint: 0.5, 0.5
+    BoxLayout:
+        orientation: "vertical"
+        Button:
+            text: "Give this current game a title"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release: Factory.GameTitlePopup().open()
+        Button:
+            text: "Save a copy of current progress"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release:
+                app.root.get_screen("game_screen").save_game()
+                root.dismiss()
+        Button:
+            text: "Load old copy (WARNING: Overrides current progress!)"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release:
+                app.root.get_screen("game_screen").load_old_game()
+                root.dismiss()
+        Button:
+            text: "Close"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+            on_release:
+                root.dismiss()
+        Button:
+            text: "Exit to Main Menu"
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+            on_release:
+                app.root.current = "main_screen"
+                root.dismiss()
+
+<Timer@AnchorLayout>:
+    anchor_x: "left"
+    anchor_y: "bottom"
+    padding: dp(10)
+    screen: root.parent
+    BoxLayout:
+        canvas.before:
+            Color:
+                rgba: 1, 1, 1, 1
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+                width: 2
+        canvas:
+            Color:
+                rgba: 0, 0, 0, 1
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        orientation: "vertical"
+        size_hint: 0.1, 0.1
+        Label:
+            text: "Time:"
+        Label:
+            id: time_remaining
+            color: 1, 1, 1, 1
+            text: root.screen.current_time
+            on_text: self.color = [1, 1, 1, 1] if int(self.text) > 10 else [1, 0, 0, 1]
+
+<GameScreen>:
+    name: "game_screen"
+    AnchorLayout:
+        anchor_y: "top"
+        padding: dp(10)
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_x: 0.75
+            RelativeLayout:
+                size_hint_y: 0.575
+                RotorDisplay:
+                Button:
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                    background_color: 0, 0, 0, 0
+                    on_release: root.manager.current = "rotor_screen"
+            EnigmaKeyboard:
+                id: enigma_keyboard
+            RelativeLayout:
+                size_hint_y: 0.2
+                PlugBoardModified:
+                    canvas.before:
+                        Color:
+                            rgba: 16 / 255, 16 / 255, 16 / 255, 1
+                        RoundedRectangle:
+                            pos: self.pos
+                            size: self.size
+                Button:
+                    on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                    background_color: 0, 0, 0, 0
+                    on_release: root.manager.current = "plugboard_screen"
+    AnchorLayout:
+        anchor_y : "top"
+        anchor_x : "left"
+        Button:
+            text: "Menu"
+            size_hint: 0.1, 0.1
+            on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+            on_release: Factory.GameMenuPopup().open()
+    Timer:
+        id: timer
+    CheckPaper:

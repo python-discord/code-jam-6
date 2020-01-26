@@ -90,6 +90,9 @@ ENV/
 env.bak/
 venv.bak/
 
+# Pipenv
+Pipfile.lock
+
 # Spyder project settings
 .spyderproject
 .spyproject
@@ -109,4 +112,8 @@ venv.bak/
 # JetBrains IDE
 .idea/
 *.db
+.DS_Store
+tags
 
+#Jess
+microscopic-monks/primal/resources/bushBase.png

@@ -1,0 +1,116 @@
+# Chinese (Traditional, Taiwan) translations for PROJECT.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-01-26 20:32+0800\n"
+"PO-Revision-Date: 2020-01-24 04:38+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: zh_Hant_TW\n"
+"Language-Team: zh_Hant_TW <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: main.py:122
+msgid "Cancel"
+msgstr "取消"
+
+#: main.py:131
+msgid "An error has occured."
+msgstr "發生錯誤。"
+
+#: main.py:137
+msgid "Loading..."
+msgstr "加載中..."
+
+#: main.py:169 main.py:197
+msgid "Please select a file."
+msgstr "請選擇文件。"
+
+#: main.py:189
+msgid "Import from {path}"
+msgstr "從 {path} 導入"
+
+#: main.py:194
+msgid "Open \"{filename}\""
+msgstr "打開“{filename}”"
+
+#: main.py:205
+msgid "Importing the project."
+msgstr "正在導入計劃。"
+
+#: main.py:212
+msgid "The file could not be loaded."
+msgstr "無法加載文件。"
+
+#: main.py:227
+msgid "(with background)"
+msgstr "（包括背景）"
+
+#: main.py:228
+msgid "(transparent)"
+msgstr "（透明）"
+
+#: main.py:230
+msgid "All"
+msgstr "全部"
+
+#: main.py:246 main.py:329
+msgid "Select file type"
+msgstr "選擇文件種類"
+
+#: main.py:250
+msgid "Please select a file type."
+msgstr "請選擇文件種類。"
+
+#: main.py:289
+msgid "Save to {path}"
+msgstr "在 {path} 保存"
+
+#: main.py:317
+msgid "Save as \"{filename}\""
+msgstr "保存為“{filename}”"
+
+#: main.py:323
+msgid ""
+"The file could not be saved due to an error raised by the operating "
+"system.\n"
+"Common issue: Illegal characters in the file name."
+msgstr "由於操作系統所引起的錯誤，無法保存文件。\n"
+"常見問題：文件名含有非法符號。"
+
+#: main.py:402
+msgid "Options"
+msgstr "設定"
+
+#: main.py:410 main.py:481
+msgid "Select language"
+msgstr "選擇語言"
+
+#: main.py:417
+msgid "Import..."
+msgstr "導入..."
+
+#: main.py:424
+msgid "Save as..."
+msgstr "保存為..."
+
+#: main.py:431
+msgid "Reset"
+msgstr "重置"
+
+#: main.py:438
+msgid "Source code"
+msgstr "源代碼"
+
+#: main.py:487
+msgid "Resetting the canvas."
+msgstr "正在重置畫布。"
+

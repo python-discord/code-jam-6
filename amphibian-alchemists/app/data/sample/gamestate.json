@@ -1,0 +1,61 @@
+{
+  "latest_game_id": {"id": null},
+  "1": {
+    "ciphered_text": "asdfjhalskjdfhasdjf",
+    "unciphered_text": "Hello",
+    "current_output_text": "",
+    "encrypted_state": {
+      "reflector": "B",
+      "rotors": [
+        "N", "W", "B", null, null
+      ],
+      "plugs": [
+        "AB",
+        "CD",
+        "EF",
+        "GH",
+        "IJ",
+        "KL",
+        "MN",
+        "OP",
+        "QR",
+        "ST"
+      ]
+    },
+    "current_state": {
+      "rotors": [
+        "A", "A", "A", null, null
+      ],
+      "plugs": [
+        "AB",
+        "CD",
+        "EF",
+        "GH",
+        "IJ",
+        "KL",
+        "MN",
+        "OP",
+        "QR",
+        "ST"
+      ]
+    },
+    "last_saved_state": {
+      "rotors": [
+        "A", "A", "A", null, null
+      ],
+      "plugs": [
+        "AB",
+        "CD",
+        "EF",
+        "GH",
+        "IJ",
+        "KL",
+        "MN",
+        "OP",
+        "QR",
+        "ST"
+      ]
+    }
+  },
+  "2": {}
+}
