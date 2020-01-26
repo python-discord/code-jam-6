@@ -1,4 +1,3 @@
-import random
 from typing import Any
 
 from firestarter.game_engine.engine import Engine
@@ -13,12 +12,15 @@ from firestarter.game_engine.object import (
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.uix.image import Image
 
 
 class MyGame(Engine):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+
+        # Background
+        self.background = GenericObject(self.assets['background'], (0, 0))
+        self.add_sprite(self.background, static=True)
 
         # UI
         self.hearts = PlayerUiHeart(self.assets['hearts'], (0, self.height))
