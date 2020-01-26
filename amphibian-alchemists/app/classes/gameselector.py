@@ -72,7 +72,6 @@ class GameSelectorScreen(Screen):
             self.rv.data = [{"text": self.no_saved_games}]
 
     def new_game(self):
-
         App.get_running_app().game_id = None
         self.manager.get_screen("rotor_screen").reset_rotors()
         self.manager.get_screen(
@@ -81,7 +80,6 @@ class GameSelectorScreen(Screen):
         self.manager.get_screen("plugboard_screen").clear_plugs()
 
         config_store = JsonStore(CONFIG_DIR)
-
         if (
             config_store.exists("auto_input")
             and config_store.get("auto_input")["value"] == 0

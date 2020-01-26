@@ -1,5 +1,4 @@
 import os
-import random
 from datetime import datetime
 from random import sample
 from string import ascii_uppercase
@@ -106,11 +105,12 @@ def setup_new_game_settings():
     )
 
 
-def auto_input_processor(char) -> str:
+def auto_input_processor(char: str) -> str:
     """
     Processes the next handled letter for auto-inputting
-     if directed by user from settings
-     """
+    if directed by user from settings
+    """
+    print("Char", char)
     config_store = JsonStore(CONFIG_DIR)
     try:
         if config_store.get("auto_input")["value"] == 1:
@@ -121,6 +121,8 @@ def auto_input_processor(char) -> str:
             ciphered_text = game["ciphered_text"]
             output = str(ciphered_text)[len(current_output_text)]
             return output
+        else:
+            return char
     except KeyError:
         # If setting not found, start again and re-process
         config_store.put("auto_input", value=1)
@@ -128,6 +130,7 @@ def auto_input_processor(char) -> str:
     except IndexError:
         # Game won or messed up and passed len(ciphertext).
         # Nothing else to auto-input.
+        print("Index Error", char)
         return char
 
 
@@ -233,8 +236,7 @@ class GameScreen(Screen):
         anim.start(self.ids.enigma_keyboard.ids.lamp_board.ids.lamp)
 
         # Auto-input invading key
-        letter = key.name  # Saving in case auto-input disabled
-        letter = auto_input_processor(letter)
+        letter = auto_input_processor(key.name)
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
         if not board_output.focus:
             board_output.insert_text(letter)
