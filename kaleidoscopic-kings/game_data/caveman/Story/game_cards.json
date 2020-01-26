@@ -81,20 +81,20 @@
     "card_id": "dino_kick",
     "card_type": "event",
     "card_image": "test.jpg",
-    "text": "Uh, this is a test card. There's a dinosaur, do you kick it?",
+    "text": "You're minding your own business, and whats this? There's a dinosaur, do you kick it?",
     "options": [
       {
         "text": "He's in my way, I'll sort 'im right out!",
         "outcomes": [
           {
-            "weight": 0.5,
+            "weight": 0.7,
             "next_card": "random",
             "effects": {
               "player_health": -0.3
             }
           },
           {
-            "weight": 0.5,
+            "weight": 0.3,
             "next_card": "dino_kick_friendly"
           }
         ]
@@ -146,8 +146,6 @@
     "options": [
       {
         "text": "Take a trip to river.",
-
-
         "outcomes": [
           {
             "weight": 0.4,
@@ -275,17 +273,66 @@
     ]
   },
   {
-    "card_id": "game_over",
-    "card_type": "game_over",
+    "card_id": "tribe_confrontation",
+    "card_type": "event",
     "card_image": "test.jpg",
-    "text": "You have lost!",
+    "text": "When out hunting, you see an odd looking dinosaur in the distance. This isn't just a run of the mill Rex",
+    "conditions": {
+      "world_encountered_dinosaur": true,
+      "world_found_tribe": true
+    },
     "options": [
       {
-        "text": "Unfortunate",
+        "text": "Let's see whats what",
         "outcomes": [
           {
+            "next_card": "mechasaurus",
             "weight": 1,
-            "next_card": "random"
+            "effects": {
+              "world_encountered_dinosaur": true
+            }
+          }
+        ]
+      },
+      {
+        "text": "Haha - not falling for that",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "card_id": "mechasaurus",
+    "card_type": "response",
+    "card_image": "mechasaurus.png",
+    "text": "A giant shiny super hard T-Rex. For some reason the name \"mechasaurus\" seems to fit",
+    "options": [
+      {
+        "text": "I think I've seen quite enough. I've got to go tell Gary about this",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_civility": 0.1
+            }
+          }
+        ]
+      },
+      {
+        "text": "Lets go say hi",
+        "outcomes": [
+          {
+            "next_card": "random",
+            "weight": 1,
+            "effects": {
+              "player_health": -0.7,
+              "player_civility": 0.7
+            }
           }
         ]
       }
