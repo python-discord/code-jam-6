@@ -9,15 +9,15 @@ from functools import partial
 lorem = ""
 sentences = [
     "It's the year 12020 CE...",
-    """Civilization has fallen, after humans caused their own demise as they tried to
-    interfere with the natural order of things thousands of years ago """,
-    """Experiments with prehistoric animals DNA, race to the ultimate doomsday's
-    weapon and total neglect of the Global Warming...""",
+    """Civilization has fallen, after humans caused their own demise as they tried to"""
+    """ interfere with the natural order of things thousands of years ago """,
+    """Experiments with prehistoric animals DNA, race to the ultimate doomsday's"""
+    """ weapon and total neglect of the Global Warming...""",
     "Today, flora and fauna from all ages flourish, treading the ruins of an ancient civilization.",
-    """Some humans survived against all odds, striving to rebuild what was lost,
-    but without lost knowledge and wisdom it seems hopeless.""",
-    """You are one of these humans. Will you be the one cunning and smart enough to tip
-    the scales or will your ignorance careless attitude ruin everything?""",
+    """Some humans survived against all odds, striving to rebuild what was lost,"""
+    """ but without lost knowledge and wisdom it seems hopeless.""",
+    """You are one of these humans. Will you be the one cunning and smart enough to tip"""
+    """ the scales or will your ignorance careless attitude ruin everything?""",
     "Only time will tell.",
 ]
 # images = [
