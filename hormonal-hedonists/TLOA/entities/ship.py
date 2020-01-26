@@ -1,19 +1,30 @@
 from TLOA.core.constants import LANE_BOUNDS
 from TLOA.entities import MovingEntity
 
+from kivy.clock import Clock
+
 
 class BrownShip(MovingEntity):
     id = 'brown_ship'
 
-    def __init__(self, lane_id, health=100, velocity=(-1, 0), **kwargs):
+    def __init__(self, lane_id, health=100, velocity=(-10, 0), **kwargs):
         super().__init__(health=health, velocity=velocity, **kwargs)
         self.lane_id = lane_id
         self.is_anchored = False
+        self.register_event_type('on_launch_cannon_ball')
+        self._has_launched = False
+
+    def on_launch_cannon_ball(self, ship):
+        pass
+
+    def reload(self):
+        self._has_launched = False
 
     def step(self, dt, game):
-        if self.is_anchored:
-            game.health -= 10
-            self.health = 0
+        if self.is_anchored and not self._has_launched:
+            self._has_launched = True
+            self.dispatch('on_launch_cannon_ball')
+            Clock.schedule_once(lambda _: self.reload(), 5)
         else:
             x_stop = LANE_BOUNDS[self.lane_id][0]
             if self.shape.x > x_stop:
