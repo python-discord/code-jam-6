@@ -1,0 +1,120 @@
+<DeleteSaves@Popup>:
+    size_hint: 0.5, 0.5
+    title: "Are you sure?"
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text_size: self.parent.width, None
+            size: self.texture_size
+            halign: "center"
+            valign: "center"
+            text: "Doing this will result in all your progress being deleted."
+        BoxLayout:
+            size_hint: 0.4, 0.2
+            pos_hint: {"center_x": 0.5}
+            spacing: dp(10)
+            Button:
+                text: "Confirm"
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('button_1')
+                    app.root.get_screen("settings_screen").delete_saved_games(root)
+            Button:
+                text: "Cancel"
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('button_2')
+                    root.dismiss()
+
+<SoundSlider@Slider>:
+    min: 0
+    max: 100
+    value: self.max
+    step: 1
+
+<SoundSliderLayout@BoxLayout>:
+    orientation: "vertical"
+    size_hint: 0.5, 0.3
+    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+
+<SettingTabLayout@GridLayout>:
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 1
+        Line:
+            rectangle: self.x, self.y, self.width, self.height
+            width: 2
+    canvas:
+        Color:
+            rgba: 120 / 255, 68 / 255, 33 / 255, 1
+        Rectangle:
+            size: self.size
+            pos: self.pos
+    cols: 2
+
+<CheckBox@ToggleButtonBehavior+Image>:
+    on_state:
+        self.source = "atlas://data/images/defaulttheme/checkbox_on" if self.state == "down" else "atlas://data/images/defaulttheme/checkbox_off"
+
+<SettingsScreen>:
+    name: "settings_screen"
+    AnchorLayout:
+        anchor_x: "left"
+        anchor_y: "top"
+        Button:
+            size_hint: 0.1, 0.1
+            text: "Go Back"
+            on_release:
+                app.root.get_screen('game_screen').play_effect_sound('swoosh')
+                root.manager.current = "main_screen"
+    AnchorLayout:
+        TabbedPanel:
+            size_hint: 0.7, 0.7
+            do_default_tab: False
+            TabbedPanelItem:
+                on_press: app.root.get_screen('game_screen').play_effect_sound('pop')
+                text: "General"
+                SettingTabLayout:
+                    BoxLayout:
+                        orientation: "vertical"
+                        Label:
+                            text: "Automatically input the correct text"
+                        Label:
+                            text: "Saved games:"
+                    BoxLayout:
+                        orientation: "vertical"
+                        CheckBox:
+                            id: auto_input
+                            on_state: root.save_settings("auto_input")
+                        RelativeLayout:
+                            Button:
+                                size_hint: 0.4, 0.4
+                                pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                                text: "Delete"
+                                on_release:
+                                    app.root.get_screen('game_screen').play_effect_sound('button_1')
+                                    Factory.DeleteSaves().open()
+            TabbedPanelItem:
+                text: "Sound"
+                on_press: app.root.get_screen('game_screen').play_effect_sound('pop')
+                SettingTabLayout:
+                    BoxLayout:
+                        orientation: "vertical"
+                        Label:
+                            text: "Background music volume"
+                        Label:
+                            text: "Sound effects volume"
+                    BoxLayout:
+                        orientation: "vertical"
+                        RelativeLayout:
+                            SoundSliderLayout:
+                                SoundSlider:
+                                    id: background_volume
+                                    on_value: root.save_settings("background_volume")
+                                Label:
+                                    text: str(background_volume.value) if background_volume.value != 0 else "Muted"
+                        RelativeLayout:
+                            SoundSliderLayout:
+                                SoundSlider:
+                                    id: effects_volume
+                                    on_value: root.save_settings("effects_volume")
+                                Label:
+                                    text: str(effects_volume.value) if effects_volume.value != 0 else "Muted"

@@ -1,0 +1,49 @@
+<MenuButton@Button>:
+<ConfirmationPopup@Popup>:
+    title: "Confirm exit"
+    size_hint: 0.5, 0.5
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Are you sure you want to exit?"
+        BoxLayout:
+            size_hint_y: 0.3
+            orientation: "horizontal"
+            Button:
+                text: "Yes"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+                on_release: app.stop()
+            Button:
+                text: "No"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_2")
+                on_release: root.dismiss()
+
+<MainScreen>:
+    name: "main_screen"
+    AnchorLayout:
+        BoxLayout:
+            orientation: "vertical"
+            size_hint: 0.5, 0.5
+            GridLayout:
+                pos_hint: {"center_x": 0.5}
+                size_hint_x: 0.35
+                cols: 2
+                Image:
+                    source: app.icon
+                Label:
+                    text: "[b]Elusive Enigmas[/b]"
+                    font_size: "25dp"
+                    markup: True
+            Widget:
+            MenuButton:
+                text: "Start"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                on_release: root.manager.current = "game_selector_screen"
+            MenuButton:
+                text: "Settings"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
+                on_release: root.manager.current = "settings_screen"
+            MenuButton:
+                text: "Exit"
+                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+                on_release: Factory.ConfirmationPopup().open()
