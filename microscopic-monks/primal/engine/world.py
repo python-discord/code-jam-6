@@ -155,7 +155,7 @@ class Chunk:
             return
 
         bushes = ['bushBB.png', 'bushBO.png', 'bushBP.png', 'bushBR.png', 'bushBY.png']
-        while random.randint(0, 3) != 1:
+        while random.randint(0, 1) != 1:
             s = 65
             angle = random.randint(0, 359)
             sprite = random.choice(bushes)
