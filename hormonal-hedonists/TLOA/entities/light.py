@@ -54,9 +54,9 @@ class LightRays(Mesh):
             vertex4 = vertex4 + self.point
 
             self.vertices.extend([vertex1.x, vertex1.y, vertex2.x, vertex2.y])
-            self.vertices.extend([vertex2.x, vertex2.y, vertex4.x, vertex4.y])
-            self.vertices.extend([vertex4.x, vertex4.y, vertex3.x, vertex3.y])
-            self.vertices.extend([vertex3.x, vertex3.y, vertex1.x, vertex1.y])
+            self.vertices.extend([vertex2.x, vertex2.y, vertex3.x, vertex3.y])
+            self.vertices.extend([vertex3.x, vertex3.y, vertex4.x, vertex4.y])
+            self.vertices.extend([vertex4.x, vertex4.y, vertex1.x, vertex1.y])
 
             self.color = Color(
                 LIGHT_COLOR_MAX_RED,
