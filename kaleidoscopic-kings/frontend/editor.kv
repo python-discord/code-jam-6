@@ -96,16 +96,11 @@ WindowManager:
         rows: 3
 
         ScrollView:
+            id: game_states_scroll_list
             height: root.height * 0.88
             size_hint_y: None
             do_scroll_x: False
             do_scroll_y: True
-
-            Label:
-                size_hint_y: None
-                height: self.texture_size[1]
-                text:
-                    'Placeholder text\n' * 100
 
         GridLayout:
             cols: 3
@@ -114,6 +109,7 @@ WindowManager:
             height: root.height * 0.06
 
             TextInput:
+                id: state_name_key
                 size_hint_x: None
                 width: 600
                 hint_text: 'State key name (please use snake_case)'
@@ -121,6 +117,8 @@ WindowManager:
 
             Button:
                 text: 'Add state'
+                on_release:
+                    root.wtf(root.ids)
 
             Button:
                 text: 'Remove state'
@@ -132,6 +130,7 @@ WindowManager:
             height: root.height * 0.06
 
             TextInput:
+                id: value
                 hint_text: 'State value (int, float, bool)'
                 multiline: False
 
