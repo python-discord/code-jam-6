@@ -15,6 +15,8 @@ class _Keycodes:
             'c':          99,
             'x':          120,
             's':          115,
+            '+':          43,
+            '-':          45
         }
 
     def __getitem__(self, items: Union[str, Tuple]) -> List[int]:

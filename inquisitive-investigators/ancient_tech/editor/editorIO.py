@@ -1,6 +1,7 @@
 from typing import Any, Tuple
 
 from kivy.clock import Clock
+from kivy.uix.scatterlayout import ScatterLayout
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Keyboard
 from kivy.properties import (
@@ -50,6 +51,15 @@ class EditorIO(TextInput):
 
         elif keycode[0] in KEYS['del', 'backspace']:
             self.cancel_selection()
+
+        elif keycode[0] in KEYS['+'] and 'ctrl' in modifiers:
+            print(f'Zoom in:{self.font_size}')
+            self.font_size += 1
+
+        elif keycode[0] in KEYS['-'] and 'ctrl' in modifiers:
+            print(f'Zoom out:{self.font_size}')
+            if self.font_size > 0:
+                self.font_size -= 1
 
         return super(EditorIO, self).keyboard_on_key_down(
             window, keycode, text, modifiers
