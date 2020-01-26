@@ -1,5 +1,4 @@
 import operator as op
-import sys
 from re import sub
 from typing import List, Union, Callable, Dict, TypeVar, Any
 

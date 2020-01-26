@@ -4,6 +4,7 @@ from shutil import copytree, copy2 as copy
 PathType = type(BasePath())
 PathCopy = 'project.core.path.Path'
 
+
 class Path(PathType):
     def copy(self, destination: BasePath) -> None:
         if self.is_dir():
