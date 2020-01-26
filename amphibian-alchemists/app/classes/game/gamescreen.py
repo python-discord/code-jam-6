@@ -193,7 +193,7 @@ class GameScreen(Screen):
                 game = store.get(str(game_id))
                 current_output_text = game["current_output_text"]
                 ciphered_text = game["ciphered_text"]
-                letter = str(ciphered_text)[len(current_output_text) - 1]
+                letter = str(ciphered_text)[len(current_output_text)]
         except KeyError:
             config_store.put("autoinput", value=1)
         board_output = self.ids.enigma_keyboard.ids.lamp_board.ids.board_output
