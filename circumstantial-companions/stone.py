@@ -224,7 +224,8 @@ class Chisel(Widget):
 
     def save(self, path_to_file):
         _, pebbles_per_row, pebbles_per_column = CURRENT_IMAGE
-        pebble_dict = {'positions': self.positions,
+        positions = [(x, y, z) for (x, y, z) in self.positions if y]
+        pebble_dict = {'positions': positions,
                        'colors': self.colors,
                        'aspect': (pebbles_per_row, pebbles_per_column)}
         with open(path_to_file, 'w') as file:
