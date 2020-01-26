@@ -162,6 +162,15 @@ class EnigmaOutput(TextInput):
             game = store.get(str(game_id))
             current_output_text = game["current_output_text"]
             store_put(current_output_text=current_output_text + s)
+
+            # Check win condition
+            game_id = App.get_running_app().game_id
+            store = JsonStore(DATA_DIR)
+            plaintext = store.get(str(game_id))["unciphered_text"]
+            if store.get(str(game_id))["current_output_text"] == plaintext:
+                App.get_running_app().root.get_screen("game_screen").timer_clock.cancel()
+                Factory.WinPopup().open()
+
             return super().insert_text(s, from_undo=from_undo)
 
 
@@ -280,14 +289,6 @@ class GameScreen(Screen):
         rotor_screen.rotor_section.ids.first_rotor.rotor_value.text = new_rotors[0]
         rotor_screen.rotor_section.ids.second_rotor.rotor_value.text = new_rotors[1]
         rotor_screen.rotor_section.ids.third_rotor.rotor_value.text = new_rotors[2]
-
-        # Check win condition
-        game_id = App.get_running_app().game_id
-        store = JsonStore(DATA_DIR)
-        plaintext = store.get(str(game_id))["unciphered_text"]
-        if self.ids.enigma_keyboard.ids.lamp_board.ids.board_output.text == plaintext:
-            self.timer_clock.cancel()
-            Factory.WinPopup().open()
 
     def load_old_game(self):
         """Loads old/saved (point) copy of game"""
