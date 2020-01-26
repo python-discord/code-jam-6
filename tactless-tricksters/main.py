@@ -15,16 +15,13 @@ from ui.screens.contacts_screen import ContactScreen
 from ui.screens.conversation_screen import ConversationScreen
 from ui.screens.decoder_screen import DecoderScreen
 from ui.screens.encoder_screen import EncoderScreen
+from ui.screens.listening_training_screen import ListeningScreen
 from ui.screens.message_screen import MessageScreen
+from ui.screens.sign_in_screen import SignInScreen
 from ui.screens.tapping_training_screen import TappingScreen
 # Project imports
 from ui.screens.training_menu_screen import TrainingMenuScreen
 from ui.screens.welcome_screen import WelcomeScreen
-from ui.screens.listening_training_screen import ListeningScreen
-from ui.screens.contacts_screen import ContactScreen
-from ui.screens.add_contact_screen import AddContactScreen
-from ui.screens.calibration_screen import CalibrationScreen
-from ui.screens.sign_in_screen import SignInScreen
 from util.utility import Utility
 
 gc.disable()

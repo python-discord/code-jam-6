@@ -30,7 +30,7 @@ Builder.load_string('''
             anchor_title: 'center'
             md_bg_color: app.theme_cls.primary_color
             left_action_items: [["arrow-left", lambda x: root.return_home()]]
-            
+
     FloatLayout:
         size_hint: .8, .65
         pos_hint: {'center_x': 0.5, 'center_y': .45}
@@ -41,7 +41,7 @@ Builder.load_string('''
                 size: self.size
                 pos: self.pos
                 radius: [dp(10)]
-                
+
         BoxLayout:
             size_hint: .8, .8
             orientation: 'vertical'

@@ -53,7 +53,8 @@ class ConversationScreen(Screen):
                     pos_hint = {'center_x': 0.7}
                     md_bg_color = [1, 1, 1, 0.6]
                     text_color = [0, 0, 0, 1]
-                message_label = MDLabel(text=message['message'], font_style='Caption', size_hint=(1, None))
+                message_label = MDLabel(text=message['message'],
+                                        font_style='Caption', size_hint=(1, None))
                 if '_' not in message_label.text:
                     self.util.morse.read(words=str(message_label.text))
                     message_label.text = self.util.morse.morse
@@ -85,7 +86,6 @@ class ConversationScreen(Screen):
         scroll.add_widget(scroll_box)
         layout.add_widget(scroll)
 
-
         self.text_input = MDTextFieldRound()
         # Hides left icon
         self.text_input.icon_left_dasabled = True
@@ -96,7 +96,8 @@ class ConversationScreen(Screen):
         self.text_input.children[2].children[0].bind(
             on_press=lambda x: self.send_message(self.text_input.text))
 
-        self.long_press_btn = LongpressButton(text_input_cb=self.text_input_cb, size=(dp(50), dp(1)), size_hint=(3, None))
+        self.long_press_btn = LongpressButton(text_input_cb=self.text_input_cb,
+                                              size=(dp(50), dp(1)), size_hint=(3, None))
 
         input_box_horz = BoxLayout(orientation='horizontal')
         input_box_horz.add_widget(MDLabel(text='', size_hint=(0.05, None)))
@@ -106,7 +107,8 @@ class ConversationScreen(Screen):
         text_input_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom', padding=dp(65))
         text_input_anchor.add_widget(self.text_input)
 
-        tap_input_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom', size_hint=(1, 0.1), padding=dp(15))
+        tap_input_anchor = AnchorLayout(anchor_x='center', anchor_y='bottom',
+                                        size_hint=(1, 0.1), padding=dp(15))
         tap_input_anchor.add_widget(input_box_horz)
 
         toolbar_anchor = AnchorLayout(anchor_x='center', anchor_y='top')

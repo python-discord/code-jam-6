@@ -25,7 +25,7 @@ Builder.load_string("""
             size: self.size
             source: 'ui/img/morse_code_bg.jpg'
             tex_coords: root.tex_coords
-        
+
     FloatLayout:
         size_hint: .65, .65
         pos_hint: {'center_x': 0.5, 'center_y': .5}
@@ -36,17 +36,17 @@ Builder.load_string("""
                 size: self.size
                 pos: self.pos
                 radius: [dp(10)]
-        
+
         BoxLayout:
             size_hint: .8, .8
             orientation: 'vertical'
             pos_hint: {'center_x': 0.5, 'center_y': .5}
-            
+
             Image:
                 source: 'ui/img/welcome_morse_code.png'
                 size_hint_y: .3
                 allow_stretch: True
-                
+
             Widget:
                 size_hint_y: .1
 
@@ -67,7 +67,7 @@ Builder.load_string("""
                     size_hint_x: 1
                     on_press:
                         root.manager.current = 'encode'
-            
+
                 WelcomeButton:
                     text: 'Train'
                     icon: 'dumbbell'
@@ -95,7 +95,7 @@ Builder.load_string("""
                     size_hint_x: 1
                     on_press:
                         root.manager.current = 'message'
-                        if app.util.auth_token == '': \ 
+                        if app.util.auth_token == '': \
                         root.manager.current = 'sign_in'
 
 """)
