@@ -51,7 +51,6 @@ class TypeWriter(Popup):
         super().__init__(**kwargs)
         self.keyboard = Window.request_keyboard(self._keyboard_closed, self)
         self.keyboard.bind(on_key_down=self._key_down)
-        print(self.keyboard.properties())
     def _key_down(self, keyboard, keycode, *args):
         punctuation = {';': 'semicolon', ':': 'colon', '#': 'enter', ' ': 'spacebar'}
         key = keycode[1]
@@ -164,9 +163,12 @@ class TextPaper(Image):
             self.x = self.default_pos[0]
 
     def on_whiteout(self, *args):
-        print(type(self.whiteout))
-        print(args)
-        print(Image.from_bytes(self.whiteout))
+        data = BytesIO()
+        self.txt.paste(self.whiteout, (0,0), self.whiteout)
+        self.txt.save(data, format='png')
+        data.seek(0)
+        im = CoreImage(BytesIO(data.read()), ext='png')
+        self.texture = im.texture
 
     def save(self):
         self.txt.save(f'{"".join(i.char for i in self.letters[:3])}.png')
@@ -182,7 +184,6 @@ class WhiteOut(GestureSurface):
     def on_gesture_complete(self, gesture):
         fbo = Fbo(size=self.size,
             with_stencilbuffer=True)
-
         with fbo:
             ClearColor(0, 0, 0, 0)
             ClearBuffers()
@@ -191,7 +192,7 @@ class WhiteOut(GestureSurface):
             Translate(-self.x, -self.y - self.height, 0)
         fbo.add(self.canvas)
         fbo.draw()
-        self.parent.typw.whiteout = fbo.texture.pixels
+        self.parent.typw.whiteout = Im.frombytes('RGBA', tuple(map(int, self.size)), fbo.texture.pixels)
 
 
 class PhoneButtons(Label):
