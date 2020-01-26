@@ -3,20 +3,26 @@ import pandas as pd
 
 
 class Ledger(BoxLayout):
+    """
+    Ledger data structure:
+    x: first number in equation (float)
+    y: second number in equation (float)
+    op: operator ['+', "-", '*', '/'] (str)
+    z: result (float)
+    """
+
     def __init__(self, **kwargs):
         super(Ledger, self).__init__(**kwargs)
-        print('[ INIT LEDGER ]')
-        self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
         self.col = 'x'
         self.row = 1
-        self.new_row()
-
+        self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
+        self.df.loc[1] = {'x': 0, 'y': 0, 'op': '', 'z': 0}
         self.clear_button_src = 'assets/graphics/clear.png'
 
     def select(self, col: str):
-        """select column: ['x', 'y', 'z']"""
-        if col not in ['x', 'y', 'z']:
-            print(f"WARNING: Invalid column: {col}")
+        """select active column"""
+        if col not in ['x', 'y', 'op', 'z']:
+            print(f"[ WARNING ] Invalid column: {col}")
             pass
         else:
             self.col = col
@@ -33,28 +39,49 @@ class Ledger(BoxLayout):
             self.df.at[self.row, self.col] /= n
         if op == '=':
             self.df.at[self.row, self.col] = n
-        print(self.df)
-        self.update_ledger()
+        self.refresh_ledger()
 
-    def new_row(self):
+    def operation(self, op: str):
+        """update operator column of current row and advance selection"""
+        if op not in ['+', '-', '*', '/']:
+            print(f"[ WARNING ] Invalid operator: {op}")
+        print(self.df.at[self.row, 'op'])
+        self.df.at[self.row, 'op'] = op
+        self.select('y')
+        self.refresh_ledger()
+
+    def get_row(self) -> dict:
+        """return all values from active row"""
+        return self.df.loc[self.row].to_dict()
+
+    def submit_row(self):
         """add and select new row at bottom of ledger"""
-        index = len(self.df.index) + 1
-        self.df.loc[index] = {'x': 0, 'y': 0, 'op': None, 'z': 0}
-        self.row = index
-        self.col = 'x'
-        print(self.df)
+        self.col = 'z'
+        # TODO: execute equation if possible and store result z
+        print(self.df.loc[self.row])
+        self.new_row()
 
-    def update_ledger(self):
-        """update ledger view with current data"""
+    def refresh_ledger(self):
+        """refresh ledger view with current data"""
+        # TODO: Reincorporate A5's cuneiform translator commented out below (untested)
         rows = self.df.values.astype('str')
-        print(f"ROWS: {rows}")
-        print(f"ids: {self.ids}")
         self.rv.data = [
             {'value': row} for row in rows
         ]
 
+    def new_row(self):
+        """add and select new row at bottom of ledger"""
+        index = len(self.df.index) + 1
+        self.df.loc[index] = {'x': 0, 'y': 0, 'op': '', 'z': 0}
+        self.row = index
+        self.col = 'x'
+        self.refresh_ledger()
+        self.get_row()
+
     def clear(self):
-        self.rv.data = []
+        """clear ledger and backing dataframe"""
+        self.df = pd.DataFrame(columns=['x', 'y', 'op', 'z'])
+        self.new_row()
 
     # def add_cuneiform(self, b10_number: int):
     #     # turn into an [b10, b10, b10], each at max 60

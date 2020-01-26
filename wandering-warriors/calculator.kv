@@ -87,11 +87,6 @@
             source: 'assets/graphics/sandstone.jpg'
     rv: rv
     orientation: 'vertical'
-    BoxLayout:
-        size_hint_y: None
-        height: dp(36)
-        padding: dp(8)
-        spacing: dp(8)
     RecycleView:
         id: rv
         scroll_type: ['bars', 'content']
@@ -99,7 +94,7 @@
         bar_width: dp(10)
         viewclass: 'LedgerRow'
         RecycleBoxLayout:
-            default_size: None, dp(56)
+            default_size: None, dp(48)
             default_size_hint: 1, None
             size_hint_y: None
             height: self.minimum_height
@@ -123,7 +118,7 @@
         Button:
             pos_hint: {'x': 0, 'top': 1}
             background_color: 1, .1, .1, 0
-            on_release: self.parent.parent.send_operation('plus')
+            on_release: self.parent.parent.parent.children[2].operation('+')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -132,7 +127,7 @@
         Button:
             pos_hint:  {'x': 0, 'top':4/5}
             background_color: 1, .1, .1, 0
-            on_release: self.parent.parent.send_operation('minus')
+            on_release: self.parent.parent.parent.children[2].operation('-')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -141,7 +136,7 @@
         Button:
             pos_hint: {'x': 0, 'top': 3/5}
             background_color: 1, .1, .1, 0
-            on_release: self.parent.parent.send_operation('times')
+            on_release: self.parent.parent.parent.children[2].operation('*')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -150,7 +145,7 @@
         Button:
             pos_hint: {'x': 0, 'top': 2/5}
             background_color: 1, .1, .1, 0
-            on_release: self.parent.parent.send_operation('divide')
+            on_release: self.parent.parent.parent.children[2].operation('/')
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
@@ -159,7 +154,7 @@
         Button:
             pos_hint: {'x': 0, 'top': 1/5}
             background_color: 1, .1, .1, 0
-            on_release: self.parent.parent.parent.children[2].next_line()
+            on_release: self.parent.parent.parent.children[2].submit_row()
             Image:
                 pos: self.parent.pos
                 size: self.parent.size
