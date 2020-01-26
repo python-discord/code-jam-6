@@ -11,7 +11,7 @@ WindowManager:
         rows: 1
 
         ScrollView:
-            height: 600
+            height: root.height
             size_hint_y: None
             do_scroll_x: False
             do_scroll_y: True
@@ -22,8 +22,6 @@ WindowManager:
                 padding: 10, 10
                 text:
                     'Placeholder card text\n' * 100
-
-
 
         GridLayout:
             cols: 2
@@ -42,6 +40,8 @@ WindowManager:
                 font_size: 12
                 hint_text: 'sound filename with extension (optional)'
                 multiline: False
+                on_double_tap:
+                    root.preview_sound(self.text)
 
             TextInput:
                 size_hint_y: None
@@ -54,8 +54,10 @@ WindowManager:
                 size_hint_y: None
                 height: 30
                 font_size: 12
-                hint_text: 'image filename with extension (right click preview)'
+                hint_text: 'image filename with extension (double click preview)'
                 multiline: False
+                on_double_tap:
+                    root.preview_image(self.text)
 
             TextInput:
                 hint_text: 'options json'
@@ -94,7 +96,7 @@ WindowManager:
         rows: 3
 
         ScrollView:
-            height: 400
+            height: root.height * 0.88
             size_hint_y: None
             do_scroll_x: False
             do_scroll_y: True
@@ -102,7 +104,6 @@ WindowManager:
             Label:
                 size_hint_y: None
                 height: self.texture_size[1]
-                padding: 10, 10
                 text:
                     'Placeholder text\n' * 100
 
@@ -110,12 +111,11 @@ WindowManager:
             cols: 3
             rows: 1
             size_hint_y: None
-            height: 40
+            height: root.height * 0.06
 
             TextInput:
                 size_hint_x: None
                 width: 600
-                padding: 10, 10
                 hint_text: 'State key name (please use snake_case)'
                 multiline: False
 
@@ -129,19 +129,14 @@ WindowManager:
             cols: 2
             rows: 1
             size_hint_y: None
-            height: 40
+            height: root.height * 0.06
 
             TextInput:
-                size_hint_y: None
-                height: 40
-                padding: 10, 10
                 hint_text: 'State value (int, float, bool)'
                 multiline: False
 
             Button:
                 text: 'Back to card screen'
-                size_hint_y: None
-                height: 40
                 on_release:
                     app.root.current = "card_add"
                     root.manager.transition.direction = "left"
