@@ -27,11 +27,11 @@ In order to start decripting messages, you must first do two things: configure t
 
 ![]()
 
-## Rotors ##
+#### Rotors ####
 
 Configure the three rotors with the + and - buttons until they match with the instructions on the paper.
 
-## Plugboard ##
+#### Plugboard ####
 
 Click two ports to create a wire that connects both of them. These ports are labeled with letters. You must connect each letter with its respetive letter pair listed on the paper.
 
