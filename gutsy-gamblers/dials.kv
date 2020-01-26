@@ -125,3 +125,22 @@
             angle_start: root.sun_two_angle_start
             angle_end: root.sun_two_angle_stop
             pos: 0, 0
+
+<SeasonDial>:
+    dial_file: ''
+    dial_size: (0, 0)
+
+    canvas.before:
+		PushMatrix
+		Rotate:
+			angle: root.angle
+			axis: 0, 0, 1
+			origin: (self.width / 2, self.height / 2)
+
+	canvas.after:
+		PopMatrix
+
+	Image:
+	    source: root.dial_file
+		size_hint: root.dial_size
+		pos_hint: {'center_x': 0.5, 'center_y': 0.5}

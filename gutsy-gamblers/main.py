@@ -17,7 +17,8 @@ from kivy.uix.screenmanager import Screen, ScreenManager
 import datahelpers
 from dials import (
     DialWidget,
-    NowMarker
+    NowMarker,
+    SeasonDial
 )
 
 kivy.require('1.11.1')
@@ -51,9 +52,11 @@ class MainScreen(Screen):
 
         self.dial_widget = DialWidget(latlon_point=pt)
         self.now_marker = NowMarker()
+        self.season_dial = SeasonDial()
 
         self.add_widget(self.dial_widget)
         self.add_widget(self.now_marker)
+        self.add_widget(self.season_dial)
 
         # workaround for kivy's LIFO draw order
         if settings_modal is not None:

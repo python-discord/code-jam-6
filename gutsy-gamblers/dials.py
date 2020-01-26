@@ -314,3 +314,31 @@ class SunSetMarker(FloatLayout):
 
 class NowMarker(FloatLayout):
     pass
+
+
+class SeasonDial(FloatLayout):
+    """
+    An smaller dial layered on top of the sundial to indicate the season.
+    """
+    angle = NumericProperty(0)
+
+    def __init__(self, **kwargs):
+        super(SeasonDial, self).__init__(**kwargs)
+
+        self.dial_file = 'assets/dial.png'
+        self.dial_size = 0.4, 0.4
+        self.day_length = 86400
+        self.set_season_angle()  # will this work?
+
+        anim = Animation(angle=360, duration=self.day_length * 365.25)
+        anim += Animation(angle=360, duration=self.day_length * 365.25)
+        anim.repeat = True
+        anim.start(self)
+
+    def on_angle(self, item, angle):
+        if angle == 360:
+            item.angle = 0
+
+    def set_season_angle(self):
+        test_date = date.today()
+        self.angle = round(360 / 365.25 * test_date.timetuple().tm_yday)
