@@ -6,6 +6,6 @@ Features
 
 - A built in terminal? yeah we were suprised too! be able to change directories and even commit your own project to github!
 
-- A built in editor too! What did you just want to look at your files, see what it was like to edit files back in the old'n days!
+- A built in editor too! What, did you just want to look at your files. See what it was like to edit files back in the old'n days!
 
 - Create files and directories to utilize with the built in editor, terminal and file explorer.

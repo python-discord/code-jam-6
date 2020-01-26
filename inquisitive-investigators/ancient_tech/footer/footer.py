@@ -106,7 +106,8 @@ class Footer(BoxLayout):
         return True
 
     def copy(self):
-        print(1)
+
+        pass
 
     def mkdir(self) -> None:
         popup = Mkdir(
