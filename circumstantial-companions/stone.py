@@ -91,6 +91,8 @@ class Pebble:
     def __init__(self, index, stone, x, y, z, velocity):
         self.index = index
         self.stone = stone
+        self.pos = stone.positions[index]
+        self.pixel = stone.pixels[index]
         self.x, self.y, self.z = x, y, z
         self.velocity = velocity
         self.update = Clock.schedule_interval(self.step, 0)
@@ -115,11 +117,10 @@ class Pebble:
         self.update_canvas()
 
     def update_canvas(self):
+        x, y = self.pos[:-1] = self.x, self.y
         stone = self.stone
-        stone.positions[self.index] = x, y, _ = self.x, self.y, self.z
         scaled_x, scaled_y = x * stone.width, y * stone.height
-        stone.pixels[self.index].pos = scaled_x, scaled_y
-        stone.pixels[self.index].size = stone.pebble_size
+        self.pixel.pos = scaled_x, scaled_y
 
         if not self.y:
             self.update.cancel()
@@ -160,7 +161,7 @@ class Chisel(Widget):
                 for x, y, (r, g, b, a) in pebble_setup():
                     scaled_x = x * self.width
                     scaled_y = y * self.height
-                    self.positions.append((x, y, depth))
+                    self.positions.append([x, y, depth])
 
                     color = color_scale * r, color_scale * g, color_scale * b, a
                     self.rgba.append(color)
@@ -177,11 +178,11 @@ class Chisel(Widget):
         self.background.pos = self.pos
         self.background.size = self.size
         self.pebble_size = size = self.get_pebble_size()
-        for i, (x, y, z) in enumerate(self.positions):
+        for pixel, (x, y, z) in zip(self.pixels, self.positions):
             scaled_x = x * self.width
             scaled_y = y * self.height
-            self.pixels[i].pos = scaled_x, scaled_y
-            self.pixels[i].size = size
+            pixel.pos = scaled_x, scaled_y
+            pixel.size = size
 
     def poke_power(self, tx, ty, touch_velocity, pebble_x, pebble_y):
         """
@@ -235,7 +236,7 @@ class Chisel(Widget):
         colors = []
         for (x, y, z), color in zip(self.positions, self.rgba):
             if y:
-                positions.append((x, y, z))
+                positions.append([x, y, z])
                 colors.append(color)
 
         pebble_dict = {'positions': positions,
