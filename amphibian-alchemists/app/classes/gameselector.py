@@ -11,6 +11,9 @@ from kivy.uix.togglebutton import ToggleButton
 DATA_DIR = os.path.join(
     App.get_running_app().APP_DIR, os.path.normcase("data/gamestate.json")
 )
+CONFIG_DIR = os.path.join(
+    App.get_running_app().APP_DIR, os.path.normcase("data/gameconfig.json")
+)
 
 
 class SelectableButton(RecycleDataViewBehavior, ToggleButton):
@@ -65,13 +68,20 @@ class GameSelectorScreen(Screen):
             self.rv.data = [{"text": self.no_saved_games}]
 
     def new_game(self):
+
         App.get_running_app().game_id = None
         self.manager.get_screen("rotor_screen").reset_rotors()
         self.manager.get_screen(
             "game_screen"
         ).ids.enigma_keyboard.ids.lamp_board.ids.board_output.text = ""
         self.manager.get_screen("plugboard_screen").clear_plugs()
-        self.manager.get_screen("game_screen").current_time = "60"
+
+        configs = JsonStore(CONFIG_DIR)
+
+        if configs.exists("auto_input") and configs.get("auto_input")["value"] == 0:
+            self.manager.get_screen("game_screen").current_time = "200"
+        else:
+            self.manager.get_screen("game_screen").current_time = "100"
 
         self.manager.current = "game_screen"
 
