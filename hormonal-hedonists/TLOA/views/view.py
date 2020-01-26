@@ -4,7 +4,9 @@ from random import randint
 
 from TLOA.core.game import Game
 from TLOA.core.constants import (ATLAS_PATH, IMAGES_PATH, KEY_MAPPING, WINDOW_WIDTH, FONT_PATH,
-                                 WINDOW_HEIGHT, LANE_BOUNDS)
+                                 WINDOW_HEIGHT, LANE_BOUNDS, LIGHT_COLOR_MAX_RED,
+                                LIGHT_COLOR_MAX_GREEN, LIGHT_COLOR_MAX_BLUE,
+                                LIGHT_COLOR_MAX_ALPHA)
 from TLOA.entities import BrownShip
 from TLOA.views import ShipView, PauseMenuView
 
@@ -19,6 +21,7 @@ from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.popup import Popup
 from kivy.storage.jsonstore import JsonStore
+from kivy.graphics import Color
 
 
 class GameView(Widget):
@@ -145,7 +148,18 @@ class GameView(Widget):
             self.canvas.add(self._game.sun_rays)
 
             # Change the color and display the death sun rays on the canvas
-            self.canvas.add(self._game.death_rays.color)
+            if self._game.death_rays.target:
+                self.canvas.add(Color(
+                    LIGHT_COLOR_MAX_RED,
+                    LIGHT_COLOR_MAX_GREEN,
+                    LIGHT_COLOR_MAX_BLUE,
+                    LIGHT_COLOR_MAX_ALPHA*1.50))
+            else:
+                self.canvas.add(Color(
+                    LIGHT_COLOR_MAX_RED,
+                    LIGHT_COLOR_MAX_GREEN,
+                    LIGHT_COLOR_MAX_BLUE,
+                    LIGHT_COLOR_MAX_ALPHA*0.5))
             self.canvas.add(self._game.death_rays)
 
         # Add the Health Bar for the Castle/Island

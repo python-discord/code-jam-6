@@ -18,7 +18,7 @@ class LightRays(Mesh):
             LIGHT_COLOR_MAX_RED,
             LIGHT_COLOR_MAX_GREEN,
             LIGHT_COLOR_MAX_BLUE,
-            LIGHT_COLOR_MAX_ALPHA*1.5)
+            LIGHT_COLOR_MAX_ALPHA)
         self.vertices = []
         self.indices = []
         self.mode = 'triangle_fan'
@@ -43,20 +43,7 @@ class LightRays(Mesh):
             self.vertices.extend([vertex1.x, vertex1.y, vertex2.x, vertex2.y])
             self.vertices.extend([vertex2.x, vertex2.y, self.point.x, self.point.y])
 
-            # Make the light beam less transperant when no target is available
-            self.color = Color(
-                LIGHT_COLOR_MAX_RED,
-                LIGHT_COLOR_MAX_GREEN,
-                LIGHT_COLOR_MAX_BLUE,
-                LIGHT_COLOR_MAX_ALPHA)
         else:
-            # Make the light beam more transperant when no target is available
-            self.color = Color(
-                LIGHT_COLOR_MAX_RED,
-                LIGHT_COLOR_MAX_GREEN,
-                LIGHT_COLOR_MAX_BLUE,
-                LIGHT_COLOR_MAX_ALPHA*0.4)
-
             # Make the light beam non-pointed when no target available
             self.indices = [0, 1, 2, 3]
             vertex1, vertex2, vertex3, vertex4 = self.mirror[1:]
