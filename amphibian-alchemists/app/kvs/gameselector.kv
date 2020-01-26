@@ -3,12 +3,6 @@
 
 <GameSelectorScreen>:
     name: "game_selector_screen"
-    canvas:
-        Color:
-            rgba: 135 / 255, 73 / 255, 31 / 255, 1
-        Rectangle:
-            size: self.size
-            pos: self.pos
     rv: rv
     AnchorLayout:
         anchor_y: "top"
@@ -18,14 +12,19 @@
             spacing: dp(16)
             Button:
                 text: "Go back"
-                on_release: root.manager.current = "main_screen"
+                on_release:
+                    root.manager.current = "main_screen"
+                    app.root.get_screen('game_screen').play_effect_sound('swoosh')
             Button:
                 text: "Load game"
                 disabled: not root.last_selected
+                on_press: app.root.get_screen('game_screen').play_effect_sound('swoosh')
                 on_release: if root.last_selected: root.load_game(root.last_selected.index)
             Button:
                 text: "New game"
-                on_release: root.new_game()
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('swoosh')
+                    root.new_game()
 
     AnchorLayout:
         RecycleView:

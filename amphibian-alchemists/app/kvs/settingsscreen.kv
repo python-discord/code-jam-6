@@ -15,10 +15,14 @@
             spacing: dp(10)
             Button:
                 text: "Confirm"
-                on_release: app.root.get_screen("settings_screen").delete_saved_games(root)
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('button_1')
+                    app.root.get_screen("settings_screen").delete_saved_games(root)
             Button:
                 text: "Cancel"
-                on_release: root.dismiss()
+                on_release:
+                    app.root.get_screen('game_screen').play_effect_sound('button_2')
+                    root.dismiss()
 
 <SoundSlider@Slider>:
     min: 0
@@ -58,12 +62,15 @@
         Button:
             size_hint: 0.1, 0.1
             text: "Go Back"
-            on_release: root.manager.current = "main_screen"
+            on_release:
+                app.root.get_screen('game_screen').play_effect_sound('swoosh')
+                root.manager.current = "main_screen"
     AnchorLayout:
         TabbedPanel:
             size_hint: 0.7, 0.7
             do_default_tab: False
             TabbedPanelItem:
+                on_press: app.root.get_screen('game_screen').play_effect_sound('pop')
                 text: "General"
                 SettingTabLayout:
                     BoxLayout:
@@ -82,9 +89,12 @@
                                 size_hint: 0.4, 0.4
                                 pos_hint: {"center_x": 0.5, "center_y": 0.5}
                                 text: "Delete"
-                                on_release: Factory.DeleteSaves().open()
+                                on_release:
+                                    app.root.get_screen('game_screen').play_effect_sound('button_1')
+                                    Factory.DeleteSaves().open()
             TabbedPanelItem:
                 text: "Sound"
+                on_press: app.root.get_screen('game_screen').play_effect_sound('pop')
                 SettingTabLayout:
                     BoxLayout:
                         orientation: "vertical"

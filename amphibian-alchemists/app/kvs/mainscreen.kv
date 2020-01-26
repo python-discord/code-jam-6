@@ -31,7 +31,7 @@
                 Image:
                     source: app.icon
                 Label:
-                    text: "[b]Elusive Enigma[/b]"
+                    text: "[b]Elusive Enigmas[/b]"
                     font_size: "25dp"
                     markup: True
             Widget:
@@ -41,7 +41,7 @@
                 on_release: root.manager.current = "game_selector_screen"
             MenuButton:
                 text: "Settings"
-                on_press: app.root.get_screen("game_screen").play_effect_sound("button_1")
+                on_press: app.root.get_screen("game_screen").play_effect_sound("swoosh")
                 on_release: root.manager.current = "settings_screen"
             MenuButton:
                 text: "Exit"
