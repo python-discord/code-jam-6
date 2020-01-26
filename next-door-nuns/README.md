@@ -1,6 +1,17 @@
 # Next-Door Nuns
 
-Please use this README to document your team's project. Make sure to include a general description, information on how to set-up and run your project, and anything else you think may be interesting for a README. The README is usually the first document people read when they visit a project on GitHub, so it's a good idea to make it appealing.
+This is a cannon game, in which you can adjust the cannon's velocity and angle parameters to fire a cannon ball at the
+Python Discord logo target.  After running the application, you can follow these steps:
+1) Enter a velocity (Greater than 0)
+2) Click Submit
+3) Enter Angle (from 0-90 degrees)
+4) Click Submit
+5) Click fire!
+
+The cannonball will then fire, and if the target is hit, an indication will pop up and another target will be
+randomly generated. 
+
+To change the velocity or angle, just enter a new value in the window and click submit. Then click fire again to fire the cannonball at the target.
 
 ## Useful links
 
