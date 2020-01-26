@@ -40,6 +40,7 @@ def get_wiki_summary() -> str:
 
 
 def get_encrypted_text(text: str, rotor_settings: str, plug_settings: str) -> str:
+    """Gives encrypted text based on the param settings"""
     machine = EnigmaMachine.from_key_sheet(
         rotors="I II III",
         reflector="B",
@@ -80,6 +81,7 @@ def setup_new_game_settings():
     # Storing data
     rotors.append(None)
     rotors.append(None)
+    # If time allows, have 5 rotors with 3 available at one time
     text = get_wiki_summary()
     ciphered_text = get_encrypted_text(text, rotor_setting, plug_settings)
 
@@ -297,8 +299,19 @@ class GameScreen(Screen):
             store_put(game_title=title)
 
     def handle_timer(self, dt):
+        """
+        Handle timer during game
+        Init timer handled in gameselector and setup_new_game_settings
+        """
+        game_id = App.get_running_app().game_id
+        store = JsonStore(DATA_DIR)
+        current_state = store.get(str(game_id))["current_state"]
+        # Timer logic
         if int(self.current_time) == 0:
             self.timer_clock.cancel()
             Factory.TimesUp().open()
         else:
             self.current_time = str(int(self.current_time) - 1)
+            # Save timer in data
+            current_state["timer"] = self.current_time
+            store_put(current_state=current_state)
