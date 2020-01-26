@@ -13,6 +13,14 @@ class Calculator:
         self.new_row()
         print(f"Active Cell: {self.df.at[self.row, self.col]}")
 
+    def select(self, col: str):
+        """Select column: ['x', 'y', 'z']"""
+        if col not in ['x', 'y', 'z']:
+            print(f"WARNING: Invalid column: {col}")
+            pass
+        else:
+            self.col = col
+
     def update(self, n: int, op: str = '+'):
         """Update active cell"""
         if op == '+':
