@@ -1,6 +1,7 @@
 # Kivy imports
 import random
 import time
+import os
 
 from kivy.clock import Clock
 from kivy.factory import Factory
@@ -71,11 +72,10 @@ Builder.load_string('''
 #:import WelcomeButton ui.widgets.welcome_button
 
 <ListeningScreen>
-    decode_morse: decode_morse
-    decode_text: decode_text
+    user_text_field: user_text_field
     tapping_prompt_label: tapping_prompt_label
     decode_output_label: decode_output_label
-    tap_button: tap_button
+    tap_button: play_button
     
     AnchorLayout:
         anchor_x: 'center'
@@ -98,7 +98,6 @@ Builder.load_string('''
 
         Image: 
             size_hint: 1, 1
-            source: 'ui\img\morse_code_alphabet.png' 
 
         MDLabel:
             id: tapping_prompt_label
@@ -110,20 +109,13 @@ Builder.load_string('''
             text_color: [1, 1, 1, 1]
 
         MDTextFieldRound:
-            id: decode_text
-            icon_type: 'without'
-            hint_text: 'The text of your morse will be displayed here'
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            size_hint: 0.85, 0.5
-
-        MDTextFieldRound:
-            id: decode_morse
-            hint_text: 'Your morse will be displayed here'
+            id: user_text_field
+            hint_text: 'translate the morse that you heard here'
             pos_hint: {'center_x': 0.5, 'center_y': 0.5}
             size_hint: 0.85, 0.5
             icon_left: 'close-circle'
-            icon_right: 'dice-5'
-            icon_callback: root.new_prompt
+            icon_right: 'send'
+            icon_callback: root.check_answer
 
         MDLabel:
             id: decode_output_label
@@ -135,56 +127,95 @@ Builder.load_string('''
             text_color: [1, 1, 1, 1]
 
         BoxLayout:
-            anchor_x:'center'
-            anchor_y:'bottom'
+            rows: 2
             padding: [dp(25), dp(25), dp(25), dp(25)]
 
-            LongpressButton:
-                id: tap_button
-                valign: 'center'
-                icon: 'record'
-                text: 'Tap Here'
+            Button:
+                id: play_button
+                text: 'Play Morse Code Again'
                 size: [dp(56), dp(56)]
                 bg_color: app.theme_cls.primary_color
                 text_color: [1, 1, 1, 1]
-                on_short_press: root.tapped('.')
-                on_long_press: root.tapped('-')
-                on_short_pause: root.tapped(' ')
-                on_long_pause: root.tapped('/')
-                long_press_dur : app.util.morse_helper.long_press_dur
-                short_press_dur : app.util.morse_helper.short_press_dur
-                long_pause_dur : app.util.morse_helper.long_pause_dur
-                short_pause_dur : app.util.morse_helper.short_pause_dur
+                on_press: root.play_prompt()
+                
+            Button:
+                id: play_button
+                text: 'Play New Morse Code'
+                size: [dp(56), dp(56)]
+                bg_color: app.theme_cls.primary_color
+                text_color: [1, 1, 1, 1]
+                on_press: root.play_new_prompt()
 ''')
 
 
 class ListeningScreen(Screen):
     prompt = StringProperty("")
-    decode_morse = ObjectProperty(None)
-    decode_text = ObjectProperty(None)
+    user_text_field = ObjectProperty(None)
     decode_output_label = ObjectProperty(None)
     tapping_prompt_label = ObjectProperty(None)
-    tap_button = ObjectProperty(None)
+    play_button = ObjectProperty(None)
 
     def __init__(self, **kwargs):
         super(ListeningScreen, self).__init__(name=kwargs.get('name'))
         self.util = kwargs.get('util')
+        self.children[0].children[5].source = os.path.join('ui', 'img', 'morse_code_alphabet.png')
 
     def on_enter(self):
-        Clock.schedule_once(self.init_tapping_screen, 0)
+        Clock.schedule_once(self.init_listening_screen, 0)
+        self.sound_list = []
+        self.cur_sound_index = 0
+        self.cur_sound = None
 
-    def init_tapping_screen(self, dt):
+    def init_listening_screen(self, dt):
         self.tapping_prompt_label = self.ids.tapping_prompt_label
-        self.decode_morse.children[2].children[2].disabled = False
-        self.decode_morse.children[2].children[2].bind(on_press=lambda x: self.clear_input())
+        self.user_text_field.children[2].children[2].disabled = False
+        self.user_text_field.children[2].children[2].bind(on_press=lambda x: self.clear_input())
         self.training_prompt_dict = self.util.training_prompt_dict
         self.decode_output_label.text = "^-- click on the left button to clear" \
-                                        " and the right button for new prompt --^"
-        self.decode_text = self.ids.decode_text
+                                        " and the right button for new prompt --^\n" \
+                                        "v---click here to replay audio and here to play new audio --v"
+        self.play_new_prompt()
 
-    def new_prompt(self, *args):
+    def check_answer(self, *args):
+        user_input = self.user_text_field.text.lower()
+        if self.prompt == user_input:
+            self.decode_output_label.text = "You got it right!"
+        else:
+            self.decode_output_label.text = "nope you got it wrong!"
+
+    def play_prompt(self):
+        if self.cur_sound:
+            self.cur_sound_index = 9999
+            self.cur_sound.stop()
+
+        print(f"playing morse for: {self.prompt}")
+        Clock.schedule_once(self.init_morse_sounds, 0)
+
+    def init_morse_sounds(self, dt):
+        self.cur_sound_index = 0
+        self.sound_list = []
+
+        for letter in self.prompt:
+            if letter == ' ':
+                self.sound_list.append('long_pause')
+            else:
+                self.sound_list.append(letter)
+                self.sound_list.append('short_pause')
+
+        if len(self.sound_list) > self.cur_sound_index:
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            self.cur_sound.bind(on_stop=self.play_next_sound)
+            self.cur_sound.play()
+
+    def play_next_sound(self, dt):
+        self.cur_sound_index += 1
+        if len(self.sound_list) > self.cur_sound_index:
+            self.cur_sound = self.util.morse_helper.get_letter_as_morse_sound(self.sound_list[self.cur_sound_index])
+            self.cur_sound.bind(on_stop=self.play_next_sound)
+            self.cur_sound.play()
+
+    def play_new_prompt(self):
         self.clear_input()
-        self.ids.decode_output_label.text = ""
         if self.util.training_difficulty in ['Easy', 'Medium', 'Hard']:
             if self.util.training_difficulty == 'Easy':
                 training_level = 'letter'
@@ -193,29 +224,15 @@ class ListeningScreen(Screen):
             else:
                 training_level = 'sentence'
             self.prompt = random.choice(self.util.training_prompt_dict[training_level])
-            self.tapping_prompt_label.text = f"Please Tap out the {training_level}: {self.prompt}"
+            self.tapping_prompt_label.text = f"Please translate the morse code ({training_level}) being played"
         else:
             print(f"failed to load {self.util.training_difficulty}")
 
-    def update_text_display(self):
-        user_input = self.util.morse_helper.morse_to_text(self.decode_morse.text)
-        self.decode_text.text = user_input
-        if self.prompt == user_input:
-            self.ids.decode_output_label.text = "You got it! click dice icon to do next"
-
-    def update_morse_display(self, morse_code):
-        self.decode_morse.text = self.decode_morse.text + ''.join(morse_code)
-        self.update_text_display()
+        self.play_prompt()
 
     def clear_input(self):
-
-        self.decode_morse.text = ''
-        self.decode_text.text = ''
-        self.ids.decode_output_label.text = ""
-
-    def tapped(self, morse_char):
-        print(morse_char)
-        self.update_morse_display([morse_char])
+        self.user_text_field.text = ''
+        self.decode_output_label.text = ""
 
     def return_menu(self):
         self.manager.current = 'training'
