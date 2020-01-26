@@ -101,31 +101,33 @@ class Pebble:
 
     def step(self, dt):
         """Gravity Physics"""
-        x, y = self.x, self.y
         vx, vy = self.velocity
         vx *= FRICTION
         vy *= FRICTION
         vy -= GRAVITY
 
         # Bounce off walls
+        x, y = self.x, self.y
         if not 0 < x < 1:
             vx *= -1
         if y > 1:
             vy *= -1
 
-        stone = self.stone
+        self.velocity = vx, vy
         self.x, self.y = x + vx, max(0, y + vy)
-        stone.positions[self.index] = self.x, self.y, self.z
 
-        scaled_x, scaled_y = self.x * stone.width, self.y * stone.height
-        stone.pixels[self.index].size = stone.pebble_size
+        self.update_canvas()
+
+    def update_canvas(self):
+        stone = self.stone
+        stone.positions[self.index] = x, y, _ = self.x, self.y, self.z
+        scaled_x, scaled_y = x * stone.width, y * stone.height
         stone.pixels[self.index].pos = scaled_x, scaled_y
+        stone.pixels[self.index].size = stone.pebble_size
 
         if not self.y:
             self.update.cancel()
             del stone.pebbles[self.index] # Remove reference // kill this object
-        else:
-            self.velocity = vx, vy
 
 
 class Chisel(Widget):
