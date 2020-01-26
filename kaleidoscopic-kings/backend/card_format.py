@@ -25,6 +25,7 @@ class GameVariable:
     The limits for int and float are defined by constants class attributes.
     For example if the _INTEGER_RANGE_INCLUDING is (0, 1000) then that means that states of
     type int, when updated, will never go over 1000 or below 0.
+    :raise TypeError, ValueError:
     """
     INTEGER_RANGE_INCLUDING: ClassVar[Tuple[int, int]] = (0, 1000)
     FLOAT_RANGE_INCLUDING: ClassVar[Tuple[float, float]] = (0.0, 1.0)
@@ -36,6 +37,12 @@ class GameVariable:
         """Make sure that state is one of the allowed types."""
         if type(self.value) not in (int, float, bool):
             raise TypeError(f"Unknown state type {self.value}.")
+        elif (type(self.value) is int and
+              not self.INTEGER_RANGE_INCLUDING[0] <= self.value <= self.INTEGER_RANGE_INCLUDING[1]):
+            raise ValueError("Int out of range.")
+        elif (type(self.value) is float and
+              not self.FLOAT_RANGE_INCLUDING[0] <= self.value <= self.FLOAT_RANGE_INCLUDING[1]):
+            raise ValueError("Float out of range.")
 
     def __eq__(self, other_state: "GameVariable"):
         if isinstance(other_state, GameVariable):

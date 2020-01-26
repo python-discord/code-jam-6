@@ -94,11 +94,27 @@ class GameStatesWindow(Screen):
                 print("Unknown value type.")
                 return
 
-        # Class init will error if invalid type
-        card_format.GameVariable(state_name_key, value)
-        self.game_states.update({state_name_key: value})
+        # Class init will error if invalid type or out of range
+        try:
+            card_format.GameVariable(state_name_key, value)
+        except (ValueError, TypeError) as e:
+            print(e)
 
+        self.game_states.update({state_name_key: value})
+        self.save_game_states()
+
+    def remove_game_state(self, state_name_key: str):
+        try:
+            del self.game_states[state_name_key]
+        except KeyError as e:
+            print("No such key ", e)
+            return
+        self.save_game_states()
+
+    def save_game_states(self):
         self.recreate_list()
+        with open(path_handler.get_game_state_json_path(story_name), "w") as f:
+            json.dump(self.game_states, f, indent=4, sort_keys=True)
 
 
 class WindowManager(ScreenManager):

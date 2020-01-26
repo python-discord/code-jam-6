@@ -122,6 +122,8 @@ WindowManager:
 
             Button:
                 text: 'Remove state'
+                on_release:
+                    root.remove_game_state(root.ids.state_name_key.text)
 
         GridLayout:
             cols: 2
