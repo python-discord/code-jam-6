@@ -30,8 +30,8 @@ Each choice you make will have two options, you need to decide whats best for Gr
 ### Playing the game
 Playing the game is just about as simple as it  gets. You run the app, and you're presented with a choice. You make a choice,
 rinse and repeat. 
+![example screen](https://i.imgur.com/qogv4go.png "Playing the game")
 
-![logo]: https://i.imgur.com/qogv4go.png "An example game screen"
 
 ### Making your own game
 
