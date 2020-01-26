@@ -24,7 +24,7 @@ class HealthBar:
         return self.health
 
     def set_health(self, health: float):
-        self.health = health
+        self.health = max(.0, min(health, self.max_health))
         self.bar.set_size((self.get_current_width(), self.size[1]))
 
     def draw(self, canvas: Union[InstructionGroup, RenderContext]):

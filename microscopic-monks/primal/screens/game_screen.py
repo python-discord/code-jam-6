@@ -78,6 +78,9 @@ class GameScreen(Screen):
             if 'left' in self.engine.mouse_keys:
                 self.process_click()
                 self.last_clicked = 0.03
+            if 'right' in self.engine.mouse_keys:
+                self.process_left_click()
+                self.last_clicked = 0.03
 
         self.timer += delta
         while self.timer > 1:
@@ -134,6 +137,17 @@ class GameScreen(Screen):
             if self.is_key_just_pressed(keys.NUMERIC_KEYS[i]):
                 self.inventory.set_ative(i)
                 return
+
+    def process_left_click(self):
+        active = self.inventory.get_active()
+
+        if len(active) == 0:
+            return
+
+        can_eat = ['bushBB', 'bushBO', 'bushBP', 'bushBR', 'bushBY']
+        if active[0] in can_eat:
+            self.inventory.remove_item(active[0], 1)
+            self.health_bar.set_health(self.health_bar.get_health() + 5)
 
     def process_click(self):
         mx, my = self.engine.mouse_position

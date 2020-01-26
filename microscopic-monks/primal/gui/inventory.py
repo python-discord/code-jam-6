@@ -9,7 +9,7 @@ import json
 class Inventory:
     def __init__(self, pos):
         self.item_data = None
-        self.inventory_data = []
+        self.inventory_data = [[]]
 
         self.items = []
         self.grid = []
@@ -17,7 +17,7 @@ class Inventory:
         self.active = 0
 
         for i in range(10):
-            self.items.append(Sprite("blank.png", (pos[0] + 5, pos[1] + 60 * i + 5), (40, 40)))
+            self.items.append(Sprite('blank.png', (pos[0] + 5, pos[1] + 60 * i + 5), (40, 40)))
 
         for i in range(10):
             self.grid.append(
@@ -44,10 +44,12 @@ class Inventory:
         for i in self.amounts:
             i.draw(canvas)
 
+    def get_active(self):
+        return self.inventory_data[self.active]
+
     def load_inventory(self):
         with open((Sprite.resource_dir / "inventory.json").as_posix(), "r") as read_file:
             self.inventory_data = json.load(read_file)
-            print(self.inventory_data)
 
         with open((Sprite.resource_dir / "items.json").as_posix(), "r") as read_file:
             self.item_data = json.load(read_file)
@@ -61,6 +63,17 @@ class Inventory:
             except Exception:
                 pass
             i += 1
+
+    def remove_item(self, name, amount):
+        for index, item in enumerate(self.inventory_data):
+            if len(item) != 0 and item[0] == name:
+                self.inventory_data[index][1] -= amount
+                if self.inventory_data[index][1] <= 0:
+                    self.inventory_data[index] = []
+                    self.items[index].set_source('blank.png')
+                    self.amounts[index].set_color((0, 0, 0, 0))
+                else:
+                    self.amounts[index].set_text(str(self.inventory_data[index][1]))
 
     def add_item(self, feature: Feature):
         empty = None
