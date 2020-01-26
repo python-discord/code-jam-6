@@ -24,7 +24,7 @@ MIN_POWER = 1e-5
 CHISEL_POWER = 100
 
 BACKGROUND = str(Path('assets', 'img', 'background.png'))
-SOUND = str(Path('assets', 'sounds', 'dig.wav'))
+SOUND = tuple(str(Path('assets', 'sounds', f'00{i}.wav')) for i in range(1, 5))
 
 def get_image_and_aspect(file):
     """
@@ -134,7 +134,7 @@ class Chisel(Widget):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.sound = sa.WaveObject.from_wave_file(SOUND)
+        self.sounds = tuple(sa.WaveObject.from_wave_file(sound) for sound in SOUND)
         self.setup_canvas()
         self.resize_event = Clock.schedule_once(lambda dt: None, 0)
         self.bind(size=self._delayed_resize, pos=self._delayed_resize)
@@ -207,7 +207,7 @@ class Chisel(Widget):
 
     def on_touch_down(self, touch):
         self.poke(touch)
-        self.sound.play()
+        choice(self.sounds).play()
         return True
 
     def on_touch_move(self, touch):
