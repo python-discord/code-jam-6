@@ -1,0 +1,24 @@
+Name: Wiki, The Wise
+Picture: wiki_the_wise.png
+Biography: >
+  Far beyond the Ancient ruins, atop of the Wailing Mountains, meditates the droid monk Wiki, The Wise.
+  Knows everything that happened or will happen.
+Choices:
+  right: >
+    Break and scrap him for his parts.
+  left: >
+    Seek his wisdom.
+Results:
+  right: >
+    This core will power my house for days.
+  left: >
+    Such wisdom! Much wow!
+Deltas:
+  right:
+    Knowledge: 0
+    Welfare: 2
+    Energy: 2
+  left:
+    Knowledge: 3
+    Welfare: 0
+    Energy: 0
