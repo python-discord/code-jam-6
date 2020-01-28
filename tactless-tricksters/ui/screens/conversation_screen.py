@@ -141,7 +141,7 @@ class ConversationScreen(Screen):
                 self.util.message_dict[result['receiver']].append(result)
             else:
                 self.util.message_dict[result['receiver']] = [result]
-            self.util.save_message_dict('receiver', self.util.message_dict)
+            self.util.save_message_dict('receiver', result)
             self.ui_layout(result['receiver'])
             self.util.reload_screen_layout('message')
             self.text_input.text = ''
