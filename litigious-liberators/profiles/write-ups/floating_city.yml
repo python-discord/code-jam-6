@@ -1,0 +1,24 @@
+Name: Floating City
+Picture: floating_city.png
+Biography: >
+    A ship so huge that it could fit an Brachiosaurus clan lies in the middle of the Meranth lake.
+    Legends say that the ghostly fleet defend the gem of Ur'Anium from the hunters who enter it.
+Choices:
+  right: >
+    Explore the insides.
+  left: >
+    Just Take a piece of it and go home.
+Results:
+  right: >
+    Definitely haunted!
+  left: >
+    This might come useful later..
+Deltas:
+  right:
+    Knowledge: 2
+    Welfare: -1
+    Energy: -1
+  left:
+    Knowledge: 1
+    Welfare: 0
+    Energy: 0
