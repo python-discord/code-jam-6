@@ -1,0 +1,5 @@
+# Configure black
+
+[tool.black]
+# Allow lines of length up to 100
+line-length = 100
