@@ -1,4 +1,4 @@
-kivymd=0.100.2
+kivymd==0.100.2
 Kivy==1.11.0
 numpy
 pyaudio

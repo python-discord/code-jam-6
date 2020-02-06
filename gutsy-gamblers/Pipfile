@@ -3,8 +3,6 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
-
 [packages]
 kivy = "*"
 flake8 = "*"
@@ -12,3 +10,6 @@ geopy="*"
 suntime = "*"
 kivy-deps-sdl2 = {markers = "platform_system == 'Windows'",version = "*"}
 kivy-deps-glew = {markers = "platform_system == 'Windows'",version = "*"}
+
+[scripts]
+start = "python main.py"

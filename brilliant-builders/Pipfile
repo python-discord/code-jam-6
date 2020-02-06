@@ -21,6 +21,6 @@ simpleaudio = "*"
 python_version = "3.7"
 
 [scripts]
-firestarter = "python -m firestarter"
+start = "python -m firestarter"
 lint = "flake8"
 precommit = "pre-commit install"

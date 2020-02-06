@@ -1,25 +1,25 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-
-[dev-packages]
-flake8 = "*"
+name = "pypi"
 
 [packages]
-docutils = {version = "*",sys_platform = "== 'win32'"}
-pygments = {version = "*",sys_platform = "== 'win32'"}
-pypiwin32 = {version = "*",sys_platform = "== 'win32'"}
-kivy-deps-sdl2 = {version = "==0.1.*",sys_platform = "== 'win32'"}
-kivy-deps-glew = {version = "==0.1.*",sys_platform = "== 'win32'"}
-kivy = "==1.11.1"
-pipfile = "*"
-ffpyplayer = "*"
-graph = "*"
+certifi = "==2019.11.28"
+chardet = "==3.0.4"
+docutils = "==0.16"
+idna = "==2.8"
+kivy-garden = "==0.1.4"
+"pypiwin32" = "==223"
+"pywin32" = "==227"
+requests = "==2.22.0"
+"urllib3" = "==1.25.7"
+"kivy-deps.glew" = "==0.1.12"
+"kivy-deps.sdl2" = "==0.1.23"
+Kivy = "==1.11.1"
+Pygments = "==2.5.2"
 
 [requires]
 python_version = "3.7"
 
 [scripts]
-lint = "python -m flake8"
 start = "python -m TLOA"

@@ -20,3 +20,4 @@ python_version = "3.7"
 [scripts]
 lint = "python -m flake8"
 precommit = "pre-commit install"
+start = "python -m rex_explorer"

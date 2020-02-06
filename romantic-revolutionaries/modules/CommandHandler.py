@@ -81,8 +81,8 @@ class Look(Command):
         }
 
     def parse(self, words):
-        direction
         match = re.match(rf'({"|".join(self.hotkeys)})?( )?([a-zA-Z]+)?( )?(\d+)?', ' '.join(words))
+        direction = None
 
         if match:
             if match.group(1) in list(self.directions.keys()):
@@ -90,8 +90,9 @@ class Look(Command):
             elif match.group(3) in list(self.directions.keys()):
                 direction = self.directions[match.group(3)]
 
-        self.method(direction)
-        return True
+        if direction:
+            self.method(direction)
+            return True
 
 
 class CommandHandler:
