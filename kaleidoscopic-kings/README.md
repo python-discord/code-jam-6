@@ -78,3 +78,25 @@ These necessary assets and the structure can be seen in Jurassic Greg's implemen
   * In addition to wireframing the layout, defining the style, and designing the first UI, GlowingRunes provided some 
     fantastic audio assets for the project, carrying the unique look and feel throughout the game.
 * **soufianeh#4390** - MIA
+
+## Assets and licenses
+* Assets from Vecteezy <a href="https://www.vecteezy.com/"> Vectors by Vecteezy</a>
+    * CardArt/cat.png 
+    * CardArt/river.jpg 
+    * CardArt/forest.png 
+    * CardArt/cave.png 
+    * CardArt/dodo.png 
+    * CardArt/greg_the_caveman.png
+    * CardArt/strange_fruit.png 
+    * CardArt/kickable_dino.png 
+    * CardArt/test.jpg
+    * CardArt/pufferfish.png
+    * GameArt/LeftButton.png
+    * GameArt/RightButton.png
+    * GameArt/MainBackground.png
+    
+* Other assets:
+    * caveman.wav, death.wav, dino_roar.wav, water.wav, food.wav, health_increase.wav, health_decrease.wav all made by GlowingRunes
+    * All other sound assets from the BBC sounds archive 
+    * GameArt/MainStateBackground.png  -  Pixabay
+    * CardBackground.png  - <a title="stone tablet png 1" href="https://pngimage.net/stone-tablet-png-1/">stone tablet png 1</a>
