@@ -179,7 +179,7 @@
   {
     "card_id": "river_dino_encounter",
     "card_type": "response",
-    "card_image": "dino.png",
+    "card_image": "kickable_dino.png",
     "card_sound": "dino_roar.wav",
     "text": "Halfway trough your trip you see a dinosaur.",
     "options": [
